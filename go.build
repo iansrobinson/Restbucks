@@ -1,0 +1,113 @@
+<project name="Build Restbucks.Procurement" default="build">
+
+  <property name="nant.settings.currentframework" value="net-4.0" />
+  
+  <property name="configuration" value="debug"/>
+  <property name="base.dir" value="${project::get-base-directory()}"/>
+  <property name="output.dir" value="${base.dir}\output"/>
+  <property name="bin.dir" value="${output.dir}\bin"/>
+  <property name="reports.dir" value="${output.dir}\reports"/>
+  <property name="binaries.dir" value="${base.dir}\src\Restbucks.Quoting.Service\bin\"/>
+  <property name="tests.dir" value="${base.dir}\src\Tests.Restbucks\bin\${configuration}"/>
+  <property name="solution.file" value="Restbucks.Procurement.sln"/>
+  <property name="unit.test.assembly" value="Tests.Restbucks.dll"/>
+  <property name="unit.tests.file" value="results.xml"/>
+  <property name="assemblyinfo.files" value="src\Restbucks.*\Properties\AssemblyInfo.cs"/>
+  <property name="project.description" value="Restbucks Procurement Example"/>
+  <property name="copyright" value="Copyright (c) ${datetime::get-year(datetime::now())}, iansrobinson.com"/>
+
+  <loadtasks>
+    <fileset>
+        <include name=".\tools\nantcontrib\bin\NAnt.Contrib.Tasks.dll" />
+    </fileset>
+  </loadtasks>
+
+  <target name="intro">
+    <echo message="Working directory: ${directory::get-current-directory()}"/>
+  </target>
+
+  <target name="clean">    
+    <delete dir="${output.dir}" />
+  </target>
+
+  <target name="create.output.directories">
+    <mkdir dir="${output.dir}" />
+    <mkdir dir="${bin.dir}" />
+    <mkdir dir="${reports.dir}" />
+  </target>
+
+  <target name="build.assemblyinfos" if="${environment::variable-exists('CRUISE_REVISION')}">
+    <foreach item="File" property="filename">
+      <in>
+        <items>
+          <include name="${assemblyinfo.files}" />
+        </items>
+      </in>
+      <do>
+        <asminfo output="${filename}" language="CSharp">
+          <imports>
+            <import namespace="System.Reflection" />
+            <import namespace="System.Runtime.InteropServices" />
+          </imports>
+          <attributes>
+            <attribute type="ComVisibleAttribute" value="false" />
+            <attribute type="AssemblyVersionAttribute" value="1.0.${environment::get-variable('CRUISE_REVISION')}.0" />
+            <attribute type="AssemblyTitleAttribute" value="${project.description}" />
+            <attribute type="AssemblyProductAttribute" value="${project.description}" />
+            <attribute type="AssemblyDescriptionAttribute" value="${project.description}" />
+            <attribute type="AssemblyCopyrightAttribute" value="${copyright}" />
+          </attributes>
+        </asminfo>
+      </do>
+    </foreach>
+  </target>
+
+  <target name="build.solution">
+    <msbuild project="${solution.file}">
+      <arg value="/property:Configuration=${configuration}"/>
+      <arg value="/t:Rebuild"/>
+      <arg value="/verbosity:quiet"/>
+    </msbuild>
+  </target>
+
+  <target name="deploy">
+    <copy todir="${bin.dir}">
+      <fileset basedir="${binaries.dir}">
+        <include name="**/*.dll" />
+        <include name="**/*.exe" />
+        <include name="**/*.exe.config" />
+      </fileset>
+    </copy>
+    <copy todir="${reports.dir}">
+      <fileset basedir="${tests.dir}">
+        <include name="**/${unit.tests.file}" />
+        <include name="**/*.html" />
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="run.unit.tests">
+    <exec program="${base.dir}\tools\nunit\bin\net-2.0\nunit-console.exe"
+      workingdir="${tests.dir}"
+      commandline="${unit.test.assembly} /xml:${unit.tests.file} /nologo" failonerror="false" resultproperty="unit.tests.result"/>
+  </target>
+
+  <target name="generate.reports"> 
+    <nunit2report todir="${tests.dir}">
+      <fileset>
+        <include name="${tests.dir}\${unit.tests.file}" />
+      </fileset>
+    </nunit2report>
+  </target>
+
+  <target name="start.application">
+    <exec program="run.bat" spawn="true"/>
+  </target>
+
+  <target name="build" depends="intro, clean, create.output.directories, build.assemblyinfos, build.solution, run.unit.tests, generate.reports, deploy">
+    <fail if="${unit.tests.result != '0'}">One or more unit tests failed</fail>
+  </target>
+
+  <target name="run" depends="build, start.application"/>
+
+</project>
