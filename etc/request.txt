@@ -1,0 +1,12 @@
+<shop xmlns="http://schemas.restbucks.com/shop">
+  <items>
+    <item>
+      <description>item1</description>
+      <amount measure="g">250</amount>
+    </item>
+    <item>
+      <description>item2</description>
+      <amount measure="g">500</amount>
+    </item>
+  </items>
+</shop>
