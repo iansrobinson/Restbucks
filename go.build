@@ -16,6 +16,13 @@
   <property name="project.description" value="Restbucks Procurement Example"/>
   <property name="copyright" value="Copyright (c) ${datetime::get-year(datetime::now())}, iansrobinson.com"/>
 
+  <property name="bin.old.dir" value="${output.dir}\bin.old"/>
+  <property name="reports.old.dir" value="${output.dir}\reports.old"/>
+  <property name="binaries.old.dir" value="${base.dir}\src\Restbucks.Quoting.Service.Old\bin\"/>
+  <property name="tests.old.dir" value="${base.dir}\src\Tests.Restbucks.Old\bin\${configuration}"/>
+  <property name="unit.test.assembly.old" value="Tests.Restbucks.Old.dll"/>
+  <property name="unit.tests.old.file" value="results.old.xml"/>
+
   <loadtasks>
     <fileset>
         <include name=".\tools\nantcontrib\bin\NAnt.Contrib.Tasks.dll" />
@@ -34,6 +41,8 @@
     <mkdir dir="${output.dir}" />
     <mkdir dir="${bin.dir}" />
     <mkdir dir="${reports.dir}" />
+    <mkdir dir="${bin.old.dir}" />
+    <mkdir dir="${reports.old.dir}" />
   </target>
 
   <target name="build.assemblyinfos" if="${environment::variable-exists('CRUISE_REVISION')}">
@@ -84,18 +93,41 @@
         <include name="**/*.html" />
       </fileset>
     </copy>
+
+    <copy todir="${bin.old.dir}">
+      <fileset basedir="${binaries.old.dir}">
+        <include name="**/*.dll" />
+        <include name="**/*.exe" />
+        <include name="**/*.exe.config" />
+      </fileset>
+    </copy>
+    <copy todir="${reports.old.dir}">
+      <fileset basedir="${tests.old.dir}">
+        <include name="**/${unit.tests.old.file}" />
+        <include name="**/*.html" />
+      </fileset>
+    </copy>
   </target>
 
   <target name="run.unit.tests">
     <exec program="${base.dir}\tools\nunit\bin\net-2.0\nunit-console.exe"
       workingdir="${tests.dir}"
       commandline="${unit.test.assembly} /xml:${unit.tests.file} /nologo" failonerror="false" resultproperty="unit.tests.result"/>
+    
+    <exec program="${base.dir}\tools\nunit\bin\net-2.0\nunit-console.exe"
+      workingdir="${tests.old.dir}"
+      commandline="${unit.test.assembly.old} /xml:${unit.tests.old.file} /nologo" failonerror="false" resultproperty="unit.tests.old.result"/>
   </target>
 
   <target name="generate.reports"> 
     <nunit2report todir="${tests.dir}">
       <fileset>
         <include name="${tests.dir}\${unit.tests.file}" />
+      </fileset>
+    </nunit2report>
+    <nunit2report todir="${tests.old.dir}">
+      <fileset>
+        <include name="${tests.old.dir}\${unit.tests.old.file}" />
       </fileset>
     </nunit2report>
   </target>
@@ -105,7 +137,7 @@
   </target>
 
   <target name="build" depends="intro, clean, create.output.directories, build.assemblyinfos, build.solution, run.unit.tests, generate.reports, deploy">
-    <fail if="${unit.tests.result != '0'}">One or more unit tests failed</fail>
+    <fail if="${unit.tests.result != '0' or unit.tests.old.result !='0'}">One or more unit tests failed</fail>
   </target>
 
   <target name="run" depends="build, start.application"/>
