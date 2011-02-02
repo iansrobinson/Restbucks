@@ -7,6 +7,7 @@ using NUnit.Framework;
 using Restbucks.Quoting;
 using Restbucks.Quoting.Service.Old.Resources;
 using Rhino.Mocks;
+using Tests.Restbucks.Old.Quoting.Service.Old.Resources.Helpers;
 
 namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
 {

@@ -4,7 +4,7 @@ using System.Linq;
 using Restbucks.MediaType;
 using Restbucks.Quoting;
 
-namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
+namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources.Helpers
 {
     public static class Matching
     {
