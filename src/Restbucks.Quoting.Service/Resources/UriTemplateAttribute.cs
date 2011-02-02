@@ -5,7 +5,7 @@ namespace Restbucks.Quoting.Service.Resources
     [AttributeUsage(AttributeTargets.Class)]
     public class UriTemplateAttribute : Attribute
     {
-        private readonly UriFactory uriFactory;
+        private readonly UriFactoryWorker uriFactoryWorker;
 
         public UriTemplateAttribute(string routePrefix) : this(routePrefix, string.Empty)
         {
@@ -13,12 +13,12 @@ namespace Restbucks.Quoting.Service.Resources
 
         public UriTemplateAttribute(string routePrefix, string uriTemplate)
         {
-            uriFactory = new UriFactory(routePrefix, uriTemplate);
+            uriFactoryWorker = new UriFactoryWorker(routePrefix, uriTemplate);
         }
 
-        public UriFactory UriFactory
+        public UriFactoryWorker UriFactoryWorker
         {
-            get { return uriFactory; }
+            get { return uriFactoryWorker; }
         }
     }
 }

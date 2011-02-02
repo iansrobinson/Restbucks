@@ -5,11 +5,11 @@ namespace Restbucks.Quoting.Service.Resources
 {
     public class UriFactoryCollection
     {
-        private readonly IDictionary<Type, UriFactory> uriFactories;
+        private readonly IDictionary<Type, UriFactoryWorker> uriFactories;
 
         public UriFactoryCollection()
         {
-            uriFactories = new Dictionary<Type, UriFactory>();
+            uriFactories = new Dictionary<Type, UriFactoryWorker>();
         }
 
         public void Register<T>() where T : class
@@ -19,12 +19,12 @@ namespace Restbucks.Quoting.Service.Resources
             {
                 throw new UriTemplateMissingException();
             }
-            var uriFactory =  ((UriTemplateAttribute)attributes[0]).UriFactory;
+            var uriFactory =  ((UriTemplateAttribute)attributes[0]).UriFactoryWorker;
 
             uriFactories.Add(typeof(T), uriFactory);
         }
 
-        public UriFactory For<T>()
+        public UriFactoryWorker For<T>()
         {
             return uriFactories[typeof (T)];
         }

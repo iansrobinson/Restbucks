@@ -17,7 +17,7 @@ namespace Restbucks.Quoting.Service.Resources
     {
         public const string SignedFormPlaceholder = "SIGNED_FORM_PLACEHOLDER";
         
-        private static readonly UriFactory OrdersUriFactory = new UriFactory("orders", string.Format("?c=12345&s={0}", SignedFormPlaceholder));
+        private static readonly UriFactoryWorker OrdersUriFactoryWorker = new UriFactoryWorker("orders", string.Format("?c=12345&s={0}", SignedFormPlaceholder));
         private const string OrderFormUriTemplate = "{id}";
 
         private readonly UriFactoryCollection uriFactories;
@@ -53,7 +53,7 @@ namespace Restbucks.Quoting.Service.Resources
 
             return new Shop(baseUri)
                 .AddForm(new Form(
-                             OrdersUriFactory.CreateAbsoluteUri(new Uri("http://localhost:8081")),
+                             OrdersUriFactoryWorker.CreateAbsoluteUri(new Uri("http://localhost:8081")),
                              "post",
                              "application/restbucks+xml",
                              new Shop(baseUri, quotation.LineItems.Select(li => new LineItemToItem(li).Adapt()))

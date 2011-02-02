@@ -2,7 +2,7 @@
 
 namespace Restbucks.Quoting.Service.Resources
 {
-    public class UriFactory
+    public class UriFactoryWorker
     {
         private readonly string routePrefix;
         private readonly UriTemplate uriTemplate;
@@ -10,11 +10,11 @@ namespace Restbucks.Quoting.Service.Resources
 
         private static readonly Uri Localhost = new Uri("http://localhost");
 
-        public UriFactory(string routePrefix) : this(routePrefix, string.Empty)
+        public UriFactoryWorker(string routePrefix) : this(routePrefix, string.Empty)
         {
         }
 
-        public UriFactory(string routePrefix, string uriTemplateValue)
+        public UriFactoryWorker(string routePrefix, string uriTemplateValue)
         {
             this.routePrefix = routePrefix;
             uriTemplate = new UriTemplate(uriTemplateValue, true);

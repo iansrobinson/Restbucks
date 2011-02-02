@@ -99,8 +99,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Quoting.Service\Resources\RequestForQuoteTests.cs" />
-    <Compile Include="Quoting.Service\Resources\UriFactoryCollectionTests.cs" />
-    <Compile Include="Quoting.Service\Resources\UriFactoryTests.cs" />
+    <Compile Include="Quoting.Service\Resources\UriFactoryCollectionTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Quoting.Service\Resources\UriFactoryWorkerTests.cs" />
     <Compile Include="Quoting\Implementation\Helpers\StubDateTimeProvider.cs" />
     <Compile Include="Quoting\Implementation\Helpers\StubGuidProvider.cs" />
     <Compile Include="Quoting\Implementation\QuotationEngineTests.cs" />
