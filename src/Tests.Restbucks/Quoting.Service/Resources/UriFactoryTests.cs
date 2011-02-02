@@ -22,10 +22,17 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         }
 
         [Test]
-        public void ShouldUseOnlyTheHostAndPortPartOfTheSuppliedBaseAddress()
+        public void ShouldUseAllOfTheSuppliedBaseAddress()
         {
             var uriFactory = new UriFactory("quotes", "{userId}/{id}");
-            Assert.AreEqual("http://restbucks.com:8080/quotes/ian/1", uriFactory.CreateAbsoluteUri(new Uri("http://restbucks.com:8080/prefix/"), "ian", "1").ToString());
+            Assert.AreEqual("http://restbucks.com:8080/virtual-directory/quotes/ian/1", uriFactory.CreateAbsoluteUri(new Uri("http://restbucks.com:8080/virtual-directory/"), "ian", "1").ToString());
+        }
+
+        [Test]
+        public void ShouldUseTheSuppliedBaseAddressUpToLastBackslash()
+        {
+            var uriFactory = new UriFactory("quotes", "{userId}/{id}");
+            Assert.AreEqual("http://restbucks.com:8080/virtual-directory/quotes/ian/1", uriFactory.CreateAbsoluteUri(new Uri("http://restbucks.com:8080/virtual-directory/suffix"), "ian", "1").ToString());
         }
 
         [Test]
@@ -43,7 +50,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         }
 
         [Test]
-        public void ShouldGenerateBaseUriFromSuppliedAbsoluteUri()
+        public void ShouldGenerateBaseUriWithTerminatingBackslashFromSuppliedAbsoluteUri()
         {
             var uriFactory = new UriFactory("quotes", "{quoteId}");
             Assert.AreEqual(new Uri("http://restbucks.com:8080/uk/"), uriFactory.CreateBaseUri(new Uri("http://restbucks.com:8080/uk/quotes/1234")));

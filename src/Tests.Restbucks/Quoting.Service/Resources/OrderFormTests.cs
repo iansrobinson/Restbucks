@@ -14,7 +14,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
     [TestFixture]
     public class OrderFormTests
     {
-        private static readonly Uri BaseAddress = new Uri("http://localhost:8080/");
+        private static readonly Uri BaseAddress = new Uri("http://localhost:8080/virtual-directory/");
 
         [Test]
         public void ShouldBaseOrderFormOnQuoteFromQuoteEngine()
@@ -82,6 +82,14 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         }
 
         [Test]
+        public void EntityBodyShouldHaveBaseUri()
+        {
+            var entityBody = ExecuteRequestReturnEntityBody();
+
+            Assert.AreEqual(BaseAddress, entityBody.BaseUri);
+        }
+
+        [Test]
         public void FormContentsShouldIncludeSelfLinkForQuote()
         {
             var entityBody = ExecuteRequestReturnEntityBody();
@@ -91,6 +99,15 @@ namespace Tests.Restbucks.Quoting.Service.Resources
 
             Assert.IsNotNull(selfLink);
             Assert.AreEqual(DefaultUriFactoryCollection.Instance.For<Quote>().CreateRelativeUri(StubQuotationEngine.QuoteId), selfLink.Href.ToString());
+        }
+
+        [Test]
+        public void FormContentsShouldIncludeBaseUri()
+        {
+            var entityBody = ExecuteRequestReturnEntityBody();
+            var formContents = entityBody.Forms.First().Instance;
+
+            Assert.AreEqual(BaseAddress, formContents.BaseUri);
         }
 
         [Test]

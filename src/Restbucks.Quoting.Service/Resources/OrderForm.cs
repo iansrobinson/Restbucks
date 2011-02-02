@@ -43,18 +43,20 @@ namespace Restbucks.Quoting.Service.Resources
                 return null;
             }
 
+            var baseUri = uriFactories.For<OrderForm>().CreateBaseUri(request.RequestUri);
+
             response.StatusCode = HttpStatusCode.OK;
             response.Headers.CacheControl = new CacheControlHeaderValue {Public = true};
             response.Content = new ByteArrayContent(new byte[] {});
             response.Content.Headers.Expires = quotation.CreatedDateTime.AddDays(7.0);
-            response.Content.Headers.ContentLocation = uriFactories.For<Quote>().CreateAbsoluteUri(request.RequestUri, quotation.Id.ToString("N"));
+            response.Content.Headers.ContentLocation = uriFactories.For<Quote>().CreateAbsoluteUri(baseUri, quotation.Id.ToString("N"));
 
-            return new Shop(uriFactories.For<OrderForm>().CreateBaseUri(request.RequestUri))
+            return new Shop(baseUri)
                 .AddForm(new Form(
                              OrdersUriFactory.CreateAbsoluteUri(new Uri("http://localhost:8081")),
                              "post",
                              "application/restbucks+xml",
-                             new Shop(request.RequestUri, quotation.LineItems.Select(li => new LineItemToItem(li).Adapt()))
+                             new Shop(baseUri, quotation.LineItems.Select(li => new LineItemToItem(li).Adapt()))
                                  .AddLink(new Link(uriFactories.For<Quote>().CreateRelativeUri(quotation.Id.ToString("N")), "application/restbucks+xml", LinkRelations.Self))));
         }
     }

@@ -37,9 +37,8 @@ namespace Restbucks.Quoting.Service.Resources
             return new Uri(uriTemplate.BindByPosition(dummyBaseAddress, values).PathAndQuery, UriKind.RelativeOrAbsolute);
         }
 
-        public Uri CreateAbsoluteUri(Uri baseAddress, params string[] values)
+        public Uri CreateAbsoluteUri(Uri baseUri, params string[] values)
         {
-            var baseUri = new UriBuilder(baseAddress.Scheme, baseAddress.Host, baseAddress.Port).Uri;
             return uriTemplate.BindByPosition(new Uri(baseUri, routePrefix), values);
         }
 
