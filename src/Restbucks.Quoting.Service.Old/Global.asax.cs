@@ -30,16 +30,10 @@ namespace Restbucks.Quoting.Service.Old
 
             Log.Debug("Starting Restbucks.Quoting.Service.Old ...");
 
-            container.Register(
-                Component.For(typeof (IQuotationEngine)).ImplementedBy(typeof (QuotationEngine)).LifeStyle.Singleton);
-            container.Register(
-                Component.For(typeof (IDateTimeProvider)).ImplementedBy(typeof (DateTimeProvider)).LifeStyle.Singleton);
-            container.Register(
-                Component.For(typeof (IGuidProvider)).ImplementedBy(typeof (GuidProvider)).LifeStyle.Singleton);
-            container.Register(
-                Component.For(typeof (ISignForms)).Instance(new FormsIntegrityUtility(Signature.Instance,
-                                                                                      OrderForm.SignedFormPlaceholder)).
-                    LifeStyle.Singleton);
+            container.Register(Component.For(typeof (IQuotationEngine)).ImplementedBy(typeof (QuotationEngine)).LifeStyle.Singleton);
+            container.Register(Component.For(typeof (IDateTimeProvider)).ImplementedBy(typeof (DateTimeProvider)).LifeStyle.Singleton);
+            container.Register(Component.For(typeof (IGuidProvider)).ImplementedBy(typeof (GuidProvider)).LifeStyle.Singleton);
+            container.Register(Component.For(typeof (ISignForms)).Instance(new FormsIntegrityUtility(Signature.Instance, OrderForm.SignedFormPlaceholder)).LifeStyle.Singleton);
             container.Register(Component.For(typeof (FormsIntegrityResponseProcessor)).LifeStyle.Singleton);
 
             container.Register(Component.For(typeof (EntryPoint)).LifeStyle.Transient);

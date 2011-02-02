@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.ServiceModel;
+using System.ServiceModel.Activation;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
 using System.ServiceModel.Web;
 using Castle.Windsor;
 using log4net;
+using Microsoft.ServiceModel.Description;
 using Microsoft.ServiceModel.Http;
 using Restbucks.Quoting.Service.Old.Processors;
 using Restbucks.Quoting.Service.Old.Resources;
@@ -43,7 +45,7 @@ namespace Restbucks.Quoting.Service.Old
         protected override ContractDescription GetContract(ServiceHost host, ServiceDescription description, Type serviceType, IDictionary<string, ContractDescription> implementedContracts)
         {
             var contract = base.GetContract(host, description, serviceType, implementedContracts);
-
+            
             foreach (var method in serviceType.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly))
             {
                 var templates = method.GetCustomAttributes(typeof (UriTemplateAttribute), true);
@@ -85,5 +87,27 @@ namespace Restbucks.Quoting.Service.Old
                 ((IDisposable) service).Dispose();
             }
         }
+
+        public override void CreateDescription(Type serviceType, IDictionary<string, ContractDescription> implementedContracts, ServiceDescription description, ServiceHost host)
+        {
+            ContractDescription contract = this.GetContract(host, description, serviceType, implementedContracts);
+            description.Behaviors.Remove<AspNetCompatibilityRequirementsAttribute>();
+            AspNetCompatibilityRequirementsAttribute item = new AspNetCompatibilityRequirementsAttribute();
+            item.RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed;
+            description.Behaviors.Add(item);
+            foreach (Uri uri in host.BaseAddresses)
+            {
+               if (!uri.Scheme.StartsWith("https"))
+               {
+                   ServiceEndpoint endpoint = new ServiceEndpoint(contract, new HttpMessageBinding(HttpMessageBindingSecurityMode.None), new EndpointAddress(uri, new AddressHeader[0]));
+                   endpoint.Behaviors.Add(new HttpEndpointBehavior(this));
+                   description.Endpoints.Add(endpoint);
+               }
+                
+            }
+            this.CreateEndpoint(host, description, contract);
+        }
+
+
     }
 }
