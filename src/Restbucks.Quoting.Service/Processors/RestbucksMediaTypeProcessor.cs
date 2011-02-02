@@ -30,7 +30,7 @@ namespace Restbucks.Quoting.Service.Processors
             {
                 var root = new ShopFormatter((Shop)instance).CreateXml();
 
-                using (XmlWriter writer = XmlWriter.Create(stream, WriterSettings))
+                using (var writer = XmlWriter.Create(stream, WriterSettings))
                 {
                     root.WriteTo(writer);
                     writer.Flush();
