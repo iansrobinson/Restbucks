@@ -44,7 +44,8 @@ namespace Tests.Restbucks.MediaType
         [Test]
         public void GeneratesBaseUriBasedOnUri()
         {
-            
+            var shop = new ShopBuilder().WithUri(new Uri("http://localhost:8080/quotes/1234")).Build();
+            Assert.AreEqual(new Uri("http://localhost:8080/"), shop.BaseUri);
         }
 
     }

@@ -6,13 +6,15 @@ namespace Restbucks.MediaType
 {
     public class Shop
     {
-        private readonly Uri uri;
+        private readonly Uri baseUri;
         private readonly IList<Item> items;
         private readonly IList<Link> links;
         private readonly IList<Form> forms;
 
-        public Shop(Uri uri1, IEnumerable<Item> items, IEnumerable<Link> links, IEnumerable<Form> forms)
+        public Shop(Uri uri, IEnumerable<Item> items, IEnumerable<Link> links, IEnumerable<Form> forms)
         {
+            baseUri =  new Uri(uri.GetLeftPart(UriPartial.Authority));
+
             this.items = new List<Item>(items);
             this.links = new List<Link>(links);
             this.forms = new List<Form>(forms);
@@ -69,7 +71,7 @@ namespace Restbucks.MediaType
 
         public Uri BaseUri
         {
-            get { return uri; }
+            get { return baseUri; }
         }
 
         public IEnumerable<Link> Links

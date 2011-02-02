@@ -20,7 +20,7 @@ namespace Restbucks.MediaType.Assemblers
                 return null;
             }
 
-            var shop = new Shop((Uri) null);
+            var shop = new Shop(new Uri("http://iansrobinson.com"));
 
             new ItemsAssembler(root).AssembleItems().ToList().ForEach(item => shop.AddItem(item));
             new LinksAssembler(root).AssembleLinks().ToList().ForEach(link => shop.AddLink(link));
