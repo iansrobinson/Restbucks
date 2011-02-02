@@ -5,7 +5,11 @@ using Restbucks.MediaType;
 
 namespace Restbucks.Quoting.Service.Old.Resources
 {
-    public class RequestForQuote
+    public class 
+        
+        
+        
+        RequestForQuote
     {
         public static readonly UriFactory UriFactory = new UriFactory("request-for-quote");
 

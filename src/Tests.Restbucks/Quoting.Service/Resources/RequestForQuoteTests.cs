@@ -11,10 +11,12 @@ namespace Tests.Restbucks.Quoting.Service.Resources
     [TestFixture]
     public class RequestForQuoteTests
     {
+        private static readonly Uri BaseAddress = new Uri("http://localhost:8080/virtual-directory/");
+        
         [Test]
         public void EntityBodyShouldContainAnEmptyRequestForQuoteForm()
         {
-            var entityBody = GetRequestForQuoteEntityBody();
+            var entityBody = ExecuteRequestReturnEntityBody();
 
             Assert.AreEqual(1, entityBody.Forms.Count());
 
@@ -30,7 +32,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         [Test]
         public void EntityBodyShouldNotContainAnyLinks()
         {
-            var entityBody = GetRequestForQuoteEntityBody();
+            var entityBody = ExecuteRequestReturnEntityBody();
 
             Assert.IsFalse(entityBody.HasLinks);
         }
@@ -38,7 +40,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         [Test]
         public void EntityBodyShouldNotContainAnyItems()
         {
-            var entityBody = GetRequestForQuoteEntityBody();
+            var entityBody = ExecuteRequestReturnEntityBody();
 
             Assert.IsFalse(entityBody.HasItems);
         }
@@ -46,17 +48,36 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         [Test]
         public void ResponseShouldBePublicallyCacheableForOneDay()
         {
-            var resource = new RequestForQuote(DefaultUriFactoryCollection.Instance);
-            var response = new HttpResponseMessage();
-            resource.Get(new HttpRequestMessage(HttpMethod.Get, new Uri("http://localhost/request-for-quote")), response);
+            var response = ExecuteRequestReturnResponse();
 
             Assert.AreEqual(new TimeSpan(24, 0, 0), response.Headers.CacheControl.MaxAge);
             Assert.IsTrue(response.Headers.CacheControl.Public);
         }
 
-        private static Shop GetRequestForQuoteEntityBody()
+        [Test]
+        public void EntityBodyShouldIncludeBaseUri()
         {
-            return new RequestForQuote(DefaultUriFactoryCollection.Instance).Get(new HttpRequestMessage(HttpMethod.Get, new Uri("http://localhost/request-for-quote")), new HttpResponseMessage());
+            var entityBody = ExecuteRequestReturnEntityBody();
+
+            Assert.AreEqual(BaseAddress, entityBody.BaseUri);
+        }
+
+        private static Shop ExecuteRequestReturnEntityBody()
+        {
+            var request = new HttpRequestMessage { RequestUri = DefaultUriFactoryCollection.Instance.For<RequestForQuote>().CreateAbsoluteUri(BaseAddress) };
+            var response = new HttpResponseMessage();
+            var requestForQuote = new RequestForQuote(DefaultUriFactoryCollection.Instance);
+            return requestForQuote.Get(request, response);
+        }
+
+        private static HttpResponseMessage ExecuteRequestReturnResponse()
+        {
+            var request = new HttpRequestMessage { RequestUri = DefaultUriFactoryCollection.Instance.For<RequestForQuote>().CreateAbsoluteUri(BaseAddress) };
+            var response = new HttpResponseMessage();
+            var requestForQuote = new RequestForQuote(DefaultUriFactoryCollection.Instance);
+            requestForQuote.Get(request, response);
+
+            return response;
         }
     }
 }
