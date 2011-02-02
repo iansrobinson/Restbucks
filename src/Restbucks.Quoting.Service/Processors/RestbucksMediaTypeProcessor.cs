@@ -59,7 +59,7 @@ namespace Restbucks.Quoting.Service.Processors
 
                 try
                 {
-                    return new ShopAssembler(XElement.Load(stream)).AssembleShop();
+                    return new ShopAssembler(XElement.Load(stream), request.RequestUri).AssembleShop();
                 }
                 catch (XmlException)
                 {

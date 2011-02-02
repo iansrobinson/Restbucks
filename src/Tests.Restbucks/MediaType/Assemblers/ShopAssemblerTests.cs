@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Xml.Linq;
 using NUnit.Framework;
 using Restbucks.MediaType.Assemblers;
@@ -14,7 +15,7 @@ namespace Tests.Restbucks.MediaType.Assemblers
             const string xml = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <shop xmlns=""http://schemas.restbucks.com/shop""/>";
 
-            var shop = new ShopAssembler(XElement.Parse(xml)).AssembleShop();
+            var shop = new ShopAssembler(XElement.Parse(xml), new Uri("http://localhost/")).AssembleShop();
 
             Assert.IsNotNull(shop);
             Assert.IsFalse(shop.HasItems);
@@ -31,7 +32,7 @@ namespace Tests.Restbucks.MediaType.Assemblers
   <link rel=""rb:order-form"" type=""application/restbucks+xml"" href=""/order-forms/1234"" />
 </shop>";
 
-            var shop = new ShopAssembler(XElement.Parse(xml)).AssembleShop();
+            var shop = new ShopAssembler(XElement.Parse(xml), new Uri("http://localhost/")).AssembleShop();
 
             Assert.IsNotNull(shop);
             Assert.IsFalse(shop.HasItems);
@@ -70,7 +71,7 @@ namespace Tests.Restbucks.MediaType.Assemblers
   </items>
 </shop>";
 
-            var shop = new ShopAssembler(XElement.Parse(xml)).AssembleShop();
+            var shop = new ShopAssembler(XElement.Parse(xml), new Uri("http://localhost/")).AssembleShop();
 
             Assert.IsNotNull(shop);
             Assert.IsTrue(shop.HasItems);
@@ -109,7 +110,7 @@ namespace Tests.Restbucks.MediaType.Assemblers
     <submission resource=""/orders"" method=""put"" mediatype=""application/xml"" />
   </model>
 </shop>";
-            var shop = new ShopAssembler(XElement.Parse(xml)).AssembleShop();
+            var shop = new ShopAssembler(XElement.Parse(xml), new Uri("http://localhost/")).AssembleShop();
 
             Assert.IsNotNull(shop);
             Assert.IsFalse(shop.HasItems);
@@ -131,6 +132,28 @@ namespace Tests.Restbucks.MediaType.Assemblers
             Assert.AreEqual("/orders", secondForm.Resource.ToString());
             Assert.AreEqual("put", secondForm.Method);
             Assert.AreEqual("application/xml", secondForm.MediaType);
+        }
+
+        [Test]
+        public void IfRootDoesNotSpecifyXmlBaseFallsBackToSuppliedXmlBaseValue()
+        {
+            const string xml = @"<?xml version=""1.0"" encoding=""utf-8""?>
+<shop xmlns=""http://schemas.restbucks.com/shop""/>";
+
+            var shop = new ShopAssembler(XElement.Parse(xml), new Uri("http://restbucks.com:8080/shop")).AssembleShop();
+
+            Assert.AreEqual(new Uri("http://restbucks.com:8080/"), shop.BaseUri);
+        }
+
+        [Test]
+        public void ShouldUseXmlBaseValueFromRootIfPresent()
+        {
+            const string xml = @"<?xml version=""1.0"" encoding=""utf-8""?>
+<shop xmlns=""http://schemas.restbucks.com/shop"" xml:base=""http://iansrobinson.com/""/>";
+
+            var shop = new ShopAssembler(XElement.Parse(xml), new Uri("http://restbucks.com:8080/shop")).AssembleShop();
+
+            Assert.AreEqual(new Uri("http://iansrobinson.com/"), shop.BaseUri);
         }
     }
 }

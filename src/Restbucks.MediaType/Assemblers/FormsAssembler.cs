@@ -8,10 +8,12 @@ namespace Restbucks.MediaType.Assemblers
     public class FormsAssembler
     {
         private readonly XElement root;
+        private readonly Uri requestUri;
 
-        public FormsAssembler(XElement root)
+        public FormsAssembler(XElement root, Uri requestUri)
         {
             this.root = root;
+            this.requestUri = requestUri;
         }
 
         public IEnumerable<Form> AssembleForms()
@@ -31,7 +33,7 @@ namespace Restbucks.MediaType.Assemblers
                            .ApplyNonEmptyValueOrDefault(value => new Uri(value, UriKind.RelativeOrAbsolute)),
                        instance
                            .ApplyNonNullInstance(inst => inst.Element(Namespaces.ShopSchema + "shop")
-                                                             .ApplyNonNullInstance(shop => new ShopAssembler(shop).AssembleShop()))
+                                                             .ApplyNonNullInstance(shop => new ShopAssembler(shop, requestUri).AssembleShop()))
                        );
         }
     }
