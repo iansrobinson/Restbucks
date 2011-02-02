@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace Restbucks.Quoting.Service.Resources
 {
-    public class UriFactoryCollection
+    public class UriFactory
     {
         private readonly IDictionary<Type, UriFactoryWorker> uriFactories;
 
-        public UriFactoryCollection()
+        public UriFactory()
         {
             uriFactories = new Dictionary<Type, UriFactoryWorker>();
         }

@@ -85,7 +85,7 @@
     <Compile Include="Quoting.Service\Processors\RestbucksMediaTypeProcessorResponseHandlingTests.cs" />
     <Compile Include="Quoting.Service\Processors\XmlTransformTests.cs" />
     <Compile Include="Quoting.Service\Resources\EntryPointTests.cs" />
-    <Compile Include="Quoting.Service\Resources\Helpers\DefaultUriFactoryCollection.cs" />
+    <Compile Include="Quoting.Service\Resources\Helpers\DefaultUriFactory.cs" />
     <Compile Include="Quoting.Service\Resources\Helpers\EmptyQuotationEngine.cs" />
     <Compile Include="Quoting.Service\Resources\Helpers\Matching.cs" />
     <Compile Include="Quoting.Service\Resources\Helpers\OrderFormBuilder.cs" />
@@ -99,9 +99,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Quoting.Service\Resources\RequestForQuoteTests.cs" />
-    <Compile Include="Quoting.Service\Resources\UriFactoryCollectionTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Quoting.Service\Resources\UriFactoryTests.cs" />
     <Compile Include="Quoting.Service\Resources\UriFactoryWorkerTests.cs" />
     <Compile Include="Quoting\Implementation\Helpers\StubDateTimeProvider.cs" />
     <Compile Include="Quoting\Implementation\Helpers\StubGuidProvider.cs" />

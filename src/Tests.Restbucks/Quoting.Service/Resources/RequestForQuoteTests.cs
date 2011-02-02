@@ -23,7 +23,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
             var form = entityBody.Forms.First();
 
             Assert.AreEqual("http://schemas.restbucks.com/shop.xsd", form.Schema.ToString());
-            Assert.AreEqual(DefaultUriFactoryCollection.Instance.For<Quotes>().CreateRelativeUri(), form.Resource.ToString());
+            Assert.AreEqual(DefaultUriFactory.Instance.For<Quotes>().CreateRelativeUri(), form.Resource.ToString());
             Assert.AreEqual("post", form.Method);
             Assert.AreEqual("application/restbucks+xml", form.MediaType);
             Assert.IsNull(form.Instance);
@@ -64,17 +64,17 @@ namespace Tests.Restbucks.Quoting.Service.Resources
 
         private static Shop ExecuteRequestReturnEntityBody()
         {
-            var request = new HttpRequestMessage { RequestUri = DefaultUriFactoryCollection.Instance.For<RequestForQuote>().CreateAbsoluteUri(BaseAddress) };
+            var request = new HttpRequestMessage { RequestUri = DefaultUriFactory.Instance.For<RequestForQuote>().CreateAbsoluteUri(BaseAddress) };
             var response = new HttpResponseMessage();
-            var requestForQuote = new RequestForQuote(DefaultUriFactoryCollection.Instance);
+            var requestForQuote = new RequestForQuote(DefaultUriFactory.Instance);
             return requestForQuote.Get(request, response);
         }
 
         private static HttpResponseMessage ExecuteRequestReturnResponse()
         {
-            var request = new HttpRequestMessage { RequestUri = DefaultUriFactoryCollection.Instance.For<RequestForQuote>().CreateAbsoluteUri(BaseAddress) };
+            var request = new HttpRequestMessage { RequestUri = DefaultUriFactory.Instance.For<RequestForQuote>().CreateAbsoluteUri(BaseAddress) };
             var response = new HttpResponseMessage();
-            var requestForQuote = new RequestForQuote(DefaultUriFactoryCollection.Instance);
+            var requestForQuote = new RequestForQuote(DefaultUriFactory.Instance);
             requestForQuote.Get(request, response);
 
             return response;

@@ -99,9 +99,7 @@
     <Compile Include="Resources\Quote.cs" />
     <Compile Include="Resources\Quotes.cs" />
     <Compile Include="Resources\RequestForQuote.cs" />
-    <Compile Include="Resources\UriFactoryCollection.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Resources\UriFactory.cs" />
     <Compile Include="Resources\UriFactoryWorker.cs" />
     <Compile Include="Resources\UriTemplateAttribute.cs" />
     <Compile Include="Resources\UriTemplateMissingException.cs" />

@@ -21,7 +21,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources.helpers
 
         public Quote Build()
         {
-            return new Quote(DefaultUriFactoryCollection.Instance, quotationEngine);
+            return new Quote(DefaultUriFactory.Instance, quotationEngine);
         }
     }
 }

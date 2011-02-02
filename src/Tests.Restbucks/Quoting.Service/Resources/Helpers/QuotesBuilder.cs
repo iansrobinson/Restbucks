@@ -20,7 +20,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources.Helpers
 
         public Quotes Build()
         {
-            return new Quotes(DefaultUriFactoryCollection.Instance, quotationEngine);
+            return new Quotes(DefaultUriFactory.Instance, quotationEngine);
         }
     }
 }

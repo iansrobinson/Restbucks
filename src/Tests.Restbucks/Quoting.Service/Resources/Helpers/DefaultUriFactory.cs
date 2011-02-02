@@ -2,13 +2,13 @@
 
 namespace Tests.Restbucks.Quoting.Service.Resources.Helpers
 {
-    public static class DefaultUriFactoryCollection
+    public static class DefaultUriFactory
     {
-        public static UriFactoryCollection Instance
+        public static UriFactory Instance
         {
             get
             {
-                var uriFactories = new UriFactoryCollection();
+                var uriFactories = new UriFactory();
                 uriFactories.Register<EntryPoint>();
                 uriFactories.Register<RequestForQuote>();
                 uriFactories.Register<Quotes>();

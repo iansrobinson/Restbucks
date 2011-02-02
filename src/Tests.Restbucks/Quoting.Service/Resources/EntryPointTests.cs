@@ -21,7 +21,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
 
             var link = entityBody.Links.First();
 
-            Assert.AreEqual(DefaultUriFactoryCollection.Instance.For<RequestForQuote>().CreateRelativeUri(), link.Href.ToString());
+            Assert.AreEqual(DefaultUriFactory.Instance.For<RequestForQuote>().CreateRelativeUri(), link.Href.ToString());
             Assert.AreEqual(LinkRelations.Rfq, link.Rels.First());
             Assert.AreEqual(LinkRelations.Prefetch, link.Rels.Last());
             Assert.AreEqual("application/restbucks+xml", link.MediaType);
@@ -46,7 +46,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         [Test]
         public void ResponseShouldBePublicallyCacheableForOneDay()
         {
-            var resource = new EntryPoint(DefaultUriFactoryCollection.Instance);
+            var resource = new EntryPoint(DefaultUriFactory.Instance);
             var response = new HttpResponseMessage();
             resource.Get(new HttpRequestMessage(HttpMethod.Get, new Uri("http://localhost/shop")), response);
 
@@ -57,7 +57,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         [Test]
         public void BaseUriShouldIncludeVirtualDirectoryIfPresent()
         {
-            var resource = new EntryPoint(DefaultUriFactoryCollection.Instance);
+            var resource = new EntryPoint(DefaultUriFactory.Instance);
             var entityBody = resource.Get(new HttpRequestMessage(HttpMethod.Get, new Uri("http://localhost/virtual-directory/shop")), new HttpResponseMessage());
 
             Assert.AreEqual(new Uri("http://localhost/virtual-directory/"), entityBody.BaseUri);
@@ -65,7 +65,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
 
         private static Shop GetEntryPointEntityBody()
         {
-            return new EntryPoint(DefaultUriFactoryCollection.Instance).Get(new HttpRequestMessage(HttpMethod.Get, new Uri("http://localhost/shop")), new HttpResponseMessage());
+            return new EntryPoint(DefaultUriFactory.Instance).Get(new HttpRequestMessage(HttpMethod.Get, new Uri("http://localhost/shop")), new HttpResponseMessage());
         }
     }
 }

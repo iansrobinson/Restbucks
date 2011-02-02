@@ -70,7 +70,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         {
             var response = ExecuteRequestReturnResponse();
 
-            Assert.AreEqual(DefaultUriFactoryCollection.Instance.For<Quote>().CreateAbsoluteUri(BaseAddress, StubQuotationEngine.QuoteId), response.Headers.Location);
+            Assert.AreEqual(DefaultUriFactory.Instance.For<Quote>().CreateAbsoluteUri(BaseAddress, StubQuotationEngine.QuoteId), response.Headers.Location);
         }
 
         [Test]
@@ -87,7 +87,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
             var entityBody = ExecuteRequestReturnEntityBody();
 
             Assert.IsNotNull(entityBody.Links.Single(l => l.Rels.First().Value.Equals("self")));
-            Assert.AreEqual(DefaultUriFactoryCollection.Instance.For<Quote>().CreateRelativeUri(StubQuotationEngine.QuoteId), entityBody.Links.Single(l => l.Rels.First().Value.Equals("self")).Href.ToString());
+            Assert.AreEqual(DefaultUriFactory.Instance.For<Quote>().CreateRelativeUri(StubQuotationEngine.QuoteId), entityBody.Links.Single(l => l.Rels.First().Value.Equals("self")).Href.ToString());
         }
 
         [Test]
@@ -96,7 +96,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
             var entityBody = ExecuteRequestReturnEntityBody();
 
             Assert.IsNotNull(entityBody.Links.Single(l => l.Rels.First().SerializableValue.Equals("rb:order-form")));
-            Assert.AreEqual(DefaultUriFactoryCollection.Instance.For<OrderForm>().CreateRelativeUri(StubQuotationEngine.QuoteId), entityBody.Links.Single(l => l.Rels.First().SerializableValue.Equals("rb:order-form")).Href.ToString());
+            Assert.AreEqual(DefaultUriFactory.Instance.For<OrderForm>().CreateRelativeUri(StubQuotationEngine.QuoteId), entityBody.Links.Single(l => l.Rels.First().SerializableValue.Equals("rb:order-form")).Href.ToString());
         }
 
         [Test]
@@ -125,7 +125,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         {
             var quotes = new QuotesBuilder().WithQuotationEngine(StubQuotationEngine.Instance).Build();
 
-            var request = new HttpRequestMessage { RequestUri = DefaultUriFactoryCollection.Instance.For<Quotes>().CreateAbsoluteUri(BaseAddress) };
+            var request = new HttpRequestMessage { RequestUri = DefaultUriFactory.Instance.For<Quotes>().CreateAbsoluteUri(BaseAddress) };
             var response = new HttpResponseMessage();
 
             quotes.Post(new ShopBuilder().Build(), request, response);
@@ -137,7 +137,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         {
             var quotes = new QuotesBuilder().WithQuotationEngine(StubQuotationEngine.Instance).Build();
 
-            var request = new HttpRequestMessage { RequestUri = DefaultUriFactoryCollection.Instance.For<Quotes>().CreateAbsoluteUri(BaseAddress) };
+            var request = new HttpRequestMessage { RequestUri = DefaultUriFactory.Instance.For<Quotes>().CreateAbsoluteUri(BaseAddress) };
             var response = new HttpResponseMessage();
 
             return quotes.Post(new ShopBuilder().Build(), request, response);

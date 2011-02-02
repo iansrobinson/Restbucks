@@ -11,20 +11,20 @@ namespace Restbucks.Quoting.Service.Resources
     [UriTemplate("request-for-quote")]
     public class RequestForQuote
     {
-        private readonly UriFactoryCollection uriFactories;
+        private readonly UriFactory uriFactory;
 
-        public RequestForQuote(UriFactoryCollection uriFactories)
+        public RequestForQuote(UriFactory uriFactory)
         {
-            this.uriFactories = uriFactories;
+            this.uriFactory = uriFactory;
         }
 
         [WebGet(UriTemplate = "")]
         public Shop Get(HttpRequestMessage request, HttpResponseMessage response)
         {
             response.Headers.CacheControl = new CacheControlHeaderValue {Public = true, MaxAge = new TimeSpan(24, 0, 0)};
-            return new Shop(uriFactories.For<RequestForQuote>().CreateBaseUri(request.RequestUri))
+            return new Shop(uriFactory.For<RequestForQuote>().CreateBaseUri(request.RequestUri))
                 .AddForm(new Form(
-                             uriFactories.For<Quotes>().CreateRelativeUri(),
+                             uriFactory.For<Quotes>().CreateRelativeUri(),
                              "post", "application/restbucks+xml",
                              new Uri("http://schemas.restbucks.com/shop.xsd")));
         }

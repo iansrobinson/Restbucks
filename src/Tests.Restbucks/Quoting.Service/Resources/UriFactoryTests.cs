@@ -6,12 +6,12 @@ using Restbucks.Quoting.Service.Resources;
 namespace Tests.Restbucks.Quoting.Service.Resources
 {
     [TestFixture]
-    public class UriFactoryCollectionTests
+    public class UriFactoryTests
     {
         [Test]
         public void ShouldReturnUriFactoryForClassAttributedWithUriTemplateAttribute()
         {
-            var uriFactories = new UriFactoryCollection();
+            var uriFactories = new UriFactory();
             uriFactories.Register<MyResource>();
             Assert.AreEqual("/my-resource/1", uriFactories.For<MyResource>().CreateRelativeUri("1").ToString());
         }
@@ -20,7 +20,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         [ExpectedException(ExpectedException = typeof(ArgumentException))]
         public void ThrowsExceptionIfEntryAlreadyExistsForType()
         {
-            var uriFactories = new UriFactoryCollection();
+            var uriFactories = new UriFactory();
             uriFactories.Register<MyResource>();
             uriFactories.Register<MyResource>();
         }
@@ -29,7 +29,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         [ExpectedException(ExpectedException = typeof(KeyNotFoundException))]
         public void ThrowsExceptionIfEntryDoesNotExistForType()
         {
-            var uriFactories = new UriFactoryCollection();
+            var uriFactories = new UriFactory();
             uriFactories.For<MyResource>();
         }
 
@@ -37,7 +37,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         [ExpectedException(ExpectedException = typeof(UriTemplateMissingException))]
         public void ThrowsExceptionIfTypeIsNOtAttributedWithUriTemplateAttribute()
         {
-            var uriFactories = new UriFactoryCollection();
+            var uriFactories = new UriFactory();
             uriFactories.Register<string>();
         }
 

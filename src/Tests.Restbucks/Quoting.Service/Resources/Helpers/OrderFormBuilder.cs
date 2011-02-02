@@ -20,7 +20,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources.Helpers
 
         public OrderForm Build()
         {
-            return new OrderForm(DefaultUriFactoryCollection.Instance, quotationEngine);
+            return new OrderForm(DefaultUriFactory.Instance, quotationEngine);
         }
     }
 }

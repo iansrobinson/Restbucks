@@ -41,7 +41,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
             }
             mocks.Playback();
 
-            var request = new HttpRequestMessage {RequestUri = DefaultUriFactoryCollection.Instance.For<OrderForm>().CreateAbsoluteUri(BaseAddress, id.ToString("N"))};
+            var request = new HttpRequestMessage {RequestUri = DefaultUriFactory.Instance.For<OrderForm>().CreateAbsoluteUri(BaseAddress, id.ToString("N"))};
 
             var orderForm = new OrderFormBuilder().WithQuotationEngine(quoteEngine).Build();
             var entityBody = orderForm.Get(id.ToString("N"), request, new HttpResponseMessage());
@@ -98,7 +98,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
             var selfLink = formContents.Links.Single(l => l.Rels.First().Value.Equals("self"));
 
             Assert.IsNotNull(selfLink);
-            Assert.AreEqual(DefaultUriFactoryCollection.Instance.For<Quote>().CreateRelativeUri(StubQuotationEngine.QuoteId), selfLink.Href.ToString());
+            Assert.AreEqual(DefaultUriFactory.Instance.For<Quote>().CreateRelativeUri(StubQuotationEngine.QuoteId), selfLink.Href.ToString());
         }
 
         [Test]
@@ -147,7 +147,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         {
             var response = ExecuteRequestReturnResponse();
 
-            var expectedUriValue = DefaultUriFactoryCollection.Instance.For<Quote>().CreateAbsoluteUri(BaseAddress, StubQuotationEngine.QuoteId);
+            var expectedUriValue = DefaultUriFactory.Instance.For<Quote>().CreateAbsoluteUri(BaseAddress, StubQuotationEngine.QuoteId);
             Assert.AreEqual(expectedUriValue, response.Content.Headers.ContentLocation.ToString());
         }
 
@@ -155,7 +155,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         {
             var orderForm = new OrderFormBuilder().WithQuotationEngine(StubQuotationEngine.Instance).Build();
 
-            var request = new HttpRequestMessage {RequestUri = DefaultUriFactoryCollection.Instance.For<OrderForm>().CreateAbsoluteUri(BaseAddress, StubQuotationEngine.QuoteId)};
+            var request = new HttpRequestMessage {RequestUri = DefaultUriFactory.Instance.For<OrderForm>().CreateAbsoluteUri(BaseAddress, StubQuotationEngine.QuoteId)};
             var response = new HttpResponseMessage();
 
             orderForm.Get(StubQuotationEngine.QuoteId, request, response);
@@ -167,7 +167,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         {
             var orderForm = new OrderFormBuilder().WithQuotationEngine(StubQuotationEngine.Instance).Build();
 
-            var request = new HttpRequestMessage {RequestUri = DefaultUriFactoryCollection.Instance.For<OrderForm>().CreateAbsoluteUri(BaseAddress, StubQuotationEngine.QuoteId)};
+            var request = new HttpRequestMessage {RequestUri = DefaultUriFactory.Instance.For<OrderForm>().CreateAbsoluteUri(BaseAddress, StubQuotationEngine.QuoteId)};
             var response = new HttpResponseMessage();
 
             return orderForm.Get(StubQuotationEngine.QuoteId, request, response);
