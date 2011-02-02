@@ -172,54 +172,5 @@ namespace Tests.Restbucks.Quoting.Service.Resources
 
             return orderForm.Get(Guid.NewGuid().ToString("N"), request, response);
         }
-
-        private class EmptyQuotationEngine : IQuotationEngine
-        {
-            public static readonly IQuotationEngine Instance = new EmptyQuotationEngine();
-
-            private EmptyQuotationEngine()
-            {
-            }
-
-            public Quotation CreateQuote(QuotationRequest request)
-            {
-                throw new NotImplementedException();
-            }
-
-            public Quotation GetQuote(Guid id)
-            {
-                throw new KeyNotFoundException();
-            }
-        }
-
-        private class StubQuotationEngine : IQuotationEngine
-        {
-            public static readonly IQuotationEngine Instance = new StubQuotationEngine();
-
-            public static readonly Quotation Quotation = new Quotation(
-                Guid.Empty,
-                DateTime.Now,
-                new[]
-                    {
-                        new LineItem("item1", new Quantity("g", 250), new Money("GBP", 2.50)),
-                        new LineItem("item2", new Quantity("kg", 2), new Money("GBP", 2.00))
-                    });
-
-            public static readonly string QuoteId = Quotation.Id.ToString("N");
-
-            private StubQuotationEngine()
-            {
-            }
-
-            public Quotation CreateQuote(QuotationRequest request)
-            {
-                throw new NotImplementedException();
-            }
-
-            public Quotation GetQuote(Guid id)
-            {
-                return Quotation;
-            }
-        }
     }
 }

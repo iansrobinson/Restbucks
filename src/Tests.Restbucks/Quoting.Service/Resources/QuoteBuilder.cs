@@ -9,7 +9,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
 
         public QuoteBuilder()
         {
-            quotationEngine = new StubQuotationEngine();
+            quotationEngine = StubQuotationEngine.Instance;
         }
 
         public QuoteBuilder WithQuotationEngine(IQuotationEngine value)

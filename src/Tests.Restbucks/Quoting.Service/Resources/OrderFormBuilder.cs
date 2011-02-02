@@ -9,7 +9,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
 
         public OrderFormBuilder()
         {
-            quotationEngine = new StubQuotationEngine();
+            quotationEngine = StubQuotationEngine.Instance;
         }
 
         public OrderFormBuilder WithQuotationEngine(IQuotationEngine value)

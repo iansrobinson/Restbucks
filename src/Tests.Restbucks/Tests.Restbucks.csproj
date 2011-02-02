@@ -85,6 +85,7 @@
     <Compile Include="Quoting.Service\Processors\RestbucksMediaTypeProcessorResponseHandlingTests.cs" />
     <Compile Include="Quoting.Service\Processors\XmlTransformTests.cs" />
     <Compile Include="Quoting.Service\Resources\DefaultUriFactoryCollection.cs" />
+    <Compile Include="Quoting.Service\Resources\EmptyQuotationEngine.cs" />
     <Compile Include="Quoting.Service\Resources\EntryPointTests.cs" />
     <Compile Include="Quoting.Service\Resources\Matching.cs" />
     <Compile Include="Quoting.Service\Resources\OrderFormBuilder.cs" />
