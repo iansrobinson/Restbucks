@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using Restbucks.Quoting;
 using Restbucks.Quoting.Implementation;
+using Tests.Restbucks.Quoting.Implementation.Helpers;
 
 namespace Tests.Restbucks.Quoting.Implementation
 {

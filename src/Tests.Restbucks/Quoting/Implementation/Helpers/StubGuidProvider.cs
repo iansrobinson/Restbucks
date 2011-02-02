@@ -1,7 +1,7 @@
 ﻿using System;
 using Restbucks.Quoting;
 
-namespace Tests.Restbucks.Quoting.Implementation
+namespace Tests.Restbucks.Quoting.Implementation.Helpers
 {
     public class StubGuidProvider : IGuidProvider
     {
