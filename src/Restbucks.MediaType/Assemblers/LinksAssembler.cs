@@ -22,7 +22,7 @@ namespace Restbucks.MediaType.Assemblers
 
         private static LinkRelation[] CreateLinkRelationsFromRelAttribute(string value, XElement link)
         {
-            return value.Split(new[] { ' ' })
+            return value.Split(new[] {' '})
                 .Select(rel => LinkRelation.Parse(rel, LookupNamespace(link))).ToArray();
         }
 
@@ -37,12 +37,12 @@ namespace Restbucks.MediaType.Assemblers
         {
             var links = root.Descendants(Namespaces.ShopSchema + "link");
             return links.Select(lnk => new Link(
-                                           lnk.Attribute("type")
-                                               .ApplyNonEmptyValueOrDefault(),
                                            lnk.Attribute("href")
                                                .ApplyNonEmptyValueOrDefault(value => new Uri(value, UriKind.RelativeOrAbsolute)),
+                                           lnk.Attribute("type")
+                                               .ApplyNonEmptyValueOrDefault(),
                                            lnk.Attribute("rel")
                                                .ApplyNonEmptyValueOrDefault(value => CreateLinkRelationsFromRelAttribute(value, lnk))));
-        }  
+        }
     }
 }

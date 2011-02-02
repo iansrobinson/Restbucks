@@ -31,15 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Net.Http">
-      <HintPath>..\..\lib\http\Microsoft.Net.Http.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.ServiceModel.Http">
-      <HintPath>..\..\lib\http\Microsoft.ServiceModel.Http.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.ServiceModel.WebHttp">
-      <HintPath>..\..\lib\http\Microsoft.ServiceModel.WebHttp.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

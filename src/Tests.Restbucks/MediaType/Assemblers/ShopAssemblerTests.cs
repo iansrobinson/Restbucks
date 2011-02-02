@@ -28,7 +28,7 @@ namespace Tests.Restbucks.MediaType.Assemblers
         {
             const string xml = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <shop xmlns:rb=""http://relations.restbucks.com/"" xmlns=""http://schemas.restbucks.com/shop"">
-  <link rel=""rb:rfq prefetch"" href=""/quotes"" />
+  <link rel=""rb:rfq prefetch"" type=""application/xml"" href=""/quotes"" />
   <link rel=""rb:order-form"" type=""application/restbucks+xml"" href=""/order-forms/1234"" />
 </shop>";
 
@@ -45,7 +45,7 @@ namespace Tests.Restbucks.MediaType.Assemblers
             Assert.AreEqual("rb:rfq", firstLink.Rels.First().SerializableValue);
             Assert.AreEqual("prefetch", firstLink.Rels.Last().SerializableValue);
             Assert.AreEqual("/quotes", firstLink.Href.ToString());
-            Assert.IsNull(firstLink.MediaType);
+            Assert.AreEqual("application/xml", firstLink.MediaType);
 
             var secondLink = shop.Links.Last();
             Assert.AreEqual("rb:order-form", secondLink.Rels.First().SerializableValue);

@@ -53,8 +53,7 @@ namespace Restbucks.Quoting.Service.Old.Resources
                              "post",
                              "application/restbucks+xml",
                              new Shop(request.Uri, quote.LineItems.Select(li => new LineItemToItem(li).Adapt()))
-                                 .AddLink(new Link(Quotes.QuoteUriFactory.CreateRelativeUri(quote.Id.ToString("N")),
-                                                   LinkRelations.Self))));
+                                 .AddLink(new Link(Quotes.QuoteUriFactory.CreateRelativeUri(quote.Id.ToString("N")),"application/restbucks+xml", LinkRelations.Self))));
         }
     }
 }

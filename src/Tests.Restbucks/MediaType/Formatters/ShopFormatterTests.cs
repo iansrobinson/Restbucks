@@ -25,8 +25,8 @@ namespace Tests.Restbucks.MediaType.Formatters
         public void ShouldCreateLinksAsChildrenOfShopElement()
         {
             var shop = new ShopBuilder().Build()
-                .AddLink(new Link(new Uri("/quotes", UriKind.Relative), LinkRelations.Rfq, LinkRelations.Prefetch))
-                .AddLink(new Link("application/xml", new Uri("/order-forms/1234", UriKind.Relative), LinkRelations.OrderForm));
+                .AddLink(new Link(new Uri("/quotes", UriKind.Relative), "application/restbucks+xml", LinkRelations.Rfq, LinkRelations.Prefetch))
+                .AddLink(new Link(new Uri("/order-forms/1234", UriKind.Relative), "application/xml", LinkRelations.OrderForm));
 
             var xml = new XmlOutput(new ShopFormatter(shop).CreateXml());
 
@@ -34,7 +34,7 @@ namespace Tests.Restbucks.MediaType.Formatters
 
             Assert.AreEqual("rb:rfq prefetch", xml.GetNodeValue("r:shop/r:link[1]/@rel"));
             Assert.AreEqual("/quotes", xml.GetNodeValue("r:shop/r:link[1]/@href"));
-            Assert.IsNull(xml.GetNode("r:shop/r:link[1]/@type"));
+            Assert.AreEqual("application/restbucks+xml", xml.GetNodeValue("r:shop/r:link[1]/@type"));
 
             Assert.AreEqual("rb:order-form", xml.GetNodeValue("r:shop/r:link[2]/@rel"));
             Assert.AreEqual("application/xml", xml.GetNodeValue("r:shop/r:link[2]/@type"));
@@ -51,7 +51,7 @@ namespace Tests.Restbucks.MediaType.Formatters
             var rel2 = new CompactUriLinkRelation("tw", new Uri(ns2, UriKind.Absolute), "rel2");
 
             var shop = new ShopBuilder().Build()
-                .AddLink(new Link(new Uri("/quotes", UriKind.Relative), rel1, rel2));
+                .AddLink(new Link(new Uri("/quotes", UriKind.Relative), "application/restbucks+xml", rel1, rel2));
 
             var xml = new XmlOutput(new ShopFormatter(shop).CreateXml());
 

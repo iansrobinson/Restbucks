@@ -23,7 +23,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
             Assert.AreEqual(DefaultUriFactoryCollection.Instance.For<RequestForQuote>().CreateRelativeUri(), link.Href.ToString());
             Assert.AreEqual(LinkRelations.Rfq, link.Rels.First());
             Assert.AreEqual(LinkRelations.Prefetch, link.Rels.Last());
-            Assert.IsNull(link.MediaType);
+            Assert.AreEqual("application/restbucks+xml", link.MediaType);
         }
 
         [Test]

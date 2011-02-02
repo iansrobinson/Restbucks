@@ -74,9 +74,8 @@ namespace Restbucks.Quoting.Service.Old.Resources
             var uri = GenerateQuoteUri(requestUri, quote);
 
             return new Shop(uri, quote.LineItems.Select(li => new LineItemToItem(li).Adapt()))
-                .AddLink(new Link(new Uri(uri.PathAndQuery, UriKind.Relative), LinkRelations.Self))
-                .AddLink(new Link(OrderForm.UriFactory.CreateRelativeUri(quote.Id.ToString("N")),
-                                  LinkRelations.OrderForm));
+                .AddLink(new Link(new Uri(uri.PathAndQuery, UriKind.Relative), "application/restbucks+xml", LinkRelations.Self))
+                .AddLink(new Link(OrderForm.UriFactory.CreateRelativeUri(quote.Id.ToString("N")), "application/restbucks+xml", LinkRelations.OrderForm));
         }
 
         private static Uri GenerateQuoteUri(Uri requestUri, Quotation quote)

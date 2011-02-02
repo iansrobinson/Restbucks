@@ -24,7 +24,7 @@ namespace Restbucks.Quoting.Service.Resources
             response.Headers.CacheControl = new CacheControlHeaderValue {Public = true, MaxAge = new TimeSpan(24, 0, 0)};
             
             return new Shop(request.RequestUri)
-                .AddLink(new Link(uriFactories.For<RequestForQuote>().CreateRelativeUri(), LinkRelations.Rfq, LinkRelations.Prefetch));
+                .AddLink(new Link(uriFactories.For<RequestForQuote>().CreateRelativeUri(), "application/restbucks+xml", LinkRelations.Rfq, LinkRelations.Prefetch));
         }
     }
 }
