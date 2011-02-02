@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace Restbucks.MediaType.Assemblers
@@ -19,7 +20,7 @@ namespace Restbucks.MediaType.Assemblers
                 return null;
             }
 
-            var shop = new Shop();
+            var shop = new Shop((Uri) null);
 
             new ItemsAssembler(root).AssembleItems().ToList().ForEach(item => shop.AddItem(item));
             new LinksAssembler(root).AssembleLinks().ToList().ForEach(link => shop.AddLink(link));

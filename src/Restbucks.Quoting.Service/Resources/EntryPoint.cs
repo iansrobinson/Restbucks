@@ -19,11 +19,11 @@ namespace Restbucks.Quoting.Service.Resources
         }
 
         [WebGet(UriTemplate = "")]
-        public Shop Get(HttpResponseMessage response)
+        public Shop Get(HttpRequestMessage request, HttpResponseMessage response)
         {
             response.Headers.CacheControl = new CacheControlHeaderValue {Public = true, MaxAge = new TimeSpan(24, 0, 0)};
             
-            return new Shop()
+            return new Shop(request.RequestUri)
                 .AddLink(new Link(uriFactories.For<RequestForQuote>().CreateRelativeUri(), LinkRelations.Rfq, LinkRelations.Prefetch));
         }
     }

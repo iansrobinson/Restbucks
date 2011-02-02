@@ -47,12 +47,12 @@ namespace Restbucks.Quoting.Service.Old.Resources
             response.Headers.ContentLocation = Quotes.QuoteUriFactory.CreateAbsoluteUri(request.Uri,
                                                                                         quote.Id.ToString("N"));
 
-            return new Shop()
+            return new Shop(request.Uri)
                 .AddForm(new Form(
                              OrdersUriFactory.CreateAbsoluteUri(new Uri("http://localhost:8081")),
                              "post",
                              "application/restbucks+xml",
-                             new Shop(quote.LineItems.Select(li => new LineItemToItem(li).Adapt()))
+                             new Shop(request.Uri, quote.LineItems.Select(li => new LineItemToItem(li).Adapt()))
                                  .AddLink(new Link(Quotes.QuoteUriFactory.CreateRelativeUri(quote.Id.ToString("N")),
                                                    LinkRelations.Self))));
         }

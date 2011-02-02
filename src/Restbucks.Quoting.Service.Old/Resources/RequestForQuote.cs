@@ -9,10 +9,10 @@ namespace Restbucks.Quoting.Service.Old.Resources
     {
         public static readonly UriFactory UriFactory = new UriFactory("request-for-quote");
 
-        public Shop Get(HttpResponseMessage response)
+        public Shop Get(HttpRequestMessage request, HttpResponseMessage response)
         {
             response.Headers.CacheControl = new CacheControl {Public = true, MaxAge = new TimeSpan(24, 0, 0)};
-            return new Shop()
+            return new Shop(request.Uri)
                 .AddForm(new Form(
                              Quotes.QuotesUriFactory.CreateRelativeUri(),
                              "post", "application/restbucks+xml",

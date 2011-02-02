@@ -13,12 +13,11 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
         [Test]
         public void EntityBodyShouldContainAnEmptyRequestForQuoteForm()
         {
-            var resource = new RequestForQuote();
-            Shop entityBody = resource.Get(new HttpResponseMessage());
+            var entityBody = GetRequestForQuoteEntityBody();
 
             Assert.AreEqual(1, entityBody.Forms.Count());
 
-            Form form = entityBody.Forms.First();
+            var form = entityBody.Forms.First();
 
             Assert.AreEqual("http://schemas.restbucks.com/shop.xsd", form.Schema.ToString());
             Assert.AreEqual(Quotes.QuotesUriFactory.CreateRelativeUri(), form.Resource.ToString());
@@ -27,11 +26,12 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             Assert.IsNull(form.Instance);
         }
 
+        
+
         [Test]
         public void EntityBodyShouldNotContainAnyLinks()
         {
-            var resource = new RequestForQuote();
-            Shop entityBody = resource.Get(new HttpResponseMessage());
+            var entityBody = GetRequestForQuoteEntityBody();
 
             Assert.IsFalse(entityBody.HasLinks);
         }
@@ -39,8 +39,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
         [Test]
         public void EntityBodyShouldNotContainAnyItems()
         {
-            var resource = new RequestForQuote();
-            Shop entityBody = resource.Get(new HttpResponseMessage());
+            var entityBody = GetRequestForQuoteEntityBody();
 
             Assert.IsFalse(entityBody.HasItems);
         }
@@ -50,10 +49,15 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
         {
             var resource = new RequestForQuote();
             var response = new HttpResponseMessage();
-            resource.Get(response);
+            resource.Get(new HttpRequestMessage("GET", new Uri("http://localhost/rfq")), response);
 
             Assert.AreEqual(new TimeSpan(24, 0, 0), response.Headers.CacheControl.MaxAge);
             Assert.IsTrue(response.Headers.CacheControl.Public);
+        }
+
+        private static Shop GetRequestForQuoteEntityBody()
+        {
+            return new RequestForQuote().Get(new HttpRequestMessage("GET", new Uri("http://localhost/rfq")), new HttpResponseMessage());
         }
     }
 }

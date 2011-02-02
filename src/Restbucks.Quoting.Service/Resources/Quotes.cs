@@ -48,7 +48,7 @@ namespace Restbucks.Quoting.Service.Resources
         {
             var uri = GenerateQuoteUri(requestUri, quotation);
 
-            return new Shop(quotation.LineItems.Select(li => new LineItemToItem(li).Adapt()))
+            return new Shop(uri, quotation.LineItems.Select(li => new LineItemToItem(li).Adapt()))
                 .AddLink(new Link(new Uri(uri.PathAndQuery, UriKind.Relative), LinkRelations.Self))
                 .AddLink(new Link(uriFactories.For<OrderForm>().CreateRelativeUri(quotation.Id.ToString("N")), LinkRelations.OrderForm));
         }

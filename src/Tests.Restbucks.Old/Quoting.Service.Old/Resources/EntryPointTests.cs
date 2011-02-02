@@ -14,12 +14,11 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
         [Test]
         public void EntityBodyShouldContainALinkToRequestForQuoteForm()
         {
-            var resource = new EntryPoint();
-            Shop entityBody = resource.Get(new HttpResponseMessage());
+            var entityBody = GetEntryPointEntityBody();
 
             Assert.AreEqual(1, entityBody.Links.Count());
 
-            Link link = entityBody.Links.First();
+            var link = entityBody.Links.First();
 
             Assert.AreEqual(RequestForQuote.UriFactory.CreateRelativeUri(), link.Href.ToString());
             Assert.AreEqual(LinkRelations.Rfq, link.Rels.First());
@@ -30,8 +29,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
         [Test]
         public void EntityBodyShouldNotContainAnyForms()
         {
-            var resource = new EntryPoint();
-            Shop entityBody = resource.Get(new HttpResponseMessage());
+            var entityBody = GetEntryPointEntityBody();
 
             Assert.IsFalse(entityBody.HasForms);
         }
@@ -39,8 +37,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
         [Test]
         public void EntityBodyShouldNotContainAnyItems()
         {
-            var resource = new EntryPoint();
-            Shop entityBody = resource.Get(new HttpResponseMessage());
+            var entityBody = GetEntryPointEntityBody();
 
             Assert.IsFalse(entityBody.HasItems);
         }
@@ -50,10 +47,15 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
         {
             var resource = new EntryPoint();
             var response = new HttpResponseMessage();
-            resource.Get(response);
+            resource.Get(new HttpRequestMessage("GET", new Uri("http://localhost/shop")), response);
 
             Assert.AreEqual(new TimeSpan(24, 0, 0), response.Headers.CacheControl.MaxAge);
             Assert.IsTrue(response.Headers.CacheControl.Public);
+        }
+
+        private static Shop GetEntryPointEntityBody()
+        {
+            return new EntryPoint().Get(new HttpRequestMessage("GET", new Uri("http://localhost/shop")), new HttpResponseMessage());
         }
     }
 }

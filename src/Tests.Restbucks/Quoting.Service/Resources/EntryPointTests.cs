@@ -14,12 +14,11 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         [Test]
         public void EntityBodyShouldContainALinkToRequestForQuoteForm()
         {
-            var resource = BuildEntryPointResource();
-            Shop entityBody = resource.Get(new HttpResponseMessage());
+            var entityBody = GetEntryPointEntityBody();
 
             Assert.AreEqual(1, entityBody.Links.Count());
 
-            Link link = entityBody.Links.First();
+            var link = entityBody.Links.First();
 
             Assert.AreEqual(DefaultUriFactoryCollection.Instance.For<RequestForQuote>().CreateRelativeUri(), link.Href.ToString());
             Assert.AreEqual(LinkRelations.Rfq, link.Rels.First());
@@ -30,8 +29,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         [Test]
         public void EntityBodyShouldNotContainAnyForms()
         {
-            var resource = BuildEntryPointResource();
-            Shop entityBody = resource.Get(new HttpResponseMessage());
+            var entityBody = GetEntryPointEntityBody();
 
             Assert.IsFalse(entityBody.HasForms);
         }
@@ -39,8 +37,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         [Test]
         public void EntityBodyShouldNotContainAnyItems()
         {
-            var resource = BuildEntryPointResource();
-            Shop entityBody = resource.Get(new HttpResponseMessage());
+            var entityBody = GetEntryPointEntityBody();
 
             Assert.IsFalse(entityBody.HasItems);
         }
@@ -48,17 +45,18 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         [Test]
         public void ResponseShouldBePublicallyCacheableForOneDay()
         {
-            var resource = BuildEntryPointResource();
+            var resource = new EntryPoint(DefaultUriFactoryCollection.Instance);
             var response = new HttpResponseMessage();
-            resource.Get(response);
+            resource.Get(new HttpRequestMessage(HttpMethod.Get, new Uri("http://localhost/shop")), response);
 
             Assert.AreEqual(new TimeSpan(24, 0, 0), response.Headers.CacheControl.MaxAge);
             Assert.IsTrue(response.Headers.CacheControl.Public);
         }
 
-        private static EntryPoint BuildEntryPointResource()
+
+        private static Shop GetEntryPointEntityBody()
         {
-            return new EntryPoint(DefaultUriFactoryCollection.Instance);
+            return new EntryPoint(DefaultUriFactoryCollection.Instance).Get(new HttpRequestMessage(HttpMethod.Get, new Uri("http://localhost/shop")), new HttpResponseMessage());
         }
     }
 }

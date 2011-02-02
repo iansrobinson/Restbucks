@@ -13,12 +13,11 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         [Test]
         public void EntityBodyShouldContainAnEmptyRequestForQuoteForm()
         {
-            var resource = BuildRequestForQuoteResource();
-            Shop entityBody = resource.Get(new HttpResponseMessage());
+            var entityBody = GetRequestForQuoteEntityBody();
 
             Assert.AreEqual(1, entityBody.Forms.Count());
 
-            Form form = entityBody.Forms.First();
+            var form = entityBody.Forms.First();
 
             Assert.AreEqual("http://schemas.restbucks.com/shop.xsd", form.Schema.ToString());
             Assert.AreEqual(DefaultUriFactoryCollection.Instance.For<Quotes>().CreateRelativeUri(), form.Resource.ToString());
@@ -30,8 +29,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         [Test]
         public void EntityBodyShouldNotContainAnyLinks()
         {
-            var resource = BuildRequestForQuoteResource();
-            Shop entityBody = resource.Get(new HttpResponseMessage());
+            var entityBody = GetRequestForQuoteEntityBody();
 
             Assert.IsFalse(entityBody.HasLinks);
         }
@@ -39,8 +37,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         [Test]
         public void EntityBodyShouldNotContainAnyItems()
         {
-            var resource = BuildRequestForQuoteResource();
-            Shop entityBody = resource.Get(new HttpResponseMessage());
+            var entityBody = GetRequestForQuoteEntityBody();
 
             Assert.IsFalse(entityBody.HasItems);
         }
@@ -48,17 +45,17 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         [Test]
         public void ResponseShouldBePublicallyCacheableForOneDay()
         {
-            var resource = BuildRequestForQuoteResource();
+            var resource = new RequestForQuote(DefaultUriFactoryCollection.Instance);
             var response = new HttpResponseMessage();
-            resource.Get(response);
+            resource.Get(new HttpRequestMessage(HttpMethod.Get, new Uri("http://localhost/rfq")), response);
 
             Assert.AreEqual(new TimeSpan(24, 0, 0), response.Headers.CacheControl.MaxAge);
             Assert.IsTrue(response.Headers.CacheControl.Public);
         }
 
-        public static RequestForQuote BuildRequestForQuoteResource()
+        private static Shop GetRequestForQuoteEntityBody()
         {
-            return new RequestForQuote(DefaultUriFactoryCollection.Instance);
+            return new RequestForQuote(DefaultUriFactoryCollection.Instance).Get(new HttpRequestMessage(HttpMethod.Get, new Uri("http://localhost/rfq")), new HttpResponseMessage());
         }
     }
 }

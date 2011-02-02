@@ -1,26 +1,28 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Restbucks.MediaType
 {
     public class Shop
     {
+        private readonly Uri uri;
         private readonly IList<Item> items;
         private readonly IList<Link> links;
         private readonly IList<Form> forms;
 
-        public Shop(IEnumerable<Item> items, IEnumerable<Link> links, IEnumerable<Form> forms)
+        public Shop(Uri uri1, IEnumerable<Item> items, IEnumerable<Link> links, IEnumerable<Form> forms)
         {
             this.items = new List<Item>(items);
             this.links = new List<Link>(links);
             this.forms = new List<Form>(forms);
         }
 
-        public Shop() : this(new Item[] {}, new Link[] {}, new Form[] {})
+        public Shop(Uri uri) : this(uri, new Item[] {}, new Link[] {}, new Form[] {})
         {
         }
 
-        public Shop(IEnumerable<Item> items) : this(items, new Link[] {}, new Form[] {})
+        public Shop(Uri uri, IEnumerable<Item> items) : this(uri, items, new Link[] {}, new Form[] {})
         {
         }
 
@@ -63,6 +65,11 @@ namespace Restbucks.MediaType
         {
             forms.Add(form);
             return this;
+        }
+
+        public Uri BaseUri
+        {
+            get { return uri; }
         }
 
         public IEnumerable<Link> Links

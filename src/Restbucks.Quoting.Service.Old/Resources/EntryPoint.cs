@@ -9,11 +9,11 @@ namespace Restbucks.Quoting.Service.Old.Resources
     {
         public static readonly UriFactory UriFactory = new UriFactory("shop");
         
-        public Shop Get(HttpResponseMessage response)
+        public Shop Get(HttpRequestMessage request, HttpResponseMessage response)
         {
             response.Headers.CacheControl = new CacheControl {Public = true, MaxAge = new TimeSpan(24, 0, 0)};
             
-            return new Shop()
+            return new Shop(request.Uri)
                 .AddLink(new Link(RequestForQuote.UriFactory.CreateRelativeUri(), LinkRelations.Rfq, LinkRelations.Prefetch));
         }
     }

@@ -41,6 +41,11 @@ namespace Tests.Restbucks.MediaType
                 .AddLink(new Link(new Uri("http://localhost/link2"), RbNs2, TwNs2));
         }
 
+        [Test]
+        public void GeneratesBaseUriBasedOnUri()
+        {
+            
+        }
 
     }
 }

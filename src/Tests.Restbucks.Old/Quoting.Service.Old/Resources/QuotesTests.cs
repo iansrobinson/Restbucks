@@ -23,7 +23,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             var mocks = new MockRepository();
             var quoteEngine = mocks.StrictMock<IQuotationEngine>();
 
-            var shop = new Shop()
+            var shop = new Shop(new Uri("htp://localhost/"))
                 .AddItem(new Item("item1", new Amount("g", 250)))
                 .AddItem(new Item("item2", new Amount("kg", 2)));
 
@@ -119,7 +119,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             var quoteEngine = GetQuoteEngine(id, createdDateTime, new LineItem[] {});
             var response = new HttpResponseMessage();
             var quotes = new Quotes(quoteEngine);
-            var entityBody = quotes.Post(new Shop(), new HttpRequestMessage {Uri = new Uri("http://localhost:8080/quotes")}, response);
+            var entityBody = quotes.Post(new Shop(new Uri("http://localhost:8080/quotes/")), new HttpRequestMessage {Uri = new Uri("http://localhost:8080/quotes")}, response);
 
             return new Result {EntityBody = entityBody, Response = response};
         }
