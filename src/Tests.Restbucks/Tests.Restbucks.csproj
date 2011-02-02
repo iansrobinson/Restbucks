@@ -70,6 +70,7 @@
     <Compile Include="MediaType\CompactUriLinkRelationTests.cs" />
     <Compile Include="MediaType\FormTests.cs" />
     <Compile Include="MediaType\LinkRelationTests.cs" />
+    <Compile Include="MediaType\LinkTests.cs" />
     <Compile Include="MediaType\ShopTests.cs" />
     <Compile Include="MediaType\StringLinkRelationTests.cs" />
     <Compile Include="MediaType\UriLinkRelationTests.cs" />
