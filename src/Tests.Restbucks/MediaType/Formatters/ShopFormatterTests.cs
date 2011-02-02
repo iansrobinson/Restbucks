@@ -114,6 +114,15 @@ namespace Tests.Restbucks.MediaType.Formatters
             Assert.AreEqual(string.Empty, output.GetNodeValue("r:shop/x:model[2]/x:instance/r:shop"));
         }
 
+        [Test] 
+        public void ShouldAddXmlBaseAttributeToRootElement()
+        {
+            var formatter = new ShopFormatter(new ShopBuilder().WithUri(new Uri("http://restbucks.com:8080/shop")).Build());
+            var xml = new XmlOutput(formatter.CreateXml());
+
+            Assert.AreEqual("http://restbucks.com:8080/", xml.GetNodeValue("r:shop/@xml:base"));
+        }
+
         private class XmlOutput
         {
             private readonly XPathNavigator navigator;

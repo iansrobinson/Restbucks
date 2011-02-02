@@ -17,6 +17,7 @@ namespace Restbucks.MediaType.Formatters
         {
             var root = new XElement(Namespaces.ShopSchema + "shop",
                                     CreateNamespaceAttributes(shop.Links),
+                                    new XAttribute(XNamespace.Xml + "base", shop.BaseUri.ToString()),
                                     new ItemsFormatter(shop).CreateXml(),
                                     new LinksFormatter(shop).CreateXml(),
                                     new FormsFormatter(shop).CreateXml());
