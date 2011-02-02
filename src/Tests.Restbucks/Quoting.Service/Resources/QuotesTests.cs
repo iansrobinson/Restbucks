@@ -18,7 +18,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
     [TestFixture]
     public class QuotesTests
     {
-        private static readonly Uri BaseAddress = new Uri("http://localhost:8080");
+        private static readonly Uri BaseAddress = new Uri("http://localhost:8080/virtual-directory/");
 
         [Test]
         public void ShouldReturnNewQuoteFromQuoteEngine()
@@ -57,59 +57,62 @@ namespace Tests.Restbucks.Quoting.Service.Resources
             mocks.VerifyAll();
         }
 
-        
-
         [Test]
         public void ShouldReturn201Created()
         {
-            var result = ExecuteRequestReturnResult(Guid.Empty, DateTime.Now);
+            var response = ExecuteRequestReturnResponse();
 
-            Assert.AreEqual(HttpStatusCode.Created, result.Response.StatusCode);
+            Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
         }
 
         [Test]
         public void ShouldReturnLocationHeaderWithAddressOfNewQuote()
         {
-            var id = Guid.NewGuid();
-            var result = ExecuteRequestReturnResult(id, DateTime.Now);
+            var response = ExecuteRequestReturnResponse();
 
-            Assert.AreEqual(DefaultUriFactoryCollection.Instance.For<Quote>().CreateAbsoluteUri(BaseAddress, id.ToString("N")), result.Response.Headers.Location);
+            Assert.AreEqual(DefaultUriFactoryCollection.Instance.For<Quote>().CreateAbsoluteUri(BaseAddress, StubQuotationEngine.QuoteId), response.Headers.Location);
         }
 
         [Test]
         public void ResponseShouldNotBeCacheable()
         {
-            var result = ExecuteRequestReturnResult(Guid.Empty, DateTime.Now);
+            var response = ExecuteRequestReturnResponse();
 
-            Assert.AreEqual("no-store, no-cache", result.Response.Headers.CacheControl.ToString());
+            Assert.AreEqual("no-store, no-cache", response.Headers.CacheControl.ToString());
         }
 
         [Test]
         public void ShouldIncludeSelfLinkWithSameValueAsLocationHeader()
         {
-            var id = Guid.NewGuid();
-            var result = ExecuteRequestReturnResult(id, DateTime.Now);
+            var entityBody = ExecuteRequestReturnEntityBody();
 
-            Assert.IsNotNull(result.EntityBody.Links.Single(l => l.Rels.First().Value.Equals("self")));
-            Assert.AreEqual(DefaultUriFactoryCollection.Instance.For<Quote>().CreateRelativeUri(id.ToString("N")), result.EntityBody.Links.Single(l => l.Rels.First().Value.Equals("self")).Href.ToString());
+            Assert.IsNotNull(entityBody.Links.Single(l => l.Rels.First().Value.Equals("self")));
+            Assert.AreEqual(DefaultUriFactoryCollection.Instance.For<Quote>().CreateRelativeUri(StubQuotationEngine.QuoteId), entityBody.Links.Single(l => l.Rels.First().Value.Equals("self")).Href.ToString());
         }
 
         [Test]
         public void ShouldIncludeLinkToOrderForm()
         {
-            var id = Guid.NewGuid();
-            var result = ExecuteRequestReturnResult(id, DateTime.Now);
+            var entityBody = ExecuteRequestReturnEntityBody();
 
-            Assert.IsNotNull(result.EntityBody.Links.Single(l => l.Rels.First().SerializableValue.Equals("rb:order-form")));
-            Assert.AreEqual(DefaultUriFactoryCollection.Instance.For<OrderForm>().CreateRelativeUri(id.ToString("N")), result.EntityBody.Links.Single(l => l.Rels.First().SerializableValue.Equals("rb:order-form")).Href.ToString());
+            Assert.IsNotNull(entityBody.Links.Single(l => l.Rels.First().SerializableValue.Equals("rb:order-form")));
+            Assert.AreEqual(DefaultUriFactoryCollection.Instance.For<OrderForm>().CreateRelativeUri(StubQuotationEngine.QuoteId), entityBody.Links.Single(l => l.Rels.First().SerializableValue.Equals("rb:order-form")).Href.ToString());
+        }
+
+        [Test]
+        public void EntityBodyShouldIncludeBaseUri()
+        {
+            var entityBody = ExecuteRequestReturnEntityBody();
+
+            Assert.AreEqual(BaseAddress, entityBody.BaseUri);
         }
 
         [Test]
         public void ShouldReturn400BadRequestWhenShopIsNull()
         {
-            var quoteEngine = GetQuoteEngine(Guid.Empty, DateTime.Now, new LineItem[] {});
-            var quotes = new QuotesBuilder().WithQuotationEngine(quoteEngine).Build();
+            var quotes = new QuotesBuilder().WithQuotationEngine(StubQuotationEngine.Instance).Build();
             var response = new HttpResponseMessage();
+            
             quotes.Post(null, new HttpRequestMessage {RequestUri = new Uri("http://localhost:8080/quotes")}, response);
 
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
@@ -118,28 +121,26 @@ namespace Tests.Restbucks.Quoting.Service.Resources
             Assert.AreEqual("Bad request: empty or malformed data.", response.Content.ReadAsString());
         }
 
-        private static Result ExecuteRequestReturnResult(Guid id, DateTimeOffset createdDateTime)
+        private static HttpResponseMessage ExecuteRequestReturnResponse()
         {
-            var quoteEngine = GetQuoteEngine(id, createdDateTime, new LineItem[] {});
-            var response = new HttpResponseMessage();
-            var quotes = new QuotesBuilder().WithQuotationEngine(quoteEngine).Build();
-            var entityBody = quotes.Post(new ShopBuilder().Build(), new HttpRequestMessage { RequestUri = new Uri("http://localhost:8080/quotes") }, response);
+            var quotes = new QuotesBuilder().WithQuotationEngine(StubQuotationEngine.Instance).Build();
 
-            return new Result {EntityBody = entityBody, Response = response};
+            var request = new HttpRequestMessage { RequestUri = DefaultUriFactoryCollection.Instance.For<Quotes>().CreateAbsoluteUri(BaseAddress) };
+            var response = new HttpResponseMessage();
+
+            quotes.Post(new ShopBuilder().Build(), request, response);
+
+            return response;
         }
 
-        private static IQuotationEngine GetQuoteEngine(Guid id, DateTimeOffset createdDateTime, IEnumerable<LineItem> items)
+        private static Shop ExecuteRequestReturnEntityBody()
         {
-            var mocks = new MockRepository();
-            var quoteEngine = mocks.Stub<IQuotationEngine>();
+            var quotes = new QuotesBuilder().WithQuotationEngine(StubQuotationEngine.Instance).Build();
 
-            using (mocks.Record())
-            {
-                SetupResult.For(quoteEngine.CreateQuote(null)).IgnoreArguments().Return(new Quotation(id, createdDateTime, items));
-            }
-            mocks.ReplayAll();
+            var request = new HttpRequestMessage { RequestUri = DefaultUriFactoryCollection.Instance.For<Quotes>().CreateAbsoluteUri(BaseAddress) };
+            var response = new HttpResponseMessage();
 
-            return quoteEngine;
+            return quotes.Post(new ShopBuilder().Build(), request, response);
         }
     }
 }

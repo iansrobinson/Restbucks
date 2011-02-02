@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -36,27 +35,15 @@ namespace Restbucks.Quoting.Service.Resources
             }
 
             var quote = quotationEngine.CreateQuote(new QuotationRequest(shop.Items.Select(i => new QuotationRequestItem(i.Description, new Quantity(i.Amount.Measure, i.Amount.Value)))));
+            var baseUri = uriFactories.For<Quotes>().CreateBaseUri(request.RequestUri);
 
             response.StatusCode = HttpStatusCode.Created;
-            response.Headers.Location = GenerateQuoteUri(request.RequestUri, quote);
+            response.Headers.Location = uriFactories.For<Quote>().CreateAbsoluteUri(baseUri, quote.Id.ToString("N"));
             response.Headers.CacheControl = new CacheControlHeaderValue {NoCache = true, NoStore = true};
 
-            return CreateEntityBody(quote, request.RequestUri);
-        }
-
-        private Shop CreateEntityBody(Quotation quotation, Uri requestUri)
-        {
-            var baseUri = uriFactories.For<Quotes>().CreateBaseUri(requestUri);
-            var uri = GenerateQuoteUri(baseUri, quotation);
-
-            return new Shop(baseUri, quotation.LineItems.Select(li => new LineItemToItem(li).Adapt()))
-                .AddLink(new Link(new Uri(uri.PathAndQuery, UriKind.Relative), "application/restbucks+xml", LinkRelations.Self))
-                .AddLink(new Link(uriFactories.For<OrderForm>().CreateRelativeUri(quotation.Id.ToString("N")), "application/restbucks+xml", LinkRelations.OrderForm));
-        }
-
-        private Uri GenerateQuoteUri(Uri baseUri, Quotation quotation)
-        {
-            return uriFactories.For<Quote>().CreateAbsoluteUri(baseUri, quotation.Id.ToString("N"));
+            return new Shop(baseUri, quote.LineItems.Select(li => new LineItemToItem(li).Adapt()))
+                .AddLink(new Link(uriFactories.For<Quote>().CreateRelativeUri(quote.Id.ToString("N")), "application/restbucks+xml", LinkRelations.Self))
+                .AddLink(new Link(uriFactories.For<OrderForm>().CreateRelativeUri(quote.Id.ToString("N")), "application/restbucks+xml", LinkRelations.OrderForm));
         }
     }
 }
