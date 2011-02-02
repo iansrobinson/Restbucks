@@ -8,6 +8,7 @@ using Restbucks.MediaType;
 using Restbucks.Quoting;
 using Restbucks.Quoting.Service.Resources;
 using Rhino.Mocks;
+using Tests.Restbucks.MediaType;
 using Is = Rhino.Mocks.Constraints.Is;
 
 namespace Tests.Restbucks.Quoting.Service.Resources
@@ -23,7 +24,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
             var mocks = new MockRepository();
             var quoteEngine = mocks.StrictMock<IQuotationEngine>();
 
-            var shop = new Shop()
+            var shop = new ShopBuilder().Build()
                 .AddItem(new Item("item1", new Amount("g", 250)))
                 .AddItem(new Item("item2", new Amount("kg", 2)));
 
@@ -120,7 +121,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
             var quoteEngine = GetQuoteEngine(id, createdDateTime, new LineItem[] {});
             var response = new HttpResponseMessage();
             var quotes = new QuotesBuilder().WithQuotationEngine(quoteEngine).Build();
-            var entityBody = quotes.Post(new Shop(), new HttpRequestMessage {RequestUri = new Uri("http://localhost:8080/quotes")}, response);
+            var entityBody = quotes.Post(new ShopBuilder().Build(), new HttpRequestMessage { RequestUri = new Uri("http://localhost:8080/quotes") }, response);
 
             return new Result {EntityBody = entityBody, Response = response};
         }

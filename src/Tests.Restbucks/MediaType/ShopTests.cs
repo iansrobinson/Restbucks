@@ -19,7 +19,7 @@ namespace Tests.Restbucks.MediaType
         [ExpectedException(ExpectedException = typeof(NamespacePrefixConflictException), ExpectedMessage = "One or more prefixes are each associated with more than one namespace: 'rb'.")]
         public void ShouldThrowExceptionWhenAddingLinkWithACompactUriLinkRelationWithSamePrefixAsExistingLinkRelationButDifferentNamespace()
         {
-            new Shop()
+            new ShopBuilder().Build()
                 .AddLink(new Link(new Uri("http://localhost/link1"), RbNs1))
                 .AddLink(new Link(new Uri("http://localhost/link2"), RbNs2));
         }
@@ -28,7 +28,7 @@ namespace Tests.Restbucks.MediaType
         [ExpectedException(ExpectedException = typeof(NamespacePrefixConflictException), ExpectedMessage = "One or more prefixes are each associated with more than one namespace: 'rb'.")]
         public void ShouldThrowExceptionWhenAddingLinkWithCompactUriLinkRelationsWithSamePrefixButDifferentNamespace()
         {
-            new Shop()
+            new ShopBuilder().Build()
                 .AddLink(new Link(new Uri("http://localhost/link1"), RbNs1, RbNs2));
         }
 
@@ -36,9 +36,11 @@ namespace Tests.Restbucks.MediaType
         [ExpectedException(ExpectedException = typeof (NamespacePrefixConflictException), ExpectedMessage = "One or more prefixes are each associated with more than one namespace: 'rb, tw'.")]
         public void ShouldThrowExceptionWhenAddingLinkWithMoreThanOneCompactUriLinkRelationWithSamePrefixAsExistingLinkRelationButDifferentNamespace()
         {
-            new Shop()
+            new ShopBuilder().Build()
                 .AddLink(new Link(new Uri("http://localhost/link1"), RbNs1, TwNs1))
                 .AddLink(new Link(new Uri("http://localhost/link2"), RbNs2, TwNs2));
         }
+
+
     }
 }

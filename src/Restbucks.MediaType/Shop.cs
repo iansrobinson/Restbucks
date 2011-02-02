@@ -24,26 +24,6 @@ namespace Restbucks.MediaType
         {
         }
 
-        public Shop(IEnumerable<Link> links) : this(new Item[] {}, links, new Form[] {})
-        {
-        }
-
-        public Shop(IEnumerable<Form> forms) : this(new Item[] {}, new Link[] {}, forms)
-        {
-        }
-
-        public Shop(IEnumerable<Item> items, IEnumerable<Link> links) : this(items, links, new Form[] {})
-        {
-        }
-
-        public Shop(IEnumerable<Item> items, IEnumerable<Form> forms) : this(items, new Link[] {}, forms)
-        {
-        }
-
-        public Shop(IEnumerable<Link> links, IEnumerable<Form> forms) : this(new Item[] {}, links, forms)
-        {
-        }
-
         public Shop AddItem(Item item)
         {
             items.Add(item);

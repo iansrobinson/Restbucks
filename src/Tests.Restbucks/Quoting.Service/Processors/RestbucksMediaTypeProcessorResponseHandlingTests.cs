@@ -10,6 +10,7 @@ using NUnit.Framework;
 using Restbucks.MediaType;
 using Restbucks.Quoting.Service;
 using Restbucks.Quoting.Service.Processors;
+using Tests.Restbucks.MediaType;
 
 namespace Tests.Restbucks.Quoting.Service.Processors
 {
@@ -34,7 +35,7 @@ namespace Tests.Restbucks.Quoting.Service.Processors
 
             using (Stream stream = new MemoryStream())
             {
-                mediaTypeProcessor.WriteToStream(new Shop(), stream, new HttpRequestMessage());
+                mediaTypeProcessor.WriteToStream(new ShopBuilder().Build(), stream, new HttpRequestMessage());
 
                 Assert.AreEqual(1, new XmlOutput(stream).GetNodeCount("r:shop"));
             }
@@ -43,7 +44,7 @@ namespace Tests.Restbucks.Quoting.Service.Processors
         [Test]
         public void ShouldWriteLinksAsChildrenOfShopElement()
         {
-            var shop = new Shop()
+            var shop = new ShopBuilder().Build()
                 .AddLink(new Link(new Uri("/quotes", UriKind.Relative), LinkRelations.Rfq, LinkRelations.Prefetch))
                 .AddLink(new Link("application/xml", new Uri("/order-forms/1234", UriKind.Relative), LinkRelations.OrderForm));
 
@@ -75,8 +76,8 @@ namespace Tests.Restbucks.Quoting.Service.Processors
 
             var rel1 = new CompactUriLinkRelation("rb", new Uri(ns1, UriKind.Absolute), "rel1");
             var rel2 = new CompactUriLinkRelation("tw", new Uri(ns2, UriKind.Absolute), "rel2");
-            
-            var shop = new Shop()
+
+            var shop = new ShopBuilder().Build()
                 .AddLink(new Link(new Uri("/quotes", UriKind.Relative), rel1, rel2));
 
             var mediaTypeProcessor = CreateRestbucksMediaTypeProcessor();
@@ -95,7 +96,7 @@ namespace Tests.Restbucks.Quoting.Service.Processors
         [Test]
         public void ShouldWriteItemElementsAsChildrenOfItems()
         {
-            var shop = new Shop()
+            var shop = new ShopBuilder().Build()
                 .AddItem(new Item("item1", new Amount("g", 250)))
                 .AddItem(new Item("item2", new Amount("g", 500), new Cost("GBP", 5.50)));
 
@@ -129,7 +130,7 @@ namespace Tests.Restbucks.Quoting.Service.Processors
 
             using (Stream stream = new MemoryStream())
             {
-                mediaTypeProcessor.WriteToStream(new Shop(), stream, new HttpRequestMessage());
+                mediaTypeProcessor.WriteToStream(new ShopBuilder().Build(), stream, new HttpRequestMessage());
 
                 Assert.IsNull(new XmlOutput(stream).GetNode("r:shop/r:items"));
             }
@@ -138,9 +139,9 @@ namespace Tests.Restbucks.Quoting.Service.Processors
         [Test]
         public void ShouldWriteFormsAsChildrenOfShopElement()
         {
-            var shop = new Shop()
+            var shop = new ShopBuilder().Build()
                 .AddForm(new Form(new Uri("/quotes", UriKind.Relative), "post", "application/restbucks+xml", new Uri("http://schemas.restbucks.com/shop.xsd")))
-                .AddForm(new Form(new Uri("/orders", UriKind.Relative), "put", "application/restbucks+xml", new Shop()));
+                .AddForm(new Form(new Uri("/orders", UriKind.Relative), "put", "application/restbucks+xml", new ShopBuilder().Build()));
 
             var mediaTypeProcessor = CreateRestbucksMediaTypeProcessor();
 

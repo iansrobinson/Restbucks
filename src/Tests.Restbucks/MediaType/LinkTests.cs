@@ -28,7 +28,7 @@ namespace Tests.Restbucks.MediaType
         [Test]
         public void IfLinkHasBeenPrefetchedClickReturnsPrefetchedResource()
         {
-            var shop = new Shop();
+            var shop = new ShopBuilder().Build();
             
             var href = new Uri("http://localhost/shop/");
             var link = new Link(href);
@@ -41,7 +41,7 @@ namespace Tests.Restbucks.MediaType
         [Test]
         public void IfLinkhasNotBeenPrefetchedClieckFetchesResource()
         {
-            var shop = new Shop();
+            var shop = new ShopBuilder().Build();
 
             var href = new Uri("http://localhost/shop/");
             var link = new Link(href);
