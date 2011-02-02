@@ -1,26 +1,26 @@
 ﻿using Restbucks.Quoting;
 using Restbucks.Quoting.Service.Resources;
 
-namespace Tests.Restbucks.Quoting.Service.Resources
+namespace Tests.Restbucks.Quoting.Service.Resources.Helpers
 {
-    public class QuoteBuilder
+    public class OrderFormBuilder
     {
         private IQuotationEngine quotationEngine;
 
-        public QuoteBuilder()
+        public OrderFormBuilder()
         {
             quotationEngine = StubQuotationEngine.Instance;
         }
 
-        public QuoteBuilder WithQuotationEngine(IQuotationEngine value)
+        public OrderFormBuilder WithQuotationEngine(IQuotationEngine value)
         {
             quotationEngine = value;
             return this;
         }
 
-        public Quote Build()
+        public OrderForm Build()
         {
-            return new Quote(DefaultUriFactoryCollection.Instance, quotationEngine);
+            return new OrderForm(DefaultUriFactoryCollection.Instance, quotationEngine);
         }
     }
 }

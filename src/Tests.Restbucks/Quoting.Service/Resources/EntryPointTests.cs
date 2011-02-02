@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Restbucks.MediaType;
 using Restbucks.Quoting.Service;
 using Restbucks.Quoting.Service.Resources;
+using Tests.Restbucks.Quoting.Service.Resources.Helpers;
 
 namespace Tests.Restbucks.Quoting.Service.Resources
 {

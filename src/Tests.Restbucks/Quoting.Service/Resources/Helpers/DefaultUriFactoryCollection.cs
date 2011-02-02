@@ -1,6 +1,6 @@
 ﻿using Restbucks.Quoting.Service.Resources;
 
-namespace Tests.Restbucks.Quoting.Service.Resources
+namespace Tests.Restbucks.Quoting.Service.Resources.Helpers
 {
     public static class DefaultUriFactoryCollection
     {

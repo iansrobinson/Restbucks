@@ -1,7 +1,7 @@
 ﻿using System;
 using Restbucks.Quoting;
 
-namespace Tests.Restbucks.Quoting.Service.Resources
+namespace Tests.Restbucks.Quoting.Service.Resources.Helpers
 {
     public class StubQuotationEngine : IQuotationEngine
     {
@@ -11,10 +11,10 @@ namespace Tests.Restbucks.Quoting.Service.Resources
             Guid.Empty,
             DateTime.Now,
             new[]
-                    {
-                        new LineItem("item1", new Quantity("g", 250), new Money("GBP", 2.50)),
-                        new LineItem("item2", new Quantity("kg", 2), new Money("GBP", 2.00))
-                    });
+                {
+                    new LineItem("item1", new Quantity("g", 250), new Money("GBP", 2.50)),
+                    new LineItem("item2", new Quantity("kg", 2), new Money("GBP", 2.00))
+                });
 
         public static readonly string QuoteId = Quotation.Id.ToString("N");
 

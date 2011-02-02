@@ -8,6 +8,7 @@ using Restbucks.MediaType;
 using Restbucks.Quoting;
 using Restbucks.Quoting.Service.Resources;
 using Rhino.Mocks;
+using Tests.Restbucks.Quoting.Service.Resources.Helpers;
 
 namespace Tests.Restbucks.Quoting.Service.Resources
 {

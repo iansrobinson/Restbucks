@@ -84,21 +84,22 @@
     <Compile Include="Quoting.Service\Processors\RestbucksMediaTypeProcessorRequestHandlingTests.cs" />
     <Compile Include="Quoting.Service\Processors\RestbucksMediaTypeProcessorResponseHandlingTests.cs" />
     <Compile Include="Quoting.Service\Processors\XmlTransformTests.cs" />
-    <Compile Include="Quoting.Service\Resources\DefaultUriFactoryCollection.cs" />
     <Compile Include="Quoting.Service\Resources\EmptyQuotationEngine.cs" />
     <Compile Include="Quoting.Service\Resources\EntryPointTests.cs" />
-    <Compile Include="Quoting.Service\Resources\Matching.cs" />
-    <Compile Include="Quoting.Service\Resources\OrderFormBuilder.cs" />
+    <Compile Include="Quoting.Service\Resources\Helpers\DefaultUriFactoryCollection.cs" />
+    <Compile Include="Quoting.Service\Resources\Helpers\EmptyQuotationEngine.cs" />
+    <Compile Include="Quoting.Service\Resources\Helpers\Matching.cs" />
+    <Compile Include="Quoting.Service\Resources\Helpers\OrderFormBuilder.cs" />
+    <Compile Include="Quoting.Service\Resources\Helpers\QuoteBuilder.cs" />
+    <Compile Include="Quoting.Service\Resources\Helpers\QuotesBuilder.cs" />
+    <Compile Include="Quoting.Service\Resources\Helpers\Result.cs" />
+    <Compile Include="Quoting.Service\Resources\Helpers\StubQuotationEngine.cs" />
     <Compile Include="Quoting.Service\Resources\OrderFormTests.cs" />
-    <Compile Include="Quoting.Service\Resources\QuoteBuilder.cs" />
-    <Compile Include="Quoting.Service\Resources\QuotesBuilder.cs" />
     <Compile Include="Quoting.Service\Resources\QuoteTests.cs" />
     <Compile Include="Quoting.Service\Resources\QuotesTests.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Quoting.Service\Resources\RequestForQuoteTests.cs" />
-    <Compile Include="Quoting.Service\Resources\Result.cs" />
-    <Compile Include="Quoting.Service\Resources\StubQuotationEngine.cs" />
     <Compile Include="Quoting.Service\Resources\UriFactoryCollectionTests.cs" />
     <Compile Include="Quoting.Service\Resources\UriFactoryTests.cs" />
     <Compile Include="Quoting\Implementation\Helpers\StubDateTimeProvider.cs" />
