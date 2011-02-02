@@ -8,6 +8,7 @@ using Microsoft.ServiceModel.Http;
 using NUnit.Framework;
 using Restbucks.Quoting.Service.Processors;
 using Tests.Restbucks.MediaType;
+using Tests.Restbucks.MediaType.Helpers;
 
 namespace Tests.Restbucks.Quoting.Service.Processors
 {

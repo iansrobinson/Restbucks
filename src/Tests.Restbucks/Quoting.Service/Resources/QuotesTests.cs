@@ -9,6 +9,7 @@ using Restbucks.Quoting;
 using Restbucks.Quoting.Service.Resources;
 using Rhino.Mocks;
 using Tests.Restbucks.MediaType;
+using Tests.Restbucks.MediaType.Helpers;
 using Is = Rhino.Mocks.Constraints.Is;
 
 namespace Tests.Restbucks.Quoting.Service.Resources

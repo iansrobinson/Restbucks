@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using Restbucks.MediaType;
+using Tests.Restbucks.MediaType.Helpers;
 
 namespace Tests.Restbucks.MediaType
 {

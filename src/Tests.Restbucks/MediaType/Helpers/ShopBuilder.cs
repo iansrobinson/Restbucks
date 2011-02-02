@@ -1,7 +1,7 @@
 ﻿using System;
 using Restbucks.MediaType;
 
-namespace Tests.Restbucks.MediaType
+namespace Tests.Restbucks.MediaType.Helpers
 {
     public class ShopBuilder
     {
