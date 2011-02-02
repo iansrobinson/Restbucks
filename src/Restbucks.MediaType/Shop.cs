@@ -11,21 +11,17 @@ namespace Restbucks.MediaType
         private readonly IList<Link> links;
         private readonly IList<Form> forms;
 
-        public Shop(Uri uri, IEnumerable<Item> items, IEnumerable<Link> links, IEnumerable<Form> forms)
+        public Shop(Uri baseUri) : this(baseUri, new Item[] {})
         {
-            baseUri =  new Uri(uri.GetLeftPart(UriPartial.Authority));
+        }
 
+        public Shop(Uri baseUri, IEnumerable<Item> items)
+        {
+            this.baseUri = baseUri;
             this.items = new List<Item>(items);
-            this.links = new List<Link>(links);
-            this.forms = new List<Form>(forms);
-        }
-
-        public Shop(Uri uri) : this(uri, new Item[] {}, new Link[] {}, new Form[] {})
-        {
-        }
-
-        public Shop(Uri uri, IEnumerable<Item> items) : this(uri, items, new Link[] {}, new Form[] {})
-        {
+            
+            links = new List<Link>();
+            forms = new List<Form>();
         }
 
         public Shop AddItem(Item item)

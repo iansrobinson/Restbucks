@@ -30,7 +30,7 @@ namespace Tests.Restbucks.Quoting.Service.Processors
         {
             const string expectedXml = @"<?xml version=""1.0"" encoding=""utf-8""?><shop xml:base=""http://restbucks.com/"" xmlns=""http://schemas.restbucks.com/shop"" />";
             
-            var shop = new ShopBuilder().WithUri(new Uri("http://restbucks.com/")).Build();
+            var shop = new ShopBuilder().WithBaseUri(new Uri("http://restbucks.com/")).Build();
             var stream = new MemoryStream();
 
             var processor = new RestbucksMediaTypeProcessor(new HttpOperationDescription(), MediaTypeProcessorMode.Response);

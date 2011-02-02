@@ -42,5 +42,15 @@ namespace Restbucks.Quoting.Service.Resources
             var baseUri = new UriBuilder(baseAddress.Scheme, baseAddress.Host, baseAddress.Port).Uri;
             return uriTemplate.BindByPosition(new Uri(baseUri, routePrefix), values);
         }
+
+        public Uri CreateBaseUri(Uri uri)
+        {
+            var index = uri.ToString().IndexOf(routePrefix, StringComparison.InvariantCultureIgnoreCase);
+            if (index < 0)
+            {
+                throw new ArgumentException(string.Format("Supplied URI does not contain route prefix. Uri: [{0}], Route prefix: [{1}].", uri, routePrefix));
+            }
+            return new Uri(uri.ToString().Substring(0, index), UriKind.Absolute);
+        }
     }
 }

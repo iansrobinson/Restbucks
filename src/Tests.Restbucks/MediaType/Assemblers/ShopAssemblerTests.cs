@@ -142,7 +142,7 @@ namespace Tests.Restbucks.MediaType.Assemblers
 
             var shop = new ShopAssembler(XElement.Parse(xml), new Uri("http://restbucks.com:8080/shop")).AssembleShop();
 
-            Assert.AreEqual(new Uri("http://restbucks.com:8080/"), shop.BaseUri);
+            Assert.AreEqual(new Uri("http://restbucks.com:8080/shop"), shop.BaseUri);
         }
 
         [Test]

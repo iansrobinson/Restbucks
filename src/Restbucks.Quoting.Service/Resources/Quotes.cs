@@ -46,16 +46,17 @@ namespace Restbucks.Quoting.Service.Resources
 
         private Shop CreateEntityBody(Quotation quotation, Uri requestUri)
         {
-            var uri = GenerateQuoteUri(requestUri, quotation);
+            var baseUri = uriFactories.For<Quotes>().CreateBaseUri(requestUri);
+            var uri = GenerateQuoteUri(baseUri, quotation);
 
-            return new Shop(uri, quotation.LineItems.Select(li => new LineItemToItem(li).Adapt()))
+            return new Shop(baseUri, quotation.LineItems.Select(li => new LineItemToItem(li).Adapt()))
                 .AddLink(new Link(new Uri(uri.PathAndQuery, UriKind.Relative), "application/restbucks+xml", LinkRelations.Self))
                 .AddLink(new Link(uriFactories.For<OrderForm>().CreateRelativeUri(quotation.Id.ToString("N")), "application/restbucks+xml", LinkRelations.OrderForm));
         }
 
-        private Uri GenerateQuoteUri(Uri requestUri, Quotation quotation)
+        private Uri GenerateQuoteUri(Uri baseUri, Quotation quotation)
         {
-            return uriFactories.For<Quote>().CreateAbsoluteUri(requestUri, quotation.Id.ToString("N"));
+            return uriFactories.For<Quote>().CreateAbsoluteUri(baseUri, quotation.Id.ToString("N"));
         }
     }
 }

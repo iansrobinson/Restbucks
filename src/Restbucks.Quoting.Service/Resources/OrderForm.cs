@@ -49,7 +49,7 @@ namespace Restbucks.Quoting.Service.Resources
             response.Content.Headers.Expires = quotation.CreatedDateTime.AddDays(7.0);
             response.Content.Headers.ContentLocation = uriFactories.For<Quote>().CreateAbsoluteUri(request.RequestUri, quotation.Id.ToString("N"));
 
-            return new Shop(request.RequestUri)
+            return new Shop(uriFactories.For<OrderForm>().CreateBaseUri(request.RequestUri))
                 .AddForm(new Form(
                              OrdersUriFactory.CreateAbsoluteUri(new Uri("http://localhost:8081")),
                              "post",

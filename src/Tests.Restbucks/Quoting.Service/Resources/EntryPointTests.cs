@@ -53,6 +53,14 @@ namespace Tests.Restbucks.Quoting.Service.Resources
             Assert.IsTrue(response.Headers.CacheControl.Public);
         }
 
+        [Test]
+        public void BaseUriShouldIncludeVirtualDirectoryIfPresent()
+        {
+            var resource = new EntryPoint(DefaultUriFactoryCollection.Instance);
+            var entityBody = resource.Get(new HttpRequestMessage(HttpMethod.Get, new Uri("http://localhost/virtual-directory/shop")), new HttpResponseMessage());
+
+            Assert.AreEqual(new Uri("http://localhost/virtual-directory/"), entityBody.BaseUri);
+        }
 
         private static Shop GetEntryPointEntityBody()
         {

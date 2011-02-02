@@ -41,5 +41,20 @@ namespace Tests.Restbucks.Quoting.Service.Resources
             var uriFactory = new UriFactory("quotes");
             Assert.AreEqual("http://restbucks.com/quotes", uriFactory.CreateAbsoluteUri(new Uri("http://restbucks.com")).ToString());
         }
+
+        [Test]
+        public void ShouldGenerateBaseUriFromSuppliedAbsoluteUri()
+        {
+            var uriFactory = new UriFactory("quotes", "{quoteId}");
+            Assert.AreEqual(new Uri("http://restbucks.com:8080/uk/"), uriFactory.CreateBaseUri(new Uri("http://restbucks.com:8080/uk/quotes/1234")));
+        }
+
+        [Test]
+        [ExpectedException(ExpectedException = typeof(ArgumentException), ExpectedMessage = "Supplied URI does not contain route prefix. Uri: [http://restbucks.com:8080/uk/customers/1234], Route prefix: [quotes].")]
+        public void ThrowsExceptionWhenSuppliedUriDoesNotContainRoutePrefix()
+        {
+            var uriFactory = new UriFactory("quotes", "{quoteId}");
+            uriFactory.CreateBaseUri(new Uri("http://restbucks.com:8080/uk/customers/1234"));
+        }
     }
 }

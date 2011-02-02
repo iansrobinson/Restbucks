@@ -12,7 +12,7 @@ namespace Tests.Restbucks.MediaType
             uri = new Uri("http://localhost/");
         }
 
-        public ShopBuilder WithUri(Uri value)
+        public ShopBuilder WithBaseUri(Uri value)
         {
             uri = value;
             return this;

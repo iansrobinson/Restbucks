@@ -47,7 +47,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         {
             var resource = new RequestForQuote(DefaultUriFactoryCollection.Instance);
             var response = new HttpResponseMessage();
-            resource.Get(new HttpRequestMessage(HttpMethod.Get, new Uri("http://localhost/rfq")), response);
+            resource.Get(new HttpRequestMessage(HttpMethod.Get, new Uri("http://localhost/request-for-quote")), response);
 
             Assert.AreEqual(new TimeSpan(24, 0, 0), response.Headers.CacheControl.MaxAge);
             Assert.IsTrue(response.Headers.CacheControl.Public);
@@ -55,7 +55,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
 
         private static Shop GetRequestForQuoteEntityBody()
         {
-            return new RequestForQuote(DefaultUriFactoryCollection.Instance).Get(new HttpRequestMessage(HttpMethod.Get, new Uri("http://localhost/rfq")), new HttpResponseMessage());
+            return new RequestForQuote(DefaultUriFactoryCollection.Instance).Get(new HttpRequestMessage(HttpMethod.Get, new Uri("http://localhost/request-for-quote")), new HttpResponseMessage());
         }
     }
 }

@@ -117,10 +117,10 @@ namespace Tests.Restbucks.MediaType.Formatters
         [Test] 
         public void ShouldAddXmlBaseAttributeToRootElement()
         {
-            var formatter = new ShopFormatter(new ShopBuilder().WithUri(new Uri("http://restbucks.com:8080/shop")).Build());
+            var formatter = new ShopFormatter(new ShopBuilder().WithBaseUri(new Uri("http://restbucks.com:8080/shop")).Build());
             var xml = new XmlOutput(formatter.CreateXml());
 
-            Assert.AreEqual("http://restbucks.com:8080/", xml.GetNodeValue("r:shop/@xml:base"));
+            Assert.AreEqual("http://restbucks.com:8080/shop", xml.GetNodeValue("r:shop/@xml:base"));
         }
 
         private class XmlOutput

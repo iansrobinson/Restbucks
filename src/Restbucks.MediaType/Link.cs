@@ -8,19 +8,13 @@ namespace Restbucks.MediaType
         private readonly IEnumerable<LinkRelation> rels;
         private readonly string mediaType;
         private readonly Uri href;
-        private readonly Uri uri;
         private Shop instance;
 
-        private Link(Uri href, Uri uri, string mediaType, params LinkRelation[] rels)
+        public Link(Uri href, string mediaType, params LinkRelation[] rels)
         {
             this.href = href;
-            this.uri = uri;
             this.mediaType = mediaType;
-            this.rels = rels;           
-        }
-
-        public Link(Uri href, string mediaType, params LinkRelation[] rels) : this(href, href.IsAbsoluteUri ? href : null, mediaType, rels)
-        {          
+            this.rels = rels;
         }
 
         public IEnumerable<LinkRelation> Rels
