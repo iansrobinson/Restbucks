@@ -170,7 +170,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
             var request = new HttpRequestMessage {RequestUri = DefaultUriFactoryCollection.Instance.For<OrderForm>().CreateAbsoluteUri(BaseAddress, StubQuotationEngine.QuoteId)};
             var response = new HttpResponseMessage();
 
-            return orderForm.Get(Guid.NewGuid().ToString("N"), request, response);
+            return orderForm.Get(StubQuotationEngine.QuoteId, request, response);
         }
     }
 }

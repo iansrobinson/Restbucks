@@ -40,27 +40,16 @@ namespace Restbucks.Quoting.Service.Resources
                 return null;
             }
 
+            var baseUri = uriFactories.For<Quote>().CreateBaseUri(request.RequestUri);
+
             response.StatusCode = HttpStatusCode.OK;
             response.Headers.CacheControl = new CacheControlHeaderValue { Public = true };
             response.Content = new ByteArrayContent(new byte[] { });
             response.Content.Headers.Expires = quotation.CreatedDateTime.AddDays(7.0);
 
-            return CreateEntityBody(quotation, request.RequestUri);
-        }
-
-        private Shop CreateEntityBody(Quotation quotation, Uri requestUri)
-        {
-            var baseUri = uriFactories.For<Quote>().CreateBaseUri(requestUri);
-            var uri = GenerateQuoteUri(baseUri, quotation);
-
             return new Shop(baseUri, quotation.LineItems.Select(li => new LineItemToItem(li).Adapt()))
-                .AddLink(new Link(new Uri(uri.PathAndQuery, UriKind.Relative), "application/restbucks+xml", LinkRelations.Self))
+                .AddLink(new Link(uriFactories.For<Quote>().CreateRelativeUri(quotation.Id.ToString("N")), "application/restbucks+xml", LinkRelations.Self))
                 .AddLink(new Link(uriFactories.For<OrderForm>().CreateRelativeUri(quotation.Id.ToString("N")), "application/restbucks+xml", LinkRelations.OrderForm));
-        }
-
-        private Uri GenerateQuoteUri(Uri baseUri, Quotation quotation)
-        {
-            return uriFactories.For<Quote>().CreateAbsoluteUri(baseUri, quotation.Id.ToString("N"));
         }
     }
 }

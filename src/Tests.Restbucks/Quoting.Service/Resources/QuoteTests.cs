@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using NUnit.Framework;
+using Restbucks.MediaType;
 using Restbucks.Quoting;
 using Restbucks.Quoting.Service.Resources;
 using Rhino.Mocks;
@@ -15,7 +15,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
     [TestFixture]
     public class QuoteTests
     {
-        private static readonly Uri BaseAddress = new Uri("http://localhost:8080");
+        private static readonly Uri BaseAddress = new Uri("http://localhost:8080/virtual-directory/");
 
         [Test]
         public void ShouldGetQuoteFromQuoteEngine()
@@ -42,7 +42,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
             }
             mocks.Playback();
 
-            var request = CreateHttpRequestMessage(id);
+            var request = new HttpRequestMessage {RequestUri = DefaultUriFactoryCollection.Instance.For<Quote>().CreateAbsoluteUri(BaseAddress, id.ToString("N"))};
             var quote = new QuoteBuilder().WithQuotationEngine(quoteEngine).Build();
             var result = quote.Get(id.ToString("N"), request, new HttpResponseMessage());
 
@@ -55,25 +55,16 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         [Test]
         public void ShouldReturn200Ok()
         {
-            var result = ExecuteRequestReturnResult(Guid.NewGuid(), DateTime.Now);
+            var response = ExecuteRequestReturnResponse();
 
-            Assert.AreEqual(HttpStatusCode.OK, result.Response.StatusCode);
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
         }
 
         [Test]
         public void ShouldReturn404NotFoundWhenGettingQuoteThatDoesNotExist()
         {
-            var mocks = new MockRepository();
-            var quoteEngine = mocks.Stub<IQuotationEngine>();
-
-            using (mocks.Record())
-            {
-                SetupResult.For(quoteEngine.GetQuote(Guid.Empty)).IgnoreArguments().Throw(new KeyNotFoundException());
-            }
-            mocks.ReplayAll();
-
             var response = new HttpResponseMessage();
-            var quote = new QuoteBuilder().WithQuotationEngine(quoteEngine).Build();
+            var quote = new QuoteBuilder().WithQuotationEngine(EmptyQuotationEngine.Instance).Build();
             quote.Get(Guid.NewGuid().ToString("N"), new HttpRequestMessage(), response);
 
             Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
@@ -82,60 +73,58 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         [Test]
         public void ResponseShouldExpire7DaysFromDateTimeQuoteWasCreated()
         {
-            DateTimeOffset createdDateTime = DateTime.Now;
-            var result = ExecuteRequestReturnResult(Guid.NewGuid(), createdDateTime);
+            var response = ExecuteRequestReturnResponse();
 
-            Assert.AreEqual("public", result.Response.Headers.CacheControl.ToString());
-            Assert.AreEqual(createdDateTime.AddDays(7.00), result.Response.Content.Headers.Expires);
+            Assert.AreEqual("public", response.Headers.CacheControl.ToString());
+            Assert.AreEqual(StubQuotationEngine.Quotation.CreatedDateTime.AddDays(7.00), response.Content.Headers.Expires);
         }
 
         [Test]
         public void ShouldIncludeSelfLink()
         {
-            var id = Guid.NewGuid();
-            var result = ExecuteRequestReturnResult(id, DateTime.Now);
+            var entityBody = ExecuteRequestReturnEntityBody();
 
-            Assert.IsNotNull(result.EntityBody.Links.Single(l => l.Rels.First().Value.Equals("self")));
-            Assert.AreEqual(DefaultUriFactoryCollection.Instance.For<Quote>().CreateRelativeUri(id.ToString("N")), result.EntityBody.Links.Single(l => l.Rels.First().Value.Equals("self")).Href.ToString());
+            Assert.IsNotNull(entityBody.Links.Single(l => l.Rels.First().Value.Equals("self")));
+            Assert.AreEqual(DefaultUriFactoryCollection.Instance.For<Quote>().CreateRelativeUri(StubQuotationEngine.QuoteId), entityBody.Links.Single(l => l.Rels.First().Value.Equals("self")).Href.ToString());
         }
 
         [Test]
         public void ShouldIncludeLinkToOrderForm()
         {
-            var id = Guid.NewGuid();
-            var result = ExecuteRequestReturnResult(id, DateTime.Now);
+            var entityBody = ExecuteRequestReturnEntityBody();
 
-            Assert.IsNotNull(result.EntityBody.Links.Single(l => l.Rels.First().SerializableValue.Equals("rb:order-form")));
-            Assert.AreEqual(DefaultUriFactoryCollection.Instance.For<OrderForm>().CreateRelativeUri(id.ToString("N")), result.EntityBody.Links.Single(l => l.Rels.First().SerializableValue.Equals("rb:order-form")).Href.ToString());
+            Assert.IsNotNull(entityBody.Links.Single(l => l.Rels.First().SerializableValue.Equals("rb:order-form")));
+            Assert.AreEqual(DefaultUriFactoryCollection.Instance.For<OrderForm>().CreateRelativeUri(StubQuotationEngine.QuoteId), entityBody.Links.Single(l => l.Rels.First().SerializableValue.Equals("rb:order-form")).Href.ToString());
         }
 
-        private static Result ExecuteRequestReturnResult(Guid id, DateTimeOffset createdDateTime)
+        [Test]
+        public void EntityBodyShouldIncludeBaseUri()
         {
-            var quoteEngine = GetQuoteEngine(id, createdDateTime, new LineItem[] {});
+            var entityBody = ExecuteRequestReturnEntityBody();
+
+            Assert.AreEqual(BaseAddress, entityBody.BaseUri);
+        }
+
+        private static HttpResponseMessage ExecuteRequestReturnResponse()
+        {
+            var quote = new QuoteBuilder().WithQuotationEngine(StubQuotationEngine.Instance).Build();
+
+            var request = new HttpRequestMessage {RequestUri = DefaultUriFactoryCollection.Instance.For<Quote>().CreateAbsoluteUri(BaseAddress, StubQuotationEngine.QuoteId)};
             var response = new HttpResponseMessage();
-            var quote = new QuoteBuilder().WithQuotationEngine(quoteEngine).Build();
-            var entityBody = quote.Get(id.ToString("N"), CreateHttpRequestMessage(id), response);
 
-            return new Result {EntityBody = entityBody, Response = response};
+            quote.Get(StubQuotationEngine.QuoteId, request, response);
+
+            return response;
         }
 
-        private static HttpRequestMessage CreateHttpRequestMessage(Guid id)
+        private static Shop ExecuteRequestReturnEntityBody()
         {
-            return new HttpRequestMessage { RequestUri = DefaultUriFactoryCollection.Instance.For<Quote>().CreateAbsoluteUri(BaseAddress, id.ToString("N")) };
-        }
+            var quote = new QuoteBuilder().WithQuotationEngine(StubQuotationEngine.Instance).Build();
 
-        private static IQuotationEngine GetQuoteEngine(Guid id, DateTimeOffset createdDateTime, IEnumerable<LineItem> items)
-        {
-            var mocks = new MockRepository();
-            var quoteEngine = mocks.Stub<IQuotationEngine>();
+            var request = new HttpRequestMessage { RequestUri = DefaultUriFactoryCollection.Instance.For<Quote>().CreateAbsoluteUri(BaseAddress, StubQuotationEngine.QuoteId) };
+            var response = new HttpResponseMessage();
 
-            using (mocks.Record())
-            {
-                SetupResult.For(quoteEngine.GetQuote(Guid.Empty)).IgnoreArguments().Return(new Quotation(id, createdDateTime, items));
-            }
-            mocks.ReplayAll();
-
-            return quoteEngine;
+            return quote.Get(StubQuotationEngine.QuoteId, request, response);
         }
     }
 }
