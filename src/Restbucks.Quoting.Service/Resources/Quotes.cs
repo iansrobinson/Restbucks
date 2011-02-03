@@ -35,15 +35,15 @@ namespace Restbucks.Quoting.Service.Resources
             }
 
             var quote = quotationEngine.CreateQuote(new QuotationRequest(shop.Items.Select(i => new QuotationRequestItem(i.Description, new Quantity(i.Amount.Measure, i.Amount.Value)))));
-            var baseUri = uriFactory.For<Quotes>().CreateBaseUri(request.RequestUri);
+            var baseUri = uriFactory.CreateBaseUri<Quotes>(request.RequestUri);
 
             response.StatusCode = HttpStatusCode.Created;
-            response.Headers.Location = uriFactory.For<Quote>().CreateAbsoluteUri(baseUri, quote.Id.ToString("N"));
+            response.Headers.Location = uriFactory.CreateAbsoluteUri<Quote>(baseUri, quote.Id.ToString("N"));
             response.Headers.CacheControl = new CacheControlHeaderValue {NoCache = true, NoStore = true};
 
             return new Shop(baseUri, quote.LineItems.Select(li => new LineItemToItem(li).Adapt()))
-                .AddLink(new Link(uriFactory.For<Quote>().CreateRelativeUri(quote.Id.ToString("N")), "application/restbucks+xml", LinkRelations.Self))
-                .AddLink(new Link(uriFactory.For<OrderForm>().CreateRelativeUri(quote.Id.ToString("N")), "application/restbucks+xml", LinkRelations.OrderForm));
+                .AddLink(new Link(uriFactory.CreateRelativeUri<Quote>(quote.Id.ToString("N")), "application/restbucks+xml", LinkRelations.Self))
+                .AddLink(new Link(uriFactory.CreateRelativeUri <OrderForm>(quote.Id.ToString("N")), "application/restbucks+xml", LinkRelations.OrderForm));
         }
     }
 }

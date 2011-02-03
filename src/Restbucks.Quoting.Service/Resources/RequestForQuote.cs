@@ -24,7 +24,7 @@ namespace Restbucks.Quoting.Service.Resources
             response.Headers.CacheControl = new CacheControlHeaderValue {Public = true, MaxAge = new TimeSpan(24, 0, 0)};
             return new Shop(uriFactory.CreateBaseUri<RequestForQuote>(request.RequestUri))
                 .AddForm(new Form(
-                             uriFactory.For<Quotes>().CreateRelativeUri(),
+                             uriFactory.CreateRelativeUri <Quotes>(),
                              "post", "application/restbucks+xml",
                              new Uri("http://schemas.restbucks.com/shop.xsd")));
         }

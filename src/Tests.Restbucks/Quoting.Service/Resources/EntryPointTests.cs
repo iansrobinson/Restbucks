@@ -21,7 +21,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
 
             var link = entityBody.Links.First();
 
-            Assert.AreEqual(DefaultUriFactory.Instance.For<RequestForQuote>().CreateRelativeUri(), link.Href.ToString());
+            Assert.AreEqual(DefaultUriFactory.Instance.CreateRelativeUri<RequestForQuote>(), link.Href.ToString());
             Assert.AreEqual(LinkRelations.Rfq, link.Rels.First());
             Assert.AreEqual(LinkRelations.Prefetch, link.Rels.Last());
             Assert.AreEqual("application/restbucks+xml", link.MediaType);

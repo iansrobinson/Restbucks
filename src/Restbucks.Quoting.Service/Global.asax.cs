@@ -84,13 +84,13 @@ namespace Restbucks.Quoting.Service
 
             private void Register<T>() where T : class
             {
-                var uriFactories = container.Resolve<UriFactory>();
+                var uriFactory = container.Resolve<UriFactory>();
 
                 container.Register(Component.For<T>().LifeStyle.Transient);
-                uriFactories.Register<T>();
-                routes.AddServiceRoute<T>(uriFactories.For<T>().RoutePrefix, configuration);
-                
-                Log.DebugFormat("Registered resource. Type: [{0}]. Prefix: [{1}]. UriTemplate: [{2}].", typeof(T).Name, uriFactories.For<T>().RoutePrefix, uriFactories.For<T>().UriTemplateValue);
+                uriFactory.Register<T>();
+                routes.AddServiceRoute<T>(uriFactory.GetRoutePrefix<T>(), configuration);
+
+                Log.DebugFormat("Registered resource. Type: [{0}]. Prefix: [{1}]. UriTemplate: [{2}].", typeof (T).Name, uriFactory.GetRoutePrefix<T>(), uriFactory.GetUriTemplateValue<T>());
             }
         }
     }

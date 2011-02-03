@@ -40,7 +40,7 @@ namespace Restbucks.Quoting.Service.Resources
                 return null;
             }
 
-            var baseUri = uriFactory.For<Quote>().CreateBaseUri(request.RequestUri);
+            var baseUri = uriFactory.CreateBaseUri<Quote>(request.RequestUri);
 
             response.StatusCode = HttpStatusCode.OK;
             response.Headers.CacheControl = new CacheControlHeaderValue { Public = true };
@@ -48,8 +48,8 @@ namespace Restbucks.Quoting.Service.Resources
             response.Content.Headers.Expires = quotation.CreatedDateTime.AddDays(7.0);
 
             return new Shop(baseUri, quotation.LineItems.Select(li => new LineItemToItem(li).Adapt()))
-                .AddLink(new Link(uriFactory.For<Quote>().CreateRelativeUri(quotation.Id.ToString("N")), "application/restbucks+xml", LinkRelations.Self))
-                .AddLink(new Link(uriFactory.For<OrderForm>().CreateRelativeUri(quotation.Id.ToString("N")), "application/restbucks+xml", LinkRelations.OrderForm));
+                .AddLink(new Link(uriFactory.CreateRelativeUri<Quote>(quotation.Id.ToString("N")), "application/restbucks+xml", LinkRelations.Self))
+                .AddLink(new Link(uriFactory.CreateRelativeUri<OrderForm>(quotation.Id.ToString("N")), "application/restbucks+xml", LinkRelations.OrderForm));
         }
     }
 }

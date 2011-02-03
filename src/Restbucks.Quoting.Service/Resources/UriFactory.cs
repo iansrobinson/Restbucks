@@ -24,9 +24,14 @@ namespace Restbucks.Quoting.Service.Resources
             uriFactories.Add(typeof(T), uriFactory);
         }
 
-        public UriFactoryWorker For<T>() where T : class
+        public string GetRoutePrefix<T>() where T :class
         {
-            return uriFactories[typeof (T)];
+            return For<T>().RoutePrefix;
+        }
+
+        public string GetUriTemplateValue<T>() where T : class
+        {
+            return For<T>().UriTemplateValue;
         }
 
         public Uri CreateBaseUri<T>(Uri uri) where T : class
@@ -42,6 +47,11 @@ namespace Restbucks.Quoting.Service.Resources
         public Uri CreateRelativeUri<T>(params string[] values) where T : class
         {
             return For<T>().CreateRelativeUri(values);
+        }
+
+        private UriFactoryWorker For<T>() where T : class
+        {
+            return uriFactories[typeof(T)];
         }
     }
 }
