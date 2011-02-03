@@ -84,7 +84,7 @@ namespace Tests.Restbucks.MediaType.Formatters
         }
 
         [Test]
-        public void ShouldNotOutputItemsElementIfThereAreNoItemsInShop()
+        public void ShouldNotAddItemsElementIfThereAreNoItemsInShop()
         {
             var shop = new ShopBuilder().Build();
             var xml = new XmlOutput(new ShopFormatter(shop).CreateXml());
@@ -122,6 +122,15 @@ namespace Tests.Restbucks.MediaType.Formatters
             var xml = new XmlOutput(formatter.CreateXml());
 
             Assert.AreEqual("http://restbucks.com:8080/shop", xml.GetNodeValue("r:shop/@xml:base"));
+        }
+
+        [Test]
+        public void ShouldNotAddXmlBaseAttributeToRootElementIfBaseUriIsNull()
+        {
+            var formatter = new ShopFormatter(new ShopBuilder().WithBaseUri(null).Build());
+            var xml = new XmlOutput(formatter.CreateXml());
+
+            Assert.IsNull(xml.GetNode("r:shop/@xml:base"));
         }
 
         private class XmlOutput

@@ -28,7 +28,7 @@ namespace Restbucks.Quoting.Service.Processors
         {
             try
             {
-                var root = new ShopFormatter((Shop)instance).CreateXml();
+                var root = new ShopFormatter((Shop) instance).CreateXml();
 
                 using (var writer = XmlWriter.Create(stream, WriterSettings))
                 {
@@ -40,37 +40,34 @@ namespace Restbucks.Quoting.Service.Processors
             {
                 Log.Warn("Unexpected error writing application/restbucks+xml to response stream.", ex);
                 throw;
-            }  
+            }
         }
 
         public override object ReadFromStream(Stream stream, HttpRequestMessage request)
         {
+            if (stream == null)
+            {
+                return null;
+            }
+
+            if (stream.Length.Equals(0))
+            {
+                return null;
+            }
+
             try
             {
-                if (stream == null)
-                {
-                    return null;
-                }
-
-                if (stream.Length.Equals(0))
-                {
-                    return null;
-                }
-
-                try
-                {
-                    return new ShopAssembler(XElement.Load(stream), request.RequestUri).AssembleShop();
-                }
-                catch (XmlException)
-                {
-                    throw new InvalidFormatException("Incorrectly formatted entity body. Request must be formatted according to application/restbucks+xml.");
-                }
+                return new ShopAssembler(XElement.Load(stream)).AssembleShop();
+            }
+            catch (XmlException)
+            {
+                throw new InvalidFormatException("Incorrectly formatted entity body. Request must be formatted according to application/restbucks+xml.");
             }
             catch (Exception ex)
             {
                 Log.Warn("Unexpected error reading application/restbucks+xml from request stream.", ex);
                 throw;
-            } 
+            }
         }
 
         public override IEnumerable<string> SupportedMediaTypes

@@ -135,7 +135,7 @@ namespace Tests.Restbucks.MediaType.Assemblers
         }
 
         [Test]
-        public void IfRootDoesNotSpecifyXmlBaseFallsBackToSuppliedXmlBaseValue()
+        public void IfRootDoesNotSpecifyXmlBaseFallsBackToParentBaseUri()
         {
             const string xml = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <shop xmlns=""http://schemas.restbucks.com/shop""/>";
@@ -154,6 +154,57 @@ namespace Tests.Restbucks.MediaType.Assemblers
             var shop = new ShopAssembler(XElement.Parse(xml), new Uri("http://restbucks.com:8080/shop")).AssembleShop();
 
             Assert.AreEqual(new Uri("http://iansrobinson.com/"), shop.BaseUri);
+        }
+
+        [Test]
+        [ExpectedException(ExpectedException = typeof (InvalidFormatException), ExpectedMessage = "Invalid format. Base URI missing.")]
+        public void ShouldThrowExceptionIfOneOrMoreLinksContainRelativeUriButNoBaseUriIsAvailable()
+        {
+            const string xml = @"<?xml version=""1.0"" encoding=""utf-8""?>
+<shop xmlns:rb=""http://relations.restbucks.com/"" xmlns=""http://schemas.restbucks.com/shop"">
+  <link rel=""rb:rfq prefetch"" type=""application/xml"" href=""http://localhost/quotes"" />
+  <link rel=""rb:order-form"" type=""application/restbucks+xml"" href=""/order-forms/1234"" />
+</shop>";
+
+            new ShopAssembler(XElement.Parse(xml), null).AssembleShop();
+        }
+
+        [Test]
+        [ExpectedException(ExpectedException = typeof(InvalidFormatException), ExpectedMessage = "Invalid format. Base URI missing.")]
+        public void ShouldThrowExceptionIfOneOrMoreFormsContainRelativeUriButNoBaseUriIsAvailable()
+        {
+            const string xml = @"<?xml version=""1.0"" encoding=""utf-8""?>
+<shop xmlns=""http://schemas.restbucks.com/shop"">
+  <model schema=""http://schemas.restbucks.com/shop.xsd"" xmlns=""http://www.w3.org/2002/xforms"">
+    <instance />
+    <submission resource=""http://localhost/quotes"" method=""post"" mediatype=""application/restbucks+xml"" />
+  </model>
+  <model xmlns=""http://www.w3.org/2002/xforms"">
+    <instance>
+      <shop xmlns=""http://schemas.restbucks.com/shop"" />
+    </instance>
+    <submission resource=""/orders"" method=""put"" mediatype=""application/xml"" />
+  </model>
+</shop>";
+
+            new ShopAssembler(XElement.Parse(xml), null).AssembleShop();
+        }
+
+        [Test]
+        public void PassesBaseUriToFormContents()
+        {
+            const string xml = @"<?xml version=""1.0"" encoding=""utf-8""?>
+<shop xmlns=""http://schemas.restbucks.com/shop"" xml:base=""http://restbucks.com/"">
+  <model xmlns=""http://www.w3.org/2002/xforms"">
+    <instance>
+      <shop xmlns=""http://schemas.restbucks.com/shop""/>
+    </instance>
+    <submission resource=""http://localhost/orders"" method=""put"" mediatype=""application/xml"" />
+  </model>
+</shop>";
+            var shop = new ShopAssembler(XElement.Parse(xml), null).AssembleShop();
+
+            Assert.AreEqual(new Uri("http://restbucks.com"), shop.Forms.First().Instance.BaseUri);
         }
     }
 }
