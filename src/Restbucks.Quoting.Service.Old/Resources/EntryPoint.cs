@@ -5,10 +5,22 @@ using Restbucks.MediaType;
 
 namespace Restbucks.Quoting.Service.Old.Resources
 {
+    [NewUriTemplate("shop")]
     public class EntryPoint
     {
         public static readonly UriFactory UriFactory = new UriFactory("shop");
-        
+
+        private readonly NewUriFactory newUriFactory;
+
+        public EntryPoint()
+        {
+        }
+
+        public EntryPoint(NewUriFactory newUriFactory)
+        {
+            this.newUriFactory = newUriFactory;
+        }
+
         public Shop Get(HttpRequestMessage request, HttpResponseMessage response)
         {
             response.Headers.CacheControl = new CacheControl {Public = true, MaxAge = new TimeSpan(24, 0, 0)};

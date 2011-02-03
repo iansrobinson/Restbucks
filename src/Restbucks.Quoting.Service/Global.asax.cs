@@ -32,15 +32,14 @@ namespace Restbucks.Quoting.Service
 
             Log.Debug("Starting Restbucks.Quoting.Service...");
 
-            var uriFactories = new UriFactory();
+            var uriFactory = new UriFactory();
 
             container.Register(Component.For(typeof (IQuotationEngine)).ImplementedBy(typeof (QuotationEngine)).LifeStyle.Singleton);
             container.Register(Component.For(typeof (IDateTimeProvider)).ImplementedBy(typeof (DateTimeProvider)).LifeStyle.Singleton);
             container.Register(Component.For(typeof (IGuidProvider)).ImplementedBy(typeof (GuidProvider)).LifeStyle.Singleton);
             container.Register(Component.For(typeof (ISignForms)).Instance(new FormsIntegrityUtility(Signature.Instance, OrderForm.SignedFormPlaceholder)).LifeStyle.Singleton);
             container.Register(Component.For(typeof (FormsIntegrityResponseProcessor)).LifeStyle.Singleton);
-            container.Register(Component.For(typeof (Quotation)).LifeStyle.Transient);
-            container.Register(Component.For(typeof (UriFactory)).Instance(uriFactories).LifeStyle.Singleton);
+            container.Register(Component.For(typeof (UriFactory)).Instance(uriFactory).LifeStyle.Singleton);
 
             new ResourceManager(container, RouteTable.Routes).RegisterResourcesFor(Assembly.GetExecutingAssembly());
         }

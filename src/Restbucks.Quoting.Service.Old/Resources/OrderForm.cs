@@ -9,6 +9,7 @@ using Restbucks.Quoting.Service.Old.Adapters;
 
 namespace Restbucks.Quoting.Service.Old.Resources
 {
+    [NewUriTemplate("order-form", OrderFormUriTemplate)]
     public class OrderForm
     {
         private const string OrderFormUriTemplate = "{id}";
@@ -20,7 +21,14 @@ namespace Restbucks.Quoting.Service.Old.Resources
         public static readonly UriFactory UriFactory = new UriFactory("order-forms", OrderFormUriTemplate);
         public const string SignedFormPlaceholder = "SIGNED_FORM_PLACEHOLDER";
 
+        private readonly NewUriFactory newUriFactory;
         private readonly IQuotationEngine quoteEngine;
+
+        public OrderForm(NewUriFactory newUriFactory, IQuotationEngine quoteEngine)
+        {
+            this.newUriFactory = newUriFactory;
+            this.quoteEngine = quoteEngine;
+        }
 
         public OrderForm(IQuotationEngine quoteEngine)
         {

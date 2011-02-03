@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Web;
 using Microsoft.Http;
 using Microsoft.Http.Headers;
 using Restbucks.MediaType;
@@ -9,30 +10,28 @@ using Restbucks.Quoting.Service.Old.Adapters;
 
 namespace Restbucks.Quoting.Service.Old.Resources
 {
-    [NewUriTemplate("quotes")]
-    public class Quotes
+    [NewUriTemplate("quote", "{id}")]
+    public class Quote
     {
         private const string QuoteUriTemplate = "{id}";
         private const string RoutePrefix = "quotes";
-
-        public static readonly UriFactory QuotesUriFactory = new UriFactory(RoutePrefix);
+        
         public static readonly UriFactory QuoteUriFactory = new UriFactory(RoutePrefix, QuoteUriTemplate);
 
         private readonly NewUriFactory newUriFactory;
         private readonly IQuotationEngine quoteEngine;
 
-        public Quotes(NewUriFactory newUriFactory, IQuotationEngine quoteEngine)
+        public Quote(NewUriFactory newUriFactory, IQuotationEngine quoteEngine)
         {
             this.newUriFactory = newUriFactory;
             this.quoteEngine = quoteEngine;
         }
 
-        public Quotes(IQuotationEngine quoteEngine)
+        public Quote(IQuotationEngine quoteEngine)
         {
             this.quoteEngine = quoteEngine;
         }
-
-        [UriTemplate(QuoteUriTemplate)]
+        
         public Shop Get(string id, HttpRequestMessage request, HttpResponseMessage response)
         {
             Quotation quote;
@@ -47,32 +46,8 @@ namespace Restbucks.Quoting.Service.Old.Resources
             }
 
             response.StatusCode = HttpStatusCode.OK;
-            response.Headers.CacheControl = new CacheControl {Public = true};
+            response.Headers.CacheControl = new CacheControl { Public = true };
             response.Headers.Expires = quote.CreatedDateTime.AddDays(7.0).UtcDateTime;
-
-            return CreateEntityBody(quote, request.Uri);
-        }
-
-        public Shop Post(Shop shop, HttpRequestMessage request, HttpResponseMessage response)
-        {
-            if (shop == null)
-            {
-                response.StatusCode = HttpStatusCode.BadRequest;
-                response.Headers.CacheControl = new CacheControl {NoCache = true, NoStore = true};
-                response.Headers.ContentType = "text/plain";
-                response.Content = HttpContent.Create("Bad request: empty or malformed data.");
-                return null;
-            }
-
-            var quote =
-                quoteEngine.CreateQuote(
-                    new QuotationRequest(
-                        shop.Items.Select(
-                            i => new QuotationRequestItem(i.Description, new Quantity(i.Amount.Measure, i.Amount.Value)))));
-
-            response.StatusCode = HttpStatusCode.Created;
-            response.Headers.Location = GenerateQuoteUri(request.Uri, quote);
-            response.Headers.CacheControl = new CacheControl {NoCache = true, NoStore = true};
 
             return CreateEntityBody(quote, request.Uri);
         }
