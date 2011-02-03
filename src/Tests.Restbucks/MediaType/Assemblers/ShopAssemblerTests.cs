@@ -191,7 +191,7 @@ namespace Tests.Restbucks.MediaType.Assemblers
         }
 
         [Test]
-        public void PassesBaseUriToFormContents()
+        public void ShouldPassBaseUriToFormContents()
         {
             const string xml = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <shop xmlns=""http://schemas.restbucks.com/shop"" xml:base=""http://restbucks.com/"">
@@ -205,6 +205,23 @@ namespace Tests.Restbucks.MediaType.Assemblers
             var shop = new ShopAssembler(XElement.Parse(xml), null).AssembleShop();
 
             Assert.AreEqual(new Uri("http://restbucks.com"), shop.Forms.First().Instance.BaseUri);
+        }
+
+        [Test]
+        public void FormContentsShouldUseOwnBaseUriIfPresent()
+        {
+            const string xml = @"<?xml version=""1.0"" encoding=""utf-8""?>
+<shop xmlns=""http://schemas.restbucks.com/shop"" xml:base=""http://restbucks.com/"">
+  <model xmlns=""http://www.w3.org/2002/xforms"">
+    <instance>
+      <shop xmlns=""http://schemas.restbucks.com/shop"" xml:base=""http://iansrobinson.com/""/>
+    </instance>
+    <submission resource=""http://localhost/orders"" method=""put"" mediatype=""application/xml"" />
+  </model>
+</shop>";
+            var shop = new ShopAssembler(XElement.Parse(xml), null).AssembleShop();
+
+            Assert.AreEqual(new Uri("http://iansrobinson.com"), shop.Forms.First().Instance.BaseUri);
         }
     }
 }
