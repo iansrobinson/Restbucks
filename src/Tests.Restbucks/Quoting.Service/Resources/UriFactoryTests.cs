@@ -17,6 +17,57 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         }
 
         [Test]
+        public void ShouldCreateBaseUriForRegisteredClass()
+        {
+            var uriFactories = new UriFactory();
+            uriFactories.Register<MyResource>();
+
+            Assert.AreEqual(new Uri("http://localhost:8080/virtual-directory/"), uriFactories.CreateBaseUri<MyResource>(new Uri("http://localhost:8080/virtual-directory/my-resource/1")));
+        }
+
+        [Test]
+        [ExpectedException(ExpectedException = typeof(KeyNotFoundException))]
+        public void ThrowsExceptionIfTryingToCreateBaseUriForEntryWithoutRegisteredType()
+        {
+            var uriFactories = new UriFactory();
+            uriFactories.CreateBaseUri<MyResource>(new Uri("http://localhost:8080/virtual-directory/my-resource/1"));
+        }
+
+        [Test]
+        public void ShouldCreateAbsoluteUriForRegisteredClass()
+        {
+            var uriFactories = new UriFactory();
+            uriFactories.Register<MyResource>();
+
+            Assert.AreEqual(new Uri("http://localhost:8080/virtual-directory/my-resource/1"), uriFactories.CreateAbsoluteUri<MyResource>(new Uri("http://localhost:8080/virtual-directory/"), "1"));
+        }
+
+        [Test]
+        [ExpectedException(ExpectedException = typeof(KeyNotFoundException))]
+        public void ThrowsExceptionIfTryingToCreateAbsoluteUriForEntryWithoutRegisteredType()
+        {
+            var uriFactories = new UriFactory();
+            uriFactories.CreateAbsoluteUri<MyResource>(new Uri("http://localhost:8080/virtual-directory/"), "1");
+        }
+
+        [Test]
+        public void ShouldCreateRelativeUriForRegisteredClass()
+        {
+            var uriFactories = new UriFactory();
+            uriFactories.Register<MyResource>();
+
+            Assert.AreEqual(new Uri("/my-resource/1", UriKind.Relative), uriFactories.CreateRelativeUri<MyResource>("1"));
+        }
+
+        [Test]
+        [ExpectedException(ExpectedException = typeof(KeyNotFoundException))]
+        public void ThrowsExceptionIfTryingToCreateRelativeUriForEntryWithoutRegisteredType()
+        {
+            var uriFactories = new UriFactory();
+            uriFactories.CreateRelativeUri<MyResource>("1");
+        }
+
+        [Test]
         [ExpectedException(ExpectedException = typeof(ArgumentException))]
         public void ThrowsExceptionIfEntryAlreadyExistsForType()
         {
@@ -35,7 +86,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
 
         [Test]
         [ExpectedException(ExpectedException = typeof(UriTemplateMissingException))]
-        public void ThrowsExceptionIfTypeIsNOtAttributedWithUriTemplateAttribute()
+        public void ThrowsExceptionIfTypeIsNotAttributedWithUriTemplateAttribute()
         {
             var uriFactories = new UriFactory();
             uriFactories.Register<string>();

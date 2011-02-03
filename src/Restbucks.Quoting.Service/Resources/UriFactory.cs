@@ -24,9 +24,24 @@ namespace Restbucks.Quoting.Service.Resources
             uriFactories.Add(typeof(T), uriFactory);
         }
 
-        public UriFactoryWorker For<T>()
+        public UriFactoryWorker For<T>() where T : class
         {
             return uriFactories[typeof (T)];
+        }
+
+        public Uri CreateBaseUri<T>(Uri uri) where T : class
+        {
+            return For<T>().CreateBaseUri(uri);
+        }
+
+        public Uri CreateAbsoluteUri<T>(Uri baseUri, params string[] values) where T : class
+        {
+            return For<T>().CreateAbsoluteUri(baseUri, values);
+        }
+
+        public Uri CreateRelativeUri<T>(params string[] values) where T : class
+        {
+            return For<T>().CreateRelativeUri(values);
         }
     }
 }
