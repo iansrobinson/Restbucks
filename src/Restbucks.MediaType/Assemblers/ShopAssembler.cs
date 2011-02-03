@@ -21,34 +21,49 @@ namespace Restbucks.MediaType.Assemblers
 
         public Shop AssembleShop()
         {
-            if (!root.Name.Equals(Namespaces.ShopSchema + "shop"))
+            if (!HasShopRootElement(root))
             {
                 return null;
             }
 
             var baseUri = GetBaseUri(root, parentBaseUri);
+            var shop = CreateShop(root, baseUri);
 
+            if (baseUri == null)
+            {
+                EnsureThereAreNoRelativeUris(shop);
+            }
+
+            return shop;
+        }
+
+        private static bool HasShopRootElement(XElement root)
+        {
+            return root.Name.Equals(Namespaces.ShopSchema + "shop");
+        }
+
+        private static void EnsureThereAreNoRelativeUris(Shop shop)
+        {
+            var relativeUriCount = (from l in shop.Links
+                                    where l.Href.IsAbsoluteUri.Equals(false)
+                                    select l.Href)
+                .Union(from f in shop.Forms
+                       where f.Resource.IsAbsoluteUri.Equals(false)
+                       select f.Resource).Count();
+
+            if (relativeUriCount > 0)
+            {
+                throw new InvalidFormatException("Invalid format. Base URI missing.");
+            }
+        }
+
+        private static Shop CreateShop(XElement root, Uri baseUri)
+        {
             var shop = new Shop(baseUri);
 
             new ItemsAssembler(root).AssembleItems().ToList().ForEach(item => shop.AddItem(item));
             new LinksAssembler(root).AssembleLinks().ToList().ForEach(link => shop.AddLink(link));
             new FormsAssembler(root, baseUri).AssembleForms().ToList().ForEach(form => shop.AddForm(form));
-
-            if (baseUri == null)
-            {
-                var relativeUriCount = (from l in shop.Links
-                                        where l.Href.IsAbsoluteUri.Equals(false)
-                                        select l.Href)
-                    .Union(from f in shop.Forms
-                           where f.Resource.IsAbsoluteUri.Equals(false)
-                           select f.Resource).Count();
-
-                if (relativeUriCount > 0)
-                {
-                    throw new InvalidFormatException("Invalid format. Base URI missing.");
-                }
-            }
-
             return shop;
         }
 
