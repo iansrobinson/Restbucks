@@ -42,7 +42,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             mocks.Playback();
 
             var request = CreateHttpRequestMessage(id);
-            var result = new Quotes(quoteEngine).Get(id.ToString("N"), request, new HttpResponseMessage());
+            var result = new Quotes(DefaultUriFactory.Instance, quoteEngine).Get(id.ToString("N"), request, new HttpResponseMessage());
 
             Assert.True(result.HasItems);
             Assert.True(Matching.LineItemsMatchItems(quote.LineItems, result.Items));
@@ -71,7 +71,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             mocks.ReplayAll();
 
             var response = new HttpResponseMessage();
-            var quotes = new Quotes(quoteEngine);
+            var quotes = new Quotes(DefaultUriFactory.Instance, quoteEngine);
             quotes.Get(Guid.NewGuid().ToString("N"), new HttpRequestMessage(), response);
 
             Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
@@ -94,7 +94,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             var result = ExecuteRequestReturnResult(id, DateTime.Now);
 
             Assert.IsNotNull(result.EntityBody.Links.Single(l => l.Rels.First().Value.Equals("self")));
-            Assert.AreEqual(Quotes.QuoteUriFactory.CreateRelativeUri(id.ToString("N")), result.EntityBody.Links.Single(l => l.Rels.First().Value.Equals("self")).Href.ToString());
+            Assert.AreEqual(DefaultUriFactory.Instance.CreateRelativeUri<Quote>(id.ToString("N")), result.EntityBody.Links.Single(l => l.Rels.First().Value.Equals("self")).Href.ToString());
         }
 
         [Test]
@@ -104,15 +104,15 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             var result = ExecuteRequestReturnResult(id, DateTime.Now);
 
             Assert.IsNotNull(result.EntityBody.Links.Single(l => l.Rels.First().SerializableValue.Equals("rb:order-form")));
-            Assert.AreEqual(OrderForm.UriFactory.CreateRelativeUri(id.ToString("N")), result.EntityBody.Links.Single(l => l.Rels.First().SerializableValue.Equals("rb:order-form")).Href.ToString());
+            Assert.AreEqual(DefaultUriFactory.Instance.CreateRelativeUri<OrderForm>(id.ToString("N")), result.EntityBody.Links.Single(l => l.Rels.First().SerializableValue.Equals("rb:order-form")).Href.ToString());
         }
 
         private static Result ExecuteRequestReturnResult(Guid id, DateTimeOffset createdDateTime)
         {
             var quoteEngine = GetQuoteEngine(id, createdDateTime, new LineItem[] {});
             var response = new HttpResponseMessage();
-            var quotes = new Quotes(quoteEngine);
-            var entityBody = quotes.Get(id.ToString("N"), CreateHttpRequestMessage(id), response);
+            var quote = new Quote(DefaultUriFactory.Instance, quoteEngine);
+            var entityBody = quote.Get(id.ToString("N"), CreateHttpRequestMessage(id), response);
 
             return new Result {EntityBody = entityBody, Response = response};
         }

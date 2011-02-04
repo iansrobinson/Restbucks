@@ -153,7 +153,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
 
         private static HttpRequestMessage CreateHttpRequestMessage(Guid id)
         {
-            return new HttpRequestMessage { Uri = OrderForm.UriFactory.CreateAbsoluteUri(BaseAddress, id.ToString("N")) };
+            return new HttpRequestMessage { Uri = DefaultUriFactory.Instance.CreateAbsoluteUri<OrderForm>(BaseAddress, id.ToString("N")) };
         }
 
         private static IQuotationEngine GetQuoteEngine(Guid id, DateTimeOffset createdDateTime, IEnumerable<LineItem> items)

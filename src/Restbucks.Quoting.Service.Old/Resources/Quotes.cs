@@ -27,11 +27,6 @@ namespace Restbucks.Quoting.Service.Old.Resources
             this.quoteEngine = quoteEngine;
         }
 
-        public Quotes(IQuotationEngine quoteEngine)
-        {
-            this.quoteEngine = quoteEngine;
-        }
-
         [UriTemplate(QuoteUriTemplate)]
         public Shop Get(string id, HttpRequestMessage request, HttpResponseMessage response)
         {
@@ -77,18 +72,18 @@ namespace Restbucks.Quoting.Service.Old.Resources
             return CreateEntityBody(quote, request.Uri);
         }
 
-        private static Shop CreateEntityBody(Quotation quote, Uri requestUri)
+        private Shop CreateEntityBody(Quotation quote, Uri requestUri)
         {
             var uri = GenerateQuoteUri(requestUri, quote);
 
             return new Shop(uri, quote.LineItems.Select(li => new LineItemToItem(li).Adapt()))
                 .AddLink(new Link(new Uri(uri.PathAndQuery, UriKind.Relative), "application/restbucks+xml", LinkRelations.Self))
-                .AddLink(new Link(OrderForm.UriFactory.CreateRelativeUri(quote.Id.ToString("N")), "application/restbucks+xml", LinkRelations.OrderForm));
+                .AddLink(new Link(newUriFactory.CreateRelativeUri<OrderForm>(quote.Id.ToString("N")), "application/restbucks+xml", LinkRelations.OrderForm));
         }
 
-        private static Uri GenerateQuoteUri(Uri requestUri, Quotation quote)
+        private Uri GenerateQuoteUri(Uri requestUri, Quotation quote)
         {
-            return QuoteUriFactory.CreateAbsoluteUri(requestUri, quote.Id.ToString("N"));
+            return newUriFactory.CreateAbsoluteUri<Quote>(requestUri, quote.Id.ToString("N"));
         }
     }
 }

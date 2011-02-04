@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Web;
 using Microsoft.Http;
 using Microsoft.Http.Headers;
 using Restbucks.MediaType;
@@ -13,11 +12,6 @@ namespace Restbucks.Quoting.Service.Old.Resources
     [NewUriTemplate("quote", "{id}")]
     public class Quote
     {
-        private const string QuoteUriTemplate = "{id}";
-        private const string RoutePrefix = "quotes";
-        
-        public static readonly UriFactory QuoteUriFactory = new UriFactory(RoutePrefix, QuoteUriTemplate);
-
         private readonly NewUriFactory newUriFactory;
         private readonly IQuotationEngine quoteEngine;
 
@@ -31,7 +25,7 @@ namespace Restbucks.Quoting.Service.Old.Resources
         {
             this.quoteEngine = quoteEngine;
         }
-        
+
         public Shop Get(string id, HttpRequestMessage request, HttpResponseMessage response)
         {
             Quotation quote;
@@ -45,25 +39,27 @@ namespace Restbucks.Quoting.Service.Old.Resources
                 return null;
             }
 
+            var baseUri = newUriFactory.CreateBaseUri<Quote>(request.Uri);
+
             response.StatusCode = HttpStatusCode.OK;
-            response.Headers.CacheControl = new CacheControl { Public = true };
+            response.Headers.CacheControl = new CacheControl {Public = true};
             response.Headers.Expires = quote.CreatedDateTime.AddDays(7.0).UtcDateTime;
 
-            return CreateEntityBody(quote, request.Uri);
+            return CreateEntityBody(quote, baseUri);
         }
 
-        private static Shop CreateEntityBody(Quotation quote, Uri requestUri)
+        private Shop CreateEntityBody(Quotation quote, Uri baseUri)
         {
-            var uri = GenerateQuoteUri(requestUri, quote);
+            var uri = GenerateQuoteUri(baseUri, quote);
 
-            return new Shop(uri, quote.LineItems.Select(li => new LineItemToItem(li).Adapt()))
-                .AddLink(new Link(new Uri(uri.PathAndQuery, UriKind.Relative), "application/restbucks+xml", LinkRelations.Self))
-                .AddLink(new Link(OrderForm.UriFactory.CreateRelativeUri(quote.Id.ToString("N")), "application/restbucks+xml", LinkRelations.OrderForm));
+            return new Shop(baseUri, quote.LineItems.Select(li => new LineItemToItem(li).Adapt()))
+                .AddLink(new Link(newUriFactory.CreateRelativeUri<Quote>(quote.Id.ToString("N")), "application/restbucks+xml", LinkRelations.Self))
+                .AddLink(new Link(newUriFactory.CreateRelativeUri<OrderForm>(quote.Id.ToString("N")), "application/restbucks+xml", LinkRelations.OrderForm));
         }
 
-        private static Uri GenerateQuoteUri(Uri requestUri, Quotation quote)
+        private Uri GenerateQuoteUri(Uri baseUri, Quotation quote)
         {
-            return QuoteUriFactory.CreateAbsoluteUri(requestUri, quote.Id.ToString("N"));
+            return newUriFactory.CreateAbsoluteUri<Quote>(baseUri, quote.Id.ToString("N"));
         }
     }
 }

@@ -46,7 +46,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             }
             mocks.Playback();
 
-            var result = new Quotes(quoteEngine).Post(shop, new HttpRequestMessage {Uri = new Uri("http://localhost:8080/quotes")}, new HttpResponseMessage());
+            var result = new Quotes(DefaultUriFactory.Instance, quoteEngine).Post(shop, new HttpRequestMessage { Uri = new Uri("http://localhost:8080/quotes") }, new HttpResponseMessage());
 
             Assert.True(result.HasItems);
             Assert.True(Matching.LineItemsMatchItems(quote.LineItems, result.Items));
@@ -70,7 +70,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             var id = Guid.NewGuid();
             var result = ExecuteRequestReturnResult(id, DateTime.Now);
 
-            Assert.AreEqual(Quotes.QuoteUriFactory.CreateAbsoluteUri(BaseAddress, id.ToString("N")), result.Response.Headers.Location);
+            Assert.AreEqual(DefaultUriFactory.Instance.CreateAbsoluteUri<Quote>(BaseAddress, id.ToString("N")), result.Response.Headers.Location);
         }
 
         [Test]
@@ -88,7 +88,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             var result = ExecuteRequestReturnResult(id, DateTime.Now);
 
             Assert.IsNotNull(result.EntityBody.Links.Single(l => l.Rels.First().Value.Equals("self")));
-            Assert.AreEqual(Quotes.QuoteUriFactory.CreateRelativeUri(id.ToString("N")), result.EntityBody.Links.Single(l => l.Rels.First().Value.Equals("self")).Href.ToString());
+            Assert.AreEqual(DefaultUriFactory.Instance.CreateRelativeUri<Quote>(id.ToString("N")), result.EntityBody.Links.Single(l => l.Rels.First().Value.Equals("self")).Href.ToString());
         }
 
         [Test]
@@ -98,14 +98,14 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             var result = ExecuteRequestReturnResult(id, DateTime.Now);
 
             Assert.IsNotNull(result.EntityBody.Links.Single(l => l.Rels.First().SerializableValue.Equals("rb:order-form")));
-            Assert.AreEqual(OrderForm.UriFactory.CreateRelativeUri(id.ToString("N")), result.EntityBody.Links.Single(l => l.Rels.First().SerializableValue.Equals("rb:order-form")).Href.ToString());
+            Assert.AreEqual(DefaultUriFactory.Instance.CreateRelativeUri<OrderForm>(id.ToString("N")), result.EntityBody.Links.Single(l => l.Rels.First().SerializableValue.Equals("rb:order-form")).Href.ToString());
         }
 
         [Test]
         public void ShouldReturn400BadRequestWhenShopIsNull()
         {
             var quoteEngine = GetQuoteEngine(Guid.Empty, DateTime.Now, new LineItem[] {});
-            var quotes = new Quotes(quoteEngine);
+            var quotes = new Quotes(DefaultUriFactory.Instance, quoteEngine);
             var response = new HttpResponseMessage();
             quotes.Post(null, new HttpRequestMessage {Uri = new Uri("http://localhost:8080/quotes")}, response);
 
@@ -119,7 +119,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
         {
             var quoteEngine = GetQuoteEngine(id, createdDateTime, new LineItem[] {});
             var response = new HttpResponseMessage();
-            var quotes = new Quotes(quoteEngine);
+            var quotes = new Quotes(DefaultUriFactory.Instance, quoteEngine);
             var entityBody = quotes.Post(new Shop(new Uri("http://localhost:8080/quotes/")), new HttpRequestMessage {Uri = new Uri("http://localhost:8080/quotes")}, response);
 
             return new Result {EntityBody = entityBody, Response = response};
