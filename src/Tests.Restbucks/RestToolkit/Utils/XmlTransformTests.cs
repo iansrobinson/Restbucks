@@ -2,9 +2,9 @@
 using System.IO;
 using System.Xml;
 using NUnit.Framework;
-using Restbucks.Quoting.Service.Old.Processors;
+using Restbucks.RestToolkit.Utils;
 
-namespace Tests.Restbucks.Old.Quoting.Service.Old.Processors
+namespace Tests.Restbucks.RestToolkit.Utils
 {
     [TestFixture]
     public class XmlTransformTests

@@ -76,7 +76,6 @@
     <Compile Include="Quoting.Service.Old\ConfigTests.cs" />
     <Compile Include="Quoting.Service.Old\Processors\FormsIntegrityResponseProcessorTests.cs" />
     <Compile Include="Quoting.Service.Old\Processors\FormsIntegrityUtilityTests.cs" />
-    <Compile Include="Quoting.Service.Old\Processors\XmlTransformTests.cs" />
     <Compile Include="Quoting.Service.Old\Resources\EntryPointTests.cs" />
     <Compile Include="Quoting.Service.Old\Resources\Helpers\DefaultUriFactory.cs" />
     <Compile Include="Quoting.Service.Old\Resources\Helpers\Matching.cs" />

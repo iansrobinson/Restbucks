@@ -83,7 +83,6 @@
     <Compile Include="Quoting.Service\Processors\FormsIntegrityUtilityTests.cs" />
     <Compile Include="Quoting.Service\Processors\RestbucksMediaTypeProcessorRequestHandlingTests.cs" />
     <Compile Include="Quoting.Service\Processors\RestbucksMediaTypeProcessorResponseHandlingTests.cs" />
-    <Compile Include="Quoting.Service\Processors\XmlTransformTests.cs" />
     <Compile Include="Quoting.Service\Resources\EntryPointTests.cs" />
     <Compile Include="Quoting.Service\Resources\Helpers\DefaultUriFactory.cs" />
     <Compile Include="Quoting.Service\Resources\Helpers\EmptyQuotationEngine.cs" />
@@ -105,6 +104,7 @@
     <Compile Include="RestToolkit\UriFactoryTests.cs" />
     <Compile Include="RestToolkit\UriFactoryWorkerTests.cs" />
     <Compile Include="RestToolkit\Utils\CheckStringTests.cs" />
+    <Compile Include="RestToolkit\Utils\XmlTransformTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Restbucks.MediaType\Restbucks.MediaType.csproj">

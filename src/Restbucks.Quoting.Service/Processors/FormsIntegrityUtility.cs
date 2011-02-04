@@ -3,6 +3,7 @@ using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using Restbucks.MediaType;
+using Restbucks.RestToolkit.Utils;
 
 namespace Restbucks.Quoting.Service.Processors
 {

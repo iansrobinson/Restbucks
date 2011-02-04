@@ -2,7 +2,7 @@
 using System.IO;
 using System.Xml;
 
-namespace Restbucks.Quoting.Service.Processors
+namespace Restbucks.RestToolkit.Utils
 {
     public class XmlTransform : IDisposable
     {
