@@ -45,21 +45,9 @@ namespace Restbucks.Quoting.Service.Old.Resources
             response.Headers.CacheControl = new CacheControl {Public = true};
             response.Headers.Expires = quote.CreatedDateTime.AddDays(7.0).UtcDateTime;
 
-            return CreateEntityBody(quote, baseUri);
-        }
-
-        private Shop CreateEntityBody(Quotation quote, Uri baseUri)
-        {
-            var uri = GenerateQuoteUri(baseUri, quote);
-
             return new Shop(baseUri, quote.LineItems.Select(li => new LineItemToItem(li).Adapt()))
                 .AddLink(new Link(newUriFactory.CreateRelativeUri<Quote>(quote.Id.ToString("N")), "application/restbucks+xml", LinkRelations.Self))
                 .AddLink(new Link(newUriFactory.CreateRelativeUri<OrderForm>(quote.Id.ToString("N")), "application/restbucks+xml", LinkRelations.OrderForm));
-        }
-
-        private Uri GenerateQuoteUri(Uri baseUri, Quotation quote)
-        {
-            return newUriFactory.CreateAbsoluteUri<Quote>(baseUri, quote.Id.ToString("N"));
         }
     }
 }

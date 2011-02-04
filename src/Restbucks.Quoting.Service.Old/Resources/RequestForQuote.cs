@@ -12,10 +12,6 @@ namespace Restbucks.Quoting.Service.Old.Resources
 
         private readonly NewUriFactory newUriFactory;
 
-        public RequestForQuote()
-        {
-        }
-
         public RequestForQuote(NewUriFactory newUriFactory)
         {
             this.newUriFactory = newUriFactory;
@@ -26,7 +22,7 @@ namespace Restbucks.Quoting.Service.Old.Resources
             response.Headers.CacheControl = new CacheControl {Public = true, MaxAge = new TimeSpan(24, 0, 0)};
             return new Shop(request.Uri)
                 .AddForm(new Form(
-                             Quotes.QuotesUriFactory.CreateRelativeUri(),
+                             newUriFactory.CreateRelativeUri<Quotes>(),
                              "post", "application/restbucks+xml",
                              new Uri("http://schemas.restbucks.com/shop.xsd")));
         }

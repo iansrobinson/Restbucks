@@ -4,6 +4,7 @@ using Microsoft.Http;
 using NUnit.Framework;
 using Restbucks.MediaType;
 using Restbucks.Quoting.Service.Old.Resources;
+using Tests.Restbucks.Old.Quoting.Service.Old.Resources.Helpers;
 
 namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
 {
@@ -20,7 +21,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             var form = entityBody.Forms.First();
 
             Assert.AreEqual("http://schemas.restbucks.com/shop.xsd", form.Schema.ToString());
-            Assert.AreEqual(Quotes.QuotesUriFactory.CreateRelativeUri(), form.Resource.ToString());
+            Assert.AreEqual(DefaultUriFactory.Instance.CreateRelativeUri<Quotes>(), form.Resource.ToString());
             Assert.AreEqual("post", form.Method);
             Assert.AreEqual("application/restbucks+xml", form.MediaType);
             Assert.IsNull(form.Instance);
@@ -47,7 +48,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
         [Test]
         public void ResponseShouldBePublicallyCacheableForOneDay()
         {
-            var resource = new RequestForQuote();
+            var resource = new RequestForQuote(DefaultUriFactory.Instance);
             var response = new HttpResponseMessage();
             resource.Get(new HttpRequestMessage("GET", new Uri("http://localhost/rfq")), response);
 
@@ -57,7 +58,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
 
         private static Shop GetRequestForQuoteEntityBody()
         {
-            return new RequestForQuote().Get(new HttpRequestMessage("GET", new Uri("http://localhost/rfq")), new HttpResponseMessage());
+            return new RequestForQuote(DefaultUriFactory.Instance).Get(new HttpRequestMessage("GET", new Uri("http://localhost/rfq")), new HttpResponseMessage());
         }
     }
 }

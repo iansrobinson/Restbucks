@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using Microsoft.Http;
@@ -12,12 +11,6 @@ namespace Restbucks.Quoting.Service.Old.Resources
     [NewUriTemplate("quotes")]
     public class Quotes
     {
-        private const string QuoteUriTemplate = "{id}";
-        private const string RoutePrefix = "quotes";
-
-        public static readonly UriFactory QuotesUriFactory = new UriFactory(RoutePrefix);
-        public static readonly UriFactory QuoteUriFactory = new UriFactory(RoutePrefix, QuoteUriTemplate);
-
         private readonly NewUriFactory newUriFactory;
         private readonly IQuotationEngine quoteEngine;
 
@@ -25,27 +18,6 @@ namespace Restbucks.Quoting.Service.Old.Resources
         {
             this.newUriFactory = newUriFactory;
             this.quoteEngine = quoteEngine;
-        }
-
-        [UriTemplate(QuoteUriTemplate)]
-        public Shop Get(string id, HttpRequestMessage request, HttpResponseMessage response)
-        {
-            Quotation quote;
-            try
-            {
-                quote = quoteEngine.GetQuote(new Guid(id));
-            }
-            catch (KeyNotFoundException)
-            {
-                response.StatusCode = HttpStatusCode.NotFound;
-                return null;
-            }
-
-            response.StatusCode = HttpStatusCode.OK;
-            response.Headers.CacheControl = new CacheControl {Public = true};
-            response.Headers.Expires = quote.CreatedDateTime.AddDays(7.0).UtcDateTime;
-
-            return CreateEntityBody(quote, request.Uri);
         }
 
         public Shop Post(Shop shop, HttpRequestMessage request, HttpResponseMessage response)

@@ -42,7 +42,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             mocks.Playback();
 
             var request = CreateHttpRequestMessage(id);
-            var result = new Quotes(DefaultUriFactory.Instance, quoteEngine).Get(id.ToString("N"), request, new HttpResponseMessage());
+            var result = new Quote(DefaultUriFactory.Instance, quoteEngine).Get(id.ToString("N"), request, new HttpResponseMessage());
 
             Assert.True(result.HasItems);
             Assert.True(Matching.LineItemsMatchItems(quote.LineItems, result.Items));
@@ -71,8 +71,8 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             mocks.ReplayAll();
 
             var response = new HttpResponseMessage();
-            var quotes = new Quotes(DefaultUriFactory.Instance, quoteEngine);
-            quotes.Get(Guid.NewGuid().ToString("N"), new HttpRequestMessage(), response);
+            var quote = new Quote(DefaultUriFactory.Instance, quoteEngine);
+            quote.Get(Guid.NewGuid().ToString("N"), new HttpRequestMessage(), response);
 
             Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
         }
@@ -119,7 +119,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
 
         private static HttpRequestMessage CreateHttpRequestMessage(Guid id)
         {
-            return new HttpRequestMessage {Uri = Quotes.QuoteUriFactory.CreateAbsoluteUri(BaseAddress, id.ToString("N"))};
+            return new HttpRequestMessage {Uri = DefaultUriFactory.Instance.CreateAbsoluteUri<Quote>(BaseAddress, id.ToString("N"))};
         }
 
         private static IQuotationEngine GetQuoteEngine(Guid id, DateTimeOffset createdDateTime, IEnumerable<LineItem> items)
