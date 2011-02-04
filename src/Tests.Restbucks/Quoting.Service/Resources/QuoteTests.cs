@@ -42,7 +42,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
             }
             mocks.Playback();
 
-            var request = new HttpRequestMessage { RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri <Quote>(BaseAddress, id.ToString("N")) };
+            var request = new HttpRequestMessage { RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri <Quote>(BaseAddress, id) };
             var quote = new QuoteBuilder().WithQuotationEngine(quoteEngine).Build();
             var result = quote.Get(id.ToString("N"), request, new HttpResponseMessage());
 

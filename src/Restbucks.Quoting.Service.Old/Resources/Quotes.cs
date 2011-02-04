@@ -40,12 +40,12 @@ namespace Restbucks.Quoting.Service.Old.Resources
                             i => new QuotationRequestItem(i.Description, new Quantity(i.Amount.Measure, i.Amount.Value)))));
 
             response.StatusCode = HttpStatusCode.Created;
-            response.Headers.Location = uriFactory.CreateAbsoluteUri<Quote>(baseUri, quote.Id.ToString("N"));
+            response.Headers.Location = uriFactory.CreateAbsoluteUri<Quote>(baseUri, quote.Id);
             response.Headers.CacheControl = new CacheControl {NoCache = true, NoStore = true};
 
             return new Shop(baseUri, quote.LineItems.Select(li => new LineItemToItem(li).Adapt()))
-                .AddLink(new Link(uriFactory.CreateRelativeUri<Quote>(quote.Id.ToString("N")), "application/restbucks+xml", LinkRelations.Self))
-                .AddLink(new Link(uriFactory.CreateRelativeUri<OrderForm>(quote.Id.ToString("N")), "application/restbucks+xml", LinkRelations.OrderForm));
+                .AddLink(new Link(uriFactory.CreateRelativeUri<Quote>(quote.Id), "application/restbucks+xml", LinkRelations.Self))
+                .AddLink(new Link(uriFactory.CreateRelativeUri<OrderForm>(quote.Id), "application/restbucks+xml", LinkRelations.OrderForm));
         }
     }
 }

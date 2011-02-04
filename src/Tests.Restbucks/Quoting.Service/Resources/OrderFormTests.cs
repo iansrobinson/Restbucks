@@ -41,7 +41,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
             }
             mocks.Playback();
 
-            var request = new HttpRequestMessage { RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri<OrderForm>(BaseAddress, id.ToString("N")) };
+            var request = new HttpRequestMessage { RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri<OrderForm>(BaseAddress, id) };
 
             var orderForm = new OrderFormBuilder().WithQuotationEngine(quoteEngine).Build();
             var entityBody = orderForm.Get(id.ToString("N"), request, new HttpResponseMessage());

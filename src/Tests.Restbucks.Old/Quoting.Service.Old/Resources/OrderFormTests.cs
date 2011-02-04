@@ -114,7 +114,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             var formContents = result.EntityBody.Forms.First().Instance;
 
             Assert.IsNotNull(formContents.Links.Single(l => l.Rels.First().Value.Equals("self")));
-            Assert.AreEqual(DefaultUriFactory.Instance.CreateRelativeUri<Quote>(id.ToString("N")), formContents.Links.Single(l => l.Rels.First().Value.Equals("self")).Href.ToString());
+            Assert.AreEqual(DefaultUriFactory.Instance.CreateRelativeUri<Quote>(id), formContents.Links.Single(l => l.Rels.First().Value.Equals("self")).Href.ToString());
         }
 
         [Test]
@@ -155,7 +155,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             var id = Guid.NewGuid();    
             var result = ExecuteRequestReturnResult(id, DateTime.Now);
 
-            Assert.AreEqual(DefaultUriFactory.Instance.CreateAbsoluteUri<Quote>(BaseAddress, id.ToString("N")), result.Response.Headers.ContentLocation.ToString());
+            Assert.AreEqual(DefaultUriFactory.Instance.CreateAbsoluteUri<Quote>(BaseAddress, id), result.Response.Headers.ContentLocation.ToString());
         }
 
         private static Result ExecuteRequestReturnResult(Guid id, DateTimeOffset createdDateTime)
@@ -170,7 +170,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
 
         private static HttpRequestMessage CreateHttpRequestMessage(Guid id)
         {
-            return new HttpRequestMessage { Uri = DefaultUriFactory.Instance.CreateAbsoluteUri<OrderForm>(BaseAddress, id.ToString("N")) };
+            return new HttpRequestMessage { Uri = DefaultUriFactory.Instance.CreateAbsoluteUri<OrderForm>(BaseAddress, id) };
         }
 
         private static IQuotationEngine GetQuoteEngine(Guid id, DateTimeOffset createdDateTime, IEnumerable<LineItem> items)

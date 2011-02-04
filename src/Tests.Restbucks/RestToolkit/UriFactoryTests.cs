@@ -110,6 +110,15 @@ namespace Tests.Restbucks.RestToolkit
             uriFactories.GetUriTemplateValue<MyResource>();
         }
 
+        [Test]
+        public void WhenPassingGuidAsUriTemplateParameterShouldRemoveAllDashes()
+        {
+            var uriFactories = new UriFactory();
+            uriFactories.Register<MyResource>();
+
+            Assert.AreEqual(new Uri("/my-resource/00000000000000000000000000000000", UriKind.Relative), uriFactories.CreateRelativeUri<MyResource>(Guid.Empty));
+        }
+
         [UriTemplate("my-resource", "{id}")]
         private class MyResource
         {

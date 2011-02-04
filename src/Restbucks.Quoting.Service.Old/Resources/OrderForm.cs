@@ -44,7 +44,7 @@ namespace Restbucks.Quoting.Service.Old.Resources
             response.StatusCode = HttpStatusCode.OK;
             response.Headers.CacheControl = new CacheControl {Public = true};
             response.Headers.Expires = quote.CreatedDateTime.AddDays(7.0).UtcDateTime;
-            response.Headers.ContentLocation = uriFactory.CreateAbsoluteUri<Quote>(baseUri, quote.Id.ToString("N"));
+            response.Headers.ContentLocation = uriFactory.CreateAbsoluteUri<Quote>(baseUri, quote.Id);
 
             return new Shop(baseUri)
                 .AddForm(new Form(
@@ -52,7 +52,7 @@ namespace Restbucks.Quoting.Service.Old.Resources
                              "post",
                              "application/restbucks+xml",
                              new Shop(baseUri, quote.LineItems.Select(li => new LineItemToItem(li).Adapt()))
-                                 .AddLink(new Link(uriFactory.CreateRelativeUri<Quote>(quote.Id.ToString("N")), "application/restbucks+xml", LinkRelations.Self))));
+                                 .AddLink(new Link(uriFactory.CreateRelativeUri<Quote>(quote.Id), "application/restbucks+xml", LinkRelations.Self))));
         }
     }
 }

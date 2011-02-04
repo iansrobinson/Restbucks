@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Restbucks.RestToolkit
 {
@@ -44,19 +45,29 @@ namespace Restbucks.RestToolkit
             return For<T>().CreateBaseUri(uri);
         }
 
-        public Uri CreateAbsoluteUri<T>(Uri baseUri, params string[] values) where T : class
+        public Uri CreateAbsoluteUri<T>(Uri baseUri, params object[] values) where T : class
         {
-            return For<T>().CreateAbsoluteUri(baseUri, values);
+            return For<T>().CreateAbsoluteUri(baseUri, values.Select(ConvertToString).ToArray());
         }
 
-        public Uri CreateRelativeUri<T>(params string[] values) where T : class
+        public Uri CreateRelativeUri<T>(params object[] values) where T : class
         {
-            return For<T>().CreateRelativeUri(values);
+            return For<T>().CreateRelativeUri(values.Select(ConvertToString).ToArray());
         }
 
         private UriFactoryWorker For<T>() where T : class
         {
             return workers[typeof(T)];
+        }
+
+        private static string ConvertToString(object o)
+        {
+            if (o is Guid)
+            {
+                return ((Guid)o).ToString("N");
+            }
+
+            return o.ToString();
         }
     }
 }
