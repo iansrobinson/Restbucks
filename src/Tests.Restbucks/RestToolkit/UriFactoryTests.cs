@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Restbucks.RestToolkit;
 
-namespace Tests.Restbucks.Quoting.Service.Resources
+namespace Tests.Restbucks.RestToolkit
 {
     [TestFixture]
     public class UriFactoryTests

@@ -85,7 +85,6 @@
     <Compile Include="Quoting.Service.Old\Resources\QuotesTests.cs" />
     <Compile Include="Quoting.Service.Old\Resources\QuoteTests.cs" />
     <Compile Include="Quoting.Service.Old\Resources\RequestForQuoteTests.cs" />
-    <Compile Include="Quoting.Service.Old\Resources\UriFactoryWorkerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Restbucks.MediaType\Restbucks.MediaType.csproj">

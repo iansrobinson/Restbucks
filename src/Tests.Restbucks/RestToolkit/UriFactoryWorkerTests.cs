@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using Restbucks.RestToolkit;
 
-namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
+namespace Tests.Restbucks.RestToolkit
 {
     [TestFixture]
     public class UriFactoryWorkerTests
@@ -75,6 +75,13 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
         {
             var uriFactory = new UriFactoryWorker("quotes", "/");
             Assert.AreEqual("http://restbucks.com/quotes/", uriFactory.CreateAbsoluteUri(new Uri("http://restbucks.com")).ToString());
+        }
+
+        [Test]
+        public void ShouldKeepStartingBackslashOnUriTemplateValue()
+        {
+            var uriFactory = new UriFactoryWorker("orders", "/?a=b");
+            Assert.AreEqual("http://restbucks.com/orders/?a=b", uriFactory.CreateAbsoluteUri(new Uri("http://restbucks.com")).ToString());
         }
 
         [Test]
