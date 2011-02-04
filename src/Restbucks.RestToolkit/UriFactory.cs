@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Restbucks.Quoting.Service.Resources
+namespace Restbucks.RestToolkit
 {
     public class UriFactory
     {
@@ -32,6 +32,11 @@ namespace Restbucks.Quoting.Service.Resources
         public string GetUriTemplateValue<T>() where T : class
         {
             return For<T>().UriTemplateValue;
+        }
+
+        public string GetUriTemplateValueFor(Type resourceType)
+        {
+            return workers[resourceType].UriTemplateValue;
         }
 
         public Uri CreateBaseUri<T>(Uri uri) where T : class

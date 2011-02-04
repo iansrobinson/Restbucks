@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Restbucks.Quoting.Service.Resources
+namespace Restbucks.RestToolkit
 {
     public class UriTemplateMissingException : Exception
     {

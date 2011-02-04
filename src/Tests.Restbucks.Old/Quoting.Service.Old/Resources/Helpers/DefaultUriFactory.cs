@@ -1,4 +1,5 @@
 ﻿using Restbucks.Quoting.Service.Old.Resources;
+using Restbucks.RestToolkit;
 
 namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources.Helpers
 {

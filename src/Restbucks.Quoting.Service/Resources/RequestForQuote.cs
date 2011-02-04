@@ -4,6 +4,7 @@ using System.Net.Http.Headers;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using Restbucks.MediaType;
+using Restbucks.RestToolkit;
 
 namespace Restbucks.Quoting.Service.Resources
 {

@@ -2,6 +2,7 @@
 using Microsoft.Http;
 using Microsoft.Http.Headers;
 using Restbucks.MediaType;
+using Restbucks.RestToolkit;
 
 namespace Restbucks.Quoting.Service.Old.Resources
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using Restbucks.Quoting.Service.Resources;
+using Restbucks.RestToolkit;
 
 namespace Tests.Restbucks.Quoting.Service.Resources
 {
@@ -103,7 +103,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         }
 
         [Test]
-        [ExpectedException(ExpectedException = typeof(KeyNotFoundException))]
+        [ExpectedException(ExpectedException = typeof (KeyNotFoundException))]
         public void ThrowsExceptionIfTryingToGetUriTemplateValueForEntryWithoutRegisteredType()
         {
             var uriFactories = new UriFactory();

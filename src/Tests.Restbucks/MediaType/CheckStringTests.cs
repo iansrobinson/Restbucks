@@ -1,6 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
-using Restbucks.MediaType;
+using Restbucks.RestToolkit.Utils;
 
 namespace Tests.Restbucks.MediaType
 {
@@ -22,7 +22,7 @@ namespace Tests.Restbucks.MediaType
         }
 
         [Test]
-        [ExpectedException(ExpectedException = typeof(ArgumentException), ExpectedMessage = "Value cannot be whitespace.\r\nParameter name: p")]
+        [ExpectedException(ExpectedException = typeof (ArgumentException), ExpectedMessage = "Value cannot be whitespace.\r\nParameter name: p")]
         public void ThrowsExceptionWhenCheckingForWhitespaceAndArgIsWhitespace()
         {
             CheckString.Is(Not.Null | Not.Empty | Not.Whitespace, " ", "p");

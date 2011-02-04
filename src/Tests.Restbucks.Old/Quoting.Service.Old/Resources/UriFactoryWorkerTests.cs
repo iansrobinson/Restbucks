@@ -1,6 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
-using Restbucks.Quoting.Service.Old.Resources;
+using Restbucks.RestToolkit;
 
 namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
 {
@@ -85,7 +85,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
         }
 
         [Test]
-        [ExpectedException(ExpectedException = typeof(ArgumentException), ExpectedMessage = "Supplied URI does not contain route prefix. Uri: [http://restbucks.com:8080/uk/customers/1234], Route prefix: [quotes].")]
+        [ExpectedException(ExpectedException = typeof (ArgumentException), ExpectedMessage = "Supplied URI does not contain route prefix. Uri: [http://restbucks.com:8080/uk/customers/1234], Route prefix: [quotes].")]
         public void ThrowsExceptionWhenSuppliedUriDoesNotContainRoutePrefix()
         {
             var uriFactory = new UriFactoryWorker("quotes", "{quoteId}");
@@ -93,35 +93,35 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
         }
 
         [Test]
-        [ExpectedException(ExpectedException = typeof(ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: routePrefix")]
+        [ExpectedException(ExpectedException = typeof (ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: routePrefix")]
         public void ThrowsExceptionIfRoutePrefixIsNull()
         {
             new UriFactoryWorker(null);
         }
 
         [Test]
-        [ExpectedException(ExpectedException = typeof(ArgumentException), ExpectedMessage = "Value cannot be empty.\r\nParameter name: routePrefix")]
+        [ExpectedException(ExpectedException = typeof (ArgumentException), ExpectedMessage = "Value cannot be empty.\r\nParameter name: routePrefix")]
         public void ThrowsExceptionIfRoutePrefixIsEmpty()
         {
             new UriFactoryWorker(string.Empty);
         }
 
         [Test]
-        [ExpectedException(ExpectedException = typeof(ArgumentException), ExpectedMessage = "Value cannot be whitespace.\r\nParameter name: routePrefix")]
+        [ExpectedException(ExpectedException = typeof (ArgumentException), ExpectedMessage = "Value cannot be whitespace.\r\nParameter name: routePrefix")]
         public void ThrowsExceptionIfRoutePrefixIsWhitespace()
         {
             new UriFactoryWorker(" ");
         }
 
         [Test]
-        [ExpectedException(ExpectedException = typeof(ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: uriTemplateValue")]
+        [ExpectedException(ExpectedException = typeof (ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: uriTemplateValue")]
         public void ThrowsExceptionIfUriTemplateIsNull()
         {
             new UriFactoryWorker("quotes", null);
         }
 
         [Test]
-        [ExpectedException(ExpectedException = typeof(ArgumentException), ExpectedMessage = "Value cannot be whitespace.\r\nParameter name: uriTemplateValue")]
+        [ExpectedException(ExpectedException = typeof (ArgumentException), ExpectedMessage = "Value cannot be whitespace.\r\nParameter name: uriTemplateValue")]
         public void ThrowsExceptionIfUriTemplateValueIsWhitespace()
         {
             new UriFactoryWorker("quotes", " ");

@@ -1,14 +1,13 @@
 ﻿using System;
 
-namespace Restbucks.Quoting.Service.Old.Resources
+namespace Restbucks.RestToolkit
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class UriTemplateAttribute : Attribute
     {
         private readonly UriFactoryWorker uriFactoryWorker;
 
-        public UriTemplateAttribute(string routePrefix)
-            : this(routePrefix, string.Empty)
+        public UriTemplateAttribute(string routePrefix) : this(routePrefix, string.Empty)
         {
         }
 

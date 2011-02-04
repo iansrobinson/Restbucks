@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Restbucks.MediaType
+namespace Restbucks.RestToolkit.Utils
 {
     public static class Check
     {

@@ -12,6 +12,7 @@ using Microsoft.ServiceModel.Http;
 using Restbucks.Quoting.Implementation;
 using Restbucks.Quoting.Service.Processors;
 using Restbucks.Quoting.Service.Resources;
+using Restbucks.RestToolkit;
 
 namespace Restbucks.Quoting.Service
 {

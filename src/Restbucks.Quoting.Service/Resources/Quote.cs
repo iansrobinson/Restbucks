@@ -8,6 +8,7 @@ using System.ServiceModel;
 using System.ServiceModel.Web;
 using Restbucks.MediaType;
 using Restbucks.Quoting.Service.Adapters;
+using Restbucks.RestToolkit;
 
 namespace Restbucks.Quoting.Service.Resources
 {

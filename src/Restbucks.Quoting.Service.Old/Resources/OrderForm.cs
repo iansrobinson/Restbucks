@@ -6,6 +6,7 @@ using Microsoft.Http;
 using Microsoft.Http.Headers;
 using Restbucks.MediaType;
 using Restbucks.Quoting.Service.Old.Adapters;
+using Restbucks.RestToolkit;
 
 namespace Restbucks.Quoting.Service.Old.Resources
 {
@@ -47,7 +48,7 @@ namespace Restbucks.Quoting.Service.Old.Resources
 
             return new Shop(baseUri)
                 .AddForm(new Form(
-                             OrdersUriFactoryWorker.CreateAbsoluteUri(new Uri("http://localhost:8081")),
+                             OrdersUriFactoryWorker.CreateAbsoluteUri(new Uri("http://localhost:8081/")),
                              "post",
                              "application/restbucks+xml",
                              new Shop(baseUri, quote.LineItems.Select(li => new LineItemToItem(li).Adapt()))
