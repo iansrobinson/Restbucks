@@ -12,6 +12,8 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
     [TestFixture]
     public class EntryPointTests
     {
+        private static readonly Uri BaseAddress = new Uri("http://localhost:8080/virtual-directory/");
+        
         [Test]
         public void EntityBodyShouldContainALinkToRequestForQuoteForm()
         {
@@ -25,6 +27,13 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             Assert.AreEqual(LinkRelations.Rfq, link.Rels.First());
             Assert.AreEqual(LinkRelations.Prefetch, link.Rels.Last());
             Assert.AreEqual("application/restbucks+xml", link.MediaType);
+        }
+
+        [Test]
+        public void EntityBodyShouldIncludeBaseUri()
+        {
+            var entityBody = GetEntryPointEntityBody();
+            Assert.AreEqual(BaseAddress, entityBody.BaseUri);
         }
 
         [Test]
@@ -48,7 +57,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
         {
             var resource = new EntryPoint(DefaultUriFactory.Instance);
             var response = new HttpResponseMessage();
-            resource.Get(new HttpRequestMessage("GET", new Uri("http://localhost/shop")), response);
+            resource.Get(new HttpRequestMessage("GET", DefaultUriFactory.Instance.CreateAbsoluteUri<EntryPoint>(BaseAddress)), response);
 
             Assert.AreEqual(new TimeSpan(24, 0, 0), response.Headers.CacheControl.MaxAge);
             Assert.IsTrue(response.Headers.CacheControl.Public);
@@ -56,7 +65,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
 
         private static Shop GetEntryPointEntityBody()
         {
-            return new EntryPoint(DefaultUriFactory.Instance).Get(new HttpRequestMessage("GET", new Uri("http://localhost/shop")), new HttpResponseMessage());
+            return new EntryPoint(DefaultUriFactory.Instance).Get(new HttpRequestMessage("GET", DefaultUriFactory.Instance.CreateAbsoluteUri<EntryPoint>(BaseAddress)), new HttpResponseMessage());
         }
     }
 }

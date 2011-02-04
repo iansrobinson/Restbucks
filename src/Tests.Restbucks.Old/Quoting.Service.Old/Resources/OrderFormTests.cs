@@ -14,7 +14,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
     [TestFixture]
     public class OrderFormTests
     {
-        private static readonly Uri BaseAddress = new Uri("http://localhost:8080");
+        private static readonly Uri BaseAddress = new Uri("http://localhost:8080/virtual-directory/");
         
         [Test]
         public void ShouldBaseOrderFormOnQuoteFromQuoteEngine()
@@ -76,6 +76,23 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             var result = ExecuteRequestReturnResult(Guid.NewGuid(), DateTime.Now);
 
             Assert.AreEqual(HttpStatusCode.OK, result.Response.StatusCode);
+        }
+
+        [Test]
+        public void EntityBodyShouldHaveBaseUri()
+        {
+            var result = ExecuteRequestReturnResult(Guid.NewGuid(), DateTime.Now);
+
+            Assert.AreEqual(BaseAddress, result.EntityBody.BaseUri);
+        }
+
+        [Test]
+        public void FormContentsShouldHaveBaseUri()
+        {
+            var result = ExecuteRequestReturnResult(Guid.NewGuid(), DateTime.Now);
+            var formContents = result.EntityBody.Forms.First().Instance;
+
+            Assert.AreEqual(BaseAddress, formContents.BaseUri);
         }
 
         [Test]

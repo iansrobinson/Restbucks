@@ -11,6 +11,8 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
     [TestFixture]
     public class RequestForQuoteTests
     {
+        private static readonly Uri BaseAddress = new Uri("http://localhost:8080/virtual-directory/");
+
         [Test]
         public void EntityBodyShouldContainAnEmptyRequestForQuoteForm()
         {
@@ -26,8 +28,6 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             Assert.AreEqual("application/restbucks+xml", form.MediaType);
             Assert.IsNull(form.Instance);
         }
-
-        
 
         [Test]
         public void EntityBodyShouldNotContainAnyLinks()
@@ -50,15 +50,28 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
         {
             var resource = new RequestForQuote(DefaultUriFactory.Instance);
             var response = new HttpResponseMessage();
-            resource.Get(new HttpRequestMessage("GET", new Uri("http://localhost/rfq")), response);
+            resource.Get(new HttpRequestMessage("GET", GetRequestUri()), response);
 
             Assert.AreEqual(new TimeSpan(24, 0, 0), response.Headers.CacheControl.MaxAge);
             Assert.IsTrue(response.Headers.CacheControl.Public);
         }
 
+        [Test]
+        public void EntityBodyShouldContainBaseUri()
+        {
+            var entityBody = GetRequestForQuoteEntityBody();
+
+            Assert.AreEqual(BaseAddress, entityBody.BaseUri);
+        }
+
         private static Shop GetRequestForQuoteEntityBody()
         {
-            return new RequestForQuote(DefaultUriFactory.Instance).Get(new HttpRequestMessage("GET", new Uri("http://localhost/rfq")), new HttpResponseMessage());
+            return new RequestForQuote(DefaultUriFactory.Instance).Get(new HttpRequestMessage("GET", GetRequestUri()), new HttpResponseMessage());
+        }
+
+        private static Uri GetRequestUri()
+        {
+            return DefaultUriFactory.Instance.CreateAbsoluteUri<RequestForQuote>(BaseAddress);
         }
     }
 }

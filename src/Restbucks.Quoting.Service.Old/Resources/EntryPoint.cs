@@ -19,7 +19,7 @@ namespace Restbucks.Quoting.Service.Old.Resources
         {
             response.Headers.CacheControl = new CacheControl {Public = true, MaxAge = new TimeSpan(24, 0, 0)};
             
-            return new Shop(request.Uri)
+            return new Shop(newUriFactory.CreateBaseUri<EntryPoint>(request.Uri))
                 .AddLink(new Link(newUriFactory.CreateRelativeUri <RequestForQuote>(), "application/restbucks+xml", LinkRelations.Rfq, LinkRelations.Prefetch));
         }
     }

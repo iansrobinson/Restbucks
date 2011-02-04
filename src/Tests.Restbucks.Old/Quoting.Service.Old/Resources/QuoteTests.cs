@@ -14,7 +14,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
     [TestFixture]
     public class QuoteTests
     {
-        private static readonly Uri BaseAddress = new Uri("http://localhost:8080");
+        private static readonly Uri BaseAddress = new Uri("http://localhost:8080/virtual-directory/");
 
         [Test]
         public void ShouldGetQuoteFromQuoteEngine()
@@ -56,6 +56,14 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             var result = ExecuteRequestReturnResult(Guid.NewGuid(), DateTime.Now);
 
             Assert.AreEqual(HttpStatusCode.OK, result.Response.StatusCode);
+        }
+
+        [Test]
+        public void EntityBodyShouldIncludeBaseUri()
+        {
+            var result = ExecuteRequestReturnResult(Guid.NewGuid(), DateTime.Now);
+
+            Assert.AreEqual(BaseAddress, result.EntityBody.BaseUri);
         }
 
         [Test]

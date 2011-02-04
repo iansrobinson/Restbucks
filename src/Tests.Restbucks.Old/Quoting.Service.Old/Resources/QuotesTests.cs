@@ -16,7 +16,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
     [TestFixture]
     public class QuotesTests
     {
-        private static readonly Uri BaseAddress = new Uri("http://localhost:8080");
+        private static readonly Uri BaseAddress = new Uri("http://localhost:8080/virtual-directory/");
 
         [Test]
         public void ShouldReturnNewQuoteFromQuoteEngine()
@@ -24,7 +24,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             var mocks = new MockRepository();
             var quoteEngine = mocks.StrictMock<IQuotationEngine>();
 
-            var shop = new Shop(new Uri("htp://localhost/"))
+            var shop = new Shop(BaseAddress)
                 .AddItem(new Item("item1", new Amount("g", 250)))
                 .AddItem(new Item("item2", new Amount("kg", 2)));
 
@@ -46,15 +46,13 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             }
             mocks.Playback();
 
-            var result = new Quotes(DefaultUriFactory.Instance, quoteEngine).Post(shop, new HttpRequestMessage { Uri = new Uri("http://localhost:8080/quotes") }, new HttpResponseMessage());
+            var result = new Quotes(DefaultUriFactory.Instance, quoteEngine).Post(shop, new HttpRequestMessage { Uri = GetRequestUri() }, new HttpResponseMessage());
 
             Assert.True(result.HasItems);
             Assert.True(Matching.LineItemsMatchItems(quote.LineItems, result.Items));
           
             mocks.VerifyAll();
         }
-
-        
 
         [Test]
         public void ShouldReturn201Created()
@@ -79,6 +77,14 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             var result = ExecuteRequestReturnResult(Guid.Empty, DateTime.Now);
 
             Assert.AreEqual("no-cache, no-store", result.Response.Headers.CacheControl.ToString());
+        }
+
+        [Test]
+        public void EntityBodyShouldIncludeBaseUri()
+        {
+            var result = ExecuteRequestReturnResult(Guid.Empty, DateTime.Now);
+
+            Assert.AreEqual(BaseAddress, result.EntityBody.BaseUri);
         }
 
         [Test]
@@ -107,7 +113,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             var quoteEngine = GetQuoteEngine(Guid.Empty, DateTime.Now, new LineItem[] {});
             var quotes = new Quotes(DefaultUriFactory.Instance, quoteEngine);
             var response = new HttpResponseMessage();
-            quotes.Post(null, new HttpRequestMessage {Uri = new Uri("http://localhost:8080/quotes")}, response);
+            quotes.Post(null, new HttpRequestMessage {Uri = GetRequestUri()}, response);
 
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
             Assert.AreEqual("no-cache, no-store", response.Headers.CacheControl.ToString());
@@ -120,9 +126,14 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             var quoteEngine = GetQuoteEngine(id, createdDateTime, new LineItem[] {});
             var response = new HttpResponseMessage();
             var quotes = new Quotes(DefaultUriFactory.Instance, quoteEngine);
-            var entityBody = quotes.Post(new Shop(new Uri("http://localhost:8080/quotes/")), new HttpRequestMessage {Uri = new Uri("http://localhost:8080/quotes")}, response);
+            var entityBody = quotes.Post(new Shop(BaseAddress), new HttpRequestMessage {Uri = GetRequestUri()}, response);
 
             return new Result {EntityBody = entityBody, Response = response};
+        }
+
+        private static Uri GetRequestUri()
+        {
+            return DefaultUriFactory.Instance.CreateAbsoluteUri<Quotes>(BaseAddress);
         }
 
         private static IQuotationEngine GetQuoteEngine(Guid id, DateTimeOffset createdDateTime, IEnumerable<LineItem> items)

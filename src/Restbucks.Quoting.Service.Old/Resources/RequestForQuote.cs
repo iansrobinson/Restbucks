@@ -8,8 +8,6 @@ namespace Restbucks.Quoting.Service.Old.Resources
     [NewUriTemplate("request-for-quote")]
     public class RequestForQuote
     {
-        public static readonly UriFactory UriFactory = new UriFactory("request-for-quote");
-
         private readonly NewUriFactory newUriFactory;
 
         public RequestForQuote(NewUriFactory newUriFactory)
@@ -19,8 +17,10 @@ namespace Restbucks.Quoting.Service.Old.Resources
 
         public Shop Get(HttpRequestMessage request, HttpResponseMessage response)
         {
+            var baseUri = newUriFactory.CreateBaseUri<RequestForQuote>(request.Uri);
+            
             response.Headers.CacheControl = new CacheControl {Public = true, MaxAge = new TimeSpan(24, 0, 0)};
-            return new Shop(request.Uri)
+            return new Shop(baseUri)
                 .AddForm(new Form(
                              newUriFactory.CreateRelativeUri<Quotes>(),
                              "post", "application/restbucks+xml",

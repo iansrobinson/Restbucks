@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
 using Microsoft.Http;
 using Microsoft.Http.Headers;
@@ -31,6 +30,8 @@ namespace Restbucks.Quoting.Service.Old.Resources
                 return null;
             }
 
+            var baseUri = newUriFactory.CreateBaseUri<Quotes>(request.Uri);
+
             var quote =
                 quoteEngine.CreateQuote(
                     new QuotationRequest(
@@ -38,24 +39,12 @@ namespace Restbucks.Quoting.Service.Old.Resources
                             i => new QuotationRequestItem(i.Description, new Quantity(i.Amount.Measure, i.Amount.Value)))));
 
             response.StatusCode = HttpStatusCode.Created;
-            response.Headers.Location = GenerateQuoteUri(request.Uri, quote);
+            response.Headers.Location = newUriFactory.CreateAbsoluteUri<Quote>(baseUri, quote.Id.ToString("N"));
             response.Headers.CacheControl = new CacheControl {NoCache = true, NoStore = true};
 
-            return CreateEntityBody(quote, request.Uri);
-        }
-
-        private Shop CreateEntityBody(Quotation quote, Uri requestUri)
-        {
-            var uri = GenerateQuoteUri(requestUri, quote);
-
-            return new Shop(uri, quote.LineItems.Select(li => new LineItemToItem(li).Adapt()))
-                .AddLink(new Link(new Uri(uri.PathAndQuery, UriKind.Relative), "application/restbucks+xml", LinkRelations.Self))
+            return new Shop(baseUri, quote.LineItems.Select(li => new LineItemToItem(li).Adapt()))
+                .AddLink(new Link(newUriFactory.CreateRelativeUri<Quote>(quote.Id.ToString("N")), "application/restbucks+xml", LinkRelations.Self))
                 .AddLink(new Link(newUriFactory.CreateRelativeUri<OrderForm>(quote.Id.ToString("N")), "application/restbucks+xml", LinkRelations.OrderForm));
-        }
-
-        private Uri GenerateQuoteUri(Uri requestUri, Quotation quote)
-        {
-            return newUriFactory.CreateAbsoluteUri<Quote>(requestUri, quote.Id.ToString("N"));
         }
     }
 }
