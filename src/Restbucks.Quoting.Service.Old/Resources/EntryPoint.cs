@@ -8,13 +8,7 @@ namespace Restbucks.Quoting.Service.Old.Resources
     [NewUriTemplate("shop")]
     public class EntryPoint
     {
-        public static readonly UriFactory UriFactory = new UriFactory("shop");
-
         private readonly NewUriFactory newUriFactory;
-
-        public EntryPoint()
-        {
-        }
 
         public EntryPoint(NewUriFactory newUriFactory)
         {
@@ -26,7 +20,7 @@ namespace Restbucks.Quoting.Service.Old.Resources
             response.Headers.CacheControl = new CacheControl {Public = true, MaxAge = new TimeSpan(24, 0, 0)};
             
             return new Shop(request.Uri)
-                .AddLink(new Link(RequestForQuote.UriFactory.CreateRelativeUri(), "application/restbucks+xml", LinkRelations.Rfq, LinkRelations.Prefetch));
+                .AddLink(new Link(newUriFactory.CreateRelativeUri <RequestForQuote>(), "application/restbucks+xml", LinkRelations.Rfq, LinkRelations.Prefetch));
         }
     }
 }

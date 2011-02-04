@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Restbucks.MediaType;
 using Restbucks.Quoting.Service.Old;
 using Restbucks.Quoting.Service.Old.Resources;
+using Tests.Restbucks.Old.Quoting.Service.Old.Resources.Helpers;
 
 namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
 {
@@ -20,7 +21,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
 
             var link = entityBody.Links.First();
 
-            Assert.AreEqual(RequestForQuote.UriFactory.CreateRelativeUri(), link.Href.ToString());
+            Assert.AreEqual(DefaultUriFactory.Instance.CreateRelativeUri<RequestForQuote>(), link.Href);
             Assert.AreEqual(LinkRelations.Rfq, link.Rels.First());
             Assert.AreEqual(LinkRelations.Prefetch, link.Rels.Last());
             Assert.AreEqual("application/restbucks+xml", link.MediaType);
@@ -45,7 +46,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
         [Test]
         public void ResponseShouldBePublicallyCacheableForOneDay()
         {
-            var resource = new EntryPoint();
+            var resource = new EntryPoint(DefaultUriFactory.Instance);
             var response = new HttpResponseMessage();
             resource.Get(new HttpRequestMessage("GET", new Uri("http://localhost/shop")), response);
 
@@ -55,7 +56,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
 
         private static Shop GetEntryPointEntityBody()
         {
-            return new EntryPoint().Get(new HttpRequestMessage("GET", new Uri("http://localhost/shop")), new HttpResponseMessage());
+            return new EntryPoint(DefaultUriFactory.Instance).Get(new HttpRequestMessage("GET", new Uri("http://localhost/shop")), new HttpResponseMessage());
         }
     }
 }

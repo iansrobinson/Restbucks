@@ -13,8 +13,8 @@ namespace Restbucks.MediaType
         public Form(Uri resource, string method, string mediaType, Uri schema, Shop instance)
         {
             Check.IsNotNull(resource, "resource");
-            Check.IsNotNullOrWhitespace(method, "method");
-            Check.IsNotNullOrWhitespace(mediaType, "mediaType");
+            CheckString.Is(Not.NullOrEmptyOrWhitespace, method, "method");
+            CheckString.Is(Not.NullOrEmptyOrWhitespace, mediaType, "mediaType");
 
             this.resource = resource;
             this.method = method;

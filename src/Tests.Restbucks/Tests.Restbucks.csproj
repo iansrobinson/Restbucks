@@ -68,6 +68,7 @@
     <Compile Include="MediaType\Assemblers\LinksAssemblerTests.cs" />
     <Compile Include="MediaType\Assemblers\ShopAssemblerTests.cs" />
     <Compile Include="MediaType\Assemblers\XNullElementsExtensionsTests.cs" />
+    <Compile Include="MediaType\CheckStringTests.cs" />
     <Compile Include="MediaType\CompactUriLinkRelationTests.cs" />
     <Compile Include="MediaType\Formatters\ShopFormatterTests.cs" />
     <Compile Include="MediaType\FormTests.cs" />

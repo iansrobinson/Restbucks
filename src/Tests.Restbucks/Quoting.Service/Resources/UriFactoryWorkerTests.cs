@@ -22,7 +22,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         }
 
         [Test]
-        public void ShouldUseAllOfTheSuppliedBaseAddress()
+        public void ShouldUseAllOfTheSuppliedBaseAddressIfTerminatedWithBackslash()
         {
             var uriFactory = new UriFactoryWorker("quotes", "{userId}/{id}");
             Assert.AreEqual("http://restbucks.com:8080/virtual-directory/quotes/ian/1", uriFactory.CreateAbsoluteUri(new Uri("http://restbucks.com:8080/virtual-directory/"), "ian", "1").ToString());
@@ -36,17 +36,45 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         }
 
         [Test]
-        public void ShouldGenerateRelativeWithoutTerminatingBackslashWhenTemplateIsEmpty()
+        public void ShouldGenerateRelativeUriWithoutTerminatingBackslashWhenTemplateIsEmpty()
         {
             var uriFactory = new UriFactoryWorker("quotes");
             Assert.AreEqual("/quotes", uriFactory.CreateRelativeUri().ToString());
         }
 
         [Test]
-        public void ShouldGenerateAbsoluteWithoutTerminatingBackslashWhenTemplateIsEmpty()
+        public void ShouldGenerateRelativeUriWithTerminatingBackslashWhenTemplateEndsWithBackslash()
+        {
+            var uriFactory = new UriFactoryWorker("quotes", "current/");
+            Assert.AreEqual("/quotes/current/", uriFactory.CreateRelativeUri().ToString());
+        }
+
+        [Test]
+        public void ShouldGenerateRelativeUriWithTerminatingBackslashWhenTemplateIsBackslash()
+        {
+            var uriFactory = new UriFactoryWorker("quotes", "/");
+            Assert.AreEqual("/quotes/", uriFactory.CreateRelativeUri().ToString());
+        }
+
+        [Test]
+        public void ShouldGenerateAbsoluteUriWithoutTerminatingBackslashWhenTemplateIsEmpty()
         {
             var uriFactory = new UriFactoryWorker("quotes");
             Assert.AreEqual("http://restbucks.com/quotes", uriFactory.CreateAbsoluteUri(new Uri("http://restbucks.com")).ToString());
+        }
+
+        [Test]
+        public void ShouldGenerateAbsoluteUriWithTerminatingBackslashWhenTemplateEndsWithBackslash()
+        {
+            var uriFactory = new UriFactoryWorker("quotes", "current/");
+            Assert.AreEqual("http://restbucks.com/quotes/current/", uriFactory.CreateAbsoluteUri(new Uri("http://restbucks.com")).ToString());
+        }
+
+        [Test]
+        public void ShouldGenerateAbsoluteUriWithTerminatingBackslashWhenTemplateIsBackslash()
+        {
+            var uriFactory = new UriFactoryWorker("quotes", "/");
+            Assert.AreEqual("http://restbucks.com/quotes/", uriFactory.CreateAbsoluteUri(new Uri("http://restbucks.com")).ToString());
         }
 
         [Test]
@@ -62,6 +90,41 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         {
             var uriFactory = new UriFactoryWorker("quotes", "{quoteId}");
             uriFactory.CreateBaseUri(new Uri("http://restbucks.com:8080/uk/customers/1234"));
+        }
+
+        [Test]
+        [ExpectedException(ExpectedException = typeof(ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: routePrefix")]
+        public void ThrowsExceptionIfRoutePrefixIsNull()
+        {
+            new UriFactoryWorker(null);
+        }
+
+        [Test]
+        [ExpectedException(ExpectedException = typeof(ArgumentException), ExpectedMessage = "Value cannot be empty.\r\nParameter name: routePrefix")]
+        public void ThrowsExceptionIfRoutePrefixIsEmpty()
+        {
+            new UriFactoryWorker(string.Empty);
+        }
+
+        [Test]
+        [ExpectedException(ExpectedException = typeof(ArgumentException), ExpectedMessage = "Value cannot be whitespace.\r\nParameter name: routePrefix")]
+        public void ThrowsExceptionIfRoutePrefixIsWhitespace()
+        {
+            new UriFactoryWorker(" ");
+        }
+
+        [Test]
+        [ExpectedException(ExpectedException = typeof(ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: uriTemplateValue")]
+        public void ThrowsExceptionIfUriTemplateIsNull()
+        {
+            new UriFactoryWorker("quotes", null);
+        }
+
+        [Test]
+        [ExpectedException(ExpectedException = typeof(ArgumentException), ExpectedMessage = "Value cannot be whitespace.\r\nParameter name: uriTemplateValue")]
+        public void ThrowsExceptionIfUriTemplateValueIsWhitespace()
+        {
+            new UriFactoryWorker("quotes", " ");
         }
     }
 }

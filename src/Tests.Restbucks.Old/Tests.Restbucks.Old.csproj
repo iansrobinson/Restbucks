@@ -78,6 +78,7 @@
     <Compile Include="Quoting.Service.Old\Processors\FormsIntegrityUtilityTests.cs" />
     <Compile Include="Quoting.Service.Old\Processors\XmlTransformTests.cs" />
     <Compile Include="Quoting.Service.Old\Resources\EntryPointTests.cs" />
+    <Compile Include="Quoting.Service.Old\Resources\Helpers\DefaultUriFactory.cs" />
     <Compile Include="Quoting.Service.Old\Resources\Helpers\Matching.cs" />
     <Compile Include="Quoting.Service.Old\Resources\Helpers\Result.cs" />
     <Compile Include="Quoting.Service.Old\Resources\OrderFormTests.cs" />
@@ -85,6 +86,7 @@
     <Compile Include="Quoting.Service.Old\Resources\QuoteTests.cs" />
     <Compile Include="Quoting.Service.Old\Resources\RequestForQuoteTests.cs" />
     <Compile Include="Quoting.Service.Old\Resources\UriFactoryTests.cs" />
+    <Compile Include="Quoting.Service.Old\Resources\UriFactoryWorkerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Restbucks.MediaType\Restbucks.MediaType.csproj">

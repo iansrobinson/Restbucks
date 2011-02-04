@@ -1,14 +1,14 @@
-﻿using Restbucks.Quoting.Service.Resources;
+﻿using Restbucks.Quoting.Service.Old.Resources;
 
-namespace Tests.Restbucks.Quoting.Service.Resources.Helpers
+namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources.Helpers
 {
     public static class DefaultUriFactory
     {
-        public static UriFactory Instance
+        public static NewUriFactory Instance
         {
             get
             {
-                var uriFactory = new UriFactory();
+                var uriFactory = new NewUriFactory();
                 uriFactory.Register<EntryPoint>();
                 uriFactory.Register<RequestForQuote>();
                 uriFactory.Register<Quotes>();

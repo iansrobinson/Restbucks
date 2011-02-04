@@ -42,7 +42,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             mocks.Playback();
 
             var request = CreateHttpRequestMessage(id);
-            var result = new OrderForm(quoteEngine).Get(id.ToString("N"), request, new HttpResponseMessage());
+            var result = new OrderForm(DefaultUriFactory.Instance, quoteEngine).Get(id.ToString("N"), request, new HttpResponseMessage());
 
             Assert.True(result.HasForms);
             Assert.True(result.Forms.First().Instance.HasItems);
@@ -64,7 +64,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             mocks.ReplayAll();
 
             var response = new HttpResponseMessage();
-            var orderForm = new OrderForm(quoteEngine);
+            var orderForm = new OrderForm(DefaultUriFactory.Instance, quoteEngine);
             orderForm.Get(Guid.NewGuid().ToString("N"), new HttpRequestMessage(), response);
 
             Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
@@ -97,7 +97,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             var formContents = result.EntityBody.Forms.First().Instance;
 
             Assert.IsNotNull(formContents.Links.Single(l => l.Rels.First().Value.Equals("self")));
-            Assert.AreEqual(Quotes.QuoteUriFactory.CreateRelativeUri(id.ToString("N")), formContents.Links.Single(l => l.Rels.First().Value.Equals("self")).Href.ToString());
+            Assert.AreEqual(DefaultUriFactory.Instance.CreateRelativeUri<Quote>(id.ToString("N")), formContents.Links.Single(l => l.Rels.First().Value.Equals("self")).Href.ToString());
         }
 
         [Test]
@@ -138,14 +138,14 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             var id = Guid.NewGuid();    
             var result = ExecuteRequestReturnResult(id, DateTime.Now);
 
-            Assert.AreEqual(Quotes.QuoteUriFactory.CreateAbsoluteUri(BaseAddress, id.ToString("N")), result.Response.Headers.ContentLocation.ToString());
+            Assert.AreEqual(DefaultUriFactory.Instance.CreateAbsoluteUri<Quote>(BaseAddress, id.ToString("N")), result.Response.Headers.ContentLocation.ToString());
         }
 
         private static Result ExecuteRequestReturnResult(Guid id, DateTimeOffset createdDateTime)
         {
             var quoteEngine = GetQuoteEngine(id, createdDateTime, new LineItem[] {});
             var response = new HttpResponseMessage();
-            var orderForm = new OrderForm(quoteEngine);
+            var orderForm = new OrderForm(DefaultUriFactory.Instance, quoteEngine);
             var entityBody = orderForm.Get(id.ToString("N"), CreateHttpRequestMessage(id), response);
 
             return new Result {EntityBody = entityBody, Response = response};

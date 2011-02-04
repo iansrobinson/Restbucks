@@ -48,6 +48,7 @@
     <Compile Include="Assemblers\ShopAssembler.cs" />
     <Compile Include="Assemblers\XNullElementsExtensions.cs" />
     <Compile Include="Check.cs" />
+    <Compile Include="CheckString.cs" />
     <Compile Include="CompactUriLinkRelation.cs" />
     <Compile Include="Cost.cs" />
     <Compile Include="Form.cs" />

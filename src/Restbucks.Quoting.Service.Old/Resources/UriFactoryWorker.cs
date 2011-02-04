@@ -10,15 +10,14 @@ namespace Restbucks.Quoting.Service.Old.Resources
 
         private static readonly Uri Localhost = new Uri("http://localhost");
 
-        public UriFactoryWorker(string routePrefix)
-            : this(routePrefix, string.Empty)
+        public UriFactoryWorker(string routePrefix) : this(routePrefix, string.Empty)
         {
         }
 
         public UriFactoryWorker(string routePrefix, string uriTemplateValue)
         {
             this.routePrefix = routePrefix;
-            uriTemplate = new UriTemplate(uriTemplateValue, true);
+            uriTemplate = new UriTemplate(uriTemplateValue, string.IsNullOrWhiteSpace(uriTemplateValue));
 
             dummyBaseAddress = new Uri(Localhost, routePrefix);
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using Restbucks.MediaType;
 
 namespace Restbucks.Quoting.Service.Resources
 {
@@ -16,8 +17,11 @@ namespace Restbucks.Quoting.Service.Resources
 
         public UriFactoryWorker(string routePrefix, string uriTemplateValue)
         {
+            CheckString.Is(Not.NullOrEmptyOrWhitespace, routePrefix, "routePrefix");
+            CheckString.Is(Not.Null | Not.Whitespace, uriTemplateValue, "uriTemplateValue");
+            
             this.routePrefix = routePrefix;
-            uriTemplate = new UriTemplate(uriTemplateValue, true);
+            uriTemplate = new UriTemplate(uriTemplateValue, !uriTemplateValue.EndsWith("/"));
 
             dummyBaseAddress = new Uri(Localhost, routePrefix);
         }

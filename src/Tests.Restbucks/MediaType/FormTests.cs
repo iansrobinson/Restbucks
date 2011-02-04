@@ -23,7 +23,7 @@ namespace Tests.Restbucks.MediaType
         }
 
         [Test]
-        [ExpectedException(ExpectedException = typeof (ArgumentException), ExpectedMessage = "Value cannot be empty or whitespace.\r\nParameter name: method")]
+        [ExpectedException(ExpectedException = typeof (ArgumentException), ExpectedMessage = "Value cannot be whitespace.\r\nParameter name: method")]
         public void ThrowsExceptionIfMethodIsWhitespace()
         {
             new Form(new Uri("http://localhost"), " ", "application/xml", new Uri("http://localhost"), new ShopBuilder().Build());
@@ -37,7 +37,7 @@ namespace Tests.Restbucks.MediaType
         }
 
         [Test]
-        [ExpectedException(ExpectedException = typeof (ArgumentException), ExpectedMessage = "Value cannot be empty or whitespace.\r\nParameter name: mediaType")]
+        [ExpectedException(ExpectedException = typeof (ArgumentException), ExpectedMessage = "Value cannot be whitespace.\r\nParameter name: mediaType")]
         public void ThrowsExceptionIfMediaTypeIsWhitespace()
         {
             new Form(new Uri("http://localhost"), "post", " ", new Uri("http://localhost"), new ShopBuilder().Build());

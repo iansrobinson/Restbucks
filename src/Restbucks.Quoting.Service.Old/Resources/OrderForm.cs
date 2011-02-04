@@ -13,10 +13,7 @@ namespace Restbucks.Quoting.Service.Old.Resources
     public class OrderForm
     {
         private const string OrderFormUriTemplate = "{id}";
-
-        private static readonly UriFactory OrdersUriFactory = new UriFactory("orders",
-                                                                             string.Format("?c=12345&s={0}",
-                                                                                           SignedFormPlaceholder));
+        private static readonly UriFactoryWorker OrdersUriFactoryWorker = new UriFactoryWorker("orders", string.Format("/?c=12345&s={0}", SignedFormPlaceholder));
 
         public static readonly UriFactory UriFactory = new UriFactory("order-forms", OrderFormUriTemplate);
         public const string SignedFormPlaceholder = "SIGNED_FORM_PLACEHOLDER";
@@ -27,11 +24,6 @@ namespace Restbucks.Quoting.Service.Old.Resources
         public OrderForm(NewUriFactory newUriFactory, IQuotationEngine quoteEngine)
         {
             this.newUriFactory = newUriFactory;
-            this.quoteEngine = quoteEngine;
-        }
-
-        public OrderForm(IQuotationEngine quoteEngine)
-        {
             this.quoteEngine = quoteEngine;
         }
 
@@ -49,19 +41,20 @@ namespace Restbucks.Quoting.Service.Old.Resources
                 return null;
             }
 
+            var baseUri = newUriFactory.CreateBaseUri<OrderForm>(request.Uri);
+
             response.StatusCode = HttpStatusCode.OK;
             response.Headers.CacheControl = new CacheControl {Public = true};
             response.Headers.Expires = quote.CreatedDateTime.AddDays(7.0).UtcDateTime;
-            response.Headers.ContentLocation = Quotes.QuoteUriFactory.CreateAbsoluteUri(request.Uri,
-                                                                                        quote.Id.ToString("N"));
+            response.Headers.ContentLocation = newUriFactory.CreateAbsoluteUri<Quote>(baseUri, quote.Id.ToString("N"));
 
-            return new Shop(request.Uri)
+            return new Shop(baseUri)
                 .AddForm(new Form(
-                             OrdersUriFactory.CreateAbsoluteUri(new Uri("http://localhost:8081")),
+                             OrdersUriFactoryWorker.CreateAbsoluteUri(new Uri("http://localhost:8081")),
                              "post",
                              "application/restbucks+xml",
-                             new Shop(request.Uri, quote.LineItems.Select(li => new LineItemToItem(li).Adapt()))
-                                 .AddLink(new Link(Quotes.QuoteUriFactory.CreateRelativeUri(quote.Id.ToString("N")),"application/restbucks+xml", LinkRelations.Self))));
+                             new Shop(baseUri, quote.LineItems.Select(li => new LineItemToItem(li).Adapt()))
+                                 .AddLink(new Link(newUriFactory.CreateRelativeUri<Quote>(quote.Id.ToString("N")), "application/restbucks+xml", LinkRelations.Self))));
         }
     }
 }
