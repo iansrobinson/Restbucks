@@ -119,6 +119,24 @@ namespace Tests.Restbucks.RestToolkit
             Assert.AreEqual(new Uri("/my-resource/00000000000000000000000000000000", UriKind.Relative), uriFactories.CreateRelativeUri<MyResource>(Guid.Empty));
         }
 
+        [Test]
+        public void ShouldReturnUriTemplateValueForRegisteredType()
+        {
+            var uriFactories = new UriFactory();
+            uriFactories.Register<MyResource>();
+
+            Assert.AreEqual("{id}", uriFactories.GetUriTemplateValueFor(typeof(MyResource)));
+        }
+
+        [Test]
+        [ExpectedException(typeof(KeyNotFoundException))]
+        public void ThrowsExceptionWhenTryingToGetUriTemplateValueForTypeThatHasNotBeenRegistered()
+        {
+            var uriFactories = new UriFactory();
+            
+            uriFactories.GetUriTemplateValueFor(typeof(MyResource));
+        }
+
         [UriTemplate("my-resource", "{id}")]
         private class MyResource
         {
