@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Restbucks.MediaType
 {
@@ -8,6 +9,7 @@ namespace Restbucks.MediaType
         private readonly IEnumerable<LinkRelation> rels;
         private readonly string mediaType;
         private readonly Uri href;
+        private readonly Uri absoluteUri;
         private Shop instance;
 
         public Link(Uri href, string mediaType, params LinkRelation[] rels)
@@ -15,6 +17,11 @@ namespace Restbucks.MediaType
             this.href = href;
             this.mediaType = mediaType;
             this.rels = rels;
+
+            if (href.IsAbsoluteUri)
+            {
+                absoluteUri = href;
+            }
         }
 
         public IEnumerable<LinkRelation> Rels
@@ -39,7 +46,22 @@ namespace Restbucks.MediaType
 
         public Shop Click(Func<Uri, Shop> client)
         {
+            if (absoluteUri == null)
+            {
+                throw new InvalidOperationException("Unable to determine absolute URI.");
+            }
+            
             return instance ?? client(href);
+        }
+
+        public Link NewLinkWithBaseUri(Uri baseUri)
+        {
+            if (absoluteUri != null)
+            {
+                throw new InvalidOperationException("Link is already backed by an absolute URI.");
+            }
+            
+            return new Link(new Uri(baseUri, href), mediaType, rels.ToArray());
         }
     }
 }
