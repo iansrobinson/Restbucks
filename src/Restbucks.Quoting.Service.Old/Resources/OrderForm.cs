@@ -25,7 +25,6 @@ namespace Restbucks.Quoting.Service.Old.Resources
             this.quoteEngine = quoteEngine;
         }
 
-        [UriTemplate("{id}")]
         public Shop Get(string id, HttpRequestMessage request, HttpResponseMessage response)
         {
             Quotation quote;

@@ -42,24 +42,24 @@ namespace Restbucks.Quoting.Service.Old
             }
         }
 
-        protected override ContractDescription GetContract(ServiceHost host, ServiceDescription description, Type serviceType, IDictionary<string, ContractDescription> implementedContracts)
-        {
-            var contract = base.GetContract(host, description, serviceType, implementedContracts);
-            
-            foreach (var method in serviceType.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly))
-            {
-                var templates = method.GetCustomAttributes(typeof (UriTemplateAttribute), true);
-                var uriTemplate = templates.Length.Equals(0) ? string.Empty : ((UriTemplateAttribute) templates.First()).Value;
-
-                var behavior = GetWebAttribute(contract.Operations.Find(method.Name));
-                if (behavior != null)
-                {
-                    behavior.UriTemplate = uriTemplate;
-                }
-            }
-
-            return contract;
-        }
+//        protected override ContractDescription GetContract(ServiceHost host, ServiceDescription description, Type serviceType, IDictionary<string, ContractDescription> implementedContracts)
+//        {
+//            var contract = base.GetContract(host, description, serviceType, implementedContracts);
+//            
+//            foreach (var method in serviceType.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly))
+//            {
+//                var templates = method.GetCustomAttributes(typeof (UriTemplateAttribute), true);
+//                var uriTemplate = templates.Length.Equals(0) ? string.Empty : ((UriTemplateAttribute) templates.First()).Value;
+//
+//                var behavior = GetWebAttribute(contract.Operations.Find(method.Name));
+//                if (behavior != null)
+//                {
+//                    behavior.UriTemplate = uriTemplate;
+//                }
+//            }
+//
+//            return contract;
+//        }
 
         private static dynamic GetWebAttribute(OperationDescription operation)
         {
