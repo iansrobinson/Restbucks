@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using Microsoft.Http;
 using NUnit.Framework;
+using Restbucks.MediaType;
 using Restbucks.Quoting;
 using Restbucks.Quoting.Service.Old.Resources;
 using Rhino.Mocks;
@@ -138,7 +139,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
         {
             var result = ExecuteRequestReturnResult(Guid.NewGuid(), DateTime.Now);
 
-            Assert.AreEqual("application/restbucks+xml", result.EntityBody.Forms.First().MediaType);
+            Assert.AreEqual(RestbucksMediaType.Value, result.EntityBody.Forms.First().MediaType);
         }
 
         [Test]

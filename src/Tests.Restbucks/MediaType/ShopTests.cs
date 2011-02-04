@@ -21,8 +21,8 @@ namespace Tests.Restbucks.MediaType
         public void ShouldThrowExceptionWhenAddingLinkWithACompactUriLinkRelationWithSamePrefixAsExistingLinkRelationButDifferentNamespace()
         {
             new ShopBuilder().Build()
-                .AddLink(new Link(new Uri("http://localhost/link1"), "application/restbucks+xml", RbNs1))
-                .AddLink(new Link(new Uri("http://localhost/link2"), "application/restbucks+xml", RbNs2));
+                .AddLink(new Link(new Uri("http://localhost/link1"), RestbucksMediaType.Value, RbNs1))
+                .AddLink(new Link(new Uri("http://localhost/link2"), RestbucksMediaType.Value, RbNs2));
         }
 
         [Test]
@@ -30,7 +30,7 @@ namespace Tests.Restbucks.MediaType
         public void ShouldThrowExceptionWhenAddingLinkWithCompactUriLinkRelationsWithSamePrefixButDifferentNamespace()
         {
             new ShopBuilder().Build()
-                .AddLink(new Link(new Uri("http://localhost/link1"), "application/restbucks+xml", RbNs1, RbNs2));
+                .AddLink(new Link(new Uri("http://localhost/link1"), RestbucksMediaType.Value, RbNs1, RbNs2));
         }
 
         [Test]
@@ -38,8 +38,8 @@ namespace Tests.Restbucks.MediaType
         public void ShouldThrowExceptionWhenAddingLinkWithMoreThanOneCompactUriLinkRelationWithSamePrefixAsExistingLinkRelationButDifferentNamespace()
         {
             new ShopBuilder().Build()
-                .AddLink(new Link(new Uri("http://localhost/link1"), "application/restbucks+xml", RbNs1, TwNs1))
-                .AddLink(new Link(new Uri("http://localhost/link2"), "application/restbucks+xml", RbNs2, TwNs2));
+                .AddLink(new Link(new Uri("http://localhost/link1"), RestbucksMediaType.Value, RbNs1, TwNs1))
+                .AddLink(new Link(new Uri("http://localhost/link2"), RestbucksMediaType.Value, RbNs2, TwNs2));
         }
 
         [Test]

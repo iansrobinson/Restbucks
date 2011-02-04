@@ -3,6 +3,7 @@ using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using NUnit.Framework;
+using Restbucks.MediaType;
 using Restbucks.Quoting.Service.Processors;
 using Rhino.Mocks;
 
@@ -53,13 +54,13 @@ namespace Tests.Restbucks.Quoting.Service.Processors
             var processor = new FormsIntegrityResponseProcessor(new StubFormsSigner(string.Empty));
 
             var response = new HttpResponseMessage { Content = new StringContent("input") };
-            response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/restbucks+xml");          
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue(RestbucksMediaType.Value);          
             response.Content.Headers.Expires = dateTime;
 
             processor.Initialize();
             processor.Execute(new object[] { response });
 
-            Assert.AreEqual("application/restbucks+xml", response.Content.Headers.ContentType.MediaType);
+            Assert.AreEqual(RestbucksMediaType.Value, response.Content.Headers.ContentType.MediaType);
             Assert.AreEqual(dateTime, response.Content.Headers.Expires.Value);
         }
 

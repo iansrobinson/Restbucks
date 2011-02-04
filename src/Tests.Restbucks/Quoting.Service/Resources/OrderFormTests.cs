@@ -131,7 +131,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         {
             var entityBody = ExecuteRequestReturnEntityBody();
 
-            Assert.AreEqual("application/restbucks+xml", entityBody.Forms.First().MediaType);
+            Assert.AreEqual(RestbucksMediaType.Value, entityBody.Forms.First().MediaType);
         }
 
         [Test]

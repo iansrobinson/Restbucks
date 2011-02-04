@@ -51,27 +51,23 @@ namespace Restbucks.Quoting.Service.Old.Processors
 
         public override object ReadFromStream(Stream stream, HttpRequestMessage request)
         {
+            if (stream == null)
+            {
+                return null;
+            }
+
+            if (stream.Length.Equals(0))
+            {
+                return null;
+            }
+
             try
             {
-                if (stream == null)
-                {
-                    return null;
-                }
-
-                if (stream.Length.Equals(0))
-                {
-                    return null;
-                }
-
-                try
-                {
-                    return new ShopAssembler(XElement.Load(stream), request.Uri).AssembleShop();
-                }
-                catch (XmlException)
-                {
-                    throw new InvalidFormatException(
-                        "Incorrectly formatted entity body. Request must be formatted according to application/restbucks+xml.");
-                }
+                return new ShopAssembler(XElement.Load(stream), request.Uri).AssembleShop();
+            }
+            catch (XmlException)
+            {
+                throw new InvalidFormatException("Incorrectly formatted entity body. Request must be formatted according to application/restbucks+xml.");
             }
             catch (Exception ex)
             {
@@ -82,7 +78,7 @@ namespace Restbucks.Quoting.Service.Old.Processors
 
         public override IEnumerable<string> SupportedMediaTypes
         {
-            get { return new[] {"application/restbucks+xml", "application/xml", "text/xml"}; }
+            get { return new[] {RestbucksMediaType.Value, "application/xml", "text/xml"}; }
         }
     }
 }

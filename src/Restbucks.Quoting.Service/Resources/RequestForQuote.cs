@@ -26,7 +26,7 @@ namespace Restbucks.Quoting.Service.Resources
             return new Shop(uriFactory.CreateBaseUri<RequestForQuote>(request.RequestUri))
                 .AddForm(new Form(
                              uriFactory.CreateRelativeUri<Quotes>(),
-                             "post", "application/restbucks+xml",
+                             "post", RestbucksMediaType.Value,
                              new Uri("http://schemas.restbucks.com/shop.xsd")));
         }
     }

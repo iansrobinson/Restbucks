@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Xml.Linq;
 using NUnit.Framework;
+using Restbucks.MediaType;
 using Restbucks.MediaType.Assemblers;
 
 namespace Tests.Restbucks.MediaType.Assemblers
@@ -50,7 +51,7 @@ namespace Tests.Restbucks.MediaType.Assemblers
             var secondLink = shop.Links.Last();
             Assert.AreEqual("rb:order-form", secondLink.Rels.First().SerializableValue);
             Assert.AreEqual("/order-forms/1234", secondLink.Href.ToString());
-            Assert.AreEqual("application/restbucks+xml", secondLink.MediaType);
+            Assert.AreEqual(RestbucksMediaType.Value, secondLink.MediaType);
         }
 
         [Test]
@@ -124,7 +125,7 @@ namespace Tests.Restbucks.MediaType.Assemblers
             Assert.IsNull(firstForm.Instance);
             Assert.AreEqual("/quotes", firstForm.Resource.ToString());
             Assert.AreEqual("post", firstForm.Method);
-            Assert.AreEqual("application/restbucks+xml", firstForm.MediaType);
+            Assert.AreEqual(RestbucksMediaType.Value, firstForm.MediaType);
 
             var secondForm = shop.Forms.Last();
             Assert.IsNull(secondForm.Schema);

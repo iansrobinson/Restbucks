@@ -60,6 +60,7 @@
     <Compile Include="NamespacePrefixConflictException.cs" />
     <Compile Include="Namespaces.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RestbucksMediaType.cs" />
     <Compile Include="Shop.cs" />
     <Compile Include="StringLinkRelation.cs" />
     <Compile Include="UriLinkRelation.cs" />

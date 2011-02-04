@@ -25,7 +25,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             Assert.AreEqual("http://schemas.restbucks.com/shop.xsd", form.Schema.ToString());
             Assert.AreEqual(DefaultUriFactory.Instance.CreateRelativeUri<Quotes>(), form.Resource.ToString());
             Assert.AreEqual("post", form.Method);
-            Assert.AreEqual("application/restbucks+xml", form.MediaType);
+            Assert.AreEqual(RestbucksMediaType.Value, form.MediaType);
             Assert.IsNull(form.Instance);
         }
 

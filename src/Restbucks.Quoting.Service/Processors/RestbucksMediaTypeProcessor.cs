@@ -72,7 +72,7 @@ namespace Restbucks.Quoting.Service.Processors
 
         public override IEnumerable<string> SupportedMediaTypes
         {
-            get { return new[] {"application/restbucks+xml", "application/xml", "text/xml"}; }
+            get { return new[] { RestbucksMediaType.Value, "application/xml", "text/xml" }; }
         }
     }
 }

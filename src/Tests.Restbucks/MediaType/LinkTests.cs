@@ -19,7 +19,7 @@ namespace Tests.Restbucks.MediaType
                                          };
 
             var href = new Uri("http://localhost/shop/");
-            var link = new Link(href, "application/restbucks+xml");
+            var link = new Link(href, RestbucksMediaType.Value);
 
             link.Prefetch(client);
 
@@ -32,7 +32,7 @@ namespace Tests.Restbucks.MediaType
             var shop = new ShopBuilder().Build();
             
             var href = new Uri("http://localhost/shop/");
-            var link = new Link(href, "application/restbucks+xml");
+            var link = new Link(href, RestbucksMediaType.Value);
 
             link.Prefetch(uri => shop);
             
@@ -45,7 +45,7 @@ namespace Tests.Restbucks.MediaType
             var shop = new ShopBuilder().Build();
 
             var href = new Uri("http://localhost/shop/");
-            var link = new Link(href, "application/restbucks+xml");
+            var link = new Link(href, RestbucksMediaType.Value);
 
             Assert.AreEqual(shop, link.Click(uri => shop));
         }
@@ -61,7 +61,7 @@ namespace Tests.Restbucks.MediaType
             };
 
             var href = new Uri("http://localhost/shop/");
-            var link = new Link(href, "application/restbucks+xml");
+            var link = new Link(href, RestbucksMediaType.Value);
 
             link.Click(client);
 

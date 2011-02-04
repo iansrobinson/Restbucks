@@ -50,9 +50,9 @@ namespace Restbucks.Quoting.Service.Old.Resources
                 .AddForm(new Form(
                              OrdersUriFactoryWorker.CreateAbsoluteUri(new Uri("http://localhost:8081/")),
                              "post",
-                             "application/restbucks+xml",
+                             RestbucksMediaType.Value,
                              new Shop(baseUri, quote.LineItems.Select(li => new LineItemToItem(li).Adapt()))
-                                 .AddLink(new Link(uriFactory.CreateRelativeUri<Quote>(quote.Id), "application/restbucks+xml", LinkRelations.Self))));
+                                 .AddLink(new Link(uriFactory.CreateRelativeUri<Quote>(quote.Id), RestbucksMediaType.Value, LinkRelations.Self))));
         }
     }
 }
