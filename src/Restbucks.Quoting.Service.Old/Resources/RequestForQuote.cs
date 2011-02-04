@@ -5,24 +5,24 @@ using Restbucks.MediaType;
 
 namespace Restbucks.Quoting.Service.Old.Resources
 {
-    [NewUriTemplate("request-for-quote")]
+    [UriTemplate("request-for-quote")]
     public class RequestForQuote
     {
-        private readonly NewUriFactory newUriFactory;
+        private readonly UriFactory uriFactory;
 
-        public RequestForQuote(NewUriFactory newUriFactory)
+        public RequestForQuote(UriFactory uriFactory)
         {
-            this.newUriFactory = newUriFactory;
+            this.uriFactory = uriFactory;
         }
 
         public Shop Get(HttpRequestMessage request, HttpResponseMessage response)
         {
-            var baseUri = newUriFactory.CreateBaseUri<RequestForQuote>(request.Uri);
+            var baseUri = uriFactory.CreateBaseUri<RequestForQuote>(request.Uri);
             
             response.Headers.CacheControl = new CacheControl {Public = true, MaxAge = new TimeSpan(24, 0, 0)};
             return new Shop(baseUri)
                 .AddForm(new Form(
-                             newUriFactory.CreateRelativeUri<Quotes>(),
+                             uriFactory.CreateRelativeUri<Quotes>(),
                              "post", "application/restbucks+xml",
                              new Uri("http://schemas.restbucks.com/shop.xsd")));
         }

@@ -32,14 +32,14 @@ namespace Restbucks.Quoting.Service.Old
 
             Log.Debug("Starting Restbucks.Quoting.Service.Old ...");
 
-            var uriFactory = new NewUriFactory();
+            var uriFactory = new UriFactory();
 
             container.Register(Component.For(typeof (IQuotationEngine)).ImplementedBy(typeof (QuotationEngine)).LifeStyle.Singleton);
             container.Register(Component.For(typeof (IDateTimeProvider)).ImplementedBy(typeof (DateTimeProvider)).LifeStyle.Singleton);
             container.Register(Component.For(typeof (IGuidProvider)).ImplementedBy(typeof (GuidProvider)).LifeStyle.Singleton);
             container.Register(Component.For(typeof (ISignForms)).Instance(new FormsIntegrityUtility(Signature.Instance, OrderForm.SignedFormPlaceholder)).LifeStyle.Singleton);
             container.Register(Component.For(typeof (FormsIntegrityResponseProcessor)).LifeStyle.Singleton);
-            container.Register(Component.For(typeof(NewUriFactory)).Instance(uriFactory).LifeStyle.Singleton);
+            container.Register(Component.For(typeof(UriFactory)).Instance(uriFactory).LifeStyle.Singleton);
 
             new ResourceManager(container, RouteTable.Routes).RegisterResourcesFor(Assembly.GetExecutingAssembly());
         }
@@ -69,7 +69,7 @@ namespace Restbucks.Quoting.Service.Old
             public void RegisterResourcesFor(Assembly assembly)
             {
                 var types = from t in assembly.GetTypes()
-                            where t.GetCustomAttributes(typeof(NewUriTemplateAttribute), false).Length > 0
+                            where t.GetCustomAttributes(typeof(UriTemplateAttribute), false).Length > 0
                             select t;
 
                 types.ToList().ForEach(t =>
@@ -82,7 +82,7 @@ namespace Restbucks.Quoting.Service.Old
 
             private void Register<T>() where T : class
             {
-                var uriFactory = container.Resolve<NewUriFactory>();
+                var uriFactory = container.Resolve<UriFactory>();
 
                 container.Register(Component.For<T>().LifeStyle.Transient);
                 uriFactory.Register<T>();

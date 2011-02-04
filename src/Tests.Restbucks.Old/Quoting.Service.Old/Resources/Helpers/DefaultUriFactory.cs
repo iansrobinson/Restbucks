@@ -4,11 +4,11 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources.Helpers
 {
     public static class DefaultUriFactory
     {
-        public static NewUriFactory Instance
+        public static UriFactory Instance
         {
             get
             {
-                var uriFactory = new NewUriFactory();
+                var uriFactory = new UriFactory();
                 uriFactory.Register<EntryPoint>();
                 uriFactory.Register<RequestForQuote>();
                 uriFactory.Register<Quotes>();

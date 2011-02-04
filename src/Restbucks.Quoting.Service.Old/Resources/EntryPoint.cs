@@ -5,22 +5,22 @@ using Restbucks.MediaType;
 
 namespace Restbucks.Quoting.Service.Old.Resources
 {
-    [NewUriTemplate("shop")]
+    [UriTemplate("shop")]
     public class EntryPoint
     {
-        private readonly NewUriFactory newUriFactory;
+        private readonly UriFactory uriFactory;
 
-        public EntryPoint(NewUriFactory newUriFactory)
+        public EntryPoint(UriFactory uriFactory)
         {
-            this.newUriFactory = newUriFactory;
+            this.uriFactory = uriFactory;
         }
 
         public Shop Get(HttpRequestMessage request, HttpResponseMessage response)
         {
             response.Headers.CacheControl = new CacheControl {Public = true, MaxAge = new TimeSpan(24, 0, 0)};
             
-            return new Shop(newUriFactory.CreateBaseUri<EntryPoint>(request.Uri))
-                .AddLink(new Link(newUriFactory.CreateRelativeUri <RequestForQuote>(), "application/restbucks+xml", LinkRelations.Rfq, LinkRelations.Prefetch));
+            return new Shop(uriFactory.CreateBaseUri<EntryPoint>(request.Uri))
+                .AddLink(new Link(uriFactory.CreateRelativeUri <RequestForQuote>(), "application/restbucks+xml", LinkRelations.Rfq, LinkRelations.Prefetch));
         }
     }
 }

@@ -9,19 +9,19 @@ using Restbucks.Quoting.Service.Old.Adapters;
 
 namespace Restbucks.Quoting.Service.Old.Resources
 {
-    [NewUriTemplate("order-form", "{id}")]
+    [UriTemplate("order-form", "{id}")]
     public class OrderForm
     {
         private static readonly UriFactoryWorker OrdersUriFactoryWorker = new UriFactoryWorker("orders", string.Format("/?c=12345&s={0}", SignedFormPlaceholder));
 
         public const string SignedFormPlaceholder = "SIGNED_FORM_PLACEHOLDER";
 
-        private readonly NewUriFactory newUriFactory;
+        private readonly UriFactory uriFactory;
         private readonly IQuotationEngine quoteEngine;
 
-        public OrderForm(NewUriFactory newUriFactory, IQuotationEngine quoteEngine)
+        public OrderForm(UriFactory uriFactory, IQuotationEngine quoteEngine)
         {
-            this.newUriFactory = newUriFactory;
+            this.uriFactory = uriFactory;
             this.quoteEngine = quoteEngine;
         }
 
@@ -38,12 +38,12 @@ namespace Restbucks.Quoting.Service.Old.Resources
                 return null;
             }
 
-            var baseUri = newUriFactory.CreateBaseUri<OrderForm>(request.Uri);
+            var baseUri = uriFactory.CreateBaseUri<OrderForm>(request.Uri);
 
             response.StatusCode = HttpStatusCode.OK;
             response.Headers.CacheControl = new CacheControl {Public = true};
             response.Headers.Expires = quote.CreatedDateTime.AddDays(7.0).UtcDateTime;
-            response.Headers.ContentLocation = newUriFactory.CreateAbsoluteUri<Quote>(baseUri, quote.Id.ToString("N"));
+            response.Headers.ContentLocation = uriFactory.CreateAbsoluteUri<Quote>(baseUri, quote.Id.ToString("N"));
 
             return new Shop(baseUri)
                 .AddForm(new Form(
@@ -51,7 +51,7 @@ namespace Restbucks.Quoting.Service.Old.Resources
                              "post",
                              "application/restbucks+xml",
                              new Shop(baseUri, quote.LineItems.Select(li => new LineItemToItem(li).Adapt()))
-                                 .AddLink(new Link(newUriFactory.CreateRelativeUri<Quote>(quote.Id.ToString("N")), "application/restbucks+xml", LinkRelations.Self))));
+                                 .AddLink(new Link(uriFactory.CreateRelativeUri<Quote>(quote.Id.ToString("N")), "application/restbucks+xml", LinkRelations.Self))));
         }
     }
 }

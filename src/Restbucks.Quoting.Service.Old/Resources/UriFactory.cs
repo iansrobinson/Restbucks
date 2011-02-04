@@ -3,30 +3,35 @@ using System.Collections.Generic;
 
 namespace Restbucks.Quoting.Service.Old.Resources
 {
-    public class NewUriFactory
+    public class UriFactory
     {
-        private readonly IDictionary<Type, UriFactoryWorker> uriFactories;
+        private readonly IDictionary<Type, UriFactoryWorker> workers;
 
-        public NewUriFactory()
+        public UriFactory()
         {
-            uriFactories = new Dictionary<Type, UriFactoryWorker>();
+            workers = new Dictionary<Type, UriFactoryWorker>();
         }
 
         public void Register<T>() where T : class
         {
-            var attributes = typeof (T).GetCustomAttributes(typeof (NewUriTemplateAttribute), false);
+            var attributes = typeof (T).GetCustomAttributes(typeof (UriTemplateAttribute), false);
             if (attributes.Length == 0)
             {
                 throw new UriTemplateMissingException();
             }
-            var uriFactory = ((NewUriTemplateAttribute) attributes[0]).UriFactoryWorker;
+            var uriFactory = ((UriTemplateAttribute) attributes[0]).UriFactoryWorker;
 
-            uriFactories.Add(typeof (T), uriFactory);
+            workers.Add(typeof (T), uriFactory);
         }
 
         public string GetRoutePrefix<T>() where T : class
         {
             return For<T>().RoutePrefix;
+        }
+
+        public string GetUriTemplateValueFor(Type t)
+        {
+            return workers[t].UriTemplateValue;
         }
 
         public string GetUriTemplateValue<T>() where T : class
@@ -51,7 +56,7 @@ namespace Restbucks.Quoting.Service.Old.Resources
 
         private UriFactoryWorker For<T>() where T : class
         {
-            return uriFactories[typeof (T)];
+            return workers[typeof (T)];
         }
     }
 }

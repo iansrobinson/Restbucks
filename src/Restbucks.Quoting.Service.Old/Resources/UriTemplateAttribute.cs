@@ -3,16 +3,16 @@
 namespace Restbucks.Quoting.Service.Old.Resources
 {
     [AttributeUsage(AttributeTargets.Class)]
-    public class NewUriTemplateAttribute : Attribute
+    public class UriTemplateAttribute : Attribute
     {
         private readonly UriFactoryWorker uriFactoryWorker;
 
-        public NewUriTemplateAttribute(string routePrefix)
+        public UriTemplateAttribute(string routePrefix)
             : this(routePrefix, string.Empty)
         {
         }
 
-        public NewUriTemplateAttribute(string routePrefix, string uriTemplate)
+        public UriTemplateAttribute(string routePrefix, string uriTemplate)
         {
             uriFactoryWorker = new UriFactoryWorker(routePrefix, uriTemplate);
         }

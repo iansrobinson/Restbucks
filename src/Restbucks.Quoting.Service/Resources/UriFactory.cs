@@ -5,11 +5,11 @@ namespace Restbucks.Quoting.Service.Resources
 {
     public class UriFactory
     {
-        private readonly IDictionary<Type, UriFactoryWorker> uriFactories;
+        private readonly IDictionary<Type, UriFactoryWorker> workers;
 
         public UriFactory()
         {
-            uriFactories = new Dictionary<Type, UriFactoryWorker>();
+            workers = new Dictionary<Type, UriFactoryWorker>();
         }
 
         public void Register<T>() where T : class
@@ -21,7 +21,7 @@ namespace Restbucks.Quoting.Service.Resources
             }
             var uriFactory =  ((UriTemplateAttribute)attributes[0]).UriFactoryWorker;
 
-            uriFactories.Add(typeof(T), uriFactory);
+            workers.Add(typeof(T), uriFactory);
         }
 
         public string GetRoutePrefix<T>() where T :class
@@ -51,7 +51,7 @@ namespace Restbucks.Quoting.Service.Resources
 
         private UriFactoryWorker For<T>() where T : class
         {
-            return uriFactories[typeof(T)];
+            return workers[typeof(T)];
         }
     }
 }
