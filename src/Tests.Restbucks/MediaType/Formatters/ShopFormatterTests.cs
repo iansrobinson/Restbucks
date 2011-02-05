@@ -138,7 +138,7 @@ namespace Tests.Restbucks.MediaType.Formatters
             private readonly XPathNavigator navigator;
             private readonly XmlNamespaceManager manager;
 
-            public XmlOutput(XElement element)
+            public XmlOutput(XNode element)
             {
                 navigator = new XPathDocument(element.CreateReader()).CreateNavigator();
                 manager = new XmlNamespaceManager(navigator.NameTable);

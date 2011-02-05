@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.ServiceModel;
-using System.ServiceModel.Activation;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
@@ -34,7 +33,7 @@ namespace Restbucks.Quoting.Service
         public void RegisterResponseProcessorsForOperation(HttpOperationDescription operation, IList<Processor> processors, MediaTypeProcessorMode mode)
         {
             processors.Add(new RestbucksMediaTypeProcessor(operation, mode));
-            if (operation.DeclaringContract.ContractType.Equals(typeof(OrderForm)))
+            if (operation.DeclaringContract.ContractType.Equals(typeof (OrderForm)))
             {
                 processors.Add(container.Resolve<FormsIntegrityResponseProcessor>());
             }

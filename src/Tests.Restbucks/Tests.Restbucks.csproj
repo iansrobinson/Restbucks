@@ -101,6 +101,7 @@
     <Compile Include="Quoting\Implementation\Helpers\StubDateTimeProvider.cs" />
     <Compile Include="Quoting\Implementation\Helpers\StubGuidProvider.cs" />
     <Compile Include="Quoting\Implementation\QuotationEngineTests.cs" />
+    <Compile Include="RestToolkit\ResponseLifecycleControllerTests.cs" />
     <Compile Include="RestToolkit\UriFactoryTests.cs" />
     <Compile Include="RestToolkit\UriFactoryWorkerTests.cs" />
     <Compile Include="RestToolkit\Utils\CheckStringTests.cs" />

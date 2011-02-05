@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Restbucks.MediaType
+﻿namespace Restbucks.MediaType
 {
     public class Amount
     {

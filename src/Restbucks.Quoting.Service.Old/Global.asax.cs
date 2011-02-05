@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using System.ServiceModel;
 using System.Web;
 using System.Web.Routing;
 using Castle.MicroKernel.Registration;
@@ -40,7 +39,7 @@ namespace Restbucks.Quoting.Service.Old
             container.Register(Component.For(typeof (IGuidProvider)).ImplementedBy(typeof (GuidProvider)).LifeStyle.Singleton);
             container.Register(Component.For(typeof (ISignForms)).Instance(new FormsIntegrityUtility(Signature.Instance, OrderForm.SignedFormPlaceholder)).LifeStyle.Singleton);
             container.Register(Component.For(typeof (FormsIntegrityResponseProcessor)).LifeStyle.Singleton);
-            container.Register(Component.For(typeof(UriFactory)).Instance(uriFactory).LifeStyle.Singleton);
+            container.Register(Component.For(typeof (UriFactory)).Instance(uriFactory).LifeStyle.Singleton);
 
             new ResourceManager(container, RouteTable.Routes).RegisterResourcesFor(Assembly.GetExecutingAssembly());
         }
@@ -70,14 +69,14 @@ namespace Restbucks.Quoting.Service.Old
             public void RegisterResourcesFor(Assembly assembly)
             {
                 var types = from t in assembly.GetTypes()
-                            where t.GetCustomAttributes(typeof(UriTemplateAttribute), false).Length > 0
+                            where t.GetCustomAttributes(typeof (UriTemplateAttribute), false).Length > 0
                             select t;
 
                 types.ToList().ForEach(t =>
-                {
-                    var genericMethod = register.MakeGenericMethod(new[] { t });
-                    genericMethod.Invoke(this, null);
-                }
+                                           {
+                                               var genericMethod = register.MakeGenericMethod(new[] {t});
+                                               genericMethod.Invoke(this, null);
+                                           }
                     );
             }
 
@@ -89,7 +88,7 @@ namespace Restbucks.Quoting.Service.Old
                 uriFactory.Register<T>();
                 routes.AddServiceRoute<T>(uriFactory.GetRoutePrefix<T>(), configuration);
 
-                Log.DebugFormat("Registered resource. Type: [{0}]. Prefix: [{1}]. UriTemplate: [{2}].", typeof(T).Name, uriFactory.GetRoutePrefix<T>(), uriFactory.GetUriTemplateValue<T>());
+                Log.DebugFormat("Registered resource. Type: [{0}]. Prefix: [{1}]. UriTemplate: [{2}].", typeof (T).Name, uriFactory.GetRoutePrefix<T>(), uriFactory.GetUriTemplateValue<T>());
             }
         }
     }

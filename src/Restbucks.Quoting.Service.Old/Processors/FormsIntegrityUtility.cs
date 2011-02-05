@@ -50,7 +50,7 @@ namespace Restbucks.Quoting.Service.Old.Processors
             return true;
         }
 
-        private static dynamic GetSubmission(XDocument doc)
+        private static dynamic GetSubmission(XContainer doc)
         {
             return (from element in doc.Descendants(Namespaces.XForms + "submission")
                     let resource = element.Attribute("resource")
@@ -58,7 +58,7 @@ namespace Restbucks.Quoting.Service.Old.Processors
                     select new {Element = element, TargetUri = resource.Value}).FirstOrDefault();
         }
 
-        private static string GetFormContents(XDocument doc)
+        private static string GetFormContents(XContainer doc)
         {
             var formContents = (from instance in doc.Descendants(Namespaces.XForms + "instance")
                                 let contents = instance.Elements().FirstOrDefault()

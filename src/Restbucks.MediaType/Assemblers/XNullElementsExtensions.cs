@@ -22,7 +22,7 @@ namespace Restbucks.MediaType.Assemblers
             {
                 return defaultValue;
             }
-            string value = target.NodeType.Equals(XmlNodeType.Element) ? ((XElement) target).Value : ((XAttribute) target).Value;
+            var value = target.NodeType.Equals(XmlNodeType.Element) ? ((XElement) target).Value : ((XAttribute) target).Value;
             if (String.IsNullOrWhiteSpace(value))
             {
                 return defaultValue;
