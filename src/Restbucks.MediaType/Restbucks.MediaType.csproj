@@ -33,6 +33,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -47,6 +48,7 @@
     <Compile Include="Assemblers\LinksAssembler.cs" />
     <Compile Include="Assemblers\ShopAssembler.cs" />
     <Compile Include="Assemblers\XNullElementsExtensions.cs" />
+    <Compile Include="BaseUriMissingException.cs" />
     <Compile Include="CompactUriLinkRelation.cs" />
     <Compile Include="Cost.cs" />
     <Compile Include="Form.cs" />

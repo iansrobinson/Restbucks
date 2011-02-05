@@ -19,7 +19,7 @@ namespace Restbucks.MediaType
         {
             this.baseUri = baseUri;
             this.items = new List<Item>(items);
-            
+
             links = new List<Link>();
             forms = new List<Form>();
         }
@@ -33,7 +33,20 @@ namespace Restbucks.MediaType
         public Shop AddLink(Link link)
         {
             ThrowIfNamespacePrefixesConflict(link);
-            links.Add(link);
+
+            if (link.IsClickable)
+            {
+                links.Add(link);
+                return this;
+            }
+
+            if (baseUri == null)
+            {
+                throw new BaseUriMissingException();
+            }
+
+            links.Add(link.NewLinkWithBaseUri(baseUri));
+
             return this;
         }
 
@@ -55,7 +68,7 @@ namespace Restbucks.MediaType
 
             if (conflictingPrefixes.Count() > 0)
             {
-                throw new NamespacePrefixConflictException(string.Format("One or more prefixes are each associated with more than one namespace: '{0}'.", string.Join(", ", conflictingPrefixes.Distinct())));
+                throw new NamespacePrefixConflictException(string.Format("One or more namespace prefixes are each associated with more than one namespace: '{0}'.", string.Join(", ", conflictingPrefixes.Distinct())));
             }
         }
 

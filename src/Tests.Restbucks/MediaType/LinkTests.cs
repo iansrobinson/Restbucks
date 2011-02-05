@@ -85,12 +85,31 @@ namespace Tests.Restbucks.MediaType
             var link = new Link(href, RestbucksMediaType.Value);
 
             var newLink = link.NewLinkWithBaseUri(new Uri("http://localhost"));
-            Assert.AreEqual(new Uri("http://localhost/quotes"), newLink.Href);
+            
+            Uri clickUri = null;
+            newLink.Click(uri =>
+                              {
+                                  clickUri = uri;
+                                  return null;
+                              });
+
+            Assert.AreEqual(new Uri("http://localhost/quotes"), clickUri);
+        }
+
+        [Test]
+        public void NewLinkShouldStillHaveARelativeHref()
+        {
+            var href = new Uri("/quotes", UriKind.Relative);
+            var link = new Link(href, RestbucksMediaType.Value);
+
+            var newLink = link.NewLinkWithBaseUri(new Uri("http://localhost"));
+
+            Assert.AreEqual(href, newLink.Href);
         }
 
         [Test]
         [ExpectedException(ExpectedException = typeof(InvalidOperationException), ExpectedMessage = "Link is already backed by an absolute URI.")]
-        public void ShouldDoThrowExceptionIfTryingToCreateNewLinkBasedOnLinkWithAbosoluteHref()
+        public void ShouldThrowExceptionIfTryingToCreateNewLinkBasedOnLinkWithAbosoluteHref()
         {
             var href = new Uri("http://restbucks.com/quotes", UriKind.Absolute);
             var link = new Link(href, RestbucksMediaType.Value);

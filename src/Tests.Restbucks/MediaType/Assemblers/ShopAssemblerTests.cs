@@ -158,7 +158,7 @@ namespace Tests.Restbucks.MediaType.Assemblers
         }
 
         [Test]
-        [ExpectedException(ExpectedException = typeof (InvalidFormatException), ExpectedMessage = "Invalid format. Base URI missing.")]
+        [ExpectedException(ExpectedException = typeof (BaseUriMissingException))]
         public void ShouldThrowExceptionIfOneOrMoreLinksContainRelativeUriButNoBaseUriIsAvailable()
         {
             const string xml = @"<?xml version=""1.0"" encoding=""utf-8""?>
