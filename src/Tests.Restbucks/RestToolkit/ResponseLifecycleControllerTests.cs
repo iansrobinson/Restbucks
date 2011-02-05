@@ -65,5 +65,29 @@ namespace Tests.Restbucks.RestToolkit
             Assert.AreEqual(prefetchedResponse, response);
         }
 
+        [Test]
+        public void PrefetchedResponseIsDiscardedAfterItHasBeenReturnedFromGetResponse()
+        {
+            var requestUri = new Uri("http://localhost/quotes");
+            var prefetchedResponse = new Response<Shop>(200, new Dictionary<string, IEnumerable<string>>(), new ShopBuilder().Build());
+            var nextResponse = new Response<Shop>(200, new Dictionary<string, IEnumerable<string>>(), new ShopBuilder().Build());
+
+            Func<Uri, Response<Shop>, Response<Shop>> firstClient = (uri, prevResponse) => prefetchedResponse;
+            Func<Uri, Response<Shop>, Response<Shop>> secondClient = (uri, prevResponse) =>
+            {
+                throw new AssertionException("Client ought not be called a second time.");
+            };
+            Func<Uri, Response<Shop>, Response<Shop>> thirdClient = (uri, prevResponse) => nextResponse;
+
+            var controller = new ResponseLifecycleController<Shop>(requestUri);
+            controller.PrefetchResponse(firstClient);
+            controller.GetResponse(secondClient);
+
+            var response = controller.GetResponse(thirdClient);
+
+            Assert.AreEqual(nextResponse, response);
+
+        }
+
     }
 }

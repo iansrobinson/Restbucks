@@ -15,13 +15,10 @@ namespace Restbucks.RestToolkit
 
         public Response<T> GetResponse(Func<Uri, Response<T>, Response<T>> client)
         {
-            if (prefetchedResponse != null)
-            {
-                return prefetchedResponse;
-            }
+            var response = prefetchedResponse ?? client(uri, previousResponse);
 
-            var response = client(uri, previousResponse);
             previousResponse = response;
+            prefetchedResponse = null;
 
             return response;
         }
