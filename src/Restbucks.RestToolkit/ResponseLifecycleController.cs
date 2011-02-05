@@ -5,27 +5,29 @@ namespace Restbucks.RestToolkit
     public class ResponseLifecycleController<T> where T : class
     {
         private readonly Uri uri;
+        private bool isPrefetched;
         private Response<T> previousResponse;
-        private Response<T> prefetchedResponse;
-
+        
         public ResponseLifecycleController(Uri uri)
         {
             this.uri = uri;
+            isPrefetched = false;
         }
 
         public Response<T> GetResponse(Func<Uri, Response<T>, Response<T>> client)
         {
-            var response = prefetchedResponse ?? client(uri, previousResponse);
+            var response = isPrefetched ? previousResponse : client(uri, previousResponse);
 
             previousResponse = response;
-            prefetchedResponse = null;
+            isPrefetched = false;
 
             return response;
         }
 
         public void PrefetchResponse(Func<Uri, Response<T>, Response<T>> client)
         {
-            prefetchedResponse = client(uri, previousResponse);
+            previousResponse = client(uri, previousResponse);
+            isPrefetched = true;
         }
     }
 }

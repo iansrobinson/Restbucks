@@ -10,36 +10,39 @@ namespace Tests.Restbucks.RestToolkit
     [TestFixture]
     public class ResponseLifecycleControllerTests
     {
-        [Test]
-        public void ShouldUseAClientToGetResponse()
-        {
-            var requestUri = new Uri("http://localhost/quotes");
-            var entityBody = new ShopBuilder().Build();
-            Func<Uri, Response<Shop>, Response<Shop>> client = (uri, prevResponse) => new Response<Shop>(200, new Dictionary<string, IEnumerable<string>>(), entityBody);
+        private static readonly Uri RequestUri = new Uri("http://localhost/quotes");
 
-            var controller = new ResponseLifecycleController<Shop>(requestUri);
+        [Test]
+        public void ShouldUseClientToGetResponse()
+        {
+            var firstResponse = CreateResponse();
+
+            Func<Uri, Response<Shop>, Response<Shop>> client = (uri, prevResponse) => firstResponse;
+
+            var controller = new ResponseLifecycleController<Shop>(RequestUri);
             var response = controller.GetResponse(client);
 
-            Assert.AreEqual(entityBody, response.EntityBody);
+            Assert.AreEqual(firstResponse, response);
         }
 
         [Test]
         public void ShouldPassPreviousResponseToClient()
         {
-            var requestUri = new Uri("http://localhost/quotes");
-            var entityBody = new ShopBuilder().Build();
             Response<Shop> previousResponse = null;
 
-            Func<Uri, Response<Shop>, Response<Shop>> firstClient = (uri, prevResponse) => new Response<Shop>(200, new Dictionary<string, IEnumerable<string>>(), entityBody);
+            var firstResponse = CreateResponse();
+            var secondResponse = CreateResponse();
+
+            Func<Uri, Response<Shop>, Response<Shop>> firstClient = (uri, prevResponse) => firstResponse;
             Func<Uri, Response<Shop>, Response<Shop>> secondClient = (uri, prevResponse) =>
                                                                          {
                                                                              previousResponse = prevResponse;
-                                                                             return new Response<Shop>(200, new Dictionary<string, IEnumerable<string>>(), entityBody);
+                                                                             return secondResponse;
                                                                          };
 
-            var controller = new ResponseLifecycleController<Shop>(requestUri);
-            var firstResponse = controller.GetResponse(firstClient);
+            var controller = new ResponseLifecycleController<Shop>(RequestUri);
 
+            controller.GetResponse(firstClient);
             controller.GetResponse(secondClient);
 
             Assert.AreEqual(firstResponse, previousResponse);
@@ -48,46 +51,66 @@ namespace Tests.Restbucks.RestToolkit
         [Test]
         public void ShouldReturnPrefetchedResponseWithNextGetResponse()
         {
-            var requestUri = new Uri("http://localhost/quotes");
-            var prefetchedResponse = new Response<Shop>(200, new Dictionary<string, IEnumerable<string>>(), new ShopBuilder().Build());
+            var firstResponse = new Response<Shop>(200, new Dictionary<string, IEnumerable<string>>(), new ShopBuilder().Build());
 
-            Func<Uri, Response<Shop>, Response<Shop>> firstClient = (uri, prevResponse) => prefetchedResponse;
-            Func<Uri, Response<Shop>, Response<Shop>> secondClient = (uri, prevResponse) =>
-            {
-                throw new AssertionException("Client ought not be called a second time.");
-            };
+            Func<Uri, Response<Shop>, Response<Shop>> firstClient = (uri, prevResponse) => firstResponse;
+            Func<Uri, Response<Shop>, Response<Shop>> secondClient = (uri, prevResponse) => { throw new AssertionException("Client ought not be called a second time."); };
 
-            var controller = new ResponseLifecycleController<Shop>(requestUri);
+            var controller = new ResponseLifecycleController<Shop>(RequestUri);
+            
             controller.PrefetchResponse(firstClient);
-
             var response = controller.GetResponse(secondClient);
 
-            Assert.AreEqual(prefetchedResponse, response);
+            Assert.AreEqual(firstResponse, response);
         }
 
         [Test]
         public void PrefetchedResponseIsDiscardedAfterItHasBeenReturnedFromGetResponse()
         {
-            var requestUri = new Uri("http://localhost/quotes");
-            var prefetchedResponse = new Response<Shop>(200, new Dictionary<string, IEnumerable<string>>(), new ShopBuilder().Build());
-            var nextResponse = new Response<Shop>(200, new Dictionary<string, IEnumerable<string>>(), new ShopBuilder().Build());
+            var firstResponse = CreateResponse();
+            var secondResponse = CreateResponse();
 
-            Func<Uri, Response<Shop>, Response<Shop>> firstClient = (uri, prevResponse) => prefetchedResponse;
-            Func<Uri, Response<Shop>, Response<Shop>> secondClient = (uri, prevResponse) =>
-            {
-                throw new AssertionException("Client ought not be called a second time.");
-            };
-            Func<Uri, Response<Shop>, Response<Shop>> thirdClient = (uri, prevResponse) => nextResponse;
+            Func<Uri, Response<Shop>, Response<Shop>> firstClient = (uri, prevResponse) => firstResponse;
+            Func<Uri, Response<Shop>, Response<Shop>> secondClient = (uri, prevResponse) => { throw new AssertionException("Client ought not be called a second time."); };
+            Func<Uri, Response<Shop>, Response<Shop>> thirdClient = (uri, prevResponse) => secondResponse;
 
-            var controller = new ResponseLifecycleController<Shop>(requestUri);
+            var controller = new ResponseLifecycleController<Shop>(RequestUri);
+
             controller.PrefetchResponse(firstClient);
             controller.GetResponse(secondClient);
-
             var response = controller.GetResponse(thirdClient);
 
-            Assert.AreEqual(nextResponse, response);
-
+            Assert.AreEqual(secondResponse, response);
         }
 
+        [Test]
+        public void ShouldPassPreviousResponseToClientWhenPrefetchingResponse()
+        {
+            var firstResponse = CreateResponse();
+            var secondResponse = CreateResponse();
+
+            Response<Shop> previousResponse = null;
+
+            Func<Uri, Response<Shop>, Response<Shop>> firstClient = (uri, prevResponse) => firstResponse;
+            Func<Uri, Response<Shop>, Response<Shop>> secondClient = (uri, prevResponse) => { throw new AssertionException("Client ought not be called a second time."); };
+            Func<Uri, Response<Shop>, Response<Shop>> thirdClient = (uri, prevResponse) =>
+                                                                        {
+                                                                            previousResponse = prevResponse;
+                                                                            return secondResponse;
+                                                                        };
+
+            var controller = new ResponseLifecycleController<Shop>(RequestUri);
+
+            controller.PrefetchResponse(firstClient);
+            controller.GetResponse(secondClient);
+            controller.PrefetchResponse(thirdClient);
+
+            Assert.AreEqual(firstResponse, previousResponse);
+        }
+
+        private static Response<Shop> CreateResponse()
+        {
+            return new Response<Shop>(200, new Dictionary<string, IEnumerable<string>>(), new ShopBuilder().Build());
+        }
     }
 }
