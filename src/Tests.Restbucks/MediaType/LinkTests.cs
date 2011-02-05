@@ -108,7 +108,7 @@ namespace Tests.Restbucks.MediaType
         }
 
         [Test]
-        [ExpectedException(ExpectedException = typeof(InvalidOperationException), ExpectedMessage = "Link is already backed by an absolute URI.")]
+        [ExpectedException(ExpectedException = typeof(InvalidOperationException), ExpectedMessage = "Href is already backed by an absolute URI.")]
         public void ShouldThrowExceptionIfTryingToCreateNewLinkBasedOnLinkWithAbosoluteHref()
         {
             var href = new Uri("http://restbucks.com/quotes", UriKind.Absolute);
