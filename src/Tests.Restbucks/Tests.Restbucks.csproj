@@ -39,11 +39,29 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\castle-windsor\Castle.Windsor.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Http.Extensions">
+      <HintPath>..\..\lib\http\Microsoft.Http.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Net.Http">
       <HintPath>..\..\lib\http\Microsoft.Net.Http.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.QueryComposition, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\http\Microsoft.QueryComposition.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Runtime.Serialization.Json, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\http\Microsoft.Runtime.Serialization.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.ServiceModel.Http">
       <HintPath>..\..\lib\http\Microsoft.ServiceModel.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ServiceModel.Http.Client">
+      <HintPath>..\..\lib\http\Microsoft.ServiceModel.Http.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ServiceModel.Web.jQuery, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\http\Microsoft.ServiceModel.Web.jQuery.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ServiceModel.WebHttp">
       <HintPath>..\..\lib\http\Microsoft.ServiceModel.WebHttp.dll</HintPath>
@@ -57,6 +75,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -65,6 +84,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Client\Adapters\HttpResponseMessageToResponseTests.cs" />
     <Compile Include="MediaType\Assemblers\LinksAssemblerTests.cs" />
     <Compile Include="MediaType\Assemblers\ShopAssemblerTests.cs" />
     <Compile Include="MediaType\Assemblers\XNullElementsExtensionsTests.cs" />
@@ -108,6 +128,10 @@
     <Compile Include="RestToolkit\Utils\XmlTransformTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Restbucks.Client\Restbucks.Client.csproj">
+      <Project>{4FF3C7CB-505C-47EA-AD0B-F3063B6F8B03}</Project>
+      <Name>Restbucks.Client</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Restbucks.MediaType\Restbucks.MediaType.csproj">
       <Project>{2E73DA2F-07A0-42B8-B73D-029DAB550889}</Project>
       <Name>Restbucks.MediaType</Name>

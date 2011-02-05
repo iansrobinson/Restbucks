@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{849CB5F7-0DA0-4883-94CE-A408582C891B}</ProjectGuid>
+    <ProjectGuid>{4FF3C7CB-505C-47EA-AD0B-F3063B6F8B03}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Restbucks.RestToolkit</RootNamespace>
-    <AssemblyName>Restbucks.RestToolkit</AssemblyName>
+    <RootNamespace>Restbucks.Client</RootNamespace>
+    <AssemblyName>Restbucks.Client</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,9 +31,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\..\lib\log4net\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Http.Extensions">
+      <HintPath>..\..\lib\http\Microsoft.Http.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Net.Http">
+      <HintPath>..\..\lib\http\Microsoft.Net.Http.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,17 +49,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Http\Headers.cs" />
-    <Compile Include="Http\Response.cs" />
-    <Compile Include="Http\ResponseLifecycleController.cs" />
-    <Compile Include="Hypermedia\UriFactory.cs" />
-    <Compile Include="Hypermedia\UriFactoryWorker.cs" />
-    <Compile Include="Hypermedia\UriTemplateAttribute.cs" />
-    <Compile Include="Hypermedia\UriTemplateMissingException.cs" />
+    <Compile Include="Adapters\HttpResponseMessageToResponse.cs" />
+    <Compile Include="Formatters\RestbucksMediaTypeFormatter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utils\Check.cs" />
-    <Compile Include="Utils\CheckString.cs" />
-    <Compile Include="Utils\XmlTransform.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Restbucks.MediaType\Restbucks.MediaType.csproj">
+      <Project>{2E73DA2F-07A0-42B8-B73D-029DAB550889}</Project>
+      <Name>Restbucks.MediaType</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Restbucks.RestToolkit\Restbucks.RestToolkit.csproj">
+      <Project>{849CB5F7-0DA0-4883-94CE-A408582C891B}</Project>
+      <Name>Restbucks.RestToolkit</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
