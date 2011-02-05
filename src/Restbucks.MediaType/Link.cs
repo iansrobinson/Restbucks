@@ -49,11 +49,6 @@ namespace Restbucks.MediaType
 
         public Shop Click(Func<Uri, Shop> client)
         {
-            if (!href.IsDereferenceable)
-            {
-                throw new InvalidOperationException("Unable to determine absolute URI.");
-            }
-
             return instance ?? client(href.FullUri);
         }
 

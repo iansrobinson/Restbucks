@@ -69,7 +69,7 @@ namespace Tests.Restbucks.MediaType
         }
 
         [Test]
-        [ExpectedException(ExpectedException = typeof(InvalidOperationException), ExpectedMessage = "Unable to determine absolute URI.")]
+        [ExpectedException(ExpectedException = typeof(InvalidOperationException), ExpectedMessage = "Unable to determine full URI.")]
         public void ThrowsExceptionIfTryingToClickLinkWithRelativeUriAndNoKnownBaseUri()
         {
             var href = new Uri("/quotes", UriKind.Relative);

@@ -30,7 +30,15 @@ namespace Restbucks.MediaType
 
         public Uri FullUri
         {
-            get { return fullUri; }
+            get
+            {
+                if (!IsDereferenceable)
+                {
+                    throw new InvalidOperationException("Unable to determine full URI.");
+                }
+
+                return fullUri;
+            }
         }
 
         public bool IsDereferenceable
