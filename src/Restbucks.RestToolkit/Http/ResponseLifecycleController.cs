@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Restbucks.RestToolkit
+namespace Restbucks.RestToolkit.Http
 {
     public class ResponseLifecycleController<T> where T : class
     {

@@ -5,6 +5,7 @@ using Microsoft.Http.Headers;
 using Restbucks.MediaType;
 using Restbucks.Quoting.Service.Old.Adapters;
 using Restbucks.RestToolkit;
+using Restbucks.RestToolkit.Hypermedia;
 
 namespace Restbucks.Quoting.Service.Old.Resources
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using Restbucks.RestToolkit.Utils;
 
-namespace Restbucks.RestToolkit
+namespace Restbucks.RestToolkit.Hypermedia
 {
     public class UriFactoryWorker
     {

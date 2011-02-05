@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Restbucks.RestToolkit
+namespace Restbucks.RestToolkit.Hypermedia
 {
     public class UriTemplateMissingException : Exception
     {

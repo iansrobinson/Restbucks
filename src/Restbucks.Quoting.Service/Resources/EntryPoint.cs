@@ -5,6 +5,7 @@ using System.ServiceModel;
 using System.ServiceModel.Web;
 using Restbucks.MediaType;
 using Restbucks.RestToolkit;
+using Restbucks.RestToolkit.Hypermedia;
 
 namespace Restbucks.Quoting.Service.Resources
 {

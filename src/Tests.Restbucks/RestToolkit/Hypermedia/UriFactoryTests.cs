@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using Restbucks.RestToolkit;
+using Restbucks.RestToolkit.Hypermedia;
 
-namespace Tests.Restbucks.RestToolkit
+namespace Tests.Restbucks.RestToolkit.Hypermedia
 {
     [TestFixture]
     public class UriFactoryTests
@@ -125,16 +125,16 @@ namespace Tests.Restbucks.RestToolkit
             var uriFactories = new UriFactory();
             uriFactories.Register<MyResource>();
 
-            Assert.AreEqual("{id}", uriFactories.GetUriTemplateValueFor(typeof(MyResource)));
+            Assert.AreEqual("{id}", uriFactories.GetUriTemplateValueFor(typeof (MyResource)));
         }
 
         [Test]
-        [ExpectedException(typeof(KeyNotFoundException))]
+        [ExpectedException(typeof (KeyNotFoundException))]
         public void ThrowsExceptionWhenTryingToGetUriTemplateValueForTypeThatHasNotBeenRegistered()
         {
             var uriFactories = new UriFactory();
-            
-            uriFactories.GetUriTemplateValueFor(typeof(MyResource));
+
+            uriFactories.GetUriTemplateValueFor(typeof (MyResource));
         }
 
         [UriTemplate("my-resource", "{id}")]

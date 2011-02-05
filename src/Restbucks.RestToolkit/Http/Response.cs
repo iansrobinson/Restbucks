@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Restbucks.RestToolkit
+namespace Restbucks.RestToolkit.Http
 {
     public class Response<T> where T : class
     {

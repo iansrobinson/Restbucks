@@ -13,6 +13,7 @@ using Microsoft.ServiceModel.Http;
 using Restbucks.Quoting.Service.Old.Processors;
 using Restbucks.Quoting.Service.Old.Resources;
 using Restbucks.RestToolkit;
+using Restbucks.RestToolkit.Hypermedia;
 
 namespace Restbucks.Quoting.Service.Old
 {

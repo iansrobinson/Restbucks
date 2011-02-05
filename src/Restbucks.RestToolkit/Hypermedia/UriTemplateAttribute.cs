@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Restbucks.RestToolkit
+namespace Restbucks.RestToolkit.Hypermedia
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class UriTemplateAttribute : Attribute

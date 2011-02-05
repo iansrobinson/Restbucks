@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Restbucks.MediaType;
-using Restbucks.RestToolkit;
+using Restbucks.RestToolkit.Http;
 using Tests.Restbucks.MediaType.Helpers;
 
-namespace Tests.Restbucks.RestToolkit
+namespace Tests.Restbucks.RestToolkit.Http
 {
     [TestFixture]
     public class ResponseLifecycleControllerTests
@@ -57,7 +57,7 @@ namespace Tests.Restbucks.RestToolkit
             Func<Uri, Response<Shop>, Response<Shop>> secondClient = (uri, prevResponse) => { throw new AssertionException("Client ought not be called a second time."); };
 
             var controller = new ResponseLifecycleController<Shop>(RequestUri);
-            
+
             controller.PrefetchResponse(firstClient);
             var response = controller.GetResponse(secondClient);
 

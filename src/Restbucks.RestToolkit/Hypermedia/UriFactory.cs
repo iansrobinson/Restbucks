@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Restbucks.RestToolkit
+namespace Restbucks.RestToolkit.Hypermedia
 {
     public class UriFactory
     {

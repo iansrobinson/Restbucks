@@ -12,6 +12,7 @@ using Restbucks.Quoting.Implementation;
 using Restbucks.Quoting.Service.Old.Processors;
 using Restbucks.Quoting.Service.Old.Resources;
 using Restbucks.RestToolkit;
+using Restbucks.RestToolkit.Hypermedia;
 
 namespace Restbucks.Quoting.Service.Old
 {
