@@ -1,34 +1,36 @@
 ﻿using System;
+using Restbucks.RestToolkit.Http;
+using Restbucks.RestToolkit.Utils;
 
 namespace Restbucks.MediaType
 {
-    internal class Href
+    public class Href
     {
-        private readonly Uri displayUri;
-        private readonly Uri fullUri;
+        private readonly Uri uri;
+        private readonly ResponseLifecycleController<Shop> responseAccessor;
 
-        public Href(Uri displayUri)
+        public Href(Uri uri) : this(uri, uri)
         {
-            this.displayUri = displayUri;
+        }
 
-            if (displayUri.IsAbsoluteUri)
+        public Href(Uri uri, Uri accessUri)
+        {
+            Check.IsNotNull(uri, "uri");
+            Check.IsNotNull(accessUri, "accessUri");
+            
+            this.uri = uri;
+            if (accessUri.IsAbsoluteUri)
             {
-                fullUri = displayUri;
+                responseAccessor = new ResponseLifecycleController<Shop>(accessUri);
             }
         }
 
-        public Href(Uri displayUri, Uri fullUri)
+        public Uri Uri
         {
-            this.displayUri = displayUri;
-            this.fullUri = fullUri;
+            get { return uri; }
         }
 
-        public Uri DisplayUri
-        {
-            get { return displayUri; }
-        }
-
-        public Uri FullUri
+        public ResponseLifecycleController<Shop> ResponseLifecycleController
         {
             get
             {
@@ -37,23 +39,23 @@ namespace Restbucks.MediaType
                     throw new InvalidOperationException("Unable to determine full URI.");
                 }
 
-                return fullUri;
+                return responseAccessor;
             }
         }
 
         public bool IsDereferenceable
         {
-            get { return fullUri != null; }
+            get { return responseAccessor != null; }
         }
 
-        public Href WithFullUri(Uri uri)
+        public Href WithNewAccessUri(Uri accessUri)
         {
             if (IsDereferenceable)
             {
                 throw new InvalidOperationException("Href is already backed by an absolute URI.");
             }
             
-            return new Href(displayUri, uri);
+            return new Href(uri, accessUri);
         }
     }
 }

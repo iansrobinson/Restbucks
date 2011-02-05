@@ -57,7 +57,7 @@ namespace Tests.Restbucks.MediaType
             shop.AddLink(new Link(new Uri("/quotes", UriKind.Relative), RestbucksMediaType.Value));
 
             Uri clickUri = null;
-            shop.Links.First().Click(uri =>
+            shop.Links.First().Click((uri, prevResponse) =>
                                          {
                                              clickUri = uri;
                                              return null;

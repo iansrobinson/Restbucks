@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Restbucks.RestToolkit.Http;
 
 namespace Restbucks.MediaType
 {
@@ -9,13 +10,12 @@ namespace Restbucks.MediaType
         private readonly IEnumerable<LinkRelation> rels;
         private readonly string mediaType;
         private readonly Href href;
-        private Shop instance;
-
+        
         private Link(Href href, string mediaType, params LinkRelation[] rels)
         {
             this.href = href;
             this.mediaType = mediaType;
-            this.rels = rels;  
+            this.rels = rels;    
         }
 
         public Link(Uri href, string mediaType, params LinkRelation[] rels) : this(new Href(href), mediaType, rels)
@@ -34,7 +34,7 @@ namespace Restbucks.MediaType
 
         public Uri Href
         {
-            get { return href.DisplayUri; }
+            get { return href.Uri; }
         }
 
         public bool IsClickable
@@ -42,21 +42,20 @@ namespace Restbucks.MediaType
             get { return href.IsDereferenceable; }
         }
 
-        public void Prefetch(Func<Uri, Shop> client)
+        public void Prefetch(Func<Uri, Response<Shop>, Response<Shop>> client)
         {
-            instance = client(href.FullUri);
+            href.ResponseLifecycleController.PrefetchResponse(client);
         }
 
-        public Shop Click(Func<Uri, Shop> client)
+        public Response<Shop> Click(Func<Uri, Response<Shop>, Response<Shop>> client)
         {
-            return instance ?? client(href.FullUri);
+            return href.ResponseLifecycleController.GetResponse(client);
         }
 
         public Link NewLinkWithBaseUri(Uri baseUri)
         {
-            var fullUri = new UriTemplate(href.DisplayUri.ToString()).BindByPosition(baseUri);
-
-            return new Link(href.WithFullUri(fullUri), mediaType, rels.ToArray());
+            var fullUri = new UriTemplate(href.Uri.ToString()).BindByPosition(baseUri);
+            return new Link(href.WithNewAccessUri(fullUri), mediaType, rels.ToArray());
         }
     }
 }
