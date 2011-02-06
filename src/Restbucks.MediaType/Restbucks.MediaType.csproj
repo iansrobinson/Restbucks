@@ -59,6 +59,7 @@
     <Compile Include="Item.cs" />
     <Compile Include="Link.cs" />
     <Compile Include="LinkRelation.cs" />
+    <Compile Include="LinkRelationEqualityComparer.cs" />
     <Compile Include="NamespacePrefixConflictException.cs" />
     <Compile Include="Namespaces.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
