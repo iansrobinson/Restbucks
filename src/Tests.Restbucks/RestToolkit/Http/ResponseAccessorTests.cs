@@ -8,7 +8,7 @@ using Tests.Restbucks.MediaType.Helpers;
 namespace Tests.Restbucks.RestToolkit.Http
 {
     [TestFixture]
-    public class ResponseLifecycleControllerTests
+    public class ResponseAccessorTests
     {
         private static readonly Uri RequestUri = new Uri("http://localhost/quotes");
 
@@ -19,8 +19,8 @@ namespace Tests.Restbucks.RestToolkit.Http
 
             Func<Uri, Response<Shop>, Response<Shop>> client = (uri, prevResponse) => firstResponse;
 
-            var controller = new ResponseLifecycleController<Shop>(RequestUri);
-            var response = controller.GetResponse(client);
+            var accessor = ResponseAccessor<Shop>.Create(RequestUri);
+            var response = accessor.GetResponse(client);
 
             Assert.AreEqual(firstResponse, response);
         }
@@ -35,15 +35,14 @@ namespace Tests.Restbucks.RestToolkit.Http
 
             Func<Uri, Response<Shop>, Response<Shop>> firstClient = (uri, prevResponse) => firstResponse;
             Func<Uri, Response<Shop>, Response<Shop>> secondClient = (uri, prevResponse) =>
-                                                                         {
-                                                                             previousResponse = prevResponse;
-                                                                             return secondResponse;
-                                                                         };
+            {
+                previousResponse = prevResponse;
+                return secondResponse;
+            };
 
-            var controller = new ResponseLifecycleController<Shop>(RequestUri);
-
-            controller.GetResponse(firstClient);
-            controller.GetResponse(secondClient);
+            var accessor = ResponseAccessor<Shop>.Create(RequestUri);
+            accessor.GetResponse(firstClient);
+            accessor.GetResponse(secondClient);
 
             Assert.AreEqual(firstResponse, previousResponse);
         }
@@ -56,10 +55,10 @@ namespace Tests.Restbucks.RestToolkit.Http
             Func<Uri, Response<Shop>, Response<Shop>> firstClient = (uri, prevResponse) => firstResponse;
             Func<Uri, Response<Shop>, Response<Shop>> secondClient = (uri, prevResponse) => { throw new AssertionException("Client ought not be called a second time."); };
 
-            var controller = new ResponseLifecycleController<Shop>(RequestUri);
+            var accessor = ResponseAccessor<Shop>.Create(RequestUri);
 
-            controller.PrefetchResponse(firstClient);
-            var response = controller.GetResponse(secondClient);
+            accessor.PrefetchResponse(firstClient);
+            var response = accessor.GetResponse(secondClient);
 
             Assert.AreEqual(firstResponse, response);
         }
@@ -74,11 +73,11 @@ namespace Tests.Restbucks.RestToolkit.Http
             Func<Uri, Response<Shop>, Response<Shop>> secondClient = (uri, prevResponse) => { throw new AssertionException("Client ought not be called a second time."); };
             Func<Uri, Response<Shop>, Response<Shop>> thirdClient = (uri, prevResponse) => secondResponse;
 
-            var controller = new ResponseLifecycleController<Shop>(RequestUri);
+            var accessor = ResponseAccessor<Shop>.Create(RequestUri);
 
-            controller.PrefetchResponse(firstClient);
-            controller.GetResponse(secondClient);
-            var response = controller.GetResponse(thirdClient);
+            accessor.PrefetchResponse(firstClient);
+            accessor.GetResponse(secondClient);
+            var response = accessor.GetResponse(thirdClient);
 
             Assert.AreEqual(secondResponse, response);
         }
@@ -99,13 +98,66 @@ namespace Tests.Restbucks.RestToolkit.Http
                                                                             return secondResponse;
                                                                         };
 
-            var controller = new ResponseLifecycleController<Shop>(RequestUri);
+            var accessor = ResponseAccessor<Shop>.Create(RequestUri);
 
-            controller.PrefetchResponse(firstClient);
-            controller.GetResponse(secondClient);
-            controller.PrefetchResponse(thirdClient);
+            accessor.PrefetchResponse(firstClient);
+            accessor.GetResponse(secondClient);
+            accessor.PrefetchResponse(thirdClient);
 
             Assert.AreEqual(firstResponse, previousResponse);
+        }
+
+        [Test]
+        public void AbsoluteUriIsDereferenceable()
+        {
+            var accessor = ResponseAccessor<Shop>.Create(RequestUri);
+            Assert.IsTrue(accessor.IsDereferenceable);
+        }
+
+        [Test]
+        [ExpectedException(ExpectedException = typeof(InvalidOperationException), ExpectedMessage = "Cannot access URI. URI must be an absolute URI. Uri: [].")]
+        public void WhenUriIsNullGetResponseThrowsException()
+        {
+            var accessor = ResponseAccessor<Shop>.Create(null);
+            accessor.GetResponse((uri, prevResponse) => null);
+        }
+
+        [Test]
+        [ExpectedException(ExpectedException = typeof(InvalidOperationException), ExpectedMessage = "Cannot access URI. URI must be an absolute URI. Uri: [].")]
+        public void WhenUriIsNullPrefetchResponseThrowsException()
+        {
+            var accessor = ResponseAccessor<Shop>.Create(null);
+            accessor.PrefetchResponse((uri, prevResponse) => null);
+        }
+
+        [Test]
+        public void WhenUriIsNullIsNotDereferenceable()
+        {
+            var accessor = ResponseAccessor<Shop>.Create(null);
+            Assert.IsFalse(accessor.IsDereferenceable);
+        }
+
+        [Test]
+        [ExpectedException(ExpectedException = typeof(InvalidOperationException), ExpectedMessage = "Cannot access URI. URI must be an absolute URI. Uri: [/quotes].")]
+        public void WhenUriIsRelativeGetResponseThrowsException()
+        {
+            var accessor = ResponseAccessor<Shop>.Create(new Uri("/quotes", UriKind.Relative));
+            accessor.GetResponse((uri, prevResponse) => null);
+        }
+
+        [Test]
+        [ExpectedException(ExpectedException = typeof(InvalidOperationException), ExpectedMessage = "Cannot access URI. URI must be an absolute URI. Uri: [/quotes].")]
+        public void WhenUriIsRelativePrefetchResponseThrowsException()
+        {
+            var accessor = ResponseAccessor<Shop>.Create(new Uri("/quotes", UriKind.Relative));
+            accessor.PrefetchResponse((uri, prevResponse) => null);
+        }
+
+        [Test]
+        public void WhenUriIsRelativeIsNotDereferenceable()
+        {
+            var accessor = ResponseAccessor<Shop>.Create(new Uri("/quotes", UriKind.Relative));
+            Assert.IsFalse(accessor.IsDereferenceable);
         }
 
         private static Response<Shop> CreateResponse()

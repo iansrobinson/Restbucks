@@ -92,7 +92,6 @@
     <Compile Include="MediaType\Formatters\ShopFormatterTests.cs" />
     <Compile Include="MediaType\FormTests.cs" />
     <Compile Include="MediaType\Helpers\ShopBuilder.cs" />
-    <Compile Include="MediaType\HrefTests.cs" />
     <Compile Include="MediaType\LinkRelationTests.cs" />
     <Compile Include="MediaType\LinkTests.cs" />
     <Compile Include="MediaType\ShopTests.cs" />
@@ -122,7 +121,7 @@
     <Compile Include="Quoting\Implementation\Helpers\StubDateTimeProvider.cs" />
     <Compile Include="Quoting\Implementation\Helpers\StubGuidProvider.cs" />
     <Compile Include="Quoting\Implementation\QuotationEngineTests.cs" />
-    <Compile Include="RestToolkit\Http\ResponseLifecycleControllerTests.cs" />
+    <Compile Include="RestToolkit\Http\ResponseAccessorTests.cs" />
     <Compile Include="RestToolkit\Hypermedia\UriFactoryTests.cs" />
     <Compile Include="RestToolkit\Hypermedia\UriFactoryWorkerTests.cs" />
     <Compile Include="RestToolkit\Utils\CheckStringTests.cs" />

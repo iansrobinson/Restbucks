@@ -56,7 +56,6 @@
     <Compile Include="Formatters\ItemsFormatter.cs" />
     <Compile Include="Formatters\LinksFormatter.cs" />
     <Compile Include="Formatters\ShopFormatter.cs" />
-    <Compile Include="Href.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="Link.cs" />
     <Compile Include="LinkRelation.cs" />

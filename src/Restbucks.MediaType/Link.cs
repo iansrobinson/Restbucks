@@ -7,18 +7,20 @@ namespace Restbucks.MediaType
 {
     public class Link
     {
-        private readonly IEnumerable<LinkRelation> rels;
+        private readonly Uri href;
+        private readonly IResponseAccessor<Shop> responseAccessor;
         private readonly string mediaType;
-        private readonly Href href;
-        
-        private Link(Href href, string mediaType, params LinkRelation[] rels)
+        private readonly IEnumerable<LinkRelation> rels;
+
+        private Link(Uri href, IResponseAccessor<Shop> responseAccessor, string mediaType, params LinkRelation[] rels)
         {
             this.href = href;
+            this.responseAccessor = responseAccessor;
             this.mediaType = mediaType;
-            this.rels = rels;    
+            this.rels = rels;
         }
 
-        public Link(Uri href, string mediaType, params LinkRelation[] rels) : this(new Href(href), mediaType, rels)
+        public Link(Uri href, string mediaType, params LinkRelation[] rels) : this(href, ResponseAccessor<Shop>.Create(href), mediaType, rels)
         {
         }
 
@@ -34,28 +36,28 @@ namespace Restbucks.MediaType
 
         public Uri Href
         {
-            get { return href.Uri; }
+            get { return href; }
         }
 
         public bool IsClickable
         {
-            get { return href.IsDereferenceable; }
+            get { return responseAccessor.IsDereferenceable; }
         }
 
         public void Prefetch(Func<Uri, Response<Shop>, Response<Shop>> client)
         {
-            href.ResponseLifecycleController.PrefetchResponse(client);
+            responseAccessor.PrefetchResponse(client);
         }
 
         public Response<Shop> Click(Func<Uri, Response<Shop>, Response<Shop>> client)
         {
-            return href.ResponseLifecycleController.GetResponse(client);
+            return responseAccessor.GetResponse(client);
         }
 
         public Link NewLinkWithBaseUri(Uri baseUri)
         {
-            var fullUri = new UriTemplate(href.Uri.ToString()).BindByPosition(baseUri);
-            return new Link(href.WithNewAccessUri(fullUri), mediaType, rels.ToArray());
+            var absoluteUri = new UriTemplate(href.ToString()).BindByPosition(baseUri);
+            return new Link(href, ResponseAccessor<Shop>.Create(absoluteUri), mediaType, rels.ToArray());
         }
     }
 }

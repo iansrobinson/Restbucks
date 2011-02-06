@@ -42,8 +42,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Http\Headers.cs" />
+    <Compile Include="Http\IResponseAccessor.cs" />
     <Compile Include="Http\Response.cs" />
-    <Compile Include="Http\ResponseLifecycleController.cs" />
+    <Compile Include="Http\ResponseAccessor.cs" />
     <Compile Include="Hypermedia\UriFactory.cs" />
     <Compile Include="Hypermedia\UriFactoryWorker.cs" />
     <Compile Include="Hypermedia\UriTemplateAttribute.cs" />
