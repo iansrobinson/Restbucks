@@ -46,11 +46,11 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             }
             mocks.Playback();
 
-            var result = new Quotes(DefaultUriFactory.Instance, quoteEngine).Post(shop, new HttpRequestMessage { Uri = GetRequestUri() }, new HttpResponseMessage());
+            var result = new Quotes(DefaultUriFactory.Instance, quoteEngine).Post(shop, new HttpRequestMessage {Uri = GetRequestUri()}, new HttpResponseMessage());
 
             Assert.True(result.HasItems);
             Assert.True(Matching.LineItemsMatchItems(quote.LineItems, result.Items));
-          
+
             mocks.VerifyAll();
         }
 
@@ -58,7 +58,6 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
         public void ShouldReturn201Created()
         {
             var result = ExecuteRequestReturnResult(Guid.Empty, DateTime.Now);
-
             Assert.AreEqual(HttpStatusCode.Created, result.Response.StatusCode);
         }
 
@@ -68,14 +67,13 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             var id = Guid.NewGuid();
             var result = ExecuteRequestReturnResult(id, DateTime.Now);
 
-            Assert.AreEqual(DefaultUriFactory.Instance.CreateAbsoluteUri<Quote>(BaseAddress, id), result.Response.Headers.Location);
+            Assert.AreEqual(new Uri(BaseAddress + "quote/" + id.ToString("N")), result.Response.Headers.Location);
         }
 
         [Test]
         public void ResponseShouldNotBeCacheable()
         {
             var result = ExecuteRequestReturnResult(Guid.Empty, DateTime.Now);
-
             Assert.AreEqual("no-cache, no-store", result.Response.Headers.CacheControl.ToString());
         }
 
@@ -83,7 +81,6 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
         public void EntityBodyShouldIncludeBaseUri()
         {
             var result = ExecuteRequestReturnResult(Guid.Empty, DateTime.Now);
-
             Assert.AreEqual(BaseAddress, result.EntityBody.BaseUri);
         }
 
@@ -94,7 +91,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             var result = ExecuteRequestReturnResult(id, DateTime.Now);
 
             Assert.IsNotNull(result.EntityBody.Links.Single(l => l.Rels.First().Value.Equals("self")));
-            Assert.AreEqual(DefaultUriFactory.Instance.CreateRelativeUri<Quote>(id), result.EntityBody.Links.Single(l => l.Rels.First().Value.Equals("self")).Href.ToString());
+            Assert.AreEqual(new Uri("/quote/" + id.ToString("N"), UriKind.Relative), result.EntityBody.Links.Single(l => l.Rels.First().Value.Equals("self")).Href.ToString());
         }
 
         [Test]
@@ -104,7 +101,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             var result = ExecuteRequestReturnResult(id, DateTime.Now);
 
             Assert.IsNotNull(result.EntityBody.Links.Single(l => l.Rels.First().SerializableValue.Equals("rb:order-form")));
-            Assert.AreEqual(DefaultUriFactory.Instance.CreateRelativeUri<OrderForm>(id), result.EntityBody.Links.Single(l => l.Rels.First().SerializableValue.Equals("rb:order-form")).Href.ToString());
+            Assert.AreEqual(new Uri("/order-form/" + id.ToString("N"), UriKind.Relative), result.EntityBody.Links.Single(l => l.Rels.First().SerializableValue.Equals("rb:order-form")).Href.ToString());
         }
 
         [Test]

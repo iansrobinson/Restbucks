@@ -39,12 +39,38 @@ namespace Tests.Restbucks.MediaType
         }
 
         [Test]
-        public void ShouldHelpFindStringFormattedUriLinkRelations()
+        public void ShouldBeAbleToUseStringFormattedLinkRelationToFindUriLinkRelations()
         {
             var shop = CreateShop();
 
             var links = (from l in shop.Links
                          where l.Rels.Contains(new StringLinkRelation("http://relations.iansrobinson.com/help"), LinkRelationEqualityComparer.Instance)
+                         select l);
+
+            Assert.AreEqual(1, links.Count());
+            Assert.AreEqual(new Uri("http://iansrobinson.com/help"), links.First().Href);
+        }
+
+        [Test]
+        public void ShouldBeAbleToUseUriLinkRelationToFindUriLinkRelations()
+        {
+            var shop = CreateShop();
+
+            var links = (from l in shop.Links
+                         where l.Rels.Contains(new UriLinkRelation(new Uri("http://relations.iansrobinson.com/help")), LinkRelationEqualityComparer.Instance)
+                         select l);
+
+            Assert.AreEqual(1, links.Count());
+            Assert.AreEqual(new Uri("http://iansrobinson.com/help"), links.First().Href);
+        }
+
+        [Test]
+        public void ShouldBeAbleToUseCompactUriLinkRelationToFindUriLinkRelations()
+        {
+            var shop = CreateShop();
+
+            var links = (from l in shop.Links
+                         where l.Rels.Contains(new CompactUriLinkRelation("x", new Uri("http://relations.iansrobinson.com/"), "help"), LinkRelationEqualityComparer.Instance)
                          select l);
 
             Assert.AreEqual(1, links.Count());

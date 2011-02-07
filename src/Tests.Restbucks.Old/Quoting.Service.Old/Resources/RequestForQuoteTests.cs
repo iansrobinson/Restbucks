@@ -23,7 +23,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             var form = entityBody.Forms.First();
 
             Assert.AreEqual("http://schemas.restbucks.com/shop.xsd", form.Schema.ToString());
-            Assert.AreEqual(DefaultUriFactory.Instance.CreateRelativeUri<Quotes>(), form.Resource.ToString());
+            Assert.AreEqual(new Uri("/quotes/", UriKind.Relative), form.Resource.ToString());
             Assert.AreEqual("post", form.Method);
             Assert.AreEqual(RestbucksMediaType.Value, form.MediaType);
             Assert.IsNull(form.Instance);
@@ -33,7 +33,6 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
         public void EntityBodyShouldNotContainAnyLinks()
         {
             var entityBody = GetRequestForQuoteEntityBody();
-
             Assert.IsFalse(entityBody.HasLinks);
         }
 
@@ -41,7 +40,6 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
         public void EntityBodyShouldNotContainAnyItems()
         {
             var entityBody = GetRequestForQuoteEntityBody();
-
             Assert.IsFalse(entityBody.HasItems);
         }
 
@@ -60,7 +58,6 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
         public void EntityBodyShouldContainBaseUri()
         {
             var entityBody = GetRequestForQuoteEntityBody();
-
             Assert.AreEqual(BaseAddress, entityBody.BaseUri);
         }
 

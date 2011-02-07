@@ -115,14 +115,13 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             var formContents = result.EntityBody.Forms.First().Instance;
 
             Assert.IsNotNull(formContents.Links.Single(l => l.Rels.First().Value.Equals("self")));
-            Assert.AreEqual(DefaultUriFactory.Instance.CreateRelativeUri<Quote>(id), formContents.Links.Single(l => l.Rels.First().Value.Equals("self")).Href.ToString());
+            Assert.AreEqual(new Uri("/quote/" + id.ToString("N"), UriKind.Relative), formContents.Links.Single(l => l.Rels.First().Value.Equals("self")).Href.ToString());
         }
 
         [Test]
         public void FormSchemaAttributeShouldBeEmpty()
         {
             var result = ExecuteRequestReturnResult(Guid.NewGuid(), DateTime.Now);
-
             Assert.IsNull(result.EntityBody.Forms.First().Schema);
         }
 
@@ -130,7 +129,6 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
         public void FormMethodShouldBePost()
         {
             var result = ExecuteRequestReturnResult(Guid.NewGuid(), DateTime.Now);
-
             Assert.AreEqual("post", result.EntityBody.Forms.First().Method);
         }
 
@@ -138,7 +136,6 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
         public void FormMediaTypeShouldBeRestbucksMediaType()
         {
             var result = ExecuteRequestReturnResult(Guid.NewGuid(), DateTime.Now);
-
             Assert.AreEqual(RestbucksMediaType.Value, result.EntityBody.Forms.First().MediaType);
         }
 
@@ -146,8 +143,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
         public void FormResourceShouldBeOrderingServiceEntryPointUriWithSignedFormValuePlaceholder()
         {
             var result = ExecuteRequestReturnResult(Guid.NewGuid(), DateTime.Now);
-
-            Assert.AreEqual("http://localhost:8081/orders/?c=12345&s=" + OrderForm.SignedFormPlaceholder, result.EntityBody.Forms.First().Resource.ToString());
+            Assert.AreEqual(new Uri("http://localhost:8081/orders/?c=12345&s=" + OrderForm.SignedFormPlaceholder), result.EntityBody.Forms.First().Resource);
         }
 
         [Test]
@@ -156,7 +152,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             var id = Guid.NewGuid();    
             var result = ExecuteRequestReturnResult(id, DateTime.Now);
 
-            Assert.AreEqual(DefaultUriFactory.Instance.CreateAbsoluteUri<Quote>(BaseAddress, id), result.Response.Headers.ContentLocation.ToString());
+            Assert.AreEqual(new Uri(BaseAddress + "quote/" + id.ToString("N")), result.Response.Headers.ContentLocation);
         }
 
         private static Result ExecuteRequestReturnResult(Guid id, DateTimeOffset createdDateTime)

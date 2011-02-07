@@ -2,18 +2,21 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{4FF3C7CB-505C-47EA-AD0B-F3063B6F8B03}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{A83DC1E3-0E28-4BC0-86C0-862866867928}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Restbucks.Client</RootNamespace>
-    <AssemblyName>Restbucks.Client</AssemblyName>
+    <RootNamespace>Restbucks.Client.ConsoleHost</RootNamespace>
+    <AssemblyName>Restbucks.Client.ConsoleHost</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,7 +25,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -31,15 +35,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net">
-      <HintPath>..\..\lib\log4net\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Http.Extensions">
-      <HintPath>..\..\lib\http\Microsoft.Http.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Net.Http">
-      <HintPath>..\..\lib\http\Microsoft.Net.Http.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -49,19 +44,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Adapters\HttpResponseMessageToResponse.cs" />
-    <Compile Include="Formatters\RestbucksMediaTypeFormatter.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Start.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Restbucks.MediaType\Restbucks.MediaType.csproj">
-      <Project>{2E73DA2F-07A0-42B8-B73D-029DAB550889}</Project>
-      <Name>Restbucks.MediaType</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Restbucks.RestToolkit\Restbucks.RestToolkit.csproj">
-      <Project>{849CB5F7-0DA0-4883-94CE-A408582C891B}</Project>
-      <Name>Restbucks.RestToolkit</Name>
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Restbucks.Client\Restbucks.Client.csproj">
+      <Project>{4FF3C7CB-505C-47EA-AD0B-F3063B6F8B03}</Project>
+      <Name>Restbucks.Client</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

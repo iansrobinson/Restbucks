@@ -54,7 +54,6 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
         public void ShouldReturn200Ok()
         {
             var result = ExecuteRequestReturnResult(Guid.NewGuid(), DateTime.Now);
-
             Assert.AreEqual(HttpStatusCode.OK, result.Response.StatusCode);
         }
 
@@ -62,7 +61,6 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
         public void EntityBodyShouldIncludeBaseUri()
         {
             var result = ExecuteRequestReturnResult(Guid.NewGuid(), DateTime.Now);
-
             Assert.AreEqual(BaseAddress, result.EntityBody.BaseUri);
         }
 
@@ -102,7 +100,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             var result = ExecuteRequestReturnResult(id, DateTime.Now);
 
             Assert.IsNotNull(result.EntityBody.Links.Single(l => l.Rels.First().Value.Equals("self")));
-            Assert.AreEqual(DefaultUriFactory.Instance.CreateRelativeUri<Quote>(id), result.EntityBody.Links.Single(l => l.Rels.First().Value.Equals("self")).Href.ToString());
+            Assert.AreEqual(new Uri("/quote/" + id.ToString("N"), UriKind.Relative), result.EntityBody.Links.Single(l => l.Rels.First().Value.Equals("self")).Href.ToString());
         }
 
         [Test]
@@ -112,7 +110,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             var result = ExecuteRequestReturnResult(id, DateTime.Now);
 
             Assert.IsNotNull(result.EntityBody.Links.Single(l => l.Rels.First().SerializableValue.Equals("rb:order-form")));
-            Assert.AreEqual(DefaultUriFactory.Instance.CreateRelativeUri<OrderForm>(id), result.EntityBody.Links.Single(l => l.Rels.First().SerializableValue.Equals("rb:order-form")).Href.ToString());
+            Assert.AreEqual(new Uri("/order-form/" + id.ToString("N"), UriKind.Relative), result.EntityBody.Links.Single(l => l.Rels.First().SerializableValue.Equals("rb:order-form")).Href.ToString());
         }
 
         private static Result ExecuteRequestReturnResult(Guid id, DateTimeOffset createdDateTime)

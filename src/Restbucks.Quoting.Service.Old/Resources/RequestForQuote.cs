@@ -2,12 +2,11 @@
 using Microsoft.Http;
 using Microsoft.Http.Headers;
 using Restbucks.MediaType;
-using Restbucks.RestToolkit;
 using Restbucks.RestToolkit.Hypermedia;
 
 namespace Restbucks.Quoting.Service.Old.Resources
 {
-    [UriTemplate("request-for-quote")]
+    [UriTemplate("request-for-quote", "/")]
     public class RequestForQuote
     {
         private readonly UriFactory uriFactory;
@@ -20,7 +19,7 @@ namespace Restbucks.Quoting.Service.Old.Resources
         public Shop Get(HttpRequestMessage request, HttpResponseMessage response)
         {
             var baseUri = uriFactory.CreateBaseUri<RequestForQuote>(request.Uri);
-            
+
             response.Headers.CacheControl = new CacheControl {Public = true, MaxAge = new TimeSpan(24, 0, 0)};
             return new Shop(baseUri)
                 .AddForm(new Form(
