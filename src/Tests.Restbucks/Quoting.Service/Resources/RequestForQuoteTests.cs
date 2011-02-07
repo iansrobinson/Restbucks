@@ -12,21 +12,57 @@ namespace Tests.Restbucks.Quoting.Service.Resources
     public class RequestForQuoteTests
     {
         private static readonly Uri BaseAddress = new Uri("http://localhost:8080/virtual-directory/");
-        
+
         [Test]
-        public void EntityBodyShouldContainAnEmptyRequestForQuoteForm()
+        public void EntityBodyShouldContainOneForm()
         {
             var entityBody = ExecuteRequestReturnEntityBody();
-
             Assert.AreEqual(1, entityBody.Forms.Count());
+        }
 
+        [Test]
+        public void FormShouldBeEmpty()
+        {
+            var entityBody = ExecuteRequestReturnEntityBody();
+            var form = entityBody.Forms.First();
+
+            Assert.IsNull(form.Instance);
+        }
+
+        [Test]
+        public void FormShouldIndicateFormDataMustBeFormattedAccordingToRestbucksMediaType()
+        {
+            var entityBody = ExecuteRequestReturnEntityBody();
+            var form = entityBody.Forms.First();
+
+            Assert.AreEqual(RestbucksMediaType.Value, form.MediaType);
+        }
+
+        [Test]
+        public void FormShouldIndicateFormDataMustConformToRestbucksShopSchema()
+        {
+            var entityBody = ExecuteRequestReturnEntityBody();
             var form = entityBody.Forms.First();
 
             Assert.AreEqual(new Uri("http://schemas.restbucks.com/shop.xsd"), form.Schema);
+        }
+
+        [Test]
+        public void FormTargetShouldBeQuotesResourceWithoutTrailingBackslash()
+        {
+            var entityBody = ExecuteRequestReturnEntityBody();
+            var form = entityBody.Forms.First();
+
             Assert.AreEqual(new Uri("/quotes", UriKind.Relative), form.Resource);
+        }
+
+        [Test]
+        public void FormShouldRequirePost()
+        {
+            var entityBody = ExecuteRequestReturnEntityBody();
+            var form = entityBody.Forms.First();
+
             Assert.AreEqual("post", form.Method);
-            Assert.AreEqual(RestbucksMediaType.Value, form.MediaType);
-            Assert.IsNull(form.Instance);
         }
 
         [Test]

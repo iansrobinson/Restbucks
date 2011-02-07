@@ -13,19 +13,47 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
     public class EntryPointTests
     {
         private static readonly Uri BaseAddress = new Uri("http://localhost:8080/virtual-directory/");
-        
+
         [Test]
-        public void EntityBodyShouldContainALinkToRequestForQuoteForm()
+        public void EntityBodyShouldContainOneLink()
         {
             var entityBody = GetEntryPointEntityBody();
-
             Assert.AreEqual(1, entityBody.Links.Count());
+        }
 
+        [Test]
+        public void LinkHrefShouldPointToRequestForQuoteResourceWithTrailingBackslash()
+        {
+            var entityBody = GetEntryPointEntityBody();
             var link = entityBody.Links.First();
 
             Assert.AreEqual(new Uri("/request-for-quote/", UriKind.Relative), link.Href);
+        }
+
+        [Test]
+        public void LinkShouldIndicateTargetIsRequestForQuoteForm()
+        {
+            var entityBody = GetEntryPointEntityBody();
+            var link = entityBody.Links.First();
+
             Assert.AreEqual(LinkRelations.Rfq, link.Rels.First());
+        }
+
+        [Test]
+        public void LinkShouldIndicateItCanBePrefetched()
+        {
+            var entityBody = GetEntryPointEntityBody();
+            var link = entityBody.Links.First();
+
             Assert.AreEqual(LinkRelations.Prefetch, link.Rels.Last());
+        }
+
+        [Test]
+        public void LinkShouldIndicateResponseWillLikelyBeFormattedAccordingToRestbucksMediaType()
+        {
+            var entityBody = GetEntryPointEntityBody();
+            var link = entityBody.Links.First();
+
             Assert.AreEqual(RestbucksMediaType.Value, link.MediaType);
         }
 
