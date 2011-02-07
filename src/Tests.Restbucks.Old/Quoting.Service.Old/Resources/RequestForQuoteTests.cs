@@ -22,8 +22,8 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
 
             var form = entityBody.Forms.First();
 
-            Assert.AreEqual("http://schemas.restbucks.com/shop.xsd", form.Schema.ToString());
-            Assert.AreEqual(new Uri("/quotes/", UriKind.Relative), form.Resource.ToString());
+            Assert.AreEqual(new Uri("http://schemas.restbucks.com/shop.xsd"), form.Schema);
+            Assert.AreEqual(new Uri("/quotes/", UriKind.Relative), form.Resource);
             Assert.AreEqual("post", form.Method);
             Assert.AreEqual(RestbucksMediaType.Value, form.MediaType);
             Assert.IsNull(form.Instance);

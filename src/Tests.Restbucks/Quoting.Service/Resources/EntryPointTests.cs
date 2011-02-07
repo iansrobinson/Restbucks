@@ -21,7 +21,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
 
             var link = entityBody.Links.First();
 
-            Assert.AreEqual(DefaultUriFactory.Instance.CreateRelativeUri<RequestForQuote>(), link.Href.ToString());
+            Assert.AreEqual(new Uri("/request-for-quote", UriKind.Relative), link.Href);
             Assert.AreEqual(LinkRelations.Rfq, link.Rels.First());
             Assert.AreEqual(LinkRelations.Prefetch, link.Rels.Last());
             Assert.AreEqual(RestbucksMediaType.Value, link.MediaType);
@@ -31,7 +31,6 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         public void EntityBodyShouldNotContainAnyForms()
         {
             var entityBody = GetEntryPointEntityBody();
-
             Assert.IsFalse(entityBody.HasForms);
         }
 
@@ -39,7 +38,6 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         public void EntityBodyShouldNotContainAnyItems()
         {
             var entityBody = GetEntryPointEntityBody();
-
             Assert.IsFalse(entityBody.HasItems);
         }
 

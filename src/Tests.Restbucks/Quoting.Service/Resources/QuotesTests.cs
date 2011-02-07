@@ -59,7 +59,6 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         public void ShouldReturn201Created()
         {
             var response = ExecuteRequestReturnResponse();
-
             Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
         }
 
@@ -67,15 +66,13 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         public void ShouldReturnLocationHeaderWithAddressOfNewQuote()
         {
             var response = ExecuteRequestReturnResponse();
-
-            Assert.AreEqual(DefaultUriFactory.Instance.CreateAbsoluteUri<Quote>(BaseAddress, StubQuotationEngine.QuoteId), response.Headers.Location);
+            Assert.AreEqual(new Uri(BaseAddress + "quote/" + StubQuotationEngine.QuoteId), response.Headers.Location);
         }
 
         [Test]
         public void ResponseShouldNotBeCacheable()
         {
             var response = ExecuteRequestReturnResponse();
-
             Assert.AreEqual("no-store, no-cache", response.Headers.CacheControl.ToString());
         }
 
@@ -85,7 +82,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
             var entityBody = ExecuteRequestReturnEntityBody();
 
             Assert.IsNotNull(entityBody.Links.Single(l => l.Rels.First().Value.Equals("self")));
-            Assert.AreEqual(DefaultUriFactory.Instance.CreateRelativeUri<Quote>(StubQuotationEngine.QuoteId), entityBody.Links.Single(l => l.Rels.First().Value.Equals("self")).Href.ToString());
+            Assert.AreEqual(new Uri("/quote/" + StubQuotationEngine.QuoteId, UriKind.Relative), entityBody.Links.Single(l => l.Rels.First().Value.Equals("self")).Href.ToString());
         }
 
         [Test]
@@ -94,14 +91,13 @@ namespace Tests.Restbucks.Quoting.Service.Resources
             var entityBody = ExecuteRequestReturnEntityBody();
 
             Assert.IsNotNull(entityBody.Links.Single(l => l.Rels.First().SerializableValue.Equals("rb:order-form")));
-            Assert.AreEqual(DefaultUriFactory.Instance.CreateRelativeUri<OrderForm>(StubQuotationEngine.QuoteId), entityBody.Links.Single(l => l.Rels.First().SerializableValue.Equals("rb:order-form")).Href.ToString());
+            Assert.AreEqual(new Uri("/order-form/" + StubQuotationEngine.QuoteId, UriKind.Relative), entityBody.Links.Single(l => l.Rels.First().SerializableValue.Equals("rb:order-form")).Href.ToString());
         }
 
         [Test]
         public void EntityBodyShouldIncludeBaseUri()
         {
             var entityBody = ExecuteRequestReturnEntityBody();
-
             Assert.AreEqual(BaseAddress, entityBody.BaseUri);
         }
 

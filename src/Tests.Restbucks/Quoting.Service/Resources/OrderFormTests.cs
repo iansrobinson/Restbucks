@@ -68,7 +68,6 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         public void ShouldReturn200Ok()
         {
             var response = ExecuteRequestReturnResponse();
-
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
         }
 
@@ -85,7 +84,6 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         public void EntityBodyShouldHaveBaseUri()
         {
             var entityBody = ExecuteRequestReturnEntityBody();
-
             Assert.AreEqual(BaseAddress, entityBody.BaseUri);
         }
 
@@ -98,7 +96,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
             var selfLink = formContents.Links.Single(l => l.Rels.First().Value.Equals("self"));
 
             Assert.IsNotNull(selfLink);
-            Assert.AreEqual(DefaultUriFactory.Instance.CreateRelativeUri<Quote>(StubQuotationEngine.QuoteId), selfLink.Href.ToString());
+            Assert.AreEqual(new Uri("/quote/" + StubQuotationEngine.QuoteId, UriKind.Relative), selfLink.Href.ToString());
         }
 
         [Test]
@@ -114,7 +112,6 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         public void FormSchemaAttributeShouldBeEmpty()
         {
             var entityBody = ExecuteRequestReturnEntityBody();
-
             Assert.IsNull(entityBody.Forms.First().Schema);
         }
 
@@ -122,7 +119,6 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         public void FormMethodShouldBePost()
         {
             var entityBody = ExecuteRequestReturnEntityBody();
-
             Assert.AreEqual("post", entityBody.Forms.First().Method);
         }
 
@@ -130,7 +126,6 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         public void FormMediaTypeShouldBeRestbucksMediaType()
         {
             var entityBody = ExecuteRequestReturnEntityBody();
-
             Assert.AreEqual(RestbucksMediaType.Value, entityBody.Forms.First().MediaType);
         }
 
@@ -139,7 +134,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         {
             var entityBody = ExecuteRequestReturnEntityBody();
 
-            Assert.AreEqual("http://localhost:8081/orders?c=12345&s=" + OrderForm.SignedFormPlaceholder, entityBody.Forms.First().Resource.ToString());
+            Assert.AreEqual(new Uri("http://localhost:8081/orders?c=12345&s=" + OrderForm.SignedFormPlaceholder), entityBody.Forms.First().Resource);
         }
 
         [Test]
@@ -147,7 +142,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         {
             var response = ExecuteRequestReturnResponse();
 
-            var expectedUriValue = DefaultUriFactory.Instance.CreateAbsoluteUri<Quote>(BaseAddress, StubQuotationEngine.QuoteId);
+            var expectedUriValue = new Uri(BaseAddress + "quote/" + StubQuotationEngine.QuoteId);
             Assert.AreEqual(expectedUriValue, response.Content.Headers.ContentLocation.ToString());
         }
 
