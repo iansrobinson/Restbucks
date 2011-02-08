@@ -20,8 +20,8 @@ namespace Tests.Restbucks.Client.Adapters
         public void ShouldAdaptStatusCode()
         {
             var responseMessage = CreateHttpResponseMessage();
-            var adapter = new HttpResponseMessageToResponse(responseMessage);
-            var response = adapter.Adapt();
+            var adapter = CreateAdapter();
+            var response = adapter.Adapt(responseMessage);
 
             Assert.AreEqual(200, response.StatusCode);
         }
@@ -31,8 +31,8 @@ namespace Tests.Restbucks.Client.Adapters
         {
             var baseUriValue = new UniqueId().ToString();
             var responseMessage = CreateHttpResponseMessage(CreateShopContent(baseUriValue));
-            var adapter = new HttpResponseMessageToResponse(responseMessage);
-            var response = adapter.Adapt();
+            var adapter = CreateAdapter();
+            var response = adapter.Adapt(responseMessage);
 
             Assert.AreEqual(new Uri(baseUriValue), response.EntityBody.BaseUri);
         }
@@ -41,8 +41,8 @@ namespace Tests.Restbucks.Client.Adapters
         public void ShouldAdaptContentHeadersToHeaders()
         {
             var responseMessage = CreateHttpResponseMessage();
-            var adapter = new HttpResponseMessageToResponse(responseMessage);
-            var response = adapter.Adapt();
+            var adapter = CreateAdapter();
+            var response = adapter.Adapt(responseMessage);
 
             Assert.AreEqual(RestbucksMediaType.Value, response.Headers["Content-Type"].First());
         }
@@ -51,8 +51,8 @@ namespace Tests.Restbucks.Client.Adapters
         public void ShouldAdaotOtherHeadersToHeaders()
         {
             var responseMessage = CreateHttpResponseMessage();
-            var adapter = new HttpResponseMessageToResponse(responseMessage);
-            var response = adapter.Adapt();
+            var adapter = CreateAdapter();
+            var response = adapter.Adapt(responseMessage);
 
             Assert.AreEqual("no-cache", response.Headers["Cache-Control"].First());
         }
@@ -61,8 +61,8 @@ namespace Tests.Restbucks.Client.Adapters
         public void CreatesNullEntityBodyIfContentIsNull()
         {
             var responseMessage = new HttpResponseMessage(HttpStatusCode.OK, "OK");
-            var adapter = new HttpResponseMessageToResponse(responseMessage);
-            var response = adapter.Adapt();
+            var adapter = CreateAdapter();
+            var response = adapter.Adapt(responseMessage);
 
             Assert.IsNull(response.EntityBody);
         }
@@ -71,11 +71,15 @@ namespace Tests.Restbucks.Client.Adapters
         public void ShouuldAdaptResponseWithEmptyContentButContentHeaders()
         {
             var responseMessage = CreateHttpResponseMessage(new ByteArrayContent(new byte[] { }));
-
-            var adapter = new HttpResponseMessageToResponse(responseMessage);
-            var response = adapter.Adapt();
+            var adapter = CreateAdapter();
+            var response = adapter.Adapt(responseMessage);
 
             Assert.AreEqual(RestbucksMediaType.Value, response.Headers["Content-Type"].First());
+        }
+
+        private static HttpResponseMessageToResponse<Shop> CreateAdapter()
+        {
+            return new HttpResponseMessageToResponse<Shop>(new RestbucksMediaTypeFormatter());
         }
 
         private static HttpResponseMessage CreateHttpResponseMessage(HttpContent content)

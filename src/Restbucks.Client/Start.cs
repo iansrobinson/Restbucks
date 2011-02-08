@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Restbucks.Client.Adapters;
+using Restbucks.Client.Formatters;
 using Restbucks.MediaType;
 using Restbucks.RestToolkit.Http;
 
@@ -35,7 +36,7 @@ namespace Restbucks.Client
 
             using (response)
             {
-                return new HttpResponseMessageToResponse(response).Adapt();
+                return new HttpResponseMessageToResponse<Shop>(new RestbucksMediaTypeFormatter()).Adapt(response);
             }
         }
     }

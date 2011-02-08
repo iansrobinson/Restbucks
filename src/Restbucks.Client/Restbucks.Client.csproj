@@ -50,9 +50,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Adapters\HttpResponseMessageToResponse.cs" />
+    <Compile Include="Adapters\IHttpResponseMessageAdapter.cs" />
     <Compile Include="Formatters\RestbucksMediaTypeFormatter.cs" />
+    <Compile Include="IUserAgent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Start.cs" />
+    <Compile Include="UserAgent.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Restbucks.MediaType\Restbucks.MediaType.csproj">

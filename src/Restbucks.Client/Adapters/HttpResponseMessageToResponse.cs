@@ -3,33 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using Microsoft.Net.Http;
-using Restbucks.Client.Formatters;
-using Restbucks.MediaType;
 using Restbucks.RestToolkit.Http;
 
 namespace Restbucks.Client.Adapters
 {
-    public class HttpResponseMessageToResponse
+    public class HttpResponseMessageToResponse<T> : IHttpResponseMessageAdapter<T> where T : class
     {
-        private readonly HttpResponseMessage response;
+        private readonly IContentFormatter formatter;
 
-        public HttpResponseMessageToResponse(HttpResponseMessage response)
+        public HttpResponseMessageToResponse(IContentFormatter formatter)
         {
-            this.response = response;
+            this.formatter = formatter;
         }
 
-        public Response<Shop> Adapt()
+        public Response<T> Adapt(HttpResponseMessage response)
         {
-            var headers = new Dictionary<string, IEnumerable<string>>(StringComparer.InvariantCultureIgnoreCase);
-            var entityBody = response.Content != null ? response.Content.ReadAsObject<Shop>(new RestbucksMediaTypeFormatter()) : null;
+            IDictionary<string, IEnumerable<string>> headers = new Dictionary<string, IEnumerable<string>>(StringComparer.InvariantCultureIgnoreCase);
+            var entityBody = response.Content != null ? response.Content.ReadAsObject<T>(formatter) : null;
 
             if (response.Content != null)
             {
-                response.Content.Headers.ToList().ForEach(kv => headers.Add(kv.Key, kv.Value)); 
+                response.Content.Headers.ToList().ForEach(headers.Add);
             }
             response.Headers.ToList().ForEach(kv => headers.Add(kv.Key, kv.Value));
 
-            return new Response<Shop>((int) response.StatusCode, headers, entityBody);
+            return new Response<T>((int) response.StatusCode, headers, entityBody);
         }
     }
 }
