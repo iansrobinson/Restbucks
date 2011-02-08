@@ -85,6 +85,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client\Adapters\HttpResponseMessageToResponseTests.cs" />
+    <Compile Include="Client\ApplicationContextTests.cs" />
+    <Compile Include="Client\Keys\KeyEqualityComparerTests.cs" />
+    <Compile Include="Client\States\StartStateTests.cs" />
     <Compile Include="MediaType\Assemblers\LinksAssemblerTests.cs" />
     <Compile Include="MediaType\Assemblers\ShopAssemblerTests.cs" />
     <Compile Include="MediaType\Assemblers\XNullElementsExtensionsTests.cs" />
