@@ -86,6 +86,7 @@
   <ItemGroup>
     <Compile Include="Client\Adapters\HttpResponseMessageToResponseTests.cs" />
     <Compile Include="Client\ApplicationContextTests.cs" />
+    <Compile Include="Client\HttpClientTests.cs" />
     <Compile Include="Client\Keys\KeyEqualityComparerTests.cs" />
     <Compile Include="Client\States\Helpers\PrivateField.cs" />
     <Compile Include="Client\States\StartStateTests.cs" />
