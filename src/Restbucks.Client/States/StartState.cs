@@ -14,13 +14,14 @@ namespace Restbucks.Client.States
 
         public IState Execute(IUserAgent userAgent)
         {
-            userAgent.Invoke<Shop>(context.Get<Uri>(ApplicationContextKeys.EntryPointUri), null);
-            return null;
+            var response = userAgent.Invoke<Shop>(context.Get<Uri>(ApplicationContextKeys.EntryPointUri), null);
+            context.Set(ApplicationContextKeys.CurrentEntity, response.EntityBody);
+            return new StartState(context);
         }
 
         public ApplicationContext Context
         {
-            get { throw new NotImplementedException(); }
+            get { return context; }
         }
 
         public bool IsTerminalState
