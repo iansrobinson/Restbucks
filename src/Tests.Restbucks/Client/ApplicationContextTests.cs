@@ -61,6 +61,22 @@ namespace Tests.Restbucks.Client
             context.Set(new StringKey("key-name"), value2);
         }
 
+        [Test]
+        public void ShouldReturnTrueIfContextContainsKey()
+        {
+            var context = new ApplicationContext();
+            context.Set(new StringKey("key-name"), new ExampleObject());
+
+            Assert.IsTrue(context.ContainsKey(new StringKey("key-name")));
+        }
+
+        [Test]
+        public void ShouldReturnFalseIfContextDoesNotContainKey()
+        {
+            var context = new ApplicationContext();
+            Assert.IsFalse(context.ContainsKey(new StringKey("key-name")));
+        }
+
         private class ExampleObject
         {
         }

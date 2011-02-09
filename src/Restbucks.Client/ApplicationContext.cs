@@ -33,5 +33,10 @@ namespace Restbucks.Client
         {
             return (T) values[key];
         }
+
+        public bool ContainsKey(IKey key)
+        {
+            return values.ContainsKey(key);
+        }
     }
 }

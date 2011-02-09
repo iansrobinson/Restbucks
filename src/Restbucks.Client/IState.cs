@@ -2,7 +2,7 @@
 {
     public interface IState
     {
-        IState Execute(IUserAgent userAgent);
+        IState Apply(IUserAgent userAgent);
         ApplicationContext Context { get; }
         bool IsTerminalState { get; }
     }

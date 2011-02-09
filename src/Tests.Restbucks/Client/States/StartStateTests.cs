@@ -6,6 +6,7 @@ using Restbucks.Client.States;
 using Restbucks.MediaType;
 using Restbucks.RestToolkit.Http;
 using Rhino.Mocks;
+using Tests.Restbucks.Client.States.Helpers;
 using Tests.Restbucks.MediaType.Helpers;
 
 namespace Tests.Restbucks.Client.States
@@ -18,7 +19,7 @@ namespace Tests.Restbucks.Client.States
         [Test]
         public void IsNotATerminalState()
         {
-            var state = new StartState(new ApplicationContext());
+            var state = new StartState(new ApplicationContext(), null);
             Assert.IsFalse(state.IsTerminalState);
         }
 
@@ -31,7 +32,7 @@ namespace Tests.Restbucks.Client.States
             var context = new ApplicationContext();
             context.Set(ApplicationContextKeys.EntryPointUri, EntryPointUri);
 
-            var state = new StartState(context);
+            var state = new StartState(context, null);
 
             using (mocks.Record())
             {
@@ -39,36 +40,25 @@ namespace Tests.Restbucks.Client.States
             }
             mocks.Playback();
 
-            state.Execute(userAgent);
+            state.Apply(userAgent);
 
             mocks.VerifyAll();
         }
 
         [Test]
-        public void IfContextNameIsEmptyShouldReturnNewStateState()
+        public void IfContextNameIsEmptyShouldReturnNewStateStateWithResponse()
         {
             var context = new ApplicationContext();
             context.Set(ApplicationContextKeys.EntryPointUri, EntryPointUri);
 
-            var state = new StartState(context);
-            var newState = state.Execute(CreateStubUserAgent(CreateResponse()));
+            var response = CreateResponse();
+
+            var state = new StartState(context, null);           
+            var newState = state.Apply(CreateStubUserAgent(response));
 
             Assert.IsInstanceOf<StartState>(newState);
             Assert.AreNotEqual(state, newState);
-        }
-
-        [Test]
-        public void IfContextNameIsEmptyContextCurrentEntityShouldContainFirstResponse()
-        {
-            var response = CreateResponse();
-
-            var context = new ApplicationContext();
-            context.Set(ApplicationContextKeys.EntryPointUri, EntryPointUri);
-
-            var state = new StartState(context);
-            var newState = state.Execute(CreateStubUserAgent(response));
-
-            Assert.AreEqual(response.EntityBody, newState.Context.Get<Shop>(ApplicationContextKeys.CurrentEntity));
+            Assert.AreEqual(response, PrivateField.GetValue<Response<Shop>>("response", newState));
         }
 
         private static Response<Shop> CreateResponse()
