@@ -33,20 +33,8 @@ namespace Restbucks.MediaType
         public Shop AddLink(Link link)
         {
             ThrowIfNamespacePrefixesConflict(link);
-
-            if (link.IsClickable)
-            {
-                links.Add(link);
-                return this;
-            }
-
-            if (baseUri == null)
-            {
-                throw new BaseUriMissingException();
-            }
-
-            links.Add(link.NewLinkWithBaseUri(baseUri));
-
+            
+            links.Add(link);
             return this;
         }
 

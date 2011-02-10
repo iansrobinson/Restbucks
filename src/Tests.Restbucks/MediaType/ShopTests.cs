@@ -49,22 +49,5 @@ namespace Tests.Restbucks.MediaType
             var shop = new ShopBuilder().WithBaseUri(new Uri("http://localhost:8080/virtual-directory")).Build();
             Assert.AreEqual(new Uri("http://localhost:8080/virtual-directory"), shop.BaseUri);
         }
-
-        [Test]
-        public void WhenAddingLinksShouldAddBaseUriToLinksWithRelativeHrefs()
-        {
-            var shop = new ShopBuilder().WithBaseUri(new Uri("http://localhost:8080/virtual-directory")).Build();
-            shop.AddLink(new Link(new Uri("/quotes", UriKind.Relative), RestbucksMediaType.Value));
-
-            Uri clickUri = null;
-            shop.Links.First().Click((uri, prevResponse) =>
-                                         {
-                                             clickUri = uri;
-                                             return null;
-                                         });
-
-            Assert.AreEqual(new Uri("http://localhost:8080/virtual-directory/quotes"), clickUri);
-            Assert.AreEqual(new Uri("/quotes", UriKind.Relative), shop.Links.First().Href);
-        }
     }
 }

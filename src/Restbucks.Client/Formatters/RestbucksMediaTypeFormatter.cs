@@ -59,7 +59,7 @@ namespace Restbucks.Client.Formatters
             {
                 return new ShopAssembler(XElement.Load(stream)).AssembleShop();
             }
-            catch (XmlException e)
+            catch (XmlException)
             {
                 throw new InvalidFormatException("Incorrectly formatted entity body. Request must be formatted according to application/restbucks+xml.");
             }

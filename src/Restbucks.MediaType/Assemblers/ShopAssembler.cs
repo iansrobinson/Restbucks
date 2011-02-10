@@ -53,7 +53,7 @@ namespace Restbucks.MediaType.Assemblers
 
             if (relativeUriCount > 0)
             {
-                throw new InvalidFormatException("Invalid format. Base URI missing.");
+                throw new BaseUriMissingException();
             }
         }
 
