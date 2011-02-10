@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Net.Http;
-using Restbucks.Client.Adapters;
-using Restbucks.Client.Formatters;
 using Restbucks.MediaType;
 
 namespace Restbucks.Client.Actions
@@ -23,10 +21,7 @@ namespace Restbucks.Client.Actions
             var request = new HttpRequestMessage(HttpMethod.Get, entryPointUri);
             var response = client.Send(request);
 
-            using (response)
-            {
-                return new ActionResult<Shop>(true, new HttpResponseMessageToResponse<Shop>(RestbucksMediaTypeFormatter.Instance).Adapt(response));
-            }
+            return new ActionResult<Shop>(true, response);
         }
     }
 }

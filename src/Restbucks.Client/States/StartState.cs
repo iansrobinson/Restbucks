@@ -1,16 +1,15 @@
 ﻿using System;
+using System.Net.Http;
 using Restbucks.Client.Actions;
-using Restbucks.MediaType;
-using Restbucks.RestToolkit.Http;
 
 namespace Restbucks.Client.States
 {
     public class StartState : IState
     {
         private readonly ApplicationContext context;
-        private readonly Response<Shop> response;
+        private readonly HttpResponseMessage response;
 
-        public StartState(ApplicationContext context, Response<Shop> response)
+        public StartState(ApplicationContext context, HttpResponseMessage response)
         {
             this.context = context;
             this.response = response;

@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using NUnit.Framework;
 using Restbucks.Client;
-using Restbucks.Client.Adapters;
 using Restbucks.Client.Formatters;
 using Restbucks.Client.States;
 using Restbucks.MediaType;
-using Restbucks.RestToolkit.Http;
-using Rhino.Mocks;
 using Tests.Restbucks.Client.Helpers;
 using Tests.Restbucks.Client.States.Helpers;
 using Tests.Restbucks.MediaType.Helpers;
@@ -48,18 +44,17 @@ namespace Tests.Restbucks.Client.States
         [Test]
         public void IfContextNameIsEmptyShouldReturnNewStateStateWithResponse()
         {
-//            var response = CreateResponseMessage();
-//            var expectedResponse = new HttpResponseMessageToResponse<Shop>(RestbucksMediaTypeFormatter.Instance).Adapt(response);
-//            var mockEndpoint = new MockEndpoint(response);
-//
-//            var context = new ApplicationContext();
-//            context.Set(ApplicationContextKeys.EntryPointUri, EntryPointUri);
-//
-//            var state = new StartState(context, null);
-//            var newState = state.Apply(new MockEndpointHttpClientProvider(mockEndpoint));
-//
-//            Assert.AreEqual(EntryPointUri, mockEndpoint.ReceivedRequest.RequestUri);
-//            Assert.AreEqual(expectedResponse, PrivateField.GetValue<Response<Shop>>("response", newState));
+            var response = CreateResponseMessage();
+            var mockEndpoint = new MockEndpoint(response);
+
+            var context = new ApplicationContext();
+            context.Set(ApplicationContextKeys.EntryPointUri, EntryPointUri);
+
+            var state = new StartState(context, null);
+            var newState = state.Apply(new MockEndpointHttpClientProvider(mockEndpoint));
+
+            Assert.AreEqual(EntryPointUri, mockEndpoint.ReceivedRequest.RequestUri);
+            Assert.AreEqual(response, PrivateField.GetValue<HttpResponseMessage>("response", newState));
         }
 
         private static HttpResponseMessage CreateResponseMessage()
