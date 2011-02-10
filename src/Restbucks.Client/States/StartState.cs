@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Net.Http;
-using Microsoft.Net.Http;
 using Restbucks.Client.Actions;
-using Restbucks.Client.Formatters;
-using Restbucks.MediaType;
 
 namespace Restbucks.Client.States
 {
@@ -31,8 +28,12 @@ namespace Restbucks.Client.States
             }
             if (context.Get<string>(ApplicationContextKeys.ContextName).Equals("started"))
             {
-                var entityBody = response.Content.ReadAsObject<Shop>(RestbucksMediaTypeFormatter.Instance);
-
+                var result = new Rfq(clientProvider, response).GetRfq();
+                if (result.IsSuccessful)
+                {
+                    context.Set(ApplicationContextKeys.ContextName, "http://relations.restbucks.com/rfq");
+                    return new StartState(context, result.Response);
+                }
             }
             return null;
         }

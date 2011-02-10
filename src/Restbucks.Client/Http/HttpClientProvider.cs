@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using Restbucks.MediaType;
 
@@ -14,7 +15,12 @@ namespace Restbucks.Client.Http
 
         public HttpClient CreateClient()
         {
-            var client = new HttpClient();
+            return CreateClient(null);
+        }
+
+        public HttpClient CreateClient(Uri baseUri)
+        {
+            var client = new HttpClient(baseUri);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(RestbucksMediaType.Value));
 
             return client;

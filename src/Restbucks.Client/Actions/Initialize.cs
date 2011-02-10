@@ -15,14 +15,14 @@ namespace Restbucks.Client.Actions
             this.entryPointUri = entryPointUri;
         }
 
-        public ActionResult<Shop> GetEntryPoint()
+        public ActionResult GetEntryPoint()
         {
             using (var client = clientProvider.CreateClient())
             {
                 var request = new HttpRequestMessage(HttpMethod.Get, entryPointUri);
                 var response = client.Send(request);
 
-                return new ActionResult<Shop>(true, response);
+                return new ActionResult(true, response);
             } 
         }
     }

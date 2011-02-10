@@ -53,7 +53,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             var entityBody = GetRequestForQuoteEntityBody();
             var form = entityBody.Forms.First();
 
-            Assert.AreEqual(new Uri("/quotes/", UriKind.Relative), form.Resource);
+            Assert.AreEqual(new Uri("quotes/", UriKind.Relative), form.Resource);
         }
 
         [Test]

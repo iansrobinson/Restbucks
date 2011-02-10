@@ -38,7 +38,13 @@ namespace Restbucks.RestToolkit.Hypermedia
 
         public Uri CreateRelativeUri(params string[] values)
         {
-            return new Uri(uriTemplate.BindByPosition(dummyBaseAddress, values).PathAndQuery, UriKind.RelativeOrAbsolute);
+            if (string.IsNullOrEmpty(uriTemplate.ToString()))
+            {
+                return new Uri(routePrefix, UriKind.Relative);
+            }
+            
+            var uri = uriTemplate.BindByPosition(dummyBaseAddress, values);
+            return dummyBaseAddress.MakeRelativeUri(uri);
         }
 
         public Uri CreateAbsoluteUri(Uri baseUri, params string[] values)

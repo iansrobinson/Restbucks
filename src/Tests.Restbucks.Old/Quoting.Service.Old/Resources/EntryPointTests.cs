@@ -27,7 +27,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             var entityBody = GetEntryPointEntityBody();
             var link = entityBody.Links.First();
 
-            Assert.AreEqual(new Uri("/request-for-quote/", UriKind.Relative), link.Href);
+            Assert.AreEqual(new Uri("request-for-quote/", UriKind.Relative), link.Href);
         }
 
         [Test]

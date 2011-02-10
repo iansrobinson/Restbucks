@@ -96,7 +96,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
             var selfLink = formContents.Links.Single(l => l.Rels.First().Value.Equals("self"));
 
             Assert.IsNotNull(selfLink);
-            Assert.AreEqual(new Uri("/quote/" + StubQuotationEngine.QuoteId, UriKind.Relative), selfLink.Href.ToString());
+            Assert.AreEqual(new Uri("quote/" + StubQuotationEngine.QuoteId, UriKind.Relative), selfLink.Href.ToString());
         }
 
         [Test]

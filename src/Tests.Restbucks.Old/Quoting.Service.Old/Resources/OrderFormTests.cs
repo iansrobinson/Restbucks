@@ -115,7 +115,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             var formContents = result.EntityBody.Forms.First().Instance;
 
             Assert.IsNotNull(formContents.Links.Single(l => l.Rels.First().Value.Equals("self")));
-            Assert.AreEqual(new Uri("/quote/" + id.ToString("N"), UriKind.Relative), formContents.Links.Single(l => l.Rels.First().Value.Equals("self")).Href.ToString());
+            Assert.AreEqual(new Uri("quote/" + id.ToString("N"), UriKind.Relative), formContents.Links.Single(l => l.Rels.First().Value.Equals("self")).Href.ToString());
         }
 
         [Test]

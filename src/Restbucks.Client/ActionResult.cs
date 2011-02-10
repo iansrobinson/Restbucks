@@ -2,7 +2,7 @@
 
 namespace Restbucks.Client
 {
-    public class ActionResult<T> where T : class
+    public class ActionResult
     {
         private readonly bool isSuccessful;
         private readonly HttpResponseMessage response;

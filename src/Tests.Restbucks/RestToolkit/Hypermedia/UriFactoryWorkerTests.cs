@@ -11,7 +11,7 @@ namespace Tests.Restbucks.RestToolkit.Hypermedia
         public void ShouldGenerateRelativeUriFromRoutePrefixAndTemplateAndTemplateParameters()
         {
             var uriFactory = new UriFactoryWorker("quotes", "{userId}/{id}");
-            Assert.AreEqual("/quotes/ian/1", uriFactory.CreateRelativeUri("ian", "1").ToString());
+            Assert.AreEqual("quotes/ian/1", uriFactory.CreateRelativeUri("ian", "1").ToString());
         }
 
         [Test]
@@ -39,21 +39,21 @@ namespace Tests.Restbucks.RestToolkit.Hypermedia
         public void ShouldGenerateRelativeUriWithoutTerminatingBackslashWhenTemplateIsEmpty()
         {
             var uriFactory = new UriFactoryWorker("quotes");
-            Assert.AreEqual("/quotes", uriFactory.CreateRelativeUri().ToString());
+            Assert.AreEqual("quotes", uriFactory.CreateRelativeUri().ToString());
         }
 
         [Test]
         public void ShouldGenerateRelativeUriWithTerminatingBackslashWhenTemplateEndsWithBackslash()
         {
             var uriFactory = new UriFactoryWorker("quotes", "current/");
-            Assert.AreEqual("/quotes/current/", uriFactory.CreateRelativeUri().ToString());
+            Assert.AreEqual("quotes/current/", uriFactory.CreateRelativeUri().ToString());
         }
 
         [Test]
         public void ShouldGenerateRelativeUriWithTerminatingBackslashWhenTemplateIsBackslash()
         {
             var uriFactory = new UriFactoryWorker("quotes", "/");
-            Assert.AreEqual("/quotes/", uriFactory.CreateRelativeUri().ToString());
+            Assert.AreEqual("quotes/", uriFactory.CreateRelativeUri().ToString());
         }
 
         [Test]

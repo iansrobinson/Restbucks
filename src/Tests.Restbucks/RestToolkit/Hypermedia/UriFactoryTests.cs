@@ -48,7 +48,7 @@ namespace Tests.Restbucks.RestToolkit.Hypermedia
             var uriFactories = new UriFactory();
             uriFactories.Register<MyResource>();
 
-            Assert.AreEqual(new Uri("/my-resource/1", UriKind.Relative), uriFactories.CreateRelativeUri<MyResource>("1"));
+            Assert.AreEqual(new Uri("my-resource/1", UriKind.Relative), uriFactories.CreateRelativeUri<MyResource>("1"));
         }
 
         [Test]
@@ -116,7 +116,7 @@ namespace Tests.Restbucks.RestToolkit.Hypermedia
             var uriFactories = new UriFactory();
             uriFactories.Register<MyResource>();
 
-            Assert.AreEqual(new Uri("/my-resource/00000000000000000000000000000000", UriKind.Relative), uriFactories.CreateRelativeUri<MyResource>(Guid.Empty));
+            Assert.AreEqual(new Uri("my-resource/00000000000000000000000000000000", UriKind.Relative), uriFactories.CreateRelativeUri<MyResource>(Guid.Empty));
         }
 
         [Test]

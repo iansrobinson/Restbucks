@@ -91,7 +91,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             var result = ExecuteRequestReturnResult(id, DateTime.Now);
 
             Assert.IsNotNull(result.EntityBody.Links.Single(l => l.Rels.First().Value.Equals("self")));
-            Assert.AreEqual(new Uri("/quote/" + id.ToString("N"), UriKind.Relative), result.EntityBody.Links.Single(l => l.Rels.First().Value.Equals("self")).Href.ToString());
+            Assert.AreEqual(new Uri("quote/" + id.ToString("N"), UriKind.Relative), result.EntityBody.Links.Single(l => l.Rels.First().Value.Equals("self")).Href.ToString());
         }
 
         [Test]
@@ -101,7 +101,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             var result = ExecuteRequestReturnResult(id, DateTime.Now);
 
             Assert.IsNotNull(result.EntityBody.Links.Single(l => l.Rels.First().SerializableValue.Equals("rb:order-form")));
-            Assert.AreEqual(new Uri("/order-form/" + id.ToString("N"), UriKind.Relative), result.EntityBody.Links.Single(l => l.Rels.First().SerializableValue.Equals("rb:order-form")).Href.ToString());
+            Assert.AreEqual(new Uri("order-form/" + id.ToString("N"), UriKind.Relative), result.EntityBody.Links.Single(l => l.Rels.First().SerializableValue.Equals("rb:order-form")).Href.ToString());
         }
 
         [Test]

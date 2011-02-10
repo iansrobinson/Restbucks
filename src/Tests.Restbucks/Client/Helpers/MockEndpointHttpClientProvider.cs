@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using Restbucks.Client;
 using Restbucks.Client.Http;
 
@@ -15,7 +16,12 @@ namespace Tests.Restbucks.Client.Helpers
 
         public HttpClient CreateClient()
         {
-            var client = HttpClientProvider.Instance.CreateClient();
+            return CreateClient(null);
+        }
+
+        public HttpClient CreateClient(Uri baseUri)
+        {
+            var client = HttpClientProvider.Instance.CreateClient(baseUri);
             client.Channel = endpoint;
             return client;
         }

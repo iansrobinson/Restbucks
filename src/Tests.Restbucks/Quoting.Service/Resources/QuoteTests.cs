@@ -84,7 +84,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
             var entityBody = ExecuteRequestReturnEntityBody();
 
             Assert.IsNotNull(entityBody.Links.Single(l => l.Rels.First().Value.Equals("self")));
-            Assert.AreEqual(new Uri("/quote/" + StubQuotationEngine.QuoteId, UriKind.Relative), entityBody.Links.Single(l => l.Rels.First().Value.Equals("self")).Href.ToString());
+            Assert.AreEqual(new Uri("quote/" + StubQuotationEngine.QuoteId, UriKind.Relative), entityBody.Links.Single(l => l.Rels.First().Value.Equals("self")).Href.ToString());
         }
 
         [Test]
@@ -93,7 +93,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
             var entityBody = ExecuteRequestReturnEntityBody();
 
             Assert.IsNotNull(entityBody.Links.Single(l => l.Rels.First().SerializableValue.Equals("rb:order-form")));
-            Assert.AreEqual(new Uri("/order-form/" + StubQuotationEngine.QuoteId, UriKind.Relative), entityBody.Links.Single(l => l.Rels.First().SerializableValue.Equals("rb:order-form")).Href.ToString());
+            Assert.AreEqual(new Uri("order-form/" + StubQuotationEngine.QuoteId, UriKind.Relative), entityBody.Links.Single(l => l.Rels.First().SerializableValue.Equals("rb:order-form")).Href.ToString());
         }
 
         [Test]
