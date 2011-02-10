@@ -1,13 +1,13 @@
-﻿using Restbucks.RestToolkit.Http;
+﻿using System.Net.Http;
 
 namespace Restbucks.Client
 {
     public class ActionResult<T> where T : class
     {
         private readonly bool isSuccessful;
-        private readonly Response<T> response;
+        private readonly HttpResponseMessage response;
 
-        public ActionResult(bool isSuccessful, Response<T> response)
+        public ActionResult(bool isSuccessful, HttpResponseMessage response)
         {
             this.isSuccessful = isSuccessful;
             this.response = response;
@@ -18,7 +18,7 @@ namespace Restbucks.Client
             get { return isSuccessful; }
         }
 
-        public Response<T> Response
+        public HttpResponseMessage Response
         {
             get { return response; }
         }

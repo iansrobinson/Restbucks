@@ -84,7 +84,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Client\Adapters\HttpResponseMessageToResponseTests.cs" />
     <Compile Include="Client\ApplicationContextTests.cs" />
     <Compile Include="Client\Helpers\MockEndpoint.cs" />
     <Compile Include="Client\Helpers\MockEndpointHttpClientProvider.cs" />
@@ -156,9 +155,7 @@
       <Name>Restbucks.RestToolkit</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="RestToolkit\Http\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -41,9 +41,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Http\Headers.cs" />
-    <Compile Include="Http\IResponseAccessor.cs" />
-    <Compile Include="Http\Response.cs" />
     <Compile Include="Hypermedia\UriFactory.cs" />
     <Compile Include="Hypermedia\UriFactoryWorker.cs" />
     <Compile Include="Hypermedia\UriTemplateAttribute.cs" />
