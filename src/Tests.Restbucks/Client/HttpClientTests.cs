@@ -21,5 +21,45 @@ namespace Tests.Restbucks.Client
             Assert.AreEqual(response, expectedResponse);
             Assert.AreEqual(new Uri("http://localhost/orders"), mockEndpoint.ReceivedRequest.RequestUri);
         }
+
+        [Test]
+        public void ClientWithBaseUriWithVirtualDirectory()
+        {
+            var expectedResponse = new HttpResponseMessage(HttpStatusCode.OK, "OK");
+            var mockEndpoint = new MockEndpoint(expectedResponse);
+
+            var client = new HttpClient(new Uri("http://localhost/virtual-directory/")) {Channel = mockEndpoint};
+            var response = client.Send(new HttpRequestMessage(HttpMethod.Get, new Uri("./orders", UriKind.Relative)));
+
+            Assert.AreEqual(response, expectedResponse);
+            Assert.AreEqual(new Uri("http://localhost/virtual-directory/orders"), mockEndpoint.ReceivedRequest.RequestUri);
+        }
+
+        [Test]
+        public void ClientWithNullBaseUri()
+        {
+            var expectedResponse = new HttpResponseMessage(HttpStatusCode.OK, "OK");
+            var mockEndpoint = new MockEndpoint(expectedResponse);
+
+            var client = new HttpClient(null as Uri) { Channel = mockEndpoint };
+            var response = client.Send(new HttpRequestMessage(HttpMethod.Get, new Uri("http://localhost/orders")));
+
+            Assert.AreEqual(response, expectedResponse);
+            Assert.AreEqual(new Uri("http://localhost/orders"), mockEndpoint.ReceivedRequest.RequestUri);
+        }
+
+        [Test]
+        public void ClientWithBaseUriAndRequestWithAbsoluteUriWithDifferentBase()
+        {
+            var expectedResponse = new HttpResponseMessage(HttpStatusCode.OK, "OK");
+            var mockEndpoint = new MockEndpoint(expectedResponse);
+
+            var client = new HttpClient(new Uri("http://localhost/virtual-directory/")) { Channel = mockEndpoint };
+            var response = client.Send(new HttpRequestMessage(HttpMethod.Get, new Uri("http://restbucks.com/orders")));
+
+            Assert.AreEqual(response, expectedResponse);
+            Assert.AreEqual(new Uri("http://restbucks.com/orders"), mockEndpoint.ReceivedRequest.RequestUri);
+
+        }
     }
 }
