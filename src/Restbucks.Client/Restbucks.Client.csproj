@@ -51,11 +51,11 @@
   <ItemGroup>
     <Compile Include="ActionResult.cs" />
     <Compile Include="Actions\RequestEntryPoint.cs" />
+    <Compile Include="Actions\RfqAction.cs" />
     <Compile Include="ApplicationContext.cs" />
     <Compile Include="ApplicationContextKeys.cs" />
     <Compile Include="Formatters\RestbucksMediaTypeFormatter.cs" />
     <Compile Include="Http\HttpClientProvider.cs" />
-    <Compile Include="IAction.cs" />
     <Compile Include="IHttpClientProvider.cs" />
     <Compile Include="IKey.cs" />
     <Compile Include="IState.cs" />

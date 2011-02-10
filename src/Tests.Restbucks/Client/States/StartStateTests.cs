@@ -27,7 +27,7 @@ namespace Tests.Restbucks.Client.States
         }
 
         [Test]
-        public void IfContextNameIsEmptyShouldCallEntryPointUri()
+        public void WhenContextNameIsEmptyShouldCallEntryPointUri()
         {
             var response = CreateResponseMessage();
             var mockEndpoint = new MockEndpoint(response);
@@ -42,7 +42,7 @@ namespace Tests.Restbucks.Client.States
         }
 
         [Test]
-        public void IfContextNameIsEmptyShouldReturnNewStateStateWithResponse()
+        public void WhenContextNameIsEmptyShouldReturnNewStartState()
         {
             var response = CreateResponseMessage();
             var mockEndpoint = new MockEndpoint(response);
@@ -53,8 +53,39 @@ namespace Tests.Restbucks.Client.States
             var state = new StartState(context, null);
             var newState = state.Apply(new MockEndpointHttpClientProvider(mockEndpoint));
 
-            Assert.AreEqual(EntryPointUri, mockEndpoint.ReceivedRequest.RequestUri);
-            Assert.AreEqual(response, PrivateField.GetValue<HttpResponseMessage>("response", newState));
+            Assert.IsInstanceOf(typeof(StartState), newState);
+            Assert.AreNotEqual(state, newState);
+        }
+
+        [Test]
+        public void WhenContextNameIsEmptyReturnedStartStateShouldContainFetchedResponse()
+        {
+            var response = CreateResponseMessage();
+            var mockEndpoint = new MockEndpoint(response);
+
+            var context = new ApplicationContext();
+            context.Set(ApplicationContextKeys.EntryPointUri, EntryPointUri);
+
+            var state = new StartState(context, null);
+            var newState = state.Apply(new MockEndpointHttpClientProvider(mockEndpoint));
+
+           Assert.AreEqual(response, PrivateField.GetValue<HttpResponseMessage>("response", newState));
+        }
+
+        [Test]
+        public void WhenContextNameIsEmptyReturnedStartStateContextNameShouldBeStarted()
+        {
+            var response = CreateResponseMessage();
+            var mockEndpoint = new MockEndpoint(response);
+
+            var context = new ApplicationContext();
+            context.Set(ApplicationContextKeys.EntryPointUri, EntryPointUri);
+
+            var state = new StartState(context, null);
+            var newState = state.Apply(new MockEndpointHttpClientProvider(mockEndpoint));
+
+            var applicationContext = PrivateField.GetValue<ApplicationContext>("context", newState);
+            Assert.AreEqual("started", applicationContext.Get<string>(ApplicationContextKeys.ContextName));
         }
 
         private static HttpResponseMessage CreateResponseMessage()

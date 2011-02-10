@@ -4,7 +4,7 @@ using Restbucks.MediaType;
 
 namespace Restbucks.Client.Actions
 {
-    public class RequestEntryPoint : IAction<Shop>
+    public class RequestEntryPoint
     {
         private readonly IHttpClientProvider clientProvider;
         private readonly Uri entryPointUri;
@@ -17,11 +17,13 @@ namespace Restbucks.Client.Actions
 
         public ActionResult<Shop> Execute()
         {
-            var client = clientProvider.CreateClient();
-            var request = new HttpRequestMessage(HttpMethod.Get, entryPointUri);
-            var response = client.Send(request);
+            using (var client = clientProvider.CreateClient())
+            {
+                var request = new HttpRequestMessage(HttpMethod.Get, entryPointUri);
+                var response = client.Send(request);
 
-            return new ActionResult<Shop>(true, response);
+                return new ActionResult<Shop>(true, response);
+            } 
         }
     }
 }

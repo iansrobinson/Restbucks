@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Net.Http;
+using Microsoft.Net.Http;
 using Restbucks.Client.Actions;
+using Restbucks.Client.Formatters;
+using Restbucks.MediaType;
 
 namespace Restbucks.Client.States
 {
@@ -26,12 +29,12 @@ namespace Restbucks.Client.States
                     return new StartState(context, result.Response);
                 }
             }
-            return null;
-        }
+            if (context.Get<string>(ApplicationContextKeys.ContextName).Equals("started"))
+            {
+                var entityBody = response.Content.ReadAsObject<Shop>(RestbucksMediaTypeFormatter.Instance);
 
-        public ApplicationContext Context
-        {
-            get { return context; }
+            }
+            return null;
         }
 
         public bool IsTerminalState
