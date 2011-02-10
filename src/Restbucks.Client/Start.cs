@@ -36,7 +36,7 @@ namespace Restbucks.Client
 
             using (response)
             {
-                return new HttpResponseMessageToResponse<Shop>(new RestbucksMediaTypeFormatter()).Adapt(response);
+                return new HttpResponseMessageToResponse<Shop>(RestbucksMediaTypeFormatter.Instance).Adapt(response);
             }
         }
     }

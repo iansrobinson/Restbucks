@@ -1,11 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using NUnit.Framework;
 using Restbucks.Client;
+using Restbucks.Client.Adapters;
+using Restbucks.Client.Formatters;
 using Restbucks.Client.States;
 using Restbucks.MediaType;
 using Restbucks.RestToolkit.Http;
 using Rhino.Mocks;
+using Tests.Restbucks.Client.Helpers;
 using Tests.Restbucks.Client.States.Helpers;
 using Tests.Restbucks.MediaType.Helpers;
 
@@ -15,7 +22,7 @@ namespace Tests.Restbucks.Client.States
     public class StartStateTests
     {
         private static readonly Uri EntryPointUri = new Uri("http://localhost/shop/");
-     
+
         [Test]
         public void IsNotATerminalState()
         {
@@ -26,52 +33,47 @@ namespace Tests.Restbucks.Client.States
         [Test]
         public void IfContextNameIsEmptyShouldCallEntryPointUri()
         {
-            var mocks = new MockRepository();
-            var userAgent = mocks.StrictMock<IUserAgent>();
+            var response = CreateResponseMessage();
+            var mockEndpoint = new MockEndpoint(response);
 
             var context = new ApplicationContext();
             context.Set(ApplicationContextKeys.EntryPointUri, EntryPointUri);
 
             var state = new StartState(context, null);
+            state.Apply(new MockEndpointHttpClientProvider(mockEndpoint));
 
-            using (mocks.Record())
-            {
-                Expect.Call(userAgent.Invoke<Shop>(EntryPointUri, null)).Return(CreateResponse());
-            }
-            mocks.Playback();
-
-            state.Apply(userAgent);
-
-            mocks.VerifyAll();
+            Assert.AreEqual(EntryPointUri, mockEndpoint.ReceivedRequest.RequestUri);
         }
 
         [Test]
         public void IfContextNameIsEmptyShouldReturnNewStateStateWithResponse()
         {
-            var context = new ApplicationContext();
-            context.Set(ApplicationContextKeys.EntryPointUri, EntryPointUri);
-
-            var response = CreateResponse();
-
-            var state = new StartState(context, null);           
-            var newState = state.Apply(CreateStubUserAgent(response));
-
-            Assert.IsInstanceOf<StartState>(newState);
-            Assert.AreNotEqual(state, newState);
-            Assert.AreEqual(response, PrivateField.GetValue<Response<Shop>>("response", newState));
+//            var response = CreateResponseMessage();
+//            var expectedResponse = new HttpResponseMessageToResponse<Shop>(RestbucksMediaTypeFormatter.Instance).Adapt(response);
+//            var mockEndpoint = new MockEndpoint(response);
+//
+//            var context = new ApplicationContext();
+//            context.Set(ApplicationContextKeys.EntryPointUri, EntryPointUri);
+//
+//            var state = new StartState(context, null);
+//            var newState = state.Apply(new MockEndpointHttpClientProvider(mockEndpoint));
+//
+//            Assert.AreEqual(EntryPointUri, mockEndpoint.ReceivedRequest.RequestUri);
+//            Assert.AreEqual(expectedResponse, PrivateField.GetValue<Response<Shop>>("response", newState));
         }
 
-        private static Response<Shop> CreateResponse()
+        private static HttpResponseMessage CreateResponseMessage()
         {
             var entity = new ShopBuilder().Build();
-            return new Response<Shop>(200, new Dictionary<string, IEnumerable<string>>(), entity);
-        }
+            var stream = new MemoryStream();
 
-        private static IUserAgent CreateStubUserAgent(Response<Shop> response)
-        {
-            var userAgent = MockRepository.GenerateStub<IUserAgent>();
-            userAgent.Stub(ua => ua.Invoke<Shop>(null, null)).IgnoreArguments().Return(response);
-            return userAgent;
+            RestbucksMediaTypeFormatter.Instance.WriteToStream(entity, stream);
+            stream.Seek(0, SeekOrigin.Begin);
+
+            var content = new StreamContent(stream);
+            content.Headers.ContentType = new MediaTypeHeaderValue(RestbucksMediaType.Value);
+
+            return new HttpResponseMessage {StatusCode = HttpStatusCode.OK, Content = content};
         }
     }
 }

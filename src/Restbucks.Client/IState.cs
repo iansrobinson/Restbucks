@@ -2,7 +2,7 @@
 {
     public interface IState
     {
-        IState Apply(IUserAgent userAgent);
+        IState Apply(IHttpClientProvider clientProvider);
         ApplicationContext Context { get; }
         bool IsTerminalState { get; }
     }

@@ -1,23 +1,32 @@
 ﻿using System;
+using System.Net.Http;
+using Restbucks.Client.Adapters;
+using Restbucks.Client.Formatters;
 using Restbucks.MediaType;
 
 namespace Restbucks.Client.Actions
 {
     public class RequestEntryPoint : IAction<Shop>
     {
-        private readonly IUserAgent userAgent;
+        private readonly IHttpClientProvider clientProvider;
         private readonly Uri entryPointUri;
 
-        public RequestEntryPoint(IUserAgent userAgent, Uri entryPointUri)
+        public RequestEntryPoint(IHttpClientProvider clientProvider, Uri entryPointUri)
         {
-            this.userAgent = userAgent;
+            this.clientProvider = clientProvider;
             this.entryPointUri = entryPointUri;
         }
 
         public ActionResult<Shop> Execute()
         {
-            var response = userAgent.Invoke<Shop>(entryPointUri, null);
-            return new ActionResult<Shop>(true, response);
+            var client = clientProvider.CreateClient();
+            var request = new HttpRequestMessage(HttpMethod.Get, entryPointUri);
+            var response = client.Send(request);
+
+            using (response)
+            {
+                return new ActionResult<Shop>(true, new HttpResponseMessageToResponse<Shop>(RestbucksMediaTypeFormatter.Instance).Adapt(response));
+            }
         }
     }
 }

@@ -16,11 +16,11 @@ namespace Restbucks.Client.States
             this.response = response;
         }
 
-        public IState Apply(IUserAgent userAgent)
+        public IState Apply(IHttpClientProvider clientProvider)
         {
             if (!context.ContainsKey(ApplicationContextKeys.ContextName))
             {
-                var result = new RequestEntryPoint(userAgent, context.Get<Uri>(ApplicationContextKeys.EntryPointUri)).Execute();
+                var result = new RequestEntryPoint(clientProvider, context.Get<Uri>(ApplicationContextKeys.EntryPointUri)).Execute();
                 if (result.IsSuccessful)
                 {
                     context.Set(ApplicationContextKeys.ContextName, "started");

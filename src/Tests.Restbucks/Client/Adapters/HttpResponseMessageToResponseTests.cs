@@ -79,7 +79,7 @@ namespace Tests.Restbucks.Client.Adapters
 
         private static HttpResponseMessageToResponse<Shop> CreateAdapter()
         {
-            return new HttpResponseMessageToResponse<Shop>(new RestbucksMediaTypeFormatter());
+            return new HttpResponseMessageToResponse<Shop>(RestbucksMediaTypeFormatter.Instance);
         }
 
         private static HttpResponseMessage CreateHttpResponseMessage(HttpContent content)
@@ -93,13 +93,13 @@ namespace Tests.Restbucks.Client.Adapters
 
         private static HttpResponseMessage CreateHttpResponseMessage()
         {
-            var content = new ShopBuilder().WithBaseUri(new Uri(new UniqueId().ToString())).Build().ToContent(new RestbucksMediaTypeFormatter());
+            var content = new ShopBuilder().WithBaseUri(new Uri(new UniqueId().ToString())).Build().ToContent(RestbucksMediaTypeFormatter.Instance);
             return CreateHttpResponseMessage(content);
         }
 
         private static HttpContent CreateShopContent(string baseUriValue)
         {
-            return new ShopBuilder().WithBaseUri(new Uri(baseUriValue)).Build().ToContent(new RestbucksMediaTypeFormatter());
+            return new ShopBuilder().WithBaseUri(new Uri(baseUriValue)).Build().ToContent(RestbucksMediaTypeFormatter.Instance);
         }
     }
 }

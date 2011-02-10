@@ -15,9 +15,14 @@ namespace Restbucks.Client.Formatters
 {
     public class RestbucksMediaTypeFormatter : IContentFormatter
     {
+        public static readonly IContentFormatter Instance = new RestbucksMediaTypeFormatter();
+        
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
         private static readonly XmlWriterSettings WriterSettings = new XmlWriterSettings {Indent = true, NamespaceHandling = NamespaceHandling.OmitDuplicates};
+
+        private RestbucksMediaTypeFormatter()
+        {
+        }
 
         public void WriteToStream(object instance, Stream stream)
         {
@@ -54,7 +59,7 @@ namespace Restbucks.Client.Formatters
             {
                 return new ShopAssembler(XElement.Load(stream)).AssembleShop();
             }
-            catch (XmlException)
+            catch (XmlException e)
             {
                 throw new InvalidFormatException("Incorrectly formatted entity body. Request must be formatted according to application/restbucks+xml.");
             }
