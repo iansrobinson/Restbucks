@@ -22,7 +22,7 @@ namespace Restbucks.Client.States
         {
             if (!context.ContainsKey(ApplicationContextKeys.ContextName))
             {
-                var result = new RequestEntryPoint(clientProvider, context.Get<Uri>(ApplicationContextKeys.EntryPointUri)).Execute();
+                var result = new Initialize(clientProvider, context.Get<Uri>(ApplicationContextKeys.EntryPointUri)).GetEntryPoint();
                 if (result.IsSuccessful)
                 {
                     context.Set(ApplicationContextKeys.ContextName, "started");

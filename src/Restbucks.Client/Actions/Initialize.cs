@@ -4,18 +4,18 @@ using Restbucks.MediaType;
 
 namespace Restbucks.Client.Actions
 {
-    public class RequestEntryPoint
+    public class Initialize
     {
         private readonly IHttpClientProvider clientProvider;
         private readonly Uri entryPointUri;
 
-        public RequestEntryPoint(IHttpClientProvider clientProvider, Uri entryPointUri)
+        public Initialize(IHttpClientProvider clientProvider, Uri entryPointUri)
         {
             this.clientProvider = clientProvider;
             this.entryPointUri = entryPointUri;
         }
 
-        public ActionResult<Shop> Execute()
+        public ActionResult<Shop> GetEntryPoint()
         {
             using (var client = clientProvider.CreateClient())
             {

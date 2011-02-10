@@ -50,8 +50,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionResult.cs" />
-    <Compile Include="Actions\RequestEntryPoint.cs" />
-    <Compile Include="Actions\RfqAction.cs" />
+    <Compile Include="Actions\Initialize.cs" />
+    <Compile Include="Actions\Rfq.cs" />
     <Compile Include="ApplicationContext.cs" />
     <Compile Include="ApplicationContextKeys.cs" />
     <Compile Include="Formatters\RestbucksMediaTypeFormatter.cs" />
