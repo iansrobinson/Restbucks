@@ -23,7 +23,7 @@ namespace Restbucks.Client.States
 
         public IState HandleResponse()
         {
-            Log.Info("Start");
+            Log.Info("Start...");
 
             var rules = new Rules(
                 When.IsTrue(IsUninitialized)
