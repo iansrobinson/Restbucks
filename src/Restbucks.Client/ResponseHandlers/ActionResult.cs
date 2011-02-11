@@ -1,6 +1,6 @@
 ﻿using System.Net.Http;
 
-namespace Restbucks.Client
+namespace Restbucks.Client.ResponseHandlers
 {
     public class ActionResult
     {

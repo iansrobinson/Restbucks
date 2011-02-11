@@ -49,7 +49,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActionResult.cs" />
     <Compile Include="ApplicationContext.cs" />
     <Compile Include="ApplicationContextKeys.cs" />
     <Compile Include="Formatters\RestbucksMediaTypeFormatter.cs" />
@@ -60,6 +59,7 @@
     <Compile Include="Keys\KeyEqualityComparer.cs" />
     <Compile Include="Keys\StringKey.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResponseHandlers\ActionResult.cs" />
     <Compile Include="ResponseHandlers\IResponseHandler.cs" />
     <Compile Include="ResponseHandlers\IResponseHandlerProvider.cs" />
     <Compile Include="ResponseHandlers\ResponseHandlerProvider.cs" />
