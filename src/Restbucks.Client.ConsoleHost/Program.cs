@@ -1,5 +1,6 @@
 ﻿using System;
 using Restbucks.Client.Http;
+using Restbucks.Client.ResponseHandlers;
 using Restbucks.Client.States;
 
 namespace Restbucks.Client.ConsoleHost
@@ -11,11 +12,15 @@ namespace Restbucks.Client.ConsoleHost
             var context = new ApplicationContext();
             context.Set(ApplicationContextKeys.EntryPointUri, new Uri("http://localhost:8080/restbucks/shop/"));
 
-            var state = new StartState(context, null);
-            var newState = state.Apply(HttpClientProvider.Instance);
+            var responseHandlers = new ResponseHandlerProvider(
+                new InitializedResponseHandler(HttpClientProvider.Instance),
+                new StartedResponseHandler(HttpClientProvider.Instance));
+
+            var state = new StartState(responseHandlers, context, null);
+            var newState = state.Apply();
             while (newState != null)
             {
-                newState = newState.Apply(HttpClientProvider.Instance);
+                newState = newState.Apply();
             }
             Console.ReadLine();
         }

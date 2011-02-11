@@ -1,25 +1,29 @@
 ﻿using System;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
+using log4net;
 using Microsoft.Net.Http;
 using Restbucks.Client.Formatters;
 using Restbucks.MediaType;
 
-namespace Restbucks.Client.Actions
+namespace Restbucks.Client.ResponseHandlers
 {
-    public class Rfq
+    public class StartedResponseHandler : IResponseHandler
     {
+        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        
         private readonly IHttpClientProvider clientProvider;
-        private readonly HttpResponseMessage response;
 
-        public Rfq(IHttpClientProvider clientProvider, HttpResponseMessage response)
+        public StartedResponseHandler(IHttpClientProvider clientProvider)
         {
             this.clientProvider = clientProvider;
-            this.response = response;
         }
 
-        public ActionResult GetRfq()
+        public ActionResult Handle(HttpResponseMessage response, ApplicationContext context)
         {
+            Log.Debug("Getting request-for-quote form...");
+            
             var entityBody = response.Content.ReadAsObject<Shop>(RestbucksMediaTypeFormatter.Instance);
             var link = (from l in entityBody.Links
                         where l.Rels.Contains(new UriLinkRelation(new Uri("http://relations.restbucks.com/rfq")), LinkRelationEqualityComparer.Instance)

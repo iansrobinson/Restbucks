@@ -2,7 +2,7 @@
 {
     public interface IState
     {
-        IState Apply(IHttpClientProvider clientProvider);
+        IState Apply();
         bool IsTerminalState { get; }
     }
 }

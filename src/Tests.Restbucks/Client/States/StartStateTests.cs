@@ -6,9 +6,11 @@ using System.Net.Http.Headers;
 using NUnit.Framework;
 using Restbucks.Client;
 using Restbucks.Client.Formatters;
+using Restbucks.Client.Http;
+using Restbucks.Client.ResponseHandlers;
 using Restbucks.Client.States;
 using Restbucks.MediaType;
-using Tests.Restbucks.Client.Helpers;
+using Rhino.Mocks;
 using Tests.Restbucks.Client.States.Helpers;
 using Tests.Restbucks.MediaType.Helpers;
 
@@ -17,49 +19,71 @@ namespace Tests.Restbucks.Client.States
     [TestFixture]
     public class StartStateTests
     {
-        private static readonly Uri EntryPointUri = new Uri("http://localhost/shop/");
-
         [Test]
         public void IsNotATerminalState()
         {
-            var state = new StartState(new ApplicationContext(), null);
+            var state = new StartState(new ResponseHandlerProvider(), new ApplicationContext(), null);
             Assert.IsFalse(state.IsTerminalState);
         }
 
-       
+        [Test]
+        public void WhenContextNameIsEmptyShouldDelegateToInitializedResponseHandler()
+        {
+            var context = new ApplicationContext();
+
+            var mocks = new MockRepository();
+            var handler = mocks.StrictMock<IResponseHandler>();
+
+            using (mocks.Record())
+            {
+                Expect.Call(handler.Handle(null, context)).Return(new ActionResult(true, CreateResponseMessage()));
+            }
+            mocks.Playback();
+
+            var handlerProvider = new StubResponseHandlerProvider(typeof (InitializedResponseHandler), handler);
+
+            var state = new StartState(handlerProvider, context, null);
+            state.Apply();
+
+            mocks.VerifyAll();
+        }
 
         [Test]
         public void WhenContextNameIsEmptyShouldReturnNewStartState()
         {
-            var response = CreateResponseMessage();
-            var mockEndpoint = new MockEndpoint(response);
-
+            var responseHandlers = new StubResponseHandlerProvider(typeof (InitializedResponseHandler), StubResponseHandler.Instance);
             var context = new ApplicationContext();
-            context.Set(ApplicationContextKeys.EntryPointUri, EntryPointUri);
+            var state = new StartState(responseHandlers, context, null);
 
-            var state = new StartState(context, null);
-            var newState = state.Apply(new MockEndpointHttpClientProvider(mockEndpoint));
+            var newState = state.Apply();
 
-            Assert.IsInstanceOf(typeof(StartState), newState);
+            Assert.IsInstanceOf(typeof (StartState), newState);
             Assert.AreNotEqual(state, newState);
         }
-
-
 
         [Test]
         public void WhenContextNameIsEmptyReturnedStartStateContextNameShouldBeStarted()
         {
-            var response = CreateResponseMessage();
-            var mockEndpoint = new MockEndpoint(response);
-
+            var responseHandlers = new StubResponseHandlerProvider(typeof (InitializedResponseHandler), StubResponseHandler.Instance);
             var context = new ApplicationContext();
-            context.Set(ApplicationContextKeys.EntryPointUri, EntryPointUri);
+            var state = new StartState(responseHandlers, context, null);
 
-            var state = new StartState(context, null);
-            var newState = state.Apply(new MockEndpointHttpClientProvider(mockEndpoint));
+            var newState = state.Apply();
 
             var applicationContext = PrivateField.GetValue<ApplicationContext>("context", newState);
             Assert.AreEqual("started", applicationContext.Get<string>(ApplicationContextKeys.ContextName));
+        }
+
+        [Test]
+        public void WhenContextNameIsEmptyReturnedStartStateShouldContainNewResponse()
+        {
+            var responseHandlers = new StubResponseHandlerProvider(typeof (InitializedResponseHandler), StubResponseHandler.Instance);
+            var context = new ApplicationContext();
+            var state = new StartState(responseHandlers, context, null);
+
+            var newState = state.Apply();
+
+            Assert.AreEqual(StubResponseHandler.NewResponse, PrivateField.GetValue<HttpResponseMessage>("response", newState));
         }
 
         private static HttpResponseMessage CreateResponseMessage()
@@ -74,6 +98,43 @@ namespace Tests.Restbucks.Client.States
             content.Headers.ContentType = new MediaTypeHeaderValue(RestbucksMediaType.Value);
 
             return new HttpResponseMessage {StatusCode = HttpStatusCode.OK, Content = content};
+        }
+
+        private class StubResponseHandlerProvider : IResponseHandlerProvider
+        {
+            private readonly Type handlerType;
+            private readonly IResponseHandler handler;
+
+            public StubResponseHandlerProvider(Type handlerType, IResponseHandler handler)
+            {
+                this.handlerType = handlerType;
+                this.handler = handler;
+            }
+
+            public IResponseHandler GetFor<T>() where T : IResponseHandler
+            {
+                if (handlerType.Equals(typeof (T)))
+                {
+                    return handler;
+                }
+
+                throw new ArgumentException(string.Format("Expected type [{0}]. Invoked with type [{1}].", handlerType.Name, typeof (T).Name));
+            }
+        }
+
+        private class StubResponseHandler : IResponseHandler
+        {
+            public static readonly IResponseHandler Instance = new StubResponseHandler();
+            public static readonly HttpResponseMessage NewResponse = new HttpResponseMessage();
+
+            private StubResponseHandler()
+            {
+            }
+
+            public ActionResult Handle(HttpResponseMessage response, ApplicationContext context)
+            {
+                return new ActionResult(true, NewResponse);
+            }
         }
     }
 }
