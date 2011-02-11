@@ -65,6 +65,9 @@
     <Compile Include="ResponseHandlers\IResponseHandlerProvider.cs" />
     <Compile Include="ResponseHandlers\ResponseHandlerProvider.cs" />
     <Compile Include="ResponseHandlers\StartedResponseHandler.cs" />
+    <Compile Include="RulesEngine\Rule.cs" />
+    <Compile Include="RulesEngine\Rules.cs" />
+    <Compile Include="RulesEngine\When.cs" />
     <Compile Include="States\StartState.cs" />
   </ItemGroup>
   <ItemGroup>

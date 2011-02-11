@@ -18,7 +18,7 @@ namespace Restbucks.Client.ResponseHandlers
 
         public ActionResult Handle(HttpResponseMessage response, ApplicationContext context)
         {
-            Log.Debug("Getting entry point...");
+            Log.Debug("  Getting entry point...");
             
             var entryPointUri = context.Get<Uri>(ApplicationContextKeys.EntryPointUri);
 

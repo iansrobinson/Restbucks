@@ -22,7 +22,7 @@ namespace Restbucks.Client.ResponseHandlers
 
         public ActionResult Handle(HttpResponseMessage response, ApplicationContext context)
         {
-            Log.Debug("Getting request-for-quote form...");
+            Log.Debug("  Getting request-for-quote form...");
             
             var entityBody = response.Content.ReadAsObject<Shop>(RestbucksMediaTypeFormatter.Instance);
             var link = (from l in entityBody.Links

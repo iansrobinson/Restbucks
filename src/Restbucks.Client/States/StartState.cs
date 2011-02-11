@@ -1,10 +1,15 @@
 ﻿using System.Net.Http;
+using System.Reflection;
+using log4net;
 using Restbucks.Client.ResponseHandlers;
+using Restbucks.Client.RulesEngine;
 
 namespace Restbucks.Client.States
 {
     public class StartState : IState
     {
+        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
         private readonly IResponseHandlerProvider responseHandlers;
         private readonly ApplicationContext context;
         private readonly HttpResponseMessage response;
@@ -18,29 +23,29 @@ namespace Restbucks.Client.States
 
         public IState Apply()
         {
-            if (!context.ContainsKey(ApplicationContextKeys.ContextName))
-            {
-                var handler = responseHandlers.GetFor<InitializedResponseHandler>();
-                var result = handler.Handle(response, context);
-                if (result.IsSuccessful)
-                {
-                    context.Set(ApplicationContextKeys.ContextName, "started");
-                    return new StartState(responseHandlers, context, result.Response);
-                }
-            }
+            Log.Info("Start");
 
-            if (context.Get<string>(ApplicationContextKeys.ContextName).Equals("started"))
-            {
-                var handler = responseHandlers.GetFor<StartedResponseHandler>();
-                var result = handler.Handle(response, context);
-                if (result.IsSuccessful)
-                {
-                    context.Set(ApplicationContextKeys.ContextName, "http://relations.restbucks.com/rfq");
-                    return new StartState(responseHandlers, context, result.Response);
-                }
-            }
+            var rules = new Rules(
+                When.IsTrue(IsUninitialized)
+                    .InvokeHandler<InitializedResponseHandler>()
+                    .SetContext("started")
+                    .ReturnState((h, c, r) => new StartState(h, c, r)),
+                When.IsTrue(IsStarted)
+                    .InvokeHandler<StartedResponseHandler>()
+                    .SetContext("http://relations.restbucks.com/rfq")
+                    .ReturnState((h, c, r) => new StartState(h, c, r)));
 
-            return null;
+            return rules.Evaluate(responseHandlers, context, response);
+        }
+
+        private bool IsStarted()
+        {
+            return context.Get<string>(ApplicationContextKeys.ContextName).Equals("started");
+        }
+
+        private bool IsUninitialized()
+        {
+            return !context.ContainsKey(ApplicationContextKeys.ContextName);
         }
 
         public bool IsTerminalState
