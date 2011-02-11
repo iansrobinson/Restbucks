@@ -16,14 +16,14 @@ namespace Restbucks.Client.ConsoleHost
             context.Set(ApplicationContextKeys.EntryPointUri, new Uri("http://localhost:8080/restbucks/shop/"));
 
             var responseHandlers = new ResponseHandlerProvider(
-                new InitializedResponseHandler(HttpClientProvider.Instance),
+                new UninitializedResponseHandler(HttpClientProvider.Instance),
                 new StartedResponseHandler(HttpClientProvider.Instance));
 
             var state = new StartState(responseHandlers, context, null);
-            var newState = state.Apply();
+            var newState = state.HandleResponse();
             while (newState != null)
             {
-                newState = newState.Apply();
+                newState = newState.HandleResponse();
             }
             Console.ReadLine();
         }

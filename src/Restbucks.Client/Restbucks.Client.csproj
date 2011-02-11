@@ -60,11 +60,11 @@
     <Compile Include="Keys\KeyEqualityComparer.cs" />
     <Compile Include="Keys\StringKey.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ResponseHandlers\InitializedResponseHandler.cs" />
     <Compile Include="ResponseHandlers\IResponseHandler.cs" />
     <Compile Include="ResponseHandlers\IResponseHandlerProvider.cs" />
     <Compile Include="ResponseHandlers\ResponseHandlerProvider.cs" />
     <Compile Include="ResponseHandlers\StartedResponseHandler.cs" />
+    <Compile Include="ResponseHandlers\UninitializedResponseHandler.cs" />
     <Compile Include="RulesEngine\Rule.cs" />
     <Compile Include="RulesEngine\Rules.cs" />
     <Compile Include="RulesEngine\When.cs" />

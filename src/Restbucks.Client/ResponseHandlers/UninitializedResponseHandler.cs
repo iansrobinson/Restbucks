@@ -5,13 +5,13 @@ using log4net;
 
 namespace Restbucks.Client.ResponseHandlers
 {
-    public class InitializedResponseHandler : IResponseHandler
+    public class UninitializedResponseHandler : IResponseHandler
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         
         private readonly IHttpClientProvider clientProvider;
 
-        public InitializedResponseHandler(IHttpClientProvider clientProvider)
+        public UninitializedResponseHandler(IHttpClientProvider clientProvider)
         {
             this.clientProvider = clientProvider;
         }

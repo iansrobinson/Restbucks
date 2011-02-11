@@ -40,10 +40,10 @@ namespace Tests.Restbucks.Client.States
             }
             mocks.Playback();
 
-            var handlerProvider = new StubResponseHandlerProvider(typeof (InitializedResponseHandler), handler);
+            var handlerProvider = new StubResponseHandlerProvider(typeof (UninitializedResponseHandler), handler);
 
             var state = new StartState(handlerProvider, context, null);
-            state.Apply();
+            state.HandleResponse();
 
             mocks.VerifyAll();
         }
@@ -51,11 +51,11 @@ namespace Tests.Restbucks.Client.States
         [Test]
         public void WhenContextNameIsEmptyShouldReturnNewStartState()
         {
-            var responseHandlers = new StubResponseHandlerProvider(typeof (InitializedResponseHandler), StubResponseHandler.Instance);
+            var responseHandlers = new StubResponseHandlerProvider(typeof (UninitializedResponseHandler), StubResponseHandler.Instance);
             var context = new ApplicationContext();
             var state = new StartState(responseHandlers, context, null);
 
-            var newState = state.Apply();
+            var newState = state.HandleResponse();
 
             Assert.IsInstanceOf(typeof (StartState), newState);
             Assert.AreNotEqual(state, newState);
@@ -64,11 +64,11 @@ namespace Tests.Restbucks.Client.States
         [Test]
         public void WhenContextNameIsEmptyReturnedStartStateContextNameShouldBeStarted()
         {
-            var responseHandlers = new StubResponseHandlerProvider(typeof (InitializedResponseHandler), StubResponseHandler.Instance);
+            var responseHandlers = new StubResponseHandlerProvider(typeof (UninitializedResponseHandler), StubResponseHandler.Instance);
             var context = new ApplicationContext();
             var state = new StartState(responseHandlers, context, null);
 
-            var newState = state.Apply();
+            var newState = state.HandleResponse();
 
             var applicationContext = PrivateField.GetValue<ApplicationContext>("context", newState);
             Assert.AreEqual("started", applicationContext.Get<string>(ApplicationContextKeys.ContextName));
@@ -77,11 +77,11 @@ namespace Tests.Restbucks.Client.States
         [Test]
         public void WhenContextNameIsEmptyReturnedStartStateShouldContainNewResponse()
         {
-            var responseHandlers = new StubResponseHandlerProvider(typeof (InitializedResponseHandler), StubResponseHandler.Instance);
+            var responseHandlers = new StubResponseHandlerProvider(typeof (UninitializedResponseHandler), StubResponseHandler.Instance);
             var context = new ApplicationContext();
             var state = new StartState(responseHandlers, context, null);
 
-            var newState = state.Apply();
+            var newState = state.HandleResponse();
 
             Assert.AreEqual(StubResponseHandler.NewResponse, PrivateField.GetValue<HttpResponseMessage>("response", newState));
         }

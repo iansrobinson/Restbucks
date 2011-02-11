@@ -21,21 +21,26 @@ namespace Restbucks.Client.States
             this.response = response;
         }
 
-        public IState Apply()
+        public IState HandleResponse()
         {
             Log.Info("Start");
 
             var rules = new Rules(
                 When.IsTrue(IsUninitialized)
-                    .InvokeHandler<InitializedResponseHandler>()
+                    .InvokeHandler<UninitializedResponseHandler>()
                     .SetContext("started")
-                    .ReturnState((h, c, r) => new StartState(h, c, r)),
+                    .ReturnState(NewStartState),
                 When.IsTrue(IsStarted)
                     .InvokeHandler<StartedResponseHandler>()
                     .SetContext("http://relations.restbucks.com/rfq")
-                    .ReturnState((h, c, r) => new StartState(h, c, r)));
+                    .ReturnState(NewStartState));
 
             return rules.Evaluate(responseHandlers, context, response);
+        }
+
+        private static StartState NewStartState(IResponseHandlerProvider h, ApplicationContext c, HttpResponseMessage r)
+        {
+            return new StartState(h, c, r);
         }
 
         private bool IsStarted()
