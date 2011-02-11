@@ -1,35 +1,30 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using NUnit.Framework;
 using Restbucks.Client;
 using Restbucks.Client.Formatters;
+using Restbucks.Client.ResponseHandlers;
 using Restbucks.Client.States;
 using Restbucks.MediaType;
 using Tests.Restbucks.Client.Helpers;
 using Tests.Restbucks.Client.States.Helpers;
 using Tests.Restbucks.MediaType.Helpers;
 
-namespace Tests.Restbucks.Client.States
+namespace Tests.Restbucks.Client.ResponseHandlers
 {
     [TestFixture]
-    public class StartStateTests
+    public class InitializedResponseHandlerTests
     {
         private static readonly Uri EntryPointUri = new Uri("http://localhost/shop/");
-
+        
         [Test]
-        public void IsNotATerminalState()
-        {
-            var state = new StartState(new ApplicationContext(), null);
-            Assert.IsFalse(state.IsTerminalState);
-        }
-
-       
-
-        [Test]
-        public void WhenContextNameIsEmptyShouldReturnNewStartState()
+        public void WhenContextNameIsEmptyShouldMakeRequestUsingEntryPointUri()
         {
             var response = CreateResponseMessage();
             var mockEndpoint = new MockEndpoint(response);
@@ -37,17 +32,14 @@ namespace Tests.Restbucks.Client.States
             var context = new ApplicationContext();
             context.Set(ApplicationContextKeys.EntryPointUri, EntryPointUri);
 
-            var state = new StartState(context, null);
-            var newState = state.Apply(new MockEndpointHttpClientProvider(mockEndpoint));
+            var handler = new InitializedResponseHandler();
+            handler.Handle(null, context, new MockEndpointHttpClientProvider(mockEndpoint));
 
-            Assert.IsInstanceOf(typeof(StartState), newState);
-            Assert.AreNotEqual(state, newState);
+            Assert.AreEqual(EntryPointUri, mockEndpoint.ReceivedRequest.RequestUri);
         }
 
-
-
         [Test]
-        public void WhenContextNameIsEmptyReturnedStartStateContextNameShouldBeStarted()
+        public void ReturnValueContainsLatestResponse()
         {
             var response = CreateResponseMessage();
             var mockEndpoint = new MockEndpoint(response);
@@ -55,11 +47,10 @@ namespace Tests.Restbucks.Client.States
             var context = new ApplicationContext();
             context.Set(ApplicationContextKeys.EntryPointUri, EntryPointUri);
 
-            var state = new StartState(context, null);
-            var newState = state.Apply(new MockEndpointHttpClientProvider(mockEndpoint));
+            var handler = new InitializedResponseHandler();
+            var result = handler.Handle(null, context, new MockEndpointHttpClientProvider(mockEndpoint));
 
-            var applicationContext = PrivateField.GetValue<ApplicationContext>("context", newState);
-            Assert.AreEqual("started", applicationContext.Get<string>(ApplicationContextKeys.ContextName));
+            Assert.AreEqual(response, result.Response);
         }
 
         private static HttpResponseMessage CreateResponseMessage()
@@ -73,7 +64,7 @@ namespace Tests.Restbucks.Client.States
             var content = new StreamContent(stream);
             content.Headers.ContentType = new MediaTypeHeaderValue(RestbucksMediaType.Value);
 
-            return new HttpResponseMessage {StatusCode = HttpStatusCode.OK, Content = content};
+            return new HttpResponseMessage { StatusCode = HttpStatusCode.OK, Content = content };
         }
     }
 }
