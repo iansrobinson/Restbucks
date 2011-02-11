@@ -36,7 +36,7 @@ namespace Tests.Restbucks.Client.States
 
             using (mocks.Record())
             {
-                Expect.Call(handler.Handle(null, context)).Return(new ActionResult(true, CreateResponseMessage()));
+                Expect.Call(handler.Handle(null, context)).Return(new HandlerResult(true, CreateResponseMessage()));
             }
             mocks.Playback();
 
@@ -131,9 +131,9 @@ namespace Tests.Restbucks.Client.States
             {
             }
 
-            public ActionResult Handle(HttpResponseMessage response, ApplicationContext context)
+            public HandlerResult Handle(HttpResponseMessage response, ApplicationContext context)
             {
-                return new ActionResult(true, NewResponse);
+                return new HandlerResult(true, NewResponse);
             }
         }
     }

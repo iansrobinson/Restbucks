@@ -2,12 +2,12 @@
 
 namespace Restbucks.Client.ResponseHandlers
 {
-    public class ActionResult
+    public class HandlerResult
     {
         private readonly bool isSuccessful;
         private readonly HttpResponseMessage response;
 
-        public ActionResult(bool isSuccessful, HttpResponseMessage response)
+        public HandlerResult(bool isSuccessful, HttpResponseMessage response)
         {
             this.isSuccessful = isSuccessful;
             this.response = response;

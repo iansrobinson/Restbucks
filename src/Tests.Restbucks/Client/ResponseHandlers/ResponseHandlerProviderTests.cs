@@ -39,7 +39,7 @@ namespace Tests.Restbucks.Client.ResponseHandlers
 
         private class FirstResponseHandler : IResponseHandler
         {
-            public ActionResult Handle(HttpResponseMessage response, ApplicationContext context)
+            public HandlerResult Handle(HttpResponseMessage response, ApplicationContext context)
             {
                 throw new NotImplementedException();
             }
@@ -47,7 +47,7 @@ namespace Tests.Restbucks.Client.ResponseHandlers
 
         private class SecondResponseHandler : IResponseHandler
         {
-            public ActionResult Handle(HttpResponseMessage response, ApplicationContext context)
+            public HandlerResult Handle(HttpResponseMessage response, ApplicationContext context)
             {
                 throw new NotImplementedException();
             }
