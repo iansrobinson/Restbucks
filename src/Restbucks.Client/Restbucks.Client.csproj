@@ -65,6 +65,7 @@
     <Compile Include="ResponseHandlers\ResponseHandlerProvider.cs" />
     <Compile Include="ResponseHandlers\StartedResponseHandler.cs" />
     <Compile Include="ResponseHandlers\UninitializedResponseHandler.cs" />
+    <Compile Include="RulesEngine\ResponseHandlerMissingException.cs" />
     <Compile Include="RulesEngine\Rule.cs" />
     <Compile Include="RulesEngine\Rules.cs" />
     <Compile Include="RulesEngine\When.cs" />

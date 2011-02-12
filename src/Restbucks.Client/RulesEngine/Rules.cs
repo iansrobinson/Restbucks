@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Reflection;
 using Restbucks.Client.ResponseHandlers;
@@ -23,8 +24,23 @@ namespace Restbucks.Client.RulesEngine
                 if (rule.IsApplicable)
                 {
                     var genericMethod = getFor.MakeGenericMethod(new[] { rule.ResponseHandlerType });
-                    var handler = genericMethod.Invoke(responseHandlers, null) as IResponseHandler;
+                    IResponseHandler handler = null;
+                    try
+                    {
+                        handler = genericMethod.Invoke(responseHandlers, null) as IResponseHandler;
+                    }
+                    catch (TargetInvocationException ex)
+                    {
+                        if (ex.InnerException.GetType().Equals(typeof(KeyNotFoundException)))
+                        {
+                            throw new ResponseHandlerMissingException(string.Format("Response handler missing. Type: [{0}].", rule.ResponseHandlerType.FullName));
+                        }
+                        throw;
+                    }
+                    
+
                     var result = handler.Handle(response, context);
+
                     if (result.IsSuccessful)
                     {
                         context.Set(ApplicationContextKeys.ContextName, rule.ContextName);

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net.Http;
-using System.Reflection;
 using Restbucks.Client.ResponseHandlers;
 
 namespace Restbucks.Client.RulesEngine
