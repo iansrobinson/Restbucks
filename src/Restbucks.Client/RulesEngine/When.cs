@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using Restbucks.Client.ResponseHandlers;
+using Restbucks.RestToolkit.Utils;
 
 namespace Restbucks.Client.RulesEngine
 {
@@ -8,6 +9,7 @@ namespace Restbucks.Client.RulesEngine
     {
         public static IInvokeHandler IsTrue(Func<bool> condition)
         {
+            Check.IsNotNull(condition, "condition");
             return new When(condition);
         }
         
@@ -28,12 +30,14 @@ namespace Restbucks.Client.RulesEngine
 
         public IReturnState SetContext(string contextName)
         {
+            CheckString.Is(Not.NullOrEmptyOrWhitespace, contextName, "contextName");
             this.contextName = contextName;
             return this;
         } 
 
         public Rule ReturnState(Func<IResponseHandlerProvider, ApplicationContext, HttpResponseMessage, IState> createState)
         {
+            Check.IsNotNull(createState, "createState");
             return new Rule(condition, responseHandlerType, contextName, createState);
         }
     }

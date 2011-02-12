@@ -91,6 +91,7 @@
     <Compile Include="Client\Keys\KeyEqualityComparerTests.cs" />
     <Compile Include="Client\ResponseHandlers\InitializedResponseHandlerTests.cs" />
     <Compile Include="Client\ResponseHandlers\ResponseHandlerProviderTests.cs" />
+    <Compile Include="Client\RulesEngine\WhenTests.cs" />
     <Compile Include="Client\States\Helpers\PrivateField.cs" />
     <Compile Include="Client\States\StartStateTests.cs" />
     <Compile Include="MediaType\Assemblers\LinksAssemblerTests.cs" />
