@@ -41,7 +41,8 @@ namespace Restbucks.Client.RulesEngine
 
                     if (result.IsSuccessful)
                     {
-                        context.Set(ApplicationContextKeys.ContextName, rule.ContextName);
+                        rule.ContextAction(context);
+
                         var state = rule.CreateState(responseHandlers, context, result.Response);
 
                         if (state == null)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using Restbucks.Client.ResponseHandlers;
+using Restbucks.RestToolkit.Utils;
 
 namespace Restbucks.Client.RulesEngine
 {
@@ -8,14 +9,18 @@ namespace Restbucks.Client.RulesEngine
     {
         private readonly Func<bool> condition;
         private readonly Type responseHandlerType;
-        private readonly string contextName;
+        private readonly Action<ApplicationContext> contextAction;
         private readonly Func<IResponseHandlerProvider, ApplicationContext, HttpResponseMessage, IState> createState;
 
-        public Rule(Func<bool> condition, Type responseHandlerType, string contextName, Func<IResponseHandlerProvider, ApplicationContext, HttpResponseMessage, IState> createState)
+        public Rule(Func<bool> condition, Type responseHandlerType, Action<ApplicationContext> contextAction, Func<IResponseHandlerProvider, ApplicationContext, HttpResponseMessage, IState> createState)
         {
+            Check.IsNotNull(condition, "condition");
+            Check.IsNotNull(contextAction, "contextAction");
+            Check.IsNotNull(createState, "createState");
+            
             this.condition = condition;
             this.responseHandlerType = responseHandlerType;
-            this.contextName = contextName;
+            this.contextAction = contextAction;
             this.createState = createState;
         }
 
@@ -29,9 +34,9 @@ namespace Restbucks.Client.RulesEngine
             get { return responseHandlerType; }
         }
 
-        public string ContextName
+        public Action<ApplicationContext> ContextAction
         {
-            get { return contextName; }
+            get { return contextAction; }
         }
 
         public Func<IResponseHandlerProvider, ApplicationContext, HttpResponseMessage, IState> CreateState

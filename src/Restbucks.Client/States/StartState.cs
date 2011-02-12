@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Reflection;
 using log4net;
 using Restbucks.Client.ResponseHandlers;
@@ -28,14 +29,19 @@ namespace Restbucks.Client.States
             var rules = new Rules(
                 When.IsTrue(IsUninitialized)
                     .InvokeHandler<UninitializedResponseHandler>()
-                    .SetContext("started")
+                    .UpdateContext(SetContextName("started"))
                     .ReturnState(NewStartState),
                 When.IsTrue(IsStarted)
                     .InvokeHandler<StartedResponseHandler>()
-                    .SetContext("http://relations.restbucks.com/rfq")
+                    .UpdateContext(SetContextName("http://relations.restbucks.com/rfq"))
                     .ReturnState(NewStartState));
 
             return rules.Evaluate(responseHandlers, context, response);
+        }
+
+        private static Action<ApplicationContext> SetContextName(string value)
+        {
+            return c => c.Set(ApplicationContextKeys.ContextName, value);
         }
 
         private static StartState NewStartState(IResponseHandlerProvider h, ApplicationContext c, HttpResponseMessage r)

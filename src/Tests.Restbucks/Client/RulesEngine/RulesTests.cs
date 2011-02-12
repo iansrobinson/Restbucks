@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Linq;
+using System.Net.Http;
 using NUnit.Framework;
 using Restbucks.Client;
 using Restbucks.Client.ResponseHandlers;
@@ -22,17 +22,23 @@ namespace Tests.Restbucks.Client.RulesEngine
                              {
                                  processOrder.Enqueue("first");
                                  return false;
-                             }, typeof (SuccessfulResponseHandler), "context-name", (h, c, r) => new DummyState()),
+                             }, typeof (SuccessfulResponseHandler), 
+                             c => c.Set(ApplicationContextKeys.ContextName, "context-name"), 
+                             (h, c, r) => new DummyState()),
                 new Rule(() =>
                              {
                                  processOrder.Enqueue("second");
                                  return false;
-                             }, typeof (SuccessfulResponseHandler), "context-name", (h, c, r) => new DummyState()),
+                             }, typeof (SuccessfulResponseHandler), 
+                             c => c.Set(ApplicationContextKeys.ContextName, "context-name"), 
+                             (h, c, r) => new DummyState()),
                 new Rule(() =>
                              {
                                  processOrder.Enqueue("third");
                                  return false;
-                             }, typeof (SuccessfulResponseHandler), "context-name", (h, c, r) => new DummyState())
+                             }, typeof (SuccessfulResponseHandler), 
+                             c => c.Set(ApplicationContextKeys.ContextName, "context-name"), 
+                             (h, c, r) => new DummyState())
                 );
 
             rules.Evaluate(new ResponseHandlerProvider(), new ApplicationContext(), null);
@@ -44,7 +50,7 @@ namespace Tests.Restbucks.Client.RulesEngine
         public void ShouldOnlyEvaluateRuleIfItIsApplicable()
         {
             var rules = new Rules(
-                new Rule(() =>true, typeof(SuccessfulResponseHandler), "context-name", (h, c, r) => new DummyState()));
+                new Rule(() => true, typeof (SuccessfulResponseHandler), c => c.Set(ApplicationContextKeys.ContextName, "context-name"), (h, c, r) => new DummyState()));
 
             var handler = new SuccessfulResponseHandler();
             Assert.IsFalse(handler.WasCalled);
@@ -55,11 +61,11 @@ namespace Tests.Restbucks.Client.RulesEngine
         }
 
         [Test]
-        [ExpectedException(ExpectedException = typeof(ResponseHandlerMissingException), ExpectedMessage = "Response handler missing. Type: [Tests.Restbucks.Client.RulesEngine.RulesTests+SuccessfulResponseHandler].")]
+        [ExpectedException(ExpectedException = typeof (ResponseHandlerMissingException), ExpectedMessage = "Response handler missing. Type: [Tests.Restbucks.Client.RulesEngine.RulesTests+SuccessfulResponseHandler].")]
         public void ShouldThrowExceptionIfResponseHandlerDoesNotExist()
         {
             var rules = new Rules(
-                new Rule(() => true, typeof(SuccessfulResponseHandler), "context-name", (h, c, r) => new DummyState()));
+                new Rule(() => true, typeof (SuccessfulResponseHandler), c => c.Set(ApplicationContextKeys.ContextName, "context-name"), (h, c, r) => new DummyState()));
 
             rules.Evaluate(new ResponseHandlerProvider(), new ApplicationContext(), null);
         }
@@ -68,8 +74,8 @@ namespace Tests.Restbucks.Client.RulesEngine
         public void ShouldMoveToNextRuleIfEvaluatingARuleDoesNotSucceed()
         {
             var rules = new Rules(
-                new Rule(() =>true, typeof(UnsuccessfulResponseHandler), "context-name", (h, c, r) => new DummyState()),
-                new Rule(() =>true, typeof(SuccessfulResponseHandler), "context-name", (h, c, r) => new DummyState()));
+                new Rule(() => true, typeof (UnsuccessfulResponseHandler), c => c.Set(ApplicationContextKeys.ContextName, "context-name"), (h, c, r) => new DummyState()),
+                new Rule(() => true, typeof (SuccessfulResponseHandler), c => c.Set(ApplicationContextKeys.ContextName, "context-name"), (h, c, r) => new DummyState()));
 
             var firstHandler = new UnsuccessfulResponseHandler();
             var secondHandler = new SuccessfulResponseHandler();
@@ -81,11 +87,11 @@ namespace Tests.Restbucks.Client.RulesEngine
         }
 
         [Test]
-        [ExpectedException(ExpectedException = typeof(NullStateException))]
+        [ExpectedException(ExpectedException = typeof (NullStateException))]
         public void ShouldThrowExceptionIfCreateStateFunctionReturnsNull()
         {
             var rules = new Rules(
-                new Rule(() => true, typeof(SuccessfulResponseHandler), "context-name", (h, c, r) => null));
+                new Rule(() => true, typeof (SuccessfulResponseHandler), c => c.Set(ApplicationContextKeys.ContextName, "context-name"), (h, c, r) => null));
             rules.Evaluate(new ResponseHandlerProvider(new SuccessfulResponseHandler()), new ApplicationContext(), null);
         }
 
