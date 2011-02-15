@@ -72,13 +72,13 @@ namespace Restbucks.Client.States
         private bool IsStarted()
         {
             return context.Get<string>(ApplicationContextKeys.ContextName).Equals(ContextNames.Started)
-                && response.StatusCode.Is2XX();
+                && response.IsSuccessStatusCode;
         }
 
         private bool IsRfc()
         {
             return context.Get<string>(ApplicationContextKeys.ContextName).Equals(ContextNames.Rfq)
-                && response.StatusCode.Is2XX();
+                && response.IsSuccessStatusCode;
         }
 
         public bool IsTerminalState
