@@ -28,7 +28,7 @@ namespace Restbucks.Quoting.Service.Resources
                 .AddForm(new Form(
                              uriFactory.CreateRelativeUri<Quotes>(),
                              "post", RestbucksMediaType.Value,
-                             new Uri("http://schemas.restbucks.com/shop.xsd")));
+                             new Uri("http://schemas.restbucks.com/shop")));
         }
     }
 }

@@ -95,14 +95,14 @@ namespace Tests.Restbucks.MediaType.Formatters
         public void ShouldAddFormsAsChildrenOfShopElement()
         {
             var shop = new ShopBuilder().Build()
-                .AddForm(new Form(new Uri("/quotes", UriKind.Relative), "post", RestbucksMediaType.Value, new Uri("http://schemas.restbucks.com/shop.xsd")))
+                .AddForm(new Form(new Uri("/quotes", UriKind.Relative), "post", RestbucksMediaType.Value, new Uri("http://schemas.restbucks.com/shop")))
                 .AddForm(new Form(new Uri("/orders", UriKind.Relative), "put", RestbucksMediaType.Value, new ShopBuilder().Build()));
 
             var output = new XmlOutput(new ShopFormatter(shop).CreateXml());
 
             Assert.AreEqual(2, output.GetNodeCount("r:shop/x:model"));
 
-            Assert.AreEqual("http://schemas.restbucks.com/shop.xsd", output.GetNodeValue("r:shop/x:model[1]/@schema"));
+            Assert.AreEqual("http://schemas.restbucks.com/shop", output.GetNodeValue("r:shop/x:model[1]/@schema"));
             Assert.AreEqual("/quotes", output.GetNodeValue("r:shop/x:model[1]/x:submission/@resource"));
             Assert.AreEqual("post", output.GetNodeValue("r:shop/x:model[1]/x:submission/@method"));
             Assert.AreEqual(RestbucksMediaType.Value, output.GetNodeValue("r:shop/x:model[1]/x:submission/@mediatype"));

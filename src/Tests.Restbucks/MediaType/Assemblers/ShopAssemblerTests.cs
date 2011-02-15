@@ -100,7 +100,7 @@ namespace Tests.Restbucks.MediaType.Assemblers
         {
             const string xml = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <shop xmlns=""http://schemas.restbucks.com/shop"">
-  <model schema=""http://schemas.restbucks.com/shop.xsd"" xmlns=""http://www.w3.org/2002/xforms"">
+  <model schema=""http://schemas.restbucks.com/shop"" xmlns=""http://www.w3.org/2002/xforms"">
     <instance />
     <submission resource=""/quotes"" method=""post"" mediatype=""application/restbucks+xml"" />
   </model>
@@ -121,7 +121,7 @@ namespace Tests.Restbucks.MediaType.Assemblers
             Assert.AreEqual(2, shop.Forms.Count());
 
             var firstForm = shop.Forms.First();
-            Assert.AreEqual("http://schemas.restbucks.com/shop.xsd", firstForm.Schema.ToString());
+            Assert.AreEqual("http://schemas.restbucks.com/shop", firstForm.Schema.ToString());
             Assert.IsNull(firstForm.Instance);
             Assert.AreEqual("/quotes", firstForm.Resource.ToString());
             Assert.AreEqual("post", firstForm.Method);
@@ -176,7 +176,7 @@ namespace Tests.Restbucks.MediaType.Assemblers
         {
             const string xml = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <shop xmlns=""http://schemas.restbucks.com/shop"">
-  <model schema=""http://schemas.restbucks.com/shop.xsd"" xmlns=""http://www.w3.org/2002/xforms"">
+  <model schema=""http://schemas.restbucks.com/shop"" xmlns=""http://www.w3.org/2002/xforms"">
     <instance />
     <submission resource=""http://localhost/quotes"" method=""post"" mediatype=""application/restbucks+xml"" />
   </model>

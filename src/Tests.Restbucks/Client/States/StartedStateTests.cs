@@ -6,7 +6,6 @@ using System.Net.Http.Headers;
 using NUnit.Framework;
 using Restbucks.Client;
 using Restbucks.Client.Formatters;
-using Restbucks.Client.Http;
 using Restbucks.Client.ResponseHandlers;
 using Restbucks.Client.States;
 using Restbucks.MediaType;
@@ -17,12 +16,12 @@ using Tests.Restbucks.MediaType.Helpers;
 namespace Tests.Restbucks.Client.States
 {
     [TestFixture]
-    public class StartStateTests
+    public class StartedStateTests
     {
         [Test]
         public void IsNotATerminalState()
         {
-            var state = new StartState(new ResponseHandlerProvider(), new ApplicationContext(), null);
+            var state = new StartedState(new ResponseHandlerProvider(), new ApplicationContext(), null);
             Assert.IsFalse(state.IsTerminalState);
         }
 
@@ -42,7 +41,7 @@ namespace Tests.Restbucks.Client.States
 
             var handlerProvider = new StubResponseHandlerProvider(typeof (UninitializedResponseHandler), handler);
 
-            var state = new StartState(handlerProvider, context, null);
+            var state = new StartedState(handlerProvider, context, null);
             state.HandleResponse();
 
             mocks.VerifyAll();
@@ -53,11 +52,11 @@ namespace Tests.Restbucks.Client.States
         {
             var responseHandlers = new StubResponseHandlerProvider(typeof (UninitializedResponseHandler), StubResponseHandler.Instance);
             var context = new ApplicationContext();
-            var state = new StartState(responseHandlers, context, null);
+            var state = new StartedState(responseHandlers, context, null);
 
             var newState = state.HandleResponse();
 
-            Assert.IsInstanceOf(typeof (StartState), newState);
+            Assert.IsInstanceOf(typeof (StartedState), newState);
             Assert.AreNotEqual(state, newState);
         }
 
@@ -66,7 +65,7 @@ namespace Tests.Restbucks.Client.States
         {
             var responseHandlers = new StubResponseHandlerProvider(typeof (UninitializedResponseHandler), StubResponseHandler.Instance);
             var context = new ApplicationContext();
-            var state = new StartState(responseHandlers, context, null);
+            var state = new StartedState(responseHandlers, context, null);
 
             var newState = state.HandleResponse();
 
@@ -79,7 +78,7 @@ namespace Tests.Restbucks.Client.States
         {
             var responseHandlers = new StubResponseHandlerProvider(typeof (UninitializedResponseHandler), StubResponseHandler.Instance);
             var context = new ApplicationContext();
-            var state = new StartState(responseHandlers, context, null);
+            var state = new StartedState(responseHandlers, context, null);
 
             var newState = state.HandleResponse();
 

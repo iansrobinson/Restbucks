@@ -18,14 +18,14 @@ namespace Restbucks.Client.ConsoleHost
             
             var context = new ApplicationContext();
             context.Set(ApplicationContextKeys.EntryPointUri, new Uri("http://localhost:8080/restbucks/shop/"));
-            context.Set(new EntityBodyKey(RestbucksMediaType.Value, "http://schemas.restbucks.com/shop.xsd", ContextNames.Rfq), items);
+            context.Set(new EntityBodyKey(RestbucksMediaType.Value, "http://schemas.restbucks.com/shop", ContextNames.Rfq), items);
 
             var responseHandlers = new ResponseHandlerProvider(
                 new UninitializedResponseHandler(HttpClientProvider.Instance),
                 new StartedResponseHandler(HttpClientProvider.Instance),
                 new RequestForQuoteFormResponseHandler(HttpClientProvider.Instance));
 
-            var state = new StartState(responseHandlers, context, null);
+            var state = new StartedState(responseHandlers, context, null);
             var newState = state.HandleResponse();
 
             while (newState != null && !newState.IsTerminalState)

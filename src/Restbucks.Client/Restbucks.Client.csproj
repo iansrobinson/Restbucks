@@ -75,7 +75,7 @@
     <Compile Include="RulesEngine\Rules.cs" />
     <Compile Include="RulesEngine\When.cs" />
     <Compile Include="States\QuoteRequestedState.cs" />
-    <Compile Include="States\StartState.cs" />
+    <Compile Include="States\StartedState.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Restbucks.MediaType\Restbucks.MediaType.csproj">

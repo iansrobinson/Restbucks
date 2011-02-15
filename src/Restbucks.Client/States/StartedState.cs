@@ -2,13 +2,12 @@
 using System.Net.Http;
 using System.Reflection;
 using log4net;
-using Restbucks.Client.Http;
 using Restbucks.Client.ResponseHandlers;
 using Restbucks.Client.RulesEngine;
 
 namespace Restbucks.Client.States
 {
-    public class StartState : IState
+    public class StartedState : IState
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -16,7 +15,7 @@ namespace Restbucks.Client.States
         private readonly ApplicationContext context;
         private readonly HttpResponseMessage response;
 
-        public StartState(IResponseHandlerProvider responseHandlers, ApplicationContext context, HttpResponseMessage response)
+        public StartedState(IResponseHandlerProvider responseHandlers, ApplicationContext context, HttpResponseMessage response)
         {
             this.responseHandlers = responseHandlers;
             this.context = context;
@@ -25,7 +24,7 @@ namespace Restbucks.Client.States
 
         public IState HandleResponse()
         {
-            Log.Info("Start...");
+            Log.Info("Started...");
 
             var rules = new Rules(
                 When.IsTrue(IsUninitialized)
@@ -56,12 +55,12 @@ namespace Restbucks.Client.States
 
         private static IState NewStartState(IResponseHandlerProvider h, ApplicationContext c, HttpResponseMessage r)
         {
-            return new StartState(h, c, r);
+            return new StartedState(h, c, r);
         }
 
         private static IState NewQuoteRequestedState(IResponseHandlerProvider h, ApplicationContext c, HttpResponseMessage r)
         {
-            return  new QuoteRequestedState();
+            return new QuoteRequestedState();
         }
 
         private bool IsUninitialized()
@@ -72,13 +71,13 @@ namespace Restbucks.Client.States
         private bool IsStarted()
         {
             return context.Get<string>(ApplicationContextKeys.ContextName).Equals(ContextNames.Started)
-                && response.IsSuccessStatusCode;
+                   && response.IsSuccessStatusCode;
         }
 
         private bool IsRfc()
         {
             return context.Get<string>(ApplicationContextKeys.ContextName).Equals(ContextNames.Rfq)
-                && response.IsSuccessStatusCode;
+                   && response.IsSuccessStatusCode;
         }
 
         public bool IsTerminalState

@@ -44,7 +44,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
             var entityBody = ExecuteRequestReturnEntityBody();
             var form = entityBody.Forms.First();
 
-            Assert.AreEqual(new Uri("http://schemas.restbucks.com/shop.xsd"), form.Schema);
+            Assert.AreEqual(new Uri("http://schemas.restbucks.com/shop"), form.Schema);
         }
 
         [Test]

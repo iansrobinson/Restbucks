@@ -14,7 +14,7 @@ using Tests.Restbucks.MediaType.Helpers;
 namespace Tests.Restbucks.Client.ResponseHandlers
 {
     [TestFixture]
-    public class InitializedResponseHandlerTests
+    public class UninitializedResponseHandlerTests
     {
         private static readonly Uri EntryPointUri = new Uri("http://localhost/shop/");
 
