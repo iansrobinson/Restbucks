@@ -11,7 +11,7 @@ namespace Restbucks.Client.States
 
         public bool IsTerminalState
         {
-            get { throw new NotImplementedException(); }
+            get { return true; }
         }
     }
 }

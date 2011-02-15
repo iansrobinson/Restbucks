@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Linq;
+﻿using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
@@ -24,6 +23,8 @@ namespace Restbucks.Client.ResponseHandlers
 
         public HandlerResult Handle(HttpResponseMessage response, ApplicationContext context)
         {
+            Log.Debug("  Submitting a request for quote...");
+
             var entityBody = response.Content.ReadAsObject<Shop>(RestbucksMediaTypeFormatter.Instance);
             var form = entityBody.Forms.First();
 
@@ -34,8 +35,8 @@ namespace Restbucks.Client.ResponseHandlers
             {
                 var content = formData.ToContent(RestbucksMediaTypeFormatter.Instance);
                 content.Headers.ContentType = new MediaTypeHeaderValue(RestbucksMediaType.Value);
-                
-                var request = new HttpRequestMessage(new HttpMethod(form.Method), form.Resource){Content = content};
+
+                var request = new HttpRequestMessage(new HttpMethod(form.Method), form.Resource) {Content = content};
                 var newResponse = client.Send(request);
 
                 return new HandlerResult(true, newResponse);
