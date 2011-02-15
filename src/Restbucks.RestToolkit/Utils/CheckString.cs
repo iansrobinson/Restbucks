@@ -5,12 +5,12 @@ namespace Restbucks.RestToolkit.Utils
     [Flags]
     public enum Not
     {
-        Null = 0,
-        Empty = 1,
-        Whitespace =2,
+        Null = 1,
+        Empty = 2,
+        Whitespace = 4,
         NullOrEmptyOrWhitespace = Null | Empty | Whitespace
     }
-    
+
     public static class CheckString
     {
         public static void Is(Not values, string s, string name)
@@ -25,7 +25,7 @@ namespace Restbucks.RestToolkit.Utils
 
             if ((values & Not.Empty) == Not.Empty)
             {
-                if (string.IsNullOrEmpty(s))
+                if (s != null && s.Length.Equals(0))
                 {
                     throw new ArgumentException("Value cannot be empty.", name);
                 }
@@ -33,7 +33,7 @@ namespace Restbucks.RestToolkit.Utils
 
             if ((values & Not.Whitespace) == Not.Whitespace)
             {
-                if ((s.Length > 0) && (s.Trim().Length == 0))
+                if ((!string.IsNullOrEmpty(s)) && (s.Trim().Length == 0))
                 {
                     throw new ArgumentException("Value cannot be whitespace.", name);
                 }

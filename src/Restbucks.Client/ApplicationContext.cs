@@ -38,5 +38,10 @@ namespace Restbucks.Client
         {
             return values.ContainsKey(key);
         }
+
+        public void Remove(IKey key)
+        {
+            values.Remove(key);
+        }
     }
 }

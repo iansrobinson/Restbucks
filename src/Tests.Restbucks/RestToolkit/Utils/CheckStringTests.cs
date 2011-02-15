@@ -33,5 +33,23 @@ namespace Tests.Restbucks.RestToolkit.Utils
         {
             CheckString.Is(Not.Whitespace, string.Empty, "p");
         }
+
+        [Test]
+        public void DoesNotThrowExceptionWhenCheckingForWhitespaceAndArgIsNull()
+        {
+            CheckString.Is(Not.Whitespace, null, "p");
+        }
+
+        [Test]
+        public void DoesNotThrowExceptionWhenCheckingForEmptyAndArgIsWhitespace()
+        {
+            CheckString.Is(Not.Empty, " ", "p");
+        }
+
+        [Test]
+        public void DoesNotThrowExceptionWhenCheckingForEmptyAndArgIsNull()
+        {
+            CheckString.Is(Not.Empty, null, "p");
+        }
     }
 }

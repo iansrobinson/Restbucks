@@ -88,8 +88,10 @@
     <Compile Include="Client\Helpers\MockEndpoint.cs" />
     <Compile Include="Client\Helpers\MockEndpointHttpClientProvider.cs" />
     <Compile Include="Client\HttpClientTests.cs" />
+    <Compile Include="Client\Keys\EntityBodyKeyTests.cs" />
     <Compile Include="Client\Keys\KeyEqualityComparerTests.cs" />
     <Compile Include="Client\ResponseHandlers\InitializedResponseHandlerTests.cs" />
+    <Compile Include="Client\ResponseHandlers\RequestForQuoteFormResponseHandlerTests.cs" />
     <Compile Include="Client\ResponseHandlers\ResponseHandlerProviderTests.cs" />
     <Compile Include="Client\RulesEngine\RulesTests.cs" />
     <Compile Include="Client\RulesEngine\RuleTests.cs" />

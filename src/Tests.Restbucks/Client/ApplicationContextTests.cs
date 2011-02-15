@@ -77,6 +77,35 @@ namespace Tests.Restbucks.Client
             Assert.IsFalse(context.ContainsKey(new StringKey("key-name")));
         }
 
+        [Test]
+        public void ShouldRemoveKeyValuePair()
+        {
+            var key = new StringKey("key-name");
+
+            var context = new ApplicationContext();           
+            context.Set(key, new ExampleObject());
+
+            Assert.IsTrue(context.ContainsKey(key));
+
+            context.Remove(key);
+
+            Assert.IsFalse(context.ContainsKey(key));
+        }
+
+        [Test]
+        public void RemoveShouldSucceedEvenIfKeyDoesNotExist()
+        {
+            var key = new StringKey("key-name");
+
+            var context = new ApplicationContext();
+            
+            Assert.IsFalse(context.ContainsKey(key));
+
+            context.Remove(key);
+
+            Assert.IsFalse(context.ContainsKey(key));
+        }
+
         private class ExampleObject
         {
         }

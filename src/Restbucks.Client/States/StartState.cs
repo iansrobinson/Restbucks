@@ -29,14 +29,23 @@ namespace Restbucks.Client.States
             var rules = new Rules(
                 When.IsTrue(IsUninitialized)
                     .InvokeHandler<UninitializedResponseHandler>()
-                    .UpdateContext(SetContextName("started"))
+                    .UpdateContext(SetContextName(ContextNames.Started))
                     .ReturnState(NewStartState),
                 When.IsTrue(IsStarted)
                     .InvokeHandler<StartedResponseHandler>()
-                    .UpdateContext(SetContextName("http://relations.restbucks.com/rfq"))
-                    .ReturnState(NewStartState));
+                    .UpdateContext(SetContextName(ContextNames.Rfq))
+                    .ReturnState(NewStartState),
+                When.IsTrue(IsRfc)
+                    .InvokeHandler<RequestForQuoteFormResponseHandler>()
+                    .UpdateContext(ClearContextName())
+                    .ReturnState(NewQuoteRequestedState));
 
             return rules.Evaluate(responseHandlers, context, response);
+        }
+
+        private static Action<ApplicationContext> ClearContextName()
+        {
+            return c => c.Remove(ApplicationContextKeys.ContextName);
         }
 
         private static Action<ApplicationContext> SetContextName(string value)
@@ -44,19 +53,29 @@ namespace Restbucks.Client.States
             return c => c.Set(ApplicationContextKeys.ContextName, value);
         }
 
-        private static StartState NewStartState(IResponseHandlerProvider h, ApplicationContext c, HttpResponseMessage r)
+        private static IState NewStartState(IResponseHandlerProvider h, ApplicationContext c, HttpResponseMessage r)
         {
             return new StartState(h, c, r);
         }
 
-        private bool IsStarted()
+        private static IState NewQuoteRequestedState(IResponseHandlerProvider h, ApplicationContext c, HttpResponseMessage r)
         {
-            return context.Get<string>(ApplicationContextKeys.ContextName).Equals("started");
+            return  new QuoteRequestedState();
         }
 
         private bool IsUninitialized()
         {
             return !context.ContainsKey(ApplicationContextKeys.ContextName);
+        }
+
+        private bool IsStarted()
+        {
+            return context.Get<string>(ApplicationContextKeys.ContextName).Equals(ContextNames.Started);
+        }
+
+        private bool IsRfc()
+        {
+            return context.Get<string>(ApplicationContextKeys.ContextName).Equals(ContextNames.Rfq);
         }
 
         public bool IsTerminalState
