@@ -17,7 +17,7 @@ namespace Restbucks.Client.ConsoleHost
             var items = new Shop(null).AddItem(new Item("coffee", new Amount("g", 125)));
             
             var context = new ApplicationContext();
-            context.Set(ApplicationContextKeys.EntryPointUri, new Uri("http://localhost.:8080/restbucks/shop/"));
+            context.Set(ApplicationContextKeys.EntryPointUri, new Uri("http://localhost:8080/restbucks/shop/"));
             context.Set(new EntityBodyKey(RestbucksMediaType.Value, "http://schemas.restbucks.com/shop.xsd", ContextNames.Rfq), items);
 
             var responseHandlers = new ResponseHandlerProvider(

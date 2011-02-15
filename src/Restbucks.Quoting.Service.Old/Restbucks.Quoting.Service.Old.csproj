@@ -75,6 +75,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="default.htm" />
     <Content Include="Global.asax" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -126,7 +127,7 @@
           <AutoAssignPort>False</AutoAssignPort>
           <DevelopmentServerPort>8080</DevelopmentServerPort>
           <DevelopmentServerVPath>/restbucks/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/Restbucks.Quoting.Service.Old</IISUrl>
+          <IISUrl>http://localhost/restbucks</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
