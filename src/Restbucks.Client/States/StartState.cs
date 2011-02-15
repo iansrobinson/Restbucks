@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Reflection;
 using log4net;
+using Restbucks.Client.Http;
 using Restbucks.Client.ResponseHandlers;
 using Restbucks.Client.RulesEngine;
 
@@ -70,12 +71,14 @@ namespace Restbucks.Client.States
 
         private bool IsStarted()
         {
-            return context.Get<string>(ApplicationContextKeys.ContextName).Equals(ContextNames.Started);
+            return context.Get<string>(ApplicationContextKeys.ContextName).Equals(ContextNames.Started)
+                && response.StatusCode.Is2XX();
         }
 
         private bool IsRfc()
         {
-            return context.Get<string>(ApplicationContextKeys.ContextName).Equals(ContextNames.Rfq);
+            return context.Get<string>(ApplicationContextKeys.ContextName).Equals(ContextNames.Rfq)
+                && response.StatusCode.Is2XX();
         }
 
         public bool IsTerminalState

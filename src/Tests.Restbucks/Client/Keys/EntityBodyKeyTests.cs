@@ -57,10 +57,24 @@ namespace Tests.Restbucks.Client.Keys
         }
 
         [Test]
-        public void ShouldAllowEMptySchema()
+        public void ShouldAllowEmptySchema()
         {
             var key = new EntityBodyKey("application/restbucks+xml", string.Empty, "context-name");
             Assert.AreEqual("http://context-keys.restbucks.com/media-type:application/restbucks+xml&http://context-keys.restbucks.com/schema:&http://context-keys.restbucks.com/context-name:context-name", key.Value);
+        }
+
+        [Test]
+        public void ShouldAllowNullContextName()
+        {
+            var key = new EntityBodyKey("application/restbucks+xml", "http://schemas.restbucks.com/shop", null);
+            Assert.AreEqual("http://context-keys.restbucks.com/media-type:application/restbucks+xml&http://context-keys.restbucks.com/schema:http://schemas.restbucks.com/shop&http://context-keys.restbucks.com/context-name:", key.Value);
+        }
+
+        [Test]
+        public void ShouldAllowEmptyContextName()
+        {
+            var key = new EntityBodyKey("application/restbucks+xml", "http://schemas.restbucks.com/shop", string.Empty);
+            Assert.AreEqual("http://context-keys.restbucks.com/media-type:application/restbucks+xml&http://context-keys.restbucks.com/schema:http://schemas.restbucks.com/shop&http://context-keys.restbucks.com/context-name:", key.Value);
         }
     }
 }

@@ -54,6 +54,7 @@
     <Compile Include="ContextNames.cs" />
     <Compile Include="Formatters\RestbucksMediaTypeFormatter.cs" />
     <Compile Include="Http\HttpClientProvider.cs" />
+    <Compile Include="Http\HttpStatusCodeExtensionMethods.cs" />
     <Compile Include="IHttpClientProvider.cs" />
     <Compile Include="IKey.cs" />
     <Compile Include="IState.cs" />

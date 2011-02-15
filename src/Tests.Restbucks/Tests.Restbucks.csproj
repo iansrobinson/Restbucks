@@ -88,6 +88,7 @@
     <Compile Include="Client\Helpers\MockEndpoint.cs" />
     <Compile Include="Client\Helpers\MockEndpointHttpClientProvider.cs" />
     <Compile Include="Client\HttpClientTests.cs" />
+    <Compile Include="Client\Http\HttpStatusCodeExtensionMethodsTests.cs" />
     <Compile Include="Client\Keys\EntityBodyKeyTests.cs" />
     <Compile Include="Client\Keys\KeyEqualityComparerTests.cs" />
     <Compile Include="Client\ResponseHandlers\InitializedResponseHandlerTests.cs" />
