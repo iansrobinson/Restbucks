@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Restbucks.MediaType;
@@ -23,7 +22,7 @@ namespace Restbucks.Client.Http
         {
             var client = new HttpClient(baseUri);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(RestbucksMediaType.Value));
-            
+
             return client;
         }
     }

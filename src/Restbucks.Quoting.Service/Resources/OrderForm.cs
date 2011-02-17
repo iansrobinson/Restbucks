@@ -8,7 +8,6 @@ using System.ServiceModel;
 using System.ServiceModel.Web;
 using Restbucks.MediaType;
 using Restbucks.Quoting.Service.Adapters;
-using Restbucks.RestToolkit;
 using Restbucks.RestToolkit.Hypermedia;
 
 namespace Restbucks.Quoting.Service.Resources
@@ -18,7 +17,7 @@ namespace Restbucks.Quoting.Service.Resources
     public class OrderForm
     {
         public const string SignedFormPlaceholder = "SIGNED_FORM_PLACEHOLDER";
-        
+
         private static readonly UriFactoryWorker OrdersUriFactoryWorker = new UriFactoryWorker("orders", string.Format("?c=12345&s={0}", SignedFormPlaceholder));
         private const string OrderFormUriTemplate = "{id}";
 
@@ -51,7 +50,6 @@ namespace Restbucks.Quoting.Service.Resources
             response.Headers.CacheControl = new CacheControlHeaderValue {Public = true};
             response.Content = new ByteArrayContent(new byte[] {});
             response.Content.Headers.Expires = quotation.CreatedDateTime.AddDays(7.0);
-            response.Content.Headers.ContentLocation = uriFactory.CreateAbsoluteUri<Quote>(baseUri, quotation.Id);
 
             return new Shop(baseUri)
                 .AddForm(new Form(

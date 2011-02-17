@@ -44,7 +44,6 @@ namespace Restbucks.Quoting.Service.Old.Resources
             response.StatusCode = HttpStatusCode.OK;
             response.Headers.CacheControl = new CacheControl {Public = true};
             response.Headers.Expires = quote.CreatedDateTime.AddDays(7.0).UtcDateTime;
-            response.Headers.ContentLocation = uriFactory.CreateAbsoluteUri<Quote>(baseUri, quote.Id);
 
             return new Shop(baseUri)
                 .AddForm(new Form(

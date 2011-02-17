@@ -137,15 +137,6 @@ namespace Tests.Restbucks.Quoting.Service.Resources
             Assert.AreEqual(new Uri("http://localhost:8081/orders?c=12345&s=" + OrderForm.SignedFormPlaceholder), entityBody.Forms.First().Resource);
         }
 
-        [Test]
-        public void ShouldIncludeContentLocationHeaderPointingToUnderlyingQuoteResource()
-        {
-            var response = ExecuteRequestReturnResponse();
-
-            var expectedUriValue = new Uri(BaseAddress + "quote/" + StubQuotationEngine.QuoteId);
-            Assert.AreEqual(expectedUriValue, response.Content.Headers.ContentLocation.ToString());
-        }
-
         private static HttpResponseMessage ExecuteRequestReturnResponse()
         {
             var orderForm = new OrderFormBuilder().WithQuotationEngine(StubQuotationEngine.Instance).Build();
