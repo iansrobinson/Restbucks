@@ -6,7 +6,6 @@ using System.ServiceModel;
 using System.ServiceModel.Web;
 using Restbucks.MediaType;
 using Restbucks.Quoting.Service.Adapters;
-using Restbucks.RestToolkit;
 using Restbucks.RestToolkit.Hypermedia;
 
 namespace Restbucks.Quoting.Service.Resources

@@ -8,7 +8,6 @@ using System.ServiceModel;
 using System.ServiceModel.Web;
 using Restbucks.MediaType;
 using Restbucks.Quoting.Service.Adapters;
-using Restbucks.RestToolkit;
 using Restbucks.RestToolkit.Hypermedia;
 
 namespace Restbucks.Quoting.Service.Resources
@@ -17,8 +16,6 @@ namespace Restbucks.Quoting.Service.Resources
     [UriTemplate("quote", "{id}")]
     public class Quote
     {
-        private const string QuoteUriTemplate = "{id}";
-
         private readonly UriFactory uriFactory;
         private readonly IQuotationEngine quotationEngine;
 
@@ -28,7 +25,7 @@ namespace Restbucks.Quoting.Service.Resources
             this.quotationEngine = quotationEngine;
         }
 
-        [WebGet(UriTemplate = QuoteUriTemplate)]
+        [WebGet]
         public Shop Get(string id, HttpRequestMessage request, HttpResponseMessage response)
         {
             Quotation quotation;
@@ -45,8 +42,8 @@ namespace Restbucks.Quoting.Service.Resources
             var baseUri = uriFactory.CreateBaseUri<Quote>(request.RequestUri);
 
             response.StatusCode = HttpStatusCode.OK;
-            response.Headers.CacheControl = new CacheControlHeaderValue { Public = true };
-            response.Content = new ByteArrayContent(new byte[] { });
+            response.Headers.CacheControl = new CacheControlHeaderValue {Public = true};
+            response.Content = new ByteArrayContent(new byte[] {});
             response.Content.Headers.Expires = quotation.CreatedDateTime.AddDays(7.0);
 
             return new Shop(baseUri, quotation.LineItems.Select(li => new LineItemToItem(li).Adapt()))

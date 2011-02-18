@@ -13,14 +13,13 @@ using Restbucks.RestToolkit.Hypermedia;
 namespace Restbucks.Quoting.Service.Resources
 {
     [ServiceContract]
-    [UriTemplate("order-form", OrderFormUriTemplate)]
+    [UriTemplate("order-form", "{id}")]
     public class OrderForm
     {
         public const string SignedFormPlaceholder = "SIGNED_FORM_PLACEHOLDER";
 
         private static readonly UriFactoryWorker OrdersUriFactoryWorker = new UriFactoryWorker("orders", string.Format("?c=12345&s={0}", SignedFormPlaceholder));
-        private const string OrderFormUriTemplate = "{id}";
-
+        
         private readonly UriFactory uriFactory;
         private readonly IQuotationEngine quotationEngine;
 
@@ -30,7 +29,7 @@ namespace Restbucks.Quoting.Service.Resources
             this.quotationEngine = quotationEngine;
         }
 
-        [WebGet(UriTemplate = OrderFormUriTemplate)]
+        [WebGet]
         public Shop Get(string id, HttpRequestMessage request, HttpResponseMessage response)
         {
             Quotation quotation;
