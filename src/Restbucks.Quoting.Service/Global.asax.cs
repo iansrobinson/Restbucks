@@ -12,7 +12,6 @@ using Microsoft.ServiceModel.Http;
 using Restbucks.Quoting.Implementation;
 using Restbucks.Quoting.Service.Processors;
 using Restbucks.Quoting.Service.Resources;
-using Restbucks.RestToolkit;
 using Restbucks.RestToolkit.Hypermedia;
 
 namespace Restbucks.Quoting.Service
@@ -43,7 +42,9 @@ namespace Restbucks.Quoting.Service
             container.Register(Component.For(typeof (FormsIntegrityResponseProcessor)).LifeStyle.Singleton);
             container.Register(Component.For(typeof (UriFactory)).Instance(uriFactory).LifeStyle.Singleton);
 
-            new ResourceManager(container, RouteTable.Routes).RegisterResourcesFor(Assembly.GetExecutingAssembly());
+            var configuration = new Config(container);
+            
+            new ResourceManager(configuration, container, RouteTable.Routes).RegisterResourcesFor(Assembly.GetExecutingAssembly());
         }
 
         protected void Application_End(object sender, EventArgs e)
@@ -59,12 +60,12 @@ namespace Restbucks.Quoting.Service
             private readonly HttpHostConfiguration configuration;
             private readonly MethodInfo register;
 
-            public ResourceManager(IWindsorContainer container, RouteCollection routes)
+            public ResourceManager(HttpHostConfiguration configuration, IWindsorContainer container, RouteCollection routes)
             {
+                this.configuration = configuration;
                 this.container = container;
                 this.routes = routes;
 
-                configuration = new Config(container);
                 register = GetType().GetMethod("Register", BindingFlags.Instance | BindingFlags.NonPublic);
             }
 

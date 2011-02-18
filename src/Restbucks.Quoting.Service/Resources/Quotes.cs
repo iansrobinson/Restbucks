@@ -23,7 +23,7 @@ namespace Restbucks.Quoting.Service.Resources
             this.quotationEngine = quotationEngine;
         }
 
-        [WebInvoke(Method = "POST", UriTemplate = "")]
+        [WebInvoke(Method = "POST")]
         public Shop Post(Shop shop, HttpRequestMessage request, HttpResponseMessage response)
         {
             if (shop == null)

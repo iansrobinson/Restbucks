@@ -19,7 +19,7 @@ namespace Restbucks.Quoting.Service.Resources
             this.uriFactory = uriFactory;
         }
 
-        [WebGet(UriTemplate = "")]
+        [WebGet]
         public Shop Get(HttpRequestMessage request, HttpResponseMessage response)
         {
             response.Headers.CacheControl = new CacheControlHeaderValue {Public = true, MaxAge = new TimeSpan(24, 0, 0)};
