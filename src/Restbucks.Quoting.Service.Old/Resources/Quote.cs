@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.ServiceModel;
+using System.ServiceModel.Web;
 using Microsoft.Http;
 using Microsoft.Http.Headers;
 using Restbucks.MediaType;
@@ -10,6 +12,7 @@ using Restbucks.RestToolkit.Hypermedia;
 
 namespace Restbucks.Quoting.Service.Old.Resources
 {
+    [ServiceContract]
     [UriTemplate("quote", "{id}")]
     public class Quote
     {
@@ -22,11 +25,7 @@ namespace Restbucks.Quoting.Service.Old.Resources
             this.quoteEngine = quoteEngine;
         }
 
-        public Quote(IQuotationEngine quoteEngine)
-        {
-            this.quoteEngine = quoteEngine;
-        }
-
+        [WebGet]
         public Shop Get(string id, HttpRequestMessage request, HttpResponseMessage response)
         {
             Quotation quote;

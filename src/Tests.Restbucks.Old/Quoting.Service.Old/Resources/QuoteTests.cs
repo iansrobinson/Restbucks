@@ -67,18 +67,13 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
         [Test]
         public void ShouldReturn404NotFoundWhenGettingQuoteThatDoesNotExist()
         {
-            var mocks = new MockRepository();
-            var quoteEngine = mocks.Stub<IQuotationEngine>();
-
-            using (mocks.Record())
-            {
-                SetupResult.For(quoteEngine.GetQuote(Guid.Empty)).IgnoreArguments().Throw(new KeyNotFoundException());
-            }
-            mocks.ReplayAll();
+            var quoteEngine = MockRepository.GenerateStub<IQuotationEngine>();
+            quoteEngine.Stub(e => e.GetQuote(Guid.Empty)).Throw(new KeyNotFoundException());
 
             var response = new HttpResponseMessage();
+
             var quote = new Quote(DefaultUriFactory.Instance, quoteEngine);
-            quote.Get(Guid.NewGuid().ToString("N"), new HttpRequestMessage(), response);
+            quote.Get(Guid.Empty.ToString("N"), new HttpRequestMessage(), response);
 
             Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
         }
@@ -87,10 +82,17 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
         public void ResponseShouldExpire7DaysFromDateTimeQuoteWasCreated()
         {
             DateTimeOffset createdDateTime = DateTime.Now;
-            var result = ExecuteRequestReturnResult(Guid.NewGuid(), createdDateTime);
+            
+            var quoteEngine = MockRepository.GenerateStub<IQuotationEngine>();
+            quoteEngine.Stub(e => e.GetQuote(Guid.Empty)).Return(new Quotation(Guid.Empty, createdDateTime, new LineItem[]{}));
 
-            Assert.AreEqual("public", result.Response.Headers.CacheControl.ToString());
-            Assert.AreEqual(createdDateTime.AddDays(7.00).UtcDateTime, result.Response.Headers.Expires);
+            var response = new HttpResponseMessage();
+            
+            var quote = new Quote(DefaultUriFactory.Instance, quoteEngine);
+            quote.Get(Guid.Empty.ToString("N"), new HttpRequestMessage{Uri = new Uri("http://localhost/quote/")}, response);
+
+            Assert.AreEqual("public", response.Headers.CacheControl.ToString());
+            Assert.AreEqual(createdDateTime.AddDays(7.00).UtcDateTime, response.Headers.Expires);
         }
 
         [Test]
