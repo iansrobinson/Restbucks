@@ -23,8 +23,10 @@ namespace Tests.Restbucks.MediaType
         [Test]
         public void ShouldParseCompactUriIntoCompactUriLinkRelation()
         {
-            var linkRelation = LinkRelation.Parse("rb:order", s => "http://relations.restbucks.com/");
+            var linkRelation = LinkRelation.Parse("rb:rfq", s => "http://relations.restbucks.com/");
             Assert.IsInstanceOf<CompactUriLinkRelation>(linkRelation);
+            Assert.AreEqual("rb:rfq", linkRelation.SerializableValue);
+            Assert.AreEqual("http://relations.restbucks.com/rfq", linkRelation.Value);
         }
 
         [Test]
