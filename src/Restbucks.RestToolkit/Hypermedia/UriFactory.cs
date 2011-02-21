@@ -20,9 +20,9 @@ namespace Restbucks.RestToolkit.Hypermedia
             {
                 throw new UriTemplateMissingException();
             }
-            var uriFactory =  ((UriTemplateAttribute)attributes[0]).UriFactoryWorker;
+            var worker =  ((UriTemplateAttribute)attributes[0]).UriFactoryWorker;
 
-            workers.Add(typeof(T), uriFactory);
+            workers.Add(typeof(T), worker);
         }
 
         public string GetRoutePrefix<T>() where T :class

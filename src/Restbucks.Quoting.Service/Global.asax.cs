@@ -43,7 +43,7 @@ namespace Restbucks.Quoting.Service
             container.Register(Component.For(typeof (UriFactory)).Instance(uriFactory).LifeStyle.Singleton);
 
             var configuration = new Config(container);
-            
+
             new ResourceManager(configuration, container, RouteTable.Routes).RegisterResourcesFor(Assembly.GetExecutingAssembly());
         }
 

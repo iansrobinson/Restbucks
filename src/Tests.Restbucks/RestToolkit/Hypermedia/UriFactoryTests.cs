@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using Restbucks.Quoting.Service.Resources;
 using Restbucks.RestToolkit.Hypermedia;
 
 namespace Tests.Restbucks.RestToolkit.Hypermedia
@@ -9,132 +10,144 @@ namespace Tests.Restbucks.RestToolkit.Hypermedia
     public class UriFactoryTests
     {
         [Test]
+        public void UriFactoryExample()
+        {
+            var uriFactory = new UriFactory();
+            uriFactory.Register<Quote>();
+            uriFactory.Register<OrderForm>();
+
+            Assert.AreEqual(new Uri("http://restbucks.com/quote/1234"), uriFactory.CreateAbsoluteUri<Quote>(new Uri("http://restbucks.com"), 1234));
+            Assert.AreEqual(new Uri("order-form/1234", UriKind.Relative), uriFactory.CreateRelativeUri<OrderForm>(1234));
+            Assert.AreEqual(new Uri("http://restbucks.com/"), uriFactory.CreateBaseUri<Quote>(new Uri("http://restbucks.com/quote/1234")));
+        }
+        
+        [Test]
         public void ShouldCreateBaseUriForRegisteredClass()
         {
-            var uriFactories = new UriFactory();
-            uriFactories.Register<MyResource>();
+            var uriFactory = new UriFactory();
+            uriFactory.Register<MyResource>();
 
-            Assert.AreEqual(new Uri("http://localhost:8080/virtual-directory/"), uriFactories.CreateBaseUri<MyResource>(new Uri("http://localhost:8080/virtual-directory/my-resource/1")));
+            Assert.AreEqual(new Uri("http://localhost:8080/virtual-directory/"), uriFactory.CreateBaseUri<MyResource>(new Uri("http://localhost:8080/virtual-directory/my-resource/1")));
         }
 
         [Test]
         [ExpectedException(ExpectedException = typeof (KeyNotFoundException))]
         public void ThrowsExceptionIfTryingToCreateBaseUriForEntryWithoutRegisteredType()
         {
-            var uriFactories = new UriFactory();
-            uriFactories.CreateBaseUri<MyResource>(new Uri("http://localhost:8080/virtual-directory/my-resource/1"));
+            var uriFactory = new UriFactory();
+            uriFactory.CreateBaseUri<MyResource>(new Uri("http://localhost:8080/virtual-directory/my-resource/1"));
         }
 
         [Test]
         public void ShouldCreateAbsoluteUriForRegisteredClass()
         {
-            var uriFactories = new UriFactory();
-            uriFactories.Register<MyResource>();
+            var uriFactory = new UriFactory();
+            uriFactory.Register<MyResource>();
 
-            Assert.AreEqual(new Uri("http://localhost:8080/virtual-directory/my-resource/1"), uriFactories.CreateAbsoluteUri<MyResource>(new Uri("http://localhost:8080/virtual-directory/"), "1"));
+            Assert.AreEqual(new Uri("http://localhost:8080/virtual-directory/my-resource/1"), uriFactory.CreateAbsoluteUri<MyResource>(new Uri("http://localhost:8080/virtual-directory/"), "1"));
         }
 
         [Test]
         [ExpectedException(ExpectedException = typeof (KeyNotFoundException))]
         public void ThrowsExceptionIfTryingToCreateAbsoluteUriForEntryWithoutRegisteredType()
         {
-            var uriFactories = new UriFactory();
-            uriFactories.CreateAbsoluteUri<MyResource>(new Uri("http://localhost:8080/virtual-directory/"), "1");
+            var uriFactory = new UriFactory();
+            uriFactory.CreateAbsoluteUri<MyResource>(new Uri("http://localhost:8080/virtual-directory/"), "1");
         }
 
         [Test]
         public void ShouldCreateRelativeUriForRegisteredClass()
         {
-            var uriFactories = new UriFactory();
-            uriFactories.Register<MyResource>();
+            var uriFactory = new UriFactory();
+            uriFactory.Register<MyResource>();
 
-            Assert.AreEqual(new Uri("my-resource/1", UriKind.Relative), uriFactories.CreateRelativeUri<MyResource>("1"));
+            Assert.AreEqual(new Uri("my-resource/1", UriKind.Relative), uriFactory.CreateRelativeUri<MyResource>("1"));
         }
 
         [Test]
         [ExpectedException(ExpectedException = typeof (KeyNotFoundException))]
         public void ThrowsExceptionIfTryingToCreateRelativeUriForEntryWithoutRegisteredType()
         {
-            var uriFactories = new UriFactory();
-            uriFactories.CreateRelativeUri<MyResource>("1");
+            var uriFactory = new UriFactory();
+            uriFactory.CreateRelativeUri<MyResource>("1");
         }
 
         [Test]
         [ExpectedException(ExpectedException = typeof (ArgumentException))]
         public void ThrowsExceptionIfEntryAlreadyExistsForType()
         {
-            var uriFactories = new UriFactory();
-            uriFactories.Register<MyResource>();
-            uriFactories.Register<MyResource>();
+            var uriFactory = new UriFactory();
+            uriFactory.Register<MyResource>();
+            uriFactory.Register<MyResource>();
         }
 
         [Test]
         [ExpectedException(ExpectedException = typeof (UriTemplateMissingException))]
         public void ThrowsExceptionIfTypeIsNotAttributedWithUriTemplateAttribute()
         {
-            var uriFactories = new UriFactory();
-            uriFactories.Register<string>();
+            var uriFactory = new UriFactory();
+            uriFactory.Register<string>();
         }
 
         [Test]
         public void ShouldReturnRoutePrefixForRegisteredClass()
         {
-            var uriFactories = new UriFactory();
-            uriFactories.Register<MyResource>();
+            var uriFactory = new UriFactory();
+            uriFactory.Register<MyResource>();
 
-            Assert.AreEqual("my-resource", uriFactories.GetRoutePrefix<MyResource>());
+            Assert.AreEqual("my-resource", uriFactory.GetRoutePrefix<MyResource>());
         }
 
         [Test]
         [ExpectedException(ExpectedException = typeof (KeyNotFoundException))]
         public void ThrowsExceptionIfTryingToGetRoutePrefixForEntryWithoutRegisteredType()
         {
-            var uriFactories = new UriFactory();
-            uriFactories.GetRoutePrefix<MyResource>();
+            var uriFactory = new UriFactory();
+            uriFactory.GetRoutePrefix<MyResource>();
         }
 
         [Test]
         public void ShouldReturnUriTemplateValueForRegisteredClass()
         {
-            var uriFactories = new UriFactory();
-            uriFactories.Register<MyResource>();
+            var uriFactory = new UriFactory();
+            uriFactory.Register<MyResource>();
 
-            Assert.AreEqual("{id}", uriFactories.GetUriTemplateValue<MyResource>());
+            Assert.AreEqual("{id}", uriFactory.GetUriTemplateValue<MyResource>());
         }
 
         [Test]
         [ExpectedException(ExpectedException = typeof (KeyNotFoundException))]
         public void ThrowsExceptionIfTryingToGetUriTemplateValueForEntryWithoutRegisteredType()
         {
-            var uriFactories = new UriFactory();
-            uriFactories.GetUriTemplateValue<MyResource>();
+            var uriFactory = new UriFactory();
+            uriFactory.GetUriTemplateValue<MyResource>();
         }
 
         [Test]
         public void WhenPassingGuidAsUriTemplateParameterShouldRemoveAllDashes()
         {
-            var uriFactories = new UriFactory();
-            uriFactories.Register<MyResource>();
+            var uriFactory = new UriFactory();
+            uriFactory.Register<MyResource>();
 
-            Assert.AreEqual(new Uri("my-resource/00000000000000000000000000000000", UriKind.Relative), uriFactories.CreateRelativeUri<MyResource>(Guid.Empty));
+            Assert.AreEqual(new Uri("my-resource/00000000000000000000000000000000", UriKind.Relative), uriFactory.CreateRelativeUri<MyResource>(Guid.Empty));
         }
 
         [Test]
         public void ShouldReturnUriTemplateValueForRegisteredType()
         {
-            var uriFactories = new UriFactory();
-            uriFactories.Register<MyResource>();
+            var uriFactory = new UriFactory();
+            uriFactory.Register<MyResource>();
 
-            Assert.AreEqual("{id}", uriFactories.GetUriTemplateValueFor(typeof (MyResource)));
+            Assert.AreEqual("{id}", uriFactory.GetUriTemplateValueFor(typeof (MyResource)));
         }
 
         [Test]
         [ExpectedException(typeof (KeyNotFoundException))]
         public void ThrowsExceptionWhenTryingToGetUriTemplateValueForTypeThatHasNotBeenRegistered()
         {
-            var uriFactories = new UriFactory();
+            var uriFactory = new UriFactory();
 
-            uriFactories.GetUriTemplateValueFor(typeof (MyResource));
+            uriFactory.GetUriTemplateValueFor(typeof (MyResource));
         }
 
         [UriTemplate("my-resource", "{id}")]

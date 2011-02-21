@@ -19,7 +19,7 @@ namespace Restbucks.MediaType.Assemblers
                            return ns.NamespaceName;
                        };
         }
-
+        
         private static LinkRelation[] CreateLinkRelationsFromRelAttribute(string value, XElement link)
         {
             return value.Split(new[] {' '})
