@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using Restbucks.Client.ResponseHandlers;
+using Restbucks.Client.States;
 
 namespace Restbucks.Client.RulesEngine
 {
@@ -13,24 +13,15 @@ namespace Restbucks.Client.RulesEngine
 
         public Rules(params IRule[] rules)
         {
-            var hasNonTerminalElseRules = rules.Where(
-                (rule, index) => rule.GetType().Equals(typeof (ElseRule))
-                                 && index < rules.GetUpperBound(0))
-                                             .Count() > 0;
-
-            if (hasNonTerminalElseRules)
+            for (var i = 0; i < rules.Length - 1; i++)
             {
-                throw new ArgumentException("ElseRule must be last rule in list.", "rules");
+                if (rules[i].GetType().Equals(typeof (ElseRule)))
+                {
+                    throw new ArgumentException("ElseRule must be last rule in list.", "rules");
+                }
             }
 
-            if (rules.LastOrDefault(rule => rule.GetType().Equals(typeof (ElseRule))) == null)
-            {
-                this.rules = rules.Concat(new[]{ Else.UpdateContext(c => { }).Terminate()});
-            }
-            else
-            {
-                this.rules = rules;
-            } 
+            this.rules = rules;
         }
 
         public IState Evaluate(IResponseHandlerProvider responseHandlers, ApplicationContext context, HttpResponseMessage response)
@@ -74,7 +65,7 @@ namespace Restbucks.Client.RulesEngine
                 }
             }
 
-            return null;
+            return new TerminalState();
         }
     }
 }
