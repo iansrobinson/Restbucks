@@ -27,7 +27,7 @@ namespace Tests.Restbucks.Client.RulesEngine
             IRule rule = Else.UpdateContext(c => c.Set(new StringKey("key-name"), "value")).ReturnState((h, c, r) => new DummyState());
             var context = new ApplicationContext();
 
-            rule.ContextAction(context);
+            rule.CreateNewState(new ResponseHandlerProvider(), context, new HttpResponseMessage());
 
             Assert.AreEqual("value", context.Get<string>(new StringKey("key-name")));
         }
@@ -36,7 +36,7 @@ namespace Tests.Restbucks.Client.RulesEngine
         public void ShouldReturnRuleThatCreatesNewStateWithSuppliedFunction()
         {
             IRule rule = Else.UpdateContext(c => c.Set(new StringKey("key-name"), "value")).ReturnState((h, c, r) => new DummyState());
-            var state = rule.CreateState(new ResponseHandlerProvider(), new ApplicationContext(), new HttpResponseMessage());
+            var state = rule.CreateNewState(new ResponseHandlerProvider(), new ApplicationContext(), new HttpResponseMessage());
 
             Assert.IsInstanceOf(typeof (DummyState), state);
         }
@@ -47,7 +47,7 @@ namespace Tests.Restbucks.Client.RulesEngine
             IRule rule = Else.ReturnState((h, c, r) => new DummyState());
             var context = new ApplicationContext();
 
-            rule.ContextAction(context);
+            rule.CreateNewState(new ResponseHandlerProvider(), context, new HttpResponseMessage());
 
             var dict = PrivateField.GetValue<Dictionary<IKey, object>>("values", context);
             Assert.AreEqual(0, dict.Keys.Count);
@@ -57,8 +57,8 @@ namespace Tests.Restbucks.Client.RulesEngine
         public void IfTerminateIsSpecifiedInPlaceOfCreateStateFunctionShouldReturnRuleThatCreatesTerminalState()
         {
             IRule rule = Else.UpdateContext(c => { }).Terminate();
-            var state = rule.CreateState(new ResponseHandlerProvider(), new ApplicationContext(), new HttpResponseMessage());
-
+            var state = rule.CreateNewState(new ResponseHandlerProvider(), new ApplicationContext(), new HttpResponseMessage());
+            
             Assert.IsInstanceOf(typeof (TerminalState), state);
         }
 

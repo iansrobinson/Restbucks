@@ -71,7 +71,6 @@
     <Compile Include="RulesEngine\Else.cs" />
     <Compile Include="RulesEngine\ElseRule.cs" />
     <Compile Include="RulesEngine\IRule.cs" />
-    <Compile Include="RulesEngine\NullResponseHandler.cs" />
     <Compile Include="RulesEngine\NullStateException.cs" />
     <Compile Include="RulesEngine\On.cs" />
     <Compile Include="RulesEngine\ResponseHandlerMissingException.cs" />

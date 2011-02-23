@@ -43,7 +43,7 @@ namespace Tests.Restbucks.Client.RulesEngine
                          (h, c, r) => new DummyState())
                 );
 
-            rules.Evaluate(new ResponseHandlerProvider(NullResponseHandler.Instance), new ApplicationContext(), null);
+            rules.Evaluate(new ResponseHandlerProvider(), new ApplicationContext(), null);
 
             Assert.IsTrue(processOrder.SequenceEqual(new[] {"first", "second", "third"}));
         }
@@ -111,7 +111,7 @@ namespace Tests.Restbucks.Client.RulesEngine
         public void ShouldReturnTerminalStateWhenNoRuleSucceedsAndNoElseRuleIsSupplied()
         {
             var rules = new Rules();
-            var state = rules.Evaluate(new ResponseHandlerProvider(NullResponseHandler.Instance), new ApplicationContext(), new HttpResponseMessage());
+            var state = rules.Evaluate(new ResponseHandlerProvider(), new ApplicationContext(), new HttpResponseMessage());
 
             Assert.IsInstanceOf(typeof (TerminalState), state);
         }
@@ -125,7 +125,7 @@ namespace Tests.Restbucks.Client.RulesEngine
 
             var context = new ApplicationContext();
 
-            var state = rules.Evaluate(new ResponseHandlerProvider(NullResponseHandler.Instance), context, new HttpResponseMessage());
+            var state = rules.Evaluate(new ResponseHandlerProvider(), context, new HttpResponseMessage());
 
             Assert.AreEqual("value", context.Get<string>(new StringKey("key")));
             Assert.IsInstanceOf(typeof(DummyTerminalState), state);

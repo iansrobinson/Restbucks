@@ -28,17 +28,6 @@ namespace Tests.Restbucks.Client.RulesEngine
         }
 
         [Test]
-        public void ShouldReturnRuleWithSuppliedResponseHandlerType()
-        {
-            IRule rule = When.IsTrue(() => true)
-                .InvokeHandler<DummyHandler>()
-                .UpdateContext(DoNothingContextAction())
-                .ReturnState(CreateDummyState());
-
-            Assert.AreEqual(typeof(DummyHandler), rule.ResponseHandlerType);
-        }
-
-        [Test]
         public void ShouldReturnRuleThatUpdatesContextWithSuppliedAction()
         {
             IRule rule = When.IsTrue(() => true)
@@ -48,7 +37,7 @@ namespace Tests.Restbucks.Client.RulesEngine
 
             var context = new ApplicationContext();
 
-            rule.ContextAction(context);
+            rule.CreateNewState(new ResponseHandlerProvider(), context, new HttpResponseMessage());
 
             Assert.AreEqual("value", context.Get<string>(new StringKey("key-name")));
         }
@@ -61,7 +50,7 @@ namespace Tests.Restbucks.Client.RulesEngine
                 .UpdateContext(DoNothingContextAction())
                 .ReturnState(CreateDummyState());
 
-            var state = rule.CreateState(new ResponseHandlerProvider(), new ApplicationContext(), new HttpResponseMessage());
+            var state = rule.CreateNewState(new ResponseHandlerProvider(), new ApplicationContext(), new HttpResponseMessage());
 
             Assert.IsInstanceOf(typeof(DummyState), state);
         }

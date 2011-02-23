@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Reflection;
 using Restbucks.Client.ResponseHandlers;
 
 namespace Restbucks.Client.RulesEngine
@@ -20,19 +21,23 @@ namespace Restbucks.Client.RulesEngine
             get { return true; }
         }
 
-        Type IRule.ResponseHandlerType
+        HandlerResult IRule.Evaluate(MethodInfo getResponseHandler, IResponseHandlerProvider responseHandlers, HttpResponseMessage response, ApplicationContext context)
         {
-            get { return typeof (NullResponseHandler); }
+            return new HandlerResult(true, response);
         }
 
-        Action<ApplicationContext> IRule.ContextAction
+        IState IRule.CreateNewState(IResponseHandlerProvider responseHandlers, ApplicationContext context, HttpResponseMessage response)
         {
-            get { return contextAction; }
-        }
+            contextAction(context);
 
-        Func<IResponseHandlerProvider, ApplicationContext, HttpResponseMessage, IState> IRule.CreateState
-        {
-            get { return createState; }
+            var state = createState(responseHandlers, context, response);
+
+            if (state == null)
+            {
+                throw new NullStateException();
+            }
+
+            return state;
         }
     }
 }
