@@ -12,22 +12,6 @@ namespace Tests.Restbucks.Client.RulesEngine
     public class WhenTests
     {
         [Test]
-        public void ShouldReturnRuleThatIsApplicableAccordingToSuppliedCondition()
-        {
-            IRule rule1 = When.IsTrue(() => true)
-                .InvokeHandler<DummyHandler>()
-                .UpdateContext(DoNothingContextAction())
-                .ReturnState(CreateDummyState());
-            Assert.IsTrue(rule1.IsApplicable);
-
-            IRule rule2 = When.IsTrue(() => false)
-                .InvokeHandler<DummyHandler>()
-                .UpdateContext(DoNothingContextAction())
-                .ReturnState(CreateDummyState());
-            Assert.IsFalse(rule2.IsApplicable);
-        }
-
-        [Test]
         public void ShouldReturnRuleThatUpdatesContextWithSuppliedAction()
         {
             IRule rule = When.IsTrue(() => true)

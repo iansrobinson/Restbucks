@@ -11,16 +11,6 @@ namespace Tests.Restbucks.Client.RulesEngine
     public class RuleTests
     {
         [Test]
-        public void ShouldEvaluateCondition()
-        {
-            IRule rule1 = new Rule(() => true, typeof (DummyResponseHandler), c => c.Set(ApplicationContextKeys.SemanticContext, "context-name"), (h, c, r) => null);
-            Assert.IsTrue(rule1.IsApplicable);
-
-            IRule rule2 = new Rule(() => false, typeof (DummyResponseHandler), c => c.Set(ApplicationContextKeys.SemanticContext, "context-name"), (h, c, r) => null);
-            Assert.IsFalse(rule2.IsApplicable);
-        }
-
-        [Test]
         [ExpectedException(ExpectedException = typeof(ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: condition")]
         public void ThrowsExceptionIfConditionIsNull()
         {

@@ -15,10 +15,19 @@ namespace Tests.Restbucks.Client.RulesEngine
     public class ElseTests
     {
         [Test]
-        public void ShouldReturnRuleWhichIsAlwaysApplicable()
+        public void EvaluateShouldReturnSuccessfulResult()
         {
             IRule rule = Else.UpdateContext(c => { }).ReturnState((h, c, r) => new DummyState());
-            Assert.IsTrue(rule.IsApplicable);
+            var result = rule.Evaluate(null, new ResponseHandlerProvider(), new HttpResponseMessage(), new ApplicationContext());
+            Assert.IsTrue(result.IsSuccessful);
+        }
+
+        [Test]
+        public void EvaluateShouldReturnNullResponse()
+        {
+            IRule rule = Else.UpdateContext(c => { }).ReturnState((h, c, r) => new DummyState());
+            var result = rule.Evaluate(null, new ResponseHandlerProvider(), new HttpResponseMessage(), new ApplicationContext());
+            Assert.IsNull(result.Response);
         }
 
         [Test]

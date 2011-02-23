@@ -16,14 +16,9 @@ namespace Restbucks.Client.RulesEngine
             this.createState = createState;
         }
 
-        bool IRule.IsApplicable
-        {
-            get { return true; }
-        }
-
         HandlerResult IRule.Evaluate(MethodInfo getResponseHandler, IResponseHandlerProvider responseHandlers, HttpResponseMessage response, ApplicationContext context)
         {
-            return new HandlerResult(true, response);
+            return new HandlerResult(true, null);
         }
 
         IState IRule.CreateNewState(IResponseHandlerProvider responseHandlers, ApplicationContext context, HttpResponseMessage response)

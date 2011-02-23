@@ -26,13 +26,13 @@ namespace Restbucks.Client.RulesEngine
             this.createState = createState;
         }
 
-        bool IRule.IsApplicable
-        {
-            get { return condition(); }
-        }
-
         HandlerResult IRule.Evaluate(MethodInfo getResponseHandler, IResponseHandlerProvider responseHandlers, HttpResponseMessage response, ApplicationContext context)
         {
+            if (!condition())
+            {
+                return new HandlerResult(false, null);
+            }
+            
             var genericMethod = getResponseHandler.MakeGenericMethod(new[] {responseHandlerType});
             IResponseHandler handler;
             try

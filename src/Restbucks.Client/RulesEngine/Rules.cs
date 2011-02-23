@@ -30,13 +30,10 @@ namespace Restbucks.Client.RulesEngine
 
             foreach (var rule in rules)
             {
-                if (rule.IsApplicable)
+                var result = rule.Evaluate(getResponseHandler, responseHandlers, response, context);
+                if (result.IsSuccessful)
                 {
-                    var result = rule.Evaluate(getResponseHandler, responseHandlers, response, context);
-                    if (result.IsSuccessful)
-                    {
-                        return rule.CreateNewState(responseHandlers, context, result.Response);
-                    }
+                    return rule.CreateNewState(responseHandlers, context, result.Response);
                 }
             }
 

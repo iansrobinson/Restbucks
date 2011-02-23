@@ -6,7 +6,6 @@ namespace Restbucks.Client.RulesEngine
 {
     public interface IRule
     {
-        bool IsApplicable { get; }
         HandlerResult Evaluate(MethodInfo getResponseHandler, IResponseHandlerProvider responseHandlers, HttpResponseMessage response, ApplicationContext context);
         IState CreateNewState(IResponseHandlerProvider responseHandlers, ApplicationContext context, HttpResponseMessage response);
     }
