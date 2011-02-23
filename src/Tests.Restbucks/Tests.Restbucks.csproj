@@ -94,6 +94,7 @@
     <Compile Include="Client\ResponseHandlers\RequestForQuoteFormResponseHandlerTests.cs" />
     <Compile Include="Client\ResponseHandlers\ResponseHandlerProviderTests.cs" />
     <Compile Include="Client\ResponseHandlers\UninitializedResponseHandlerTests.cs" />
+    <Compile Include="Client\RulesEngine\ElseTests.cs" />
     <Compile Include="Client\RulesEngine\RulesTests.cs" />
     <Compile Include="Client\RulesEngine\RuleTests.cs" />
     <Compile Include="Client\RulesEngine\WhenTests.cs" />

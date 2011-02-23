@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Restbucks.Client;
 using Restbucks.Client.ResponseHandlers;
 using Restbucks.Client.RulesEngine;
+using Restbucks.Client.States;
 
 namespace Tests.Restbucks.Client.RulesEngine
 {
@@ -41,7 +42,7 @@ namespace Tests.Restbucks.Client.RulesEngine
                              (h, c, r) => new DummyState())
                 );
 
-            rules.Evaluate(new ResponseHandlerProvider(), new ApplicationContext(), null);
+            rules.Evaluate(new ResponseHandlerProvider(NullResponseHandler.Instance), new ApplicationContext(), null);
 
             Assert.IsTrue(processOrder.SequenceEqual(new[] {"first", "second", "third"}));
         }
@@ -93,6 +94,26 @@ namespace Tests.Restbucks.Client.RulesEngine
             var rules = new Rules(
                 new Rule(() => true, typeof (SuccessfulResponseHandler), c => c.Set(ApplicationContextKeys.SemanticContext, "context-name"), (h, c, r) => null));
             rules.Evaluate(new ResponseHandlerProvider(new SuccessfulResponseHandler()), new ApplicationContext(), null);
+        }
+
+        [Test]
+        [ExpectedException(ExpectedException = typeof(ArgumentException), ExpectedMessage = "ElseRule must be last rule in list.\r\nParameter name: rules")]
+        public void ShouldThrowExceptionIfElseRuleIsNotLastRule()
+        {
+            new Rules(
+                new Rule(() => true, typeof (UnsuccessfulResponseHandler), c => c.Set(ApplicationContextKeys.SemanticContext, "context-name"), (h, c, r) => new DummyState()),
+                new ElseRule(c => c.Set(ApplicationContextKeys.SemanticContext, "context-name"), (h, c, r) => new DummyState()),
+                new Rule(() => true, typeof(SuccessfulResponseHandler), c => c.Set(ApplicationContextKeys.SemanticContext, "context-name"), (h, c, r) => new DummyState()));
+
+        }
+
+        [Test]
+        public void IfSuppliedRulesDoNotIncludeAnElseRuleAddsAnElseRule()
+        {
+            var rules = new Rules();
+            var state = rules.Evaluate(new ResponseHandlerProvider(NullResponseHandler.Instance), new ApplicationContext(), new HttpResponseMessage());
+
+            Assert.IsInstanceOf(typeof(TerminalState), state);
         }
 
         private class SuccessfulResponseHandler : IResponseHandler

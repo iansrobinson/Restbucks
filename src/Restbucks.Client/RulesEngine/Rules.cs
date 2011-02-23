@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using Restbucks.Client.ResponseHandlers;
@@ -7,11 +9,28 @@ namespace Restbucks.Client.RulesEngine
 {
     public class Rules
     {
-        private readonly IEnumerable<Rule> rules;
+        private readonly IEnumerable<IRule> rules;
 
-        public Rules(params Rule[] rules)
+        public Rules(params IRule[] rules)
         {
-            this.rules = rules;
+            var hasNonTerminalElseRules = rules.Where(
+                (rule, index) => rule.GetType().Equals(typeof (ElseRule))
+                                 && index < rules.GetUpperBound(0))
+                                             .Count() > 0;
+
+            if (hasNonTerminalElseRules)
+            {
+                throw new ArgumentException("ElseRule must be last rule in list.", "rules");
+            }
+
+            if (rules.LastOrDefault(rule => rule.GetType().Equals(typeof (ElseRule))) == null)
+            {
+                this.rules = rules.Concat(new[]{ Else.UpdateContext(c => { }).Terminate()});
+            }
+            else
+            {
+                this.rules = rules;
+            } 
         }
 
         public IState Evaluate(IResponseHandlerProvider responseHandlers, ApplicationContext context, HttpResponseMessage response)

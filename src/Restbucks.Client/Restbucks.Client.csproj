@@ -68,6 +68,10 @@
     <Compile Include="ResponseHandlers\ResponseHandlerProvider.cs" />
     <Compile Include="ResponseHandlers\StartedResponseHandler.cs" />
     <Compile Include="ResponseHandlers\UninitializedResponseHandler.cs" />
+    <Compile Include="RulesEngine\Else.cs" />
+    <Compile Include="RulesEngine\ElseRule.cs" />
+    <Compile Include="RulesEngine\IRule.cs" />
+    <Compile Include="RulesEngine\NullResponseHandler.cs" />
     <Compile Include="RulesEngine\NullStateException.cs" />
     <Compile Include="RulesEngine\On.cs" />
     <Compile Include="RulesEngine\ResponseHandlerMissingException.cs" />
@@ -77,6 +81,7 @@
     <Compile Include="SemanticContext.cs" />
     <Compile Include="States\QuoteRequestedState.cs" />
     <Compile Include="States\StartedState.cs" />
+    <Compile Include="States\TerminalState.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Restbucks.MediaType\Restbucks.MediaType.csproj">
