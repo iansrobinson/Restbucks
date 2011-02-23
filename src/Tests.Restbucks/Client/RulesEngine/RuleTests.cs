@@ -13,10 +13,10 @@ namespace Tests.Restbucks.Client.RulesEngine
         [Test]
         public void ShouldEvaluateCondition()
         {
-            var rule1 = new Rule(() => true, typeof (DummyResponseHandler), c => c.Set(ApplicationContextKeys.ContextName, "context-name"), (h, c, r) => null);
+            var rule1 = new Rule(() => true, typeof (DummyResponseHandler), c => c.Set(ApplicationContextKeys.SemanticContext, "context-name"), (h, c, r) => null);
             Assert.IsTrue(rule1.IsApplicable);
 
-            var rule2 = new Rule(() => false, typeof (DummyResponseHandler), c => c.Set(ApplicationContextKeys.ContextName, "context-name"), (h, c, r) => null);
+            var rule2 = new Rule(() => false, typeof (DummyResponseHandler), c => c.Set(ApplicationContextKeys.SemanticContext, "context-name"), (h, c, r) => null);
             Assert.IsFalse(rule2.IsApplicable);
         }
 

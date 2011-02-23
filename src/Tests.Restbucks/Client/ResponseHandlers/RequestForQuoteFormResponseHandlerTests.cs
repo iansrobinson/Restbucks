@@ -71,8 +71,8 @@ namespace Tests.Restbucks.Client.ResponseHandlers
         private static ApplicationContext CreateContext()
         {
             var context = new ApplicationContext();
-            context.Set(ApplicationContextKeys.ContextName, ContextNames.Rfq);
-            context.Set(new EntityBodyKey(RestbucksMediaType.Value, "http://schemas.restbucks.com/shop", ContextNames.Rfq), NeededItems);
+            context.Set(ApplicationContextKeys.SemanticContext, SemanticContext.Rfq);
+            context.Set(new EntityBodyKey(RestbucksMediaType.Value, "http://schemas.restbucks.com/shop", SemanticContext.Rfq), NeededItems);
             return context;
         }
 

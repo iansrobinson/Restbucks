@@ -19,7 +19,7 @@ namespace Restbucks.Quoting.Service.Resources
         public const string SignedFormPlaceholder = "SIGNED_FORM_PLACEHOLDER";
 
         private static readonly UriFactoryWorker OrdersUriFactoryWorker = new UriFactoryWorker("orders", string.Format("?c=12345&s={0}", SignedFormPlaceholder));
-        
+
         private readonly UriFactory uriFactory;
         private readonly IQuotationEngine quotationEngine;
 

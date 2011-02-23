@@ -2,7 +2,7 @@
 {
     public interface IState
     {
-        IState HandleResponse();
+        IState Apply();
         bool IsTerminalState { get; }
     }
 }

@@ -51,7 +51,6 @@
   <ItemGroup>
     <Compile Include="ApplicationContext.cs" />
     <Compile Include="ApplicationContextKeys.cs" />
-    <Compile Include="ContextNames.cs" />
     <Compile Include="Formatters\RestbucksMediaTypeFormatter.cs" />
     <Compile Include="Http\HttpClientProvider.cs" />
     <Compile Include="Http\HttpStatusCodeExtensionMethods.cs" />
@@ -70,10 +69,12 @@
     <Compile Include="ResponseHandlers\StartedResponseHandler.cs" />
     <Compile Include="ResponseHandlers\UninitializedResponseHandler.cs" />
     <Compile Include="RulesEngine\NullStateException.cs" />
+    <Compile Include="RulesEngine\On.cs" />
     <Compile Include="RulesEngine\ResponseHandlerMissingException.cs" />
     <Compile Include="RulesEngine\Rule.cs" />
     <Compile Include="RulesEngine\Rules.cs" />
     <Compile Include="RulesEngine\When.cs" />
+    <Compile Include="SemanticContext.cs" />
     <Compile Include="States\QuoteRequestedState.cs" />
     <Compile Include="States\StartedState.cs" />
   </ItemGroup>

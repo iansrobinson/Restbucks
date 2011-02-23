@@ -41,7 +41,7 @@ namespace Tests.Restbucks.Client.RulesEngine
 
         private class DummyState : IState
         {
-            public IState HandleResponse()
+            public IState Apply()
             {
                 throw new NotImplementedException();
             }

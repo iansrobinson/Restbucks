@@ -42,7 +42,7 @@ namespace Tests.Restbucks.Client.States
             var handlerProvider = new StubResponseHandlerProvider(typeof (UninitializedResponseHandler), handler);
 
             var state = new StartedState(handlerProvider, context, null);
-            state.HandleResponse();
+            state.Apply();
 
             mocks.VerifyAll();
         }
@@ -54,7 +54,7 @@ namespace Tests.Restbucks.Client.States
             var context = new ApplicationContext();
             var state = new StartedState(responseHandlers, context, null);
 
-            var newState = state.HandleResponse();
+            var newState = state.Apply();
 
             Assert.IsInstanceOf(typeof (StartedState), newState);
             Assert.AreNotEqual(state, newState);
@@ -67,10 +67,10 @@ namespace Tests.Restbucks.Client.States
             var context = new ApplicationContext();
             var state = new StartedState(responseHandlers, context, null);
 
-            var newState = state.HandleResponse();
+            var newState = state.Apply();
 
             var applicationContext = PrivateField.GetValue<ApplicationContext>("context", newState);
-            Assert.AreEqual("started", applicationContext.Get<string>(ApplicationContextKeys.ContextName));
+            Assert.AreEqual("started", applicationContext.Get<string>(ApplicationContextKeys.SemanticContext));
         }
 
         [Test]
@@ -80,7 +80,7 @@ namespace Tests.Restbucks.Client.States
             var context = new ApplicationContext();
             var state = new StartedState(responseHandlers, context, null);
 
-            var newState = state.HandleResponse();
+            var newState = state.Apply();
 
             Assert.AreEqual(StubResponseHandler.NewResponse, PrivateField.GetValue<HttpResponseMessage>("response", newState));
         }

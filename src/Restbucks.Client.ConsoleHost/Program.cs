@@ -18,7 +18,7 @@ namespace Restbucks.Client.ConsoleHost
             
             var context = new ApplicationContext();
             context.Set(ApplicationContextKeys.EntryPointUri, new Uri("http://" + Environment.MachineName + "/restbucks/shop/"));
-            context.Set(new EntityBodyKey(RestbucksMediaType.Value, "http://schemas.restbucks.com/shop", ContextNames.Rfq), items);
+            context.Set(new EntityBodyKey(RestbucksMediaType.Value, "http://schemas.restbucks.com/shop", SemanticContext.Rfq), items);
 
             var responseHandlers = new ResponseHandlerProvider(
                 new UninitializedResponseHandler(HttpClientProvider.Instance),
@@ -26,11 +26,11 @@ namespace Restbucks.Client.ConsoleHost
                 new RequestForQuoteFormResponseHandler(HttpClientProvider.Instance));
 
             var state = new StartedState(responseHandlers, context, null);
-            var newState = state.HandleResponse();
+            var newState = state.Apply();
 
             while (newState != null && !newState.IsTerminalState)
             {
-                newState = newState.HandleResponse();
+                newState = newState.Apply();
             }
 
             Console.WriteLine("Finished");

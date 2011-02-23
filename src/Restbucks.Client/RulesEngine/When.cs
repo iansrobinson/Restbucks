@@ -20,6 +20,12 @@ namespace Restbucks.Client.RulesEngine
             this.condition = condition;
         }
 
+        public Rule InvokeHandler<T>(Actions actions) where T : IResponseHandler
+        {
+            responseHandlerType = typeof(T);
+            return new Rule(condition, responseHandlerType, actions.ContextAction, actions.CreateState);
+        }
+
         public IUpdateContext InvokeHandler<T>() where T : IResponseHandler
         {
             responseHandlerType = typeof (T);
@@ -41,6 +47,7 @@ namespace Restbucks.Client.RulesEngine
     public interface IInvokeHandler
     {
         IUpdateContext InvokeHandler<T>() where T : IResponseHandler;
+        Rule InvokeHandler<T>(Actions actions) where T : IResponseHandler;
     }
 
     public interface IUpdateContext

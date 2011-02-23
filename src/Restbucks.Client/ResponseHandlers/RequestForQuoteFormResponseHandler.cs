@@ -28,7 +28,7 @@ namespace Restbucks.Client.ResponseHandlers
             var entityBody = response.Content.ReadAsObject<Shop>(RestbucksMediaTypeFormatter.Instance);
             var form = entityBody.Forms.First();
 
-            var key = new EntityBodyKey(form.MediaType, form.Schema.ToString(), context.Get<string>(ApplicationContextKeys.ContextName));
+            var key = new EntityBodyKey(form.MediaType, form.Schema.ToString(), context.Get<string>(ApplicationContextKeys.SemanticContext));
             var formData = context.Get<Shop>(key);
 
             using (var client = clientProvider.CreateClient(entityBody.BaseUri))
