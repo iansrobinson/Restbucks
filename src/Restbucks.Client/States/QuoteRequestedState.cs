@@ -14,7 +14,7 @@ namespace Restbucks.Client.States
             this.context = context;
         }
 
-        public IState Apply(IHttpClientProvider clientProvider)
+        public IState Apply(IHttpClientProvider clientProvider, IResponseHandlers handlers)
         {
             throw new NotImplementedException();
         }

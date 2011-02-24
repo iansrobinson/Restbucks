@@ -6,6 +6,7 @@ using Restbucks.Client.Http;
 using Restbucks.Client.Keys;
 using Restbucks.Client.ResponseHandlers;
 using Restbucks.Client.RulesEngine;
+using Restbucks.Client.States;
 using Tests.Restbucks.Client.States.Helpers;
 
 namespace Tests.Restbucks.Client.RulesEngine
@@ -104,7 +105,7 @@ namespace Tests.Restbucks.Client.RulesEngine
 
         public class DummyState : IState
         {
-            public IState Apply(IHttpClientProvider clientProvider)
+            public IState Apply(IHttpClientProvider clientProvider, IResponseHandlers handlers)
             {
                 throw new NotImplementedException();
             }

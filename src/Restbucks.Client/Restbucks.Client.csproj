@@ -77,6 +77,7 @@
     <Compile Include="RulesEngine\Rules.cs" />
     <Compile Include="RulesEngine\When.cs" />
     <Compile Include="SemanticContext.cs" />
+    <Compile Include="States\IResponseHandlers.cs" />
     <Compile Include="States\QuoteRequestedState.cs" />
     <Compile Include="States\StartedState.cs" />
     <Compile Include="States\TerminalState.cs" />

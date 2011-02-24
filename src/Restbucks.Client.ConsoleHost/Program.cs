@@ -20,11 +20,11 @@ namespace Restbucks.Client.ConsoleHost
             context.Set(new EntityBodyKey(RestbucksMediaType.Value, "http://schemas.restbucks.com/shop", SemanticContext.Rfq), items);
 
             var state = new StartedState(null, context);
-            var newState = state.Apply(HttpClientProvider.Instance);
+            var newState = state.Apply(HttpClientProvider.Instance, ResponseHandlers.Instance);
 
             while (newState != null && !newState.IsTerminalState)
             {
-                newState = newState.Apply(HttpClientProvider.Instance);
+                newState = newState.Apply(HttpClientProvider.Instance, ResponseHandlers.Instance);
             }
 
             Console.WriteLine("Finished");

@@ -73,7 +73,7 @@ namespace Tests.Restbucks.Client.RulesEngine
 
         private class DummyState : IState
         {
-            public IState Apply(IHttpClientProvider clientProvider)
+            public IState Apply(IHttpClientProvider clientProvider, IResponseHandlers handlers)
             {
                 throw new NotImplementedException();
             }
