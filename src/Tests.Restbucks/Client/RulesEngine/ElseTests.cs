@@ -45,9 +45,9 @@ namespace Tests.Restbucks.Client.RulesEngine
         public void ShouldReturnRuleThatCreatesNewStateWithSuppliedFunction()
         {
             IRule rule = Else.UpdateContext(c => c.Set(new StringKey("key-name"), "value")).ReturnState((h, c, r) => new DummyState());
-            var state = rule.CreateNewState(new HttpResponseMessage(), new ApplicationContext(), HttpClientProvider.Instance);
+            var result = rule.CreateNewState(new HttpResponseMessage(), new ApplicationContext(), HttpClientProvider.Instance);
 
-            Assert.IsInstanceOf(typeof (DummyState), state);
+            Assert.IsInstanceOf(typeof (DummyState), result.Value);
         }
 
         [Test]
@@ -66,9 +66,9 @@ namespace Tests.Restbucks.Client.RulesEngine
         public void IfTerminateIsSpecifiedInPlaceOfCreateStateFunctionShouldReturnRuleThatCreatesTerminalState()
         {
             IRule rule = Else.UpdateContext(c => { }).Terminate();
-            var state = rule.CreateNewState(new HttpResponseMessage(), new ApplicationContext(), HttpClientProvider.Instance);
+            var result = rule.CreateNewState(new HttpResponseMessage(), new ApplicationContext(), HttpClientProvider.Instance);
 
-            Assert.IsInstanceOf(typeof (TerminalState), state);
+            Assert.IsInstanceOf(typeof (TerminalState), result.Value);
         }
 
         private class DummyState : IState

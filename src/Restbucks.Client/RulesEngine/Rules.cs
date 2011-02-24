@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Reflection;
-using Restbucks.Client.ResponseHandlers;
 using Restbucks.Client.States;
 
 namespace Restbucks.Client.RulesEngine
@@ -31,7 +29,7 @@ namespace Restbucks.Client.RulesEngine
                 var result = rule.Evaluate(response, context, clientProvider);
                 if (result.IsSuccessful)
                 {
-                    return rule.CreateNewState(result.Value, context, clientProvider);
+                    return rule.CreateNewState(result.Value, context, clientProvider).Value;
                 }
             }
 

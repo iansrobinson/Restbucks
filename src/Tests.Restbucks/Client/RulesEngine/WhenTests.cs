@@ -35,9 +35,9 @@ namespace Tests.Restbucks.Client.RulesEngine
                 .UpdateContext(DoNothingContextAction())
                 .ReturnState(CreateDummyState());
 
-            var state = rule.CreateNewState(new HttpResponseMessage(), new ApplicationContext(), HttpClientProvider.Instance);
+            var result = rule.CreateNewState(new HttpResponseMessage(), new ApplicationContext(), HttpClientProvider.Instance);
 
-            Assert.IsInstanceOf(typeof(DummyState), state);
+            Assert.IsInstanceOf(typeof(DummyState), result.Value);
         }
 
         private static Func<HttpResponseMessage, ApplicationContext, IHttpClientProvider, IState> CreateDummyState()

@@ -21,7 +21,7 @@ namespace Restbucks.Client.RulesEngine
             return new Result<HttpResponseMessage>(true, null);
         }
 
-        IState IRule.CreateNewState(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
+        Result<IState> IRule.CreateNewState(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
         {
             contextAction(context);
 
@@ -32,7 +32,7 @@ namespace Restbucks.Client.RulesEngine
                 throw new NullStateException();
             }
 
-            return state;
+            return new Result<IState>(true, state);
         }
     }
 }
