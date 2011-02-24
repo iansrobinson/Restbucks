@@ -6,6 +6,7 @@ using Restbucks.Client.Http;
 using Restbucks.Client.Keys;
 using Restbucks.Client.ResponseHandlers;
 using Restbucks.Client.RulesEngine;
+using Tests.Restbucks.Client.States.Helpers;
 
 namespace Tests.Restbucks.Client.RulesEngine
 {
@@ -38,6 +39,49 @@ namespace Tests.Restbucks.Client.RulesEngine
             var result = rule.Evaluate(new HttpResponseMessage(), new ApplicationContext(), HttpClientProvider.Instance);
 
             Assert.IsInstanceOf(typeof(DummyState), result.Value);
+        }
+
+        [Test]
+        public void ShouldReturnARuleContainingCreateResponseHandlerFunctionForGenericType()
+        {
+            var rule = When.IsTrue(() => true)
+                .InvokeHandler<DummyHandler>()
+                .UpdateContext(DoNothingContextAction())
+                .ReturnState(CreateDummyState());
+
+            var func = rule.GetPrivateFieldValue<Func<IResponseHandler>>("createResponseHandler");
+
+            Assert.IsInstanceOf(typeof(DummyHandler), func());
+        }
+
+        [Test]
+        public void ShouldReturnARuleContainingCreateResponseHandlerFunctionForSuppliedHandlerInstance()
+        {
+            var handler = new DummyHandler();
+
+            var rule = When.IsTrue(() => true)
+                .InvokeHandler(handler)
+                .UpdateContext(DoNothingContextAction())
+                .ReturnState(CreateDummyState());
+
+            var func = rule.GetPrivateFieldValue<Func<IResponseHandler>>("createResponseHandler");
+
+            Assert.AreEqual(handler, func());
+        }
+
+        [Test]
+        public void ShouldReturnARuleContainingSuppliedCreateResponseHandlerFunction()
+        {
+            Func<IResponseHandler> f = () => new DummyHandler();
+
+            var rule = When.IsTrue(() => true)
+                .InvokeHandler(f)
+                .UpdateContext(DoNothingContextAction())
+                .ReturnState(CreateDummyState());
+
+            var func = rule.GetPrivateFieldValue<Func<IResponseHandler>>("createResponseHandler");
+
+            Assert.AreEqual(f, func);
         }
 
         private static Func<HttpResponseMessage, ApplicationContext, IHttpClientProvider, IState> CreateDummyState()
