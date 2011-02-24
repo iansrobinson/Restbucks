@@ -47,7 +47,7 @@ namespace Tests.Restbucks.Client.States
 
             var newState = state.Apply();
 
-            var applicationContext = PrivateField.GetValue<ApplicationContext>("context", newState);
+            var applicationContext = newState.GetPrivateFieldValue<ApplicationContext>("context");
             Assert.AreEqual("started", applicationContext.Get<string>(ApplicationContextKeys.SemanticContext));
         }
 
@@ -64,7 +64,7 @@ namespace Tests.Restbucks.Client.States
 
             var newState = state.Apply();
 
-            Assert.AreEqual(response, PrivateField.GetValue<HttpResponseMessage>("response", newState));
+            Assert.AreEqual(response, newState.GetPrivateFieldValue<HttpResponseMessage>("response"));
         }
     }
 }

@@ -58,7 +58,7 @@ namespace Tests.Restbucks.Client.RulesEngine
 
             rule.Evaluate(new HttpResponseMessage(), context, HttpClientProvider.Instance);
 
-            var dict = PrivateField.GetValue<Dictionary<IKey, object>>("values", context);
+            var dict = context.GetPrivateFieldValue<Dictionary<IKey, object>>("values");
             Assert.AreEqual(0, dict.Keys.Count);
         }
 
