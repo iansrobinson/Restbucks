@@ -26,7 +26,7 @@ namespace Restbucks.Client.RulesEngine
             return this;
         }
 
-        public Rule InvokeHandler<T>(Actions actions) where T : IResponseHandler, new()
+        public IRule InvokeHandler<T>(Actions actions) where T : IResponseHandler, new()
         {
             return new Rule(condition, () => new T(), actions.ContextAction, actions.CreateState);
         }
@@ -49,7 +49,7 @@ namespace Restbucks.Client.RulesEngine
             return this;
         }
 
-        public Rule ReturnState(Func<HttpResponseMessage, ApplicationContext, IHttpClientProvider, IState> createState)
+        public IRule ReturnState(Func<HttpResponseMessage, ApplicationContext, IHttpClientProvider, IState> createState)
         {
             return new Rule(condition, createResponseHandler, contextAction, createState);
         }
@@ -60,7 +60,7 @@ namespace Restbucks.Client.RulesEngine
         IUpdateContext InvokeHandler<T>() where T : IResponseHandler, new();
         IUpdateContext InvokeHandler(Func<IResponseHandler> createResponseHandler);
         IUpdateContext InvokeHandler(IResponseHandler responseHandler);
-        Rule InvokeHandler<T>(Actions actions) where T : IResponseHandler, new();
+        IRule InvokeHandler<T>(Actions actions) where T : IResponseHandler, new();
     }
 
     public interface IUpdateContext
@@ -70,6 +70,6 @@ namespace Restbucks.Client.RulesEngine
 
     public interface IReturnState
     {
-        Rule ReturnState(Func<HttpResponseMessage, ApplicationContext, IHttpClientProvider, IState> createState);
+        IRule ReturnState(Func<HttpResponseMessage, ApplicationContext, IHttpClientProvider, IState> createState);
     }
 }

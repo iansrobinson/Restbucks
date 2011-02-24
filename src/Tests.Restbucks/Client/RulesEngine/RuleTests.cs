@@ -18,6 +18,13 @@ namespace Tests.Restbucks.Client.RulesEngine
         }
 
         [Test]
+        [ExpectedException(ExpectedException = typeof(ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: createResponseHandler")]
+        public void ThrowsExceptionIfCreateResponseHandlerFunctionIsNull()
+        {
+            new Rule(()=> true, null, c => { }, (r, c, p) => null);
+        }
+
+        [Test]
         [ExpectedException(ExpectedException = typeof(ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: contextAction")]
         public void ThrowsExceptionIfContextActionIsNull()
         {

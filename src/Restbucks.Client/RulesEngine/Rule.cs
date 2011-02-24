@@ -15,6 +15,7 @@ namespace Restbucks.Client.RulesEngine
         public Rule(Func<bool> condition, Func<IResponseHandler> createResponseHandler, Action<ApplicationContext> contextAction, Func<HttpResponseMessage, ApplicationContext, IHttpClientProvider, IState> createState)
         {
             Check.IsNotNull(condition, "condition");
+            Check.IsNotNull(createResponseHandler, "createResponseHandler");
             Check.IsNotNull(contextAction, "contextAction");
             Check.IsNotNull(createState, "createState");
 
