@@ -25,22 +25,23 @@ namespace Restbucks.Client.RulesEngine
             this.createState = createState;
         }
 
-        Result<HttpResponseMessage> IRule.Evaluate(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
+        Result<IState> IRule.Evaluate(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
         {
             if (!condition())
             {
-                return new Result<HttpResponseMessage>(false, null);
+                return new Result<IState>(false, null);
             }
 
-            var handler = createResponseHandler();
-            return handler.Handle(response, context, clientProvider);
-        }
+            var result = createResponseHandler().Handle(response, context, clientProvider);
 
-        Result<IState> IRule.CreateNewState(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
-        {
+            if (!result.IsSuccessful)
+            {
+                return new Result<IState>(false, null);
+            }
+            
             contextAction(context);
 
-            var state = createState(response, context, clientProvider);
+            var state = createState(result.Value, context, clientProvider);
 
             if (state == null)
             {

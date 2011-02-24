@@ -22,7 +22,7 @@ namespace Tests.Restbucks.Client.RulesEngine
 
             var context = new ApplicationContext();
 
-            rule.CreateNewState(new HttpResponseMessage(), context, HttpClientProvider.Instance);
+            rule.Evaluate(new HttpResponseMessage(), context, HttpClientProvider.Instance);
 
             Assert.AreEqual("value", context.Get<string>(new StringKey("key-name")));
         }
@@ -35,7 +35,7 @@ namespace Tests.Restbucks.Client.RulesEngine
                 .UpdateContext(DoNothingContextAction())
                 .ReturnState(CreateDummyState());
 
-            var result = rule.CreateNewState(new HttpResponseMessage(), new ApplicationContext(), HttpClientProvider.Instance);
+            var result = rule.Evaluate(new HttpResponseMessage(), new ApplicationContext(), HttpClientProvider.Instance);
 
             Assert.IsInstanceOf(typeof(DummyState), result.Value);
         }
@@ -54,7 +54,7 @@ namespace Tests.Restbucks.Client.RulesEngine
         {
             public Result<HttpResponseMessage> Handle(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
             {
-                throw new NotImplementedException();
+                return new Result<HttpResponseMessage>(true, new HttpResponseMessage());
             }
         }
 

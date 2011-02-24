@@ -23,11 +23,11 @@ namespace Tests.Restbucks.Client.RulesEngine
         }
 
         [Test]
-        public void EvaluateShouldReturnNullResponse()
+        public void EvaluateShouldReturnSuppliedState()
         {
             IRule rule = Else.UpdateContext(c => { }).ReturnState((h, c, r) => new DummyState());
             var result = rule.Evaluate(new HttpResponseMessage(), new ApplicationContext(), HttpClientProvider.Instance);
-            Assert.IsNull(result.Value);
+            Assert.IsInstanceOf(typeof(DummyState), result.Value);
         }
 
         [Test]
@@ -36,7 +36,7 @@ namespace Tests.Restbucks.Client.RulesEngine
             IRule rule = Else.UpdateContext(c => c.Set(new StringKey("key-name"), "value")).ReturnState((h, c, r) => new DummyState());
             var context = new ApplicationContext();
 
-            rule.CreateNewState(new HttpResponseMessage(), context, HttpClientProvider.Instance);
+            rule.Evaluate(new HttpResponseMessage(), context, HttpClientProvider.Instance);
 
             Assert.AreEqual("value", context.Get<string>(new StringKey("key-name")));
         }
@@ -45,7 +45,7 @@ namespace Tests.Restbucks.Client.RulesEngine
         public void ShouldReturnRuleThatCreatesNewStateWithSuppliedFunction()
         {
             IRule rule = Else.UpdateContext(c => c.Set(new StringKey("key-name"), "value")).ReturnState((h, c, r) => new DummyState());
-            var result = rule.CreateNewState(new HttpResponseMessage(), new ApplicationContext(), HttpClientProvider.Instance);
+            var result = rule.Evaluate(new HttpResponseMessage(), new ApplicationContext(), HttpClientProvider.Instance);
 
             Assert.IsInstanceOf(typeof (DummyState), result.Value);
         }
@@ -56,7 +56,7 @@ namespace Tests.Restbucks.Client.RulesEngine
             IRule rule = Else.ReturnState((h, c, r) => new DummyState());
             var context = new ApplicationContext();
 
-            rule.CreateNewState(new HttpResponseMessage(), context, HttpClientProvider.Instance);
+            rule.Evaluate(new HttpResponseMessage(), context, HttpClientProvider.Instance);
 
             var dict = PrivateField.GetValue<Dictionary<IKey, object>>("values", context);
             Assert.AreEqual(0, dict.Keys.Count);
@@ -66,7 +66,7 @@ namespace Tests.Restbucks.Client.RulesEngine
         public void IfTerminateIsSpecifiedInPlaceOfCreateStateFunctionShouldReturnRuleThatCreatesTerminalState()
         {
             IRule rule = Else.UpdateContext(c => { }).Terminate();
-            var result = rule.CreateNewState(new HttpResponseMessage(), new ApplicationContext(), HttpClientProvider.Instance);
+            var result = rule.Evaluate(new HttpResponseMessage(), new ApplicationContext(), HttpClientProvider.Instance);
 
             Assert.IsInstanceOf(typeof (TerminalState), result.Value);
         }

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Net.Http;
-using System.Reflection;
-using Restbucks.Client.ResponseHandlers;
 
 namespace Restbucks.Client.RulesEngine
 {
@@ -16,12 +14,7 @@ namespace Restbucks.Client.RulesEngine
             this.createState = createState;
         }
 
-        Result<HttpResponseMessage> IRule.Evaluate(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
-        {
-            return new Result<HttpResponseMessage>(true, null);
-        }
-
-        Result<IState> IRule.CreateNewState(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
+        Result<IState> IRule.Evaluate(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
         {
             contextAction(context);
 

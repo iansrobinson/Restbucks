@@ -29,7 +29,7 @@ namespace Restbucks.Client.RulesEngine
                 var result = rule.Evaluate(response, context, clientProvider);
                 if (result.IsSuccessful)
                 {
-                    return rule.CreateNewState(result.Value, context, clientProvider).Value;
+                    return result.Value;
                 }
             }
 
