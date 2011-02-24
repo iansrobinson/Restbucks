@@ -92,7 +92,6 @@
     <Compile Include="Client\Keys\EntityBodyKeyTests.cs" />
     <Compile Include="Client\Keys\KeyEqualityComparerTests.cs" />
     <Compile Include="Client\ResponseHandlers\RequestForQuoteFormResponseHandlerTests.cs" />
-    <Compile Include="Client\ResponseHandlers\ResponseHandlerProviderTests.cs" />
     <Compile Include="Client\ResponseHandlers\UninitializedResponseHandlerTests.cs" />
     <Compile Include="Client\RulesEngine\ElseTests.cs" />
     <Compile Include="Client\RulesEngine\RulesTests.cs" />
