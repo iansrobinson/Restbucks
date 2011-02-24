@@ -150,10 +150,10 @@ namespace Tests.Restbucks.Client.RulesEngine
                 wasCalled = false;
             }
 
-            public HandlerResult Handle(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
+            public Result<HttpResponseMessage> Handle(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
             {
                 wasCalled = true;
-                return new HandlerResult(true, new HttpResponseMessage());
+                return new Result<HttpResponseMessage>(true, new HttpResponseMessage());
             }
 
             public bool WasCalled
@@ -171,10 +171,10 @@ namespace Tests.Restbucks.Client.RulesEngine
                 wasCalled = false;
             }
 
-            public HandlerResult Handle(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
+            public Result<HttpResponseMessage> Handle(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
             {
                 wasCalled = true;
-                return new HandlerResult(false, null);
+                return new Result<HttpResponseMessage>(false, null);
             }
 
             public bool WasCalled

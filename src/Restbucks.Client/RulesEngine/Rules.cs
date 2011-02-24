@@ -31,7 +31,7 @@ namespace Restbucks.Client.RulesEngine
                 var result = rule.Evaluate(response, context, clientProvider);
                 if (result.IsSuccessful)
                 {
-                    return rule.CreateNewState(result.Response, context, clientProvider);
+                    return rule.CreateNewState(result.Value, context, clientProvider);
                 }
             }
 

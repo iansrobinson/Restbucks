@@ -52,7 +52,7 @@ namespace Tests.Restbucks.Client.RulesEngine
 
         public class DummyHandler : IResponseHandler
         {
-            public HandlerResult Handle(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
+            public Result<HttpResponseMessage> Handle(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
             {
                 throw new NotImplementedException();
             }

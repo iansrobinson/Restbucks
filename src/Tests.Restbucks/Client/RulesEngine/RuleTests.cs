@@ -40,7 +40,7 @@ namespace Tests.Restbucks.Client.RulesEngine
 
         private class DummyResponseHandler : IResponseHandler
         {
-            public HandlerResult Handle(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
+            public Result<HttpResponseMessage> Handle(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
             {
                 throw new NotImplementedException();
             }

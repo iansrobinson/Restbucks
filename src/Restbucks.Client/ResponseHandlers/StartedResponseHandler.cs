@@ -5,6 +5,7 @@ using System.Reflection;
 using log4net;
 using Microsoft.Net.Http;
 using Restbucks.Client.Formatters;
+using Restbucks.Client.RulesEngine;
 using Restbucks.MediaType;
 
 namespace Restbucks.Client.ResponseHandlers
@@ -13,7 +14,7 @@ namespace Restbucks.Client.ResponseHandlers
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public HandlerResult Handle(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
+        public Result<HttpResponseMessage> Handle(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
         {
             Log.Debug("  Getting request-for-quote form...");
             
@@ -27,7 +28,7 @@ namespace Restbucks.Client.ResponseHandlers
                 var request = new HttpRequestMessage(HttpMethod.Get, link.Href);
                 var newResponse = client.Send(request);
 
-                return new HandlerResult(true, newResponse);
+                return new Result<HttpResponseMessage>(true, newResponse);
             } 
         }
     }

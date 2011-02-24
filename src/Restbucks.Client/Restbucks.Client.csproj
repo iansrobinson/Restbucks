@@ -61,7 +61,6 @@
     <Compile Include="Keys\KeyEqualityComparer.cs" />
     <Compile Include="Keys\StringKey.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ResponseHandlers\HandlerResult.cs" />
     <Compile Include="ResponseHandlers\IResponseHandler.cs" />
     <Compile Include="ResponseHandlers\RequestForQuoteFormResponseHandler.cs" />
     <Compile Include="ResponseHandlers\StartedResponseHandler.cs" />
@@ -73,6 +72,7 @@
     <Compile Include="RulesEngine\NullStateException.cs" />
     <Compile Include="RulesEngine\On.cs" />
     <Compile Include="RulesEngine\ResponseHandlerMissingException.cs" />
+    <Compile Include="RulesEngine\Result.cs" />
     <Compile Include="RulesEngine\Rule.cs" />
     <Compile Include="RulesEngine\Rules.cs" />
     <Compile Include="RulesEngine\When.cs" />

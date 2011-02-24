@@ -45,7 +45,7 @@ namespace Tests.Restbucks.Client.ResponseHandlers
             var handler = new UninitializedResponseHandler();
             var result = handler.Handle(null, context, clientProvider);
 
-            Assert.AreEqual(response, result.Response);
+            Assert.AreEqual(response, result.Value);
         }
 
         private static HttpResponseMessage CreateResponseMessage()

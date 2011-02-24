@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Reflection;
 using log4net;
+using Restbucks.Client.RulesEngine;
 
 namespace Restbucks.Client.ResponseHandlers
 {
@@ -9,7 +10,7 @@ namespace Restbucks.Client.ResponseHandlers
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         
-        public HandlerResult Handle(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
+        public Result<HttpResponseMessage> Handle(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
         {
             Log.Debug("  Getting entry point...");
             
@@ -20,7 +21,7 @@ namespace Restbucks.Client.ResponseHandlers
                 var request = new HttpRequestMessage(HttpMethod.Get, entryPointUri);
                 var newResponse = client.Send(request);
 
-                return new HandlerResult(true, newResponse);
+                return new Result<HttpResponseMessage>(true, newResponse);
             }
         }
     }

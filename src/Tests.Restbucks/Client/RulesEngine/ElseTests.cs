@@ -27,7 +27,7 @@ namespace Tests.Restbucks.Client.RulesEngine
         {
             IRule rule = Else.UpdateContext(c => { }).ReturnState((h, c, r) => new DummyState());
             var result = rule.Evaluate(new HttpResponseMessage(), new ApplicationContext(), HttpClientProvider.Instance);
-            Assert.IsNull(result.Response);
+            Assert.IsNull(result.Value);
         }
 
         [Test]
