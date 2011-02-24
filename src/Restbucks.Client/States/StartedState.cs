@@ -53,14 +53,14 @@ namespace Restbucks.Client.States
             return c => c.Set(ApplicationContextKeys.SemanticContext, value);
         }
 
-        private static IState NewStartState(HttpResponseMessage r, ApplicationContext c, IHttpClientProvider p)
+        private static IState NewStartState(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
         {
-            return new StartedState(r, c, p);
+            return new StartedState(response, context, clientProvider);
         }
 
-        private static IState NewQuoteRequestedState(HttpResponseMessage r, ApplicationContext c, IHttpClientProvider p)
+        private static IState NewQuoteRequestedState(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
         {
-            return new QuoteRequestedState(r, c, p);
+            return new QuoteRequestedState(response, context, clientProvider);
         }
 
         private bool IsUninitialized()
