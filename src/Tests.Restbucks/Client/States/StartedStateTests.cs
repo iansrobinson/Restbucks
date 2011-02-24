@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Restbucks.Client;
 using Restbucks.Client.Formatters;
 using Restbucks.Client.Http;
+using Restbucks.Client.Keys;
 using Restbucks.Client.States;
 using Restbucks.MediaType;
 using Tests.Restbucks.Client.Helpers;
@@ -63,7 +64,7 @@ namespace Tests.Restbucks.Client.States
 
             var newState = state.Apply();
 
-            Assert.IsInstanceOf(typeof(StartedState), newState);
+            Assert.IsInstanceOf(typeof (StartedState), newState);
             Assert.AreNotEqual(state, newState);
         }
 
@@ -89,6 +90,39 @@ namespace Tests.Restbucks.Client.States
             Assert.AreEqual(response, newState.GetPrivateFieldValue<HttpResponseMessage>("response"));
         }
 
+        [Test]
+        public void WhenIsRfqShouldReturnNewQuoteRequestedState()
+        {
+            var state = new StartedState(CreateRfqResponseMessage(), CreateRfqContext(), new StubHttpClientProvider());
+
+            var newState = state.Apply();
+
+            Assert.IsInstanceOf(typeof (QuoteRequestedState), newState);
+            Assert.AreNotEqual(state, newState);
+        }
+
+        [Test]
+        public void WhenIsRfqReturnedStateSemanticContextShouldBeEmpty()
+        {
+            var state = new StartedState(CreateRfqResponseMessage(), CreateRfqContext(), new StubHttpClientProvider());
+
+            var newState = state.Apply();
+
+            var context = newState.GetPrivateFieldValue<ApplicationContext>("context");
+            Assert.IsFalse(context.ContainsKey(ApplicationContextKeys.SemanticContext));
+        }
+
+        [Test]
+        public void WhenIsRfqReturnedStateShouldContainNewResponse()
+        {
+            var response = new HttpResponseMessage();
+            var state = new StartedState(CreateRfqResponseMessage(), CreateRfqContext(), new StubHttpClientProvider(response));
+
+            var newState = state.Apply();
+
+            Assert.AreEqual(response, newState.GetPrivateFieldValue<HttpResponseMessage>("response"));
+        }
+
         private static ApplicationContext CreateUninitializedContext()
         {
             var context = new ApplicationContext();
@@ -99,8 +133,17 @@ namespace Tests.Restbucks.Client.States
         private static ApplicationContext CreateStartedContext()
         {
             var context = new ApplicationContext();
-            context.Set(ApplicationContextKeys.EntryPointUri, new Uri("http://localhost/shop"));
             context.Set(ApplicationContextKeys.SemanticContext, SemanticContext.Started);
+            return context;
+        }
+
+        private static ApplicationContext CreateRfqContext()
+        {
+            var context = new ApplicationContext();
+            context.Set(ApplicationContextKeys.SemanticContext, SemanticContext.Rfq);
+            context.Set(
+                new EntityBodyKey(RestbucksMediaType.Value, "http://schemas.restbucks.com/shop", SemanticContext.Rfq),
+                new Shop(null).AddItem(new Item("coffee", new Amount("g", 100))));
             return context;
         }
 
@@ -108,12 +151,24 @@ namespace Tests.Restbucks.Client.States
         {
             var entityBody = new Shop(new Uri("http://localhost/"))
                 .AddLink(new Link(
-                    new Uri("rfq", UriKind.Relative), 
-                    RestbucksMediaType.Value, 
-                    new UriLinkRelation(new Uri("http://relations.restbucks.com/rfq"))));
+                             new Uri("rfq", UriKind.Relative),
+                             RestbucksMediaType.Value,
+                             new UriLinkRelation(new Uri("http://relations.restbucks.com/rfq"))));
             var content = entityBody.ToContent(RestbucksMediaTypeFormatter.Instance);
             content.Headers.ContentType = new MediaTypeHeaderValue(RestbucksMediaType.Value);
-            return new HttpResponseMessage{Content = content};
+            return new HttpResponseMessage {Content = content};
+        }
+
+        private static HttpResponseMessage CreateRfqResponseMessage()
+        {
+            var entityBody = new Shop(new Uri("http://localhost/"))
+                .AddForm(new Form(
+                             new Uri("quotes", UriKind.Relative),
+                             "post", "application/restbucks+xml",
+                             new Uri("http://schemas.restbucks.com/shop")));
+            var content = entityBody.ToContent(RestbucksMediaTypeFormatter.Instance);
+            content.Headers.ContentType = new MediaTypeHeaderValue(RestbucksMediaType.Value);
+            return new HttpResponseMessage {Content = content};
         }
     }
 }

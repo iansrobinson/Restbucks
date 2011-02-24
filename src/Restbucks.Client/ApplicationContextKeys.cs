@@ -6,6 +6,5 @@ namespace Restbucks.Client
     {
         public static readonly IKey SemanticContext = new StringKey("semantic-context");
         public static readonly IKey EntryPointUri = new StringKey("entry-point-uri");
-        public static readonly IKey CurrentEntity = new StringKey("current-entity");
     }
 }
