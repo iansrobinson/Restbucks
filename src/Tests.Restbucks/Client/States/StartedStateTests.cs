@@ -22,13 +22,12 @@ namespace Tests.Restbucks.Client.States
         [Test]
         public void WhenContextNameIsEmptyShouldReturnNewStartState()
         {
-            var response = new HttpResponseMessage();
-            var mockEndpoint = new MockEndpoint(response);
+            var clientProvider = new StubHttpClientProvider(new HttpResponseMessage());
 
             var context = new ApplicationContext();
             context.Set(ApplicationContextKeys.EntryPointUri, new Uri("http://localhost/shop"));
 
-            var state = new StartedState(null, context, new MockEndpointHttpClientProvider(mockEndpoint));
+            var state = new StartedState(null, context, clientProvider);
 
             var newState = state.Apply();
 
@@ -39,13 +38,12 @@ namespace Tests.Restbucks.Client.States
         [Test]
         public void WhenContextNameIsEmptyReturnedStartStateContextNameShouldBeStarted()
         {
-            var response = new HttpResponseMessage();
-            var mockEndpoint = new MockEndpoint(response);
+            var clientProvider = new StubHttpClientProvider(new HttpResponseMessage());
 
             var context = new ApplicationContext();
             context.Set(ApplicationContextKeys.EntryPointUri, new Uri("http://localhost/shop"));
 
-            var state = new StartedState(null, context, new MockEndpointHttpClientProvider(mockEndpoint));
+            var state = new StartedState(null, context, clientProvider);
 
             var newState = state.Apply();
 
@@ -57,12 +55,12 @@ namespace Tests.Restbucks.Client.States
         public void WhenContextNameIsEmptyReturnedStartStateShouldContainNewResponse()
         {
             var response = new HttpResponseMessage();
-            var mockEndpoint = new MockEndpoint(response);
+            var clientProvider = new StubHttpClientProvider(response);
 
             var context = new ApplicationContext();
             context.Set(ApplicationContextKeys.EntryPointUri, new Uri("http://localhost/shop"));
 
-            var state = new StartedState(null, context, new MockEndpointHttpClientProvider(mockEndpoint));
+            var state = new StartedState(null, context, clientProvider);
 
             var newState = state.Apply();
 

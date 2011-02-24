@@ -37,13 +37,13 @@ namespace Tests.Restbucks.Client.ResponseHandlers
         public void ReturnValueContainsLatestResponse()
         {
             var response = CreateResponseMessage();
-            var mockEndpoint = new MockEndpoint(response);
+            var clientProvider = new StubHttpClientProvider(response);
 
             var context = new ApplicationContext();
             context.Set(ApplicationContextKeys.EntryPointUri, EntryPointUri);
 
             var handler = new UninitializedResponseHandler();
-            var result = handler.Handle(null, context, new MockEndpointHttpClientProvider(mockEndpoint));
+            var result = handler.Handle(null, context, clientProvider);
 
             Assert.AreEqual(response, result.Response);
         }
