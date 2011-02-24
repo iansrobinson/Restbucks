@@ -20,16 +20,16 @@ namespace Tests.Restbucks.Client.States
         [Test]
         public void IsNotATerminalState()
         {
-            var state = new StartedState(null, new ApplicationContext(), HttpClientProvider.Instance);
+            var state = new StartedState(null, new ApplicationContext());
             Assert.IsFalse(state.IsTerminalState);
         }
 
         [Test]
         public void WhenIsUninitializedShouldReturnNewStartState()
         {
-            var state = new StartedState(null, CreateUninitializedContext(), new StubHttpClientProvider());
+            var state = new StartedState(null, CreateUninitializedContext());
 
-            var newState = state.Apply();
+            var newState = state.Apply(new StubHttpClientProvider());
 
             Assert.IsInstanceOf(typeof (StartedState), newState);
             Assert.AreNotEqual(state, newState);
@@ -38,9 +38,9 @@ namespace Tests.Restbucks.Client.States
         [Test]
         public void WhenIsUninitializedReturnedStateSemanticContextShouldBeStarted()
         {
-            var state = new StartedState(null, CreateUninitializedContext(), new StubHttpClientProvider());
+            var state = new StartedState(null, CreateUninitializedContext());
 
-            var newState = state.Apply();
+            var newState = state.Apply(new StubHttpClientProvider());
 
             var context = newState.GetPrivateFieldValue<ApplicationContext>("context");
             Assert.AreEqual(SemanticContext.Started, context.Get<string>(ApplicationContextKeys.SemanticContext));
@@ -50,9 +50,9 @@ namespace Tests.Restbucks.Client.States
         public void WhenIsUninitializedReturnedStateShouldContainNewResponse()
         {
             var response = new HttpResponseMessage();
-            var state = new StartedState(null, CreateUninitializedContext(), new StubHttpClientProvider(response));
+            var state = new StartedState(null, CreateUninitializedContext());
 
-            var newState = state.Apply();
+            var newState = state.Apply(new StubHttpClientProvider(response));
 
             Assert.AreEqual(response, newState.GetPrivateFieldValue<HttpResponseMessage>("response"));
         }
@@ -60,9 +60,9 @@ namespace Tests.Restbucks.Client.States
         [Test]
         public void WhenIsStartedShouldReturnNewStartState()
         {
-            var state = new StartedState(CreateEntryPointResponseMessage(), CreateStartedContext(), new StubHttpClientProvider());
+            var state = new StartedState(CreateEntryPointResponseMessage(), CreateStartedContext());
 
-            var newState = state.Apply();
+            var newState = state.Apply(new StubHttpClientProvider());
 
             Assert.IsInstanceOf(typeof (StartedState), newState);
             Assert.AreNotEqual(state, newState);
@@ -71,9 +71,9 @@ namespace Tests.Restbucks.Client.States
         [Test]
         public void WhenIsStartedReturnedStateSemanticContextShouldBeRfq()
         {
-            var state = new StartedState(CreateEntryPointResponseMessage(), CreateStartedContext(), new StubHttpClientProvider());
+            var state = new StartedState(CreateEntryPointResponseMessage(), CreateStartedContext());
 
-            var newState = state.Apply();
+            var newState = state.Apply(new StubHttpClientProvider());
 
             var context = newState.GetPrivateFieldValue<ApplicationContext>("context");
             Assert.AreEqual(SemanticContext.Rfq, context.Get<string>(ApplicationContextKeys.SemanticContext));
@@ -83,9 +83,9 @@ namespace Tests.Restbucks.Client.States
         public void WhenIsStartedReturnedStateShouldContainNewResponse()
         {
             var response = new HttpResponseMessage();
-            var state = new StartedState(CreateEntryPointResponseMessage(), CreateStartedContext(), new StubHttpClientProvider(response));
+            var state = new StartedState(CreateEntryPointResponseMessage(), CreateStartedContext());
 
-            var newState = state.Apply();
+            var newState = state.Apply(new StubHttpClientProvider(response));
 
             Assert.AreEqual(response, newState.GetPrivateFieldValue<HttpResponseMessage>("response"));
         }
@@ -93,9 +93,9 @@ namespace Tests.Restbucks.Client.States
         [Test]
         public void WhenIsRfqShouldReturnNewQuoteRequestedState()
         {
-            var state = new StartedState(CreateRfqResponseMessage(), CreateRfqContext(), new StubHttpClientProvider());
+            var state = new StartedState(CreateRfqResponseMessage(), CreateRfqContext());
 
-            var newState = state.Apply();
+            var newState = state.Apply(new StubHttpClientProvider());
 
             Assert.IsInstanceOf(typeof (QuoteRequestedState), newState);
             Assert.AreNotEqual(state, newState);
@@ -104,9 +104,9 @@ namespace Tests.Restbucks.Client.States
         [Test]
         public void WhenIsRfqReturnedStateSemanticContextShouldBeEmpty()
         {
-            var state = new StartedState(CreateRfqResponseMessage(), CreateRfqContext(), new StubHttpClientProvider());
+            var state = new StartedState(CreateRfqResponseMessage(), CreateRfqContext());
 
-            var newState = state.Apply();
+            var newState = state.Apply(new StubHttpClientProvider());
 
             var context = newState.GetPrivateFieldValue<ApplicationContext>("context");
             Assert.IsFalse(context.ContainsKey(ApplicationContextKeys.SemanticContext));
@@ -116,9 +116,9 @@ namespace Tests.Restbucks.Client.States
         public void WhenIsRfqReturnedStateShouldContainNewResponse()
         {
             var response = new HttpResponseMessage();
-            var state = new StartedState(CreateRfqResponseMessage(), CreateRfqContext(), new StubHttpClientProvider(response));
+            var state = new StartedState(CreateRfqResponseMessage(), CreateRfqContext());
 
-            var newState = state.Apply();
+            var newState = state.Apply(new StubHttpClientProvider(response));
 
             Assert.AreEqual(response, newState.GetPrivateFieldValue<HttpResponseMessage>("response"));
         }

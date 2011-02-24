@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net.Http;
-using Restbucks.Client.ResponseHandlers;
 
 namespace Restbucks.Client.States
 {
@@ -8,16 +7,14 @@ namespace Restbucks.Client.States
     {
         private readonly HttpResponseMessage response;
         private readonly ApplicationContext context;
-        private readonly IHttpClientProvider clientProvider;
 
-        public QuoteRequestedState(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
+        public QuoteRequestedState(HttpResponseMessage response, ApplicationContext context)
         {
             this.response = response;
             this.context = context;
-            this.clientProvider = clientProvider;
         }
 
-        public IState Apply()
+        public IState Apply(IHttpClientProvider clientProvider)
         {
             throw new NotImplementedException();
         }

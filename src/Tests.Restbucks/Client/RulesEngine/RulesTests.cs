@@ -185,7 +185,7 @@ namespace Tests.Restbucks.Client.RulesEngine
 
         private class DummyState : IState
         {
-            public IState Apply()
+            public IState Apply(IHttpClientProvider clientProvider)
             {
                 throw new NotImplementedException();
             }
@@ -198,7 +198,7 @@ namespace Tests.Restbucks.Client.RulesEngine
 
         private class DummyTerminalState : IState
         {
-            public IState Apply()
+            public IState Apply(IHttpClientProvider clientProvider)
             {
                 throw new NotImplementedException();
             }

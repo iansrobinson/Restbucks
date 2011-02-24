@@ -11,18 +11,16 @@ namespace Restbucks.Client.States
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        private readonly IHttpClientProvider clientProvider;
         private readonly ApplicationContext context;
         private readonly HttpResponseMessage response;
 
-        public StartedState(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
+        public StartedState(HttpResponseMessage response, ApplicationContext context)
         {
             this.response = response;
             this.context = context;
-            this.clientProvider = clientProvider;
         }
 
-        public IState Apply()
+        public IState Apply(IHttpClientProvider clientProvider)
         {
             Log.Info("Started...");
 
@@ -55,12 +53,12 @@ namespace Restbucks.Client.States
 
         private static IState NewStartState(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
         {
-            return new StartedState(response, context, clientProvider);
+            return new StartedState(response, context);
         }
 
         private static IState NewQuoteRequestedState(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
         {
-            return new QuoteRequestedState(response, context, clientProvider);
+            return new QuoteRequestedState(response, context);
         }
 
         private bool IsUninitialized()
