@@ -83,7 +83,7 @@ namespace Tests.Restbucks.Client.RulesEngine
 
         public class DummyHandler : IResponseHandler
         {
-            public Result<HttpResponseMessage> Handle(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
+            public Result<HttpResponseMessage> Handle(HttpResponseMessage response, ApplicationContext context)
             {
                 return new Result<HttpResponseMessage>(true, new HttpResponseMessage());
             }

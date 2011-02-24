@@ -52,7 +52,7 @@ namespace Tests.Restbucks.Client.States
             var response = new HttpResponseMessage();
             var state = new StartedState(null, CreateUninitializedContext());
 
-            var newState = state.Apply(new StubHttpClientProvider(response), new StubResponseHandlers());
+            var newState = state.Apply(new StubHttpClientProvider(response), new StubResponseHandlers(new StubHttpClientProvider(response)));
 
             Assert.AreEqual(response, newState.GetPrivateFieldValue<HttpResponseMessage>("response"));
         }
@@ -85,7 +85,7 @@ namespace Tests.Restbucks.Client.States
             var response = new HttpResponseMessage();
             var state = new StartedState(CreateEntryPointResponseMessage(), CreateStartedContext());
 
-            var newState = state.Apply(new StubHttpClientProvider(response), new StubResponseHandlers());
+            var newState = state.Apply(new StubHttpClientProvider(response), new StubResponseHandlers(new StubHttpClientProvider(response)));
 
             Assert.AreEqual(response, newState.GetPrivateFieldValue<HttpResponseMessage>("response"));
         }
@@ -118,7 +118,7 @@ namespace Tests.Restbucks.Client.States
             var response = new HttpResponseMessage();
             var state = new StartedState(CreateRfqResponseMessage(), CreateRfqContext());
 
-            var newState = state.Apply(new StubHttpClientProvider(response), new StubResponseHandlers());
+            var newState = state.Apply(new StubHttpClientProvider(response), new StubResponseHandlers(new StubHttpClientProvider(response)));
 
             Assert.AreEqual(response, newState.GetPrivateFieldValue<HttpResponseMessage>("response"));
         }
@@ -173,9 +173,20 @@ namespace Tests.Restbucks.Client.States
 
         private class StubResponseHandlers : IResponseHandlers
         {
+            private readonly IHttpClientProvider clientProvider;
+
+            public StubResponseHandlers() : this(new StubHttpClientProvider())
+            {
+            }
+
+            public StubResponseHandlers(IHttpClientProvider clientProvider)
+            {
+                this.clientProvider = clientProvider;
+            }
+
             public IResponseHandler Get<T>() where T : IResponseHandler
             {
-                return (IResponseHandler) typeof (T).GetConstructor(new Type[] {}).Invoke(new object[] {});
+                return (IResponseHandler) typeof (T).GetConstructor(new[] {typeof (IHttpClientProvider)}).Invoke(new object[] {clientProvider});
             }
         }
     }

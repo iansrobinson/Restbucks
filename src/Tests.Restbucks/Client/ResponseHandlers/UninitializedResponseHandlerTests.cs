@@ -27,8 +27,8 @@ namespace Tests.Restbucks.Client.ResponseHandlers
             var context = new ApplicationContext();
             context.Set(ApplicationContextKeys.EntryPointUri, EntryPointUri);
 
-            var handler = new UninitializedResponseHandler();
-            handler.Handle(null, context, new MockEndpointHttpClientProvider(mockEndpoint));
+            var handler = new UninitializedResponseHandler(new MockEndpointHttpClientProvider(mockEndpoint));
+            handler.Handle(null, context);
 
             Assert.AreEqual(EntryPointUri, mockEndpoint.ReceivedRequest.RequestUri);
         }
@@ -37,13 +37,12 @@ namespace Tests.Restbucks.Client.ResponseHandlers
         public void ReturnValueContainsLatestResponse()
         {
             var response = CreateResponseMessage();
-            var clientProvider = new StubHttpClientProvider(response);
-
+            
             var context = new ApplicationContext();
             context.Set(ApplicationContextKeys.EntryPointUri, EntryPointUri);
 
-            var handler = new UninitializedResponseHandler();
-            var result = handler.Handle(null, context, clientProvider);
+            var handler = new UninitializedResponseHandler(new StubHttpClientProvider(response));
+            var result = handler.Handle(null, context);
 
             Assert.AreEqual(response, result.Value);
         }

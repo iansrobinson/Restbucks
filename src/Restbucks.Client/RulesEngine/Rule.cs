@@ -32,7 +32,7 @@ namespace Restbucks.Client.RulesEngine
                 return new Result<IState>(false, null);
             }
 
-            var result = createResponseHandler().Handle(response, context, clientProvider);
+            var result = createResponseHandler().Handle(response, context);
 
             if (!result.IsSuccessful)
             {

@@ -9,8 +9,15 @@ namespace Restbucks.Client.ResponseHandlers
     public class UninitializedResponseHandler : IResponseHandler
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        
-        public Result<HttpResponseMessage> Handle(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
+
+        private readonly IHttpClientProvider clientProvider;
+
+        public UninitializedResponseHandler(IHttpClientProvider clientProvider)
+        {
+            this.clientProvider = clientProvider;
+        }
+
+        public Result<HttpResponseMessage> Handle(HttpResponseMessage response, ApplicationContext context)
         {
             Log.Debug("  Getting entry point...");
             

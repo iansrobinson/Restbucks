@@ -4,6 +4,6 @@ namespace Restbucks.Client.RulesEngine
 {
     public interface IResponseHandler
     {
-        Result<HttpResponseMessage> Handle(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider);
+        Result<HttpResponseMessage> Handle(HttpResponseMessage response, ApplicationContext context);
     }
 }

@@ -1,20 +1,20 @@
-﻿using System;
-using Restbucks.Client.RulesEngine;
+﻿using Restbucks.Client.RulesEngine;
 using Restbucks.Client.States;
 
 namespace Restbucks.Client.ConsoleHost
 {
     public class ResponseHandlers : IResponseHandlers
     {
-        public static readonly IResponseHandlers Instance = new ResponseHandlers();
+        private readonly IHttpClientProvider clientProvider;
 
-        private ResponseHandlers()
+        public ResponseHandlers(IHttpClientProvider clientProvider)
         {
+            this.clientProvider = clientProvider;
         }
 
         public IResponseHandler Get<T>() where T : IResponseHandler
         {
-            return (IResponseHandler) typeof (T).GetConstructor(new Type[] {}).Invoke(new object[] {});
+            return (IResponseHandler) typeof (T).GetConstructor(new[] {typeof (IHttpClientProvider)}).Invoke(new object[] {clientProvider});
         }
     }
 }
