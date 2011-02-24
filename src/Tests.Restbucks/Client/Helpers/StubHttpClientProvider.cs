@@ -10,6 +10,10 @@ namespace Tests.Restbucks.Client.Helpers
     {
         private readonly HttpResponseMessage response;
 
+        public StubHttpClientProvider() : this(new HttpResponseMessage())
+        {
+        }
+
         public StubHttpClientProvider(HttpResponseMessage response)
         {
             this.response = response;

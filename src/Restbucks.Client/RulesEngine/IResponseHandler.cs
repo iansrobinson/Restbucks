@@ -1,7 +1,6 @@
 ﻿using System.Net.Http;
-using Restbucks.Client.RulesEngine;
 
-namespace Restbucks.Client.ResponseHandlers
+namespace Restbucks.Client.RulesEngine
 {
     public interface IResponseHandler
     {

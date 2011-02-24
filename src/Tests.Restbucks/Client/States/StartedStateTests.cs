@@ -20,14 +20,9 @@ namespace Tests.Restbucks.Client.States
         }
 
         [Test]
-        public void WhenContextNameIsEmptyShouldReturnNewStartState()
+        public void WhenIsUninitializedShouldReturnNewStartState()
         {
-            var clientProvider = new StubHttpClientProvider(new HttpResponseMessage());
-
-            var context = new ApplicationContext();
-            context.Set(ApplicationContextKeys.EntryPointUri, new Uri("http://localhost/shop"));
-
-            var state = new StartedState(null, context, clientProvider);
+            var state = new StartedState(null, CreateUninitializedContext(), new StubHttpClientProvider());
 
             var newState = state.Apply();
 
@@ -36,35 +31,32 @@ namespace Tests.Restbucks.Client.States
         }
 
         [Test]
-        public void WhenContextNameIsEmptyReturnedStartStateContextNameShouldBeStarted()
+        public void WhenIsUninitializedReturnedStateSemanticContextShouldBeStarted()
         {
-            var clientProvider = new StubHttpClientProvider(new HttpResponseMessage());
-
-            var context = new ApplicationContext();
-            context.Set(ApplicationContextKeys.EntryPointUri, new Uri("http://localhost/shop"));
-
-            var state = new StartedState(null, context, clientProvider);
+            var state = new StartedState(null, CreateUninitializedContext(), new StubHttpClientProvider());
 
             var newState = state.Apply();
 
-            var applicationContext = newState.GetPrivateFieldValue<ApplicationContext>("context");
-            Assert.AreEqual("started", applicationContext.Get<string>(ApplicationContextKeys.SemanticContext));
+            var context = newState.GetPrivateFieldValue<ApplicationContext>("context");
+            Assert.AreEqual("started", context.Get<string>(ApplicationContextKeys.SemanticContext));
         }
 
         [Test]
-        public void WhenContextNameIsEmptyReturnedStartStateShouldContainNewResponse()
+        public void WhenIsUninitializedReturnedStateShouldContainNewResponse()
         {
             var response = new HttpResponseMessage();
-            var clientProvider = new StubHttpClientProvider(response);
-
-            var context = new ApplicationContext();
-            context.Set(ApplicationContextKeys.EntryPointUri, new Uri("http://localhost/shop"));
-
-            var state = new StartedState(null, context, clientProvider);
+            var state = new StartedState(null, CreateUninitializedContext(), new StubHttpClientProvider(response));
 
             var newState = state.Apply();
 
             Assert.AreEqual(response, newState.GetPrivateFieldValue<HttpResponseMessage>("response"));
+        }
+
+        private static ApplicationContext CreateUninitializedContext()
+        {
+            var context = new ApplicationContext();
+            context.Set(ApplicationContextKeys.EntryPointUri, new Uri("http://localhost/shop"));
+            return context;
         }
     }
 }

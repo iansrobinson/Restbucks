@@ -61,13 +61,13 @@
     <Compile Include="Keys\KeyEqualityComparer.cs" />
     <Compile Include="Keys\StringKey.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ResponseHandlers\IResponseHandler.cs" />
     <Compile Include="ResponseHandlers\RequestForQuoteFormResponseHandler.cs" />
     <Compile Include="ResponseHandlers\StartedResponseHandler.cs" />
     <Compile Include="ResponseHandlers\UninitializedResponseHandler.cs" />
     <Compile Include="RulesEngine\Actions.cs" />
     <Compile Include="RulesEngine\Else.cs" />
     <Compile Include="RulesEngine\ElseRule.cs" />
+    <Compile Include="RulesEngine\IResponseHandler.cs" />
     <Compile Include="RulesEngine\IRule.cs" />
     <Compile Include="RulesEngine\NullStateException.cs" />
     <Compile Include="RulesEngine\On.cs" />
