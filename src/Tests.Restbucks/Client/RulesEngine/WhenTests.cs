@@ -4,7 +4,6 @@ using NUnit.Framework;
 using Restbucks.Client;
 using Restbucks.Client.Http;
 using Restbucks.Client.Keys;
-using Restbucks.Client.ResponseHandlers;
 using Restbucks.Client.RulesEngine;
 using Restbucks.Client.States;
 using Tests.Restbucks.Client.States.Helpers;
@@ -18,7 +17,7 @@ namespace Tests.Restbucks.Client.RulesEngine
         public void ShouldReturnRuleThatUpdatesContextWithSuppliedAction()
         {
             IRule rule = When.IsTrue(() => true)
-                .InvokeHandler<DummyHandler>()
+                .InvokeHandler(new DummyHandler())
                 .UpdateContext(c => c.Set(new StringKey("key-name"), "value"))
                 .ReturnState(CreateDummyState());
 
@@ -33,26 +32,13 @@ namespace Tests.Restbucks.Client.RulesEngine
         public void ShouldReturnRuleThatCreatesNewStateWithSuppliedFunction()
         {
             IRule rule = When.IsTrue(() => true)
-                .InvokeHandler<DummyHandler>()
+                .InvokeHandler(new DummyHandler())
                 .UpdateContext(DoNothingContextAction())
                 .ReturnState(CreateDummyState());
 
             var result = rule.Evaluate(new HttpResponseMessage(), new ApplicationContext(), HttpClientProvider.Instance);
 
-            Assert.IsInstanceOf(typeof(DummyState), result.Value);
-        }
-
-        [Test]
-        public void ShouldReturnARuleContainingCreateResponseHandlerFunctionForGenericType()
-        {
-            var rule = When.IsTrue(() => true)
-                .InvokeHandler<DummyHandler>()
-                .UpdateContext(DoNothingContextAction())
-                .ReturnState(CreateDummyState());
-
-            var func = rule.GetPrivateFieldValue<Func<IResponseHandler>>("createResponseHandler");
-
-            Assert.IsInstanceOf(typeof(DummyHandler), func());
+            Assert.IsInstanceOf(typeof (DummyState), result.Value);
         }
 
         [Test]

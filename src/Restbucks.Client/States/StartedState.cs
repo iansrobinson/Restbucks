@@ -26,15 +26,15 @@ namespace Restbucks.Client.States
 
             var rules = new Rules(
                 When.IsTrue(IsUninitialized)
-                    .InvokeHandler<UninitializedResponseHandler>()
+                    .InvokeHandler(handlers.Get<UninitializedResponseHandler>)
                     .UpdateContext(SetSemanticContext(SemanticContext.Started))
                     .ReturnState(NewStartState),
                 When.IsTrue(IsStarted)
-                    .InvokeHandler<StartedResponseHandler>()
+                    .InvokeHandler(handlers.Get<StartedResponseHandler>)
                     .UpdateContext(SetSemanticContext(SemanticContext.Rfq))
                     .ReturnState(NewStartState),
                 When.IsTrue(IsRfc)
-                    .InvokeHandler<RequestForQuoteFormResponseHandler>()
+                    .InvokeHandler(handlers.Get<RequestForQuoteFormResponseHandler>)
                     .UpdateContext(ClearSemanticContext())
                     .ReturnState(NewQuoteRequestedState));
 
