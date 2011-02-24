@@ -20,7 +20,7 @@ namespace Restbucks.Client.States
             this.context = context;
         }
 
-        public IState Apply(IHttpClientProvider clientProvider, IResponseHandlers handlers)
+        public IState Apply(IResponseHandlers handlers)
         {
             Log.Info("Started...");
 
@@ -38,7 +38,7 @@ namespace Restbucks.Client.States
                     .UpdateContext(ClearSemanticContext())
                     .ReturnState(NewQuoteRequestedState));
 
-            return rules.Evaluate(response, context, clientProvider);
+            return rules.Evaluate(response, context);
         }
 
         private static Action<ApplicationContext> ClearSemanticContext()
@@ -51,12 +51,12 @@ namespace Restbucks.Client.States
             return c => c.Set(ApplicationContextKeys.SemanticContext, value);
         }
 
-        private static IState NewStartState(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
+        private static IState NewStartState(HttpResponseMessage response, ApplicationContext context)
         {
             return new StartedState(response, context);
         }
 
-        private static IState NewQuoteRequestedState(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
+        private static IState NewQuoteRequestedState(HttpResponseMessage response, ApplicationContext context)
         {
             return new QuoteRequestedState(response, context);
         }

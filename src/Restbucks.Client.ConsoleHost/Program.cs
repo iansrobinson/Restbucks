@@ -22,11 +22,11 @@ namespace Restbucks.Client.ConsoleHost
             var responseHandlers = new ResponseHandlers(HttpClientProvider.Instance);
             
             var state = new StartedState(null, context);
-            var newState = state.Apply(HttpClientProvider.Instance, responseHandlers);
+            var newState = state.Apply(responseHandlers);
 
             while (newState != null && !newState.IsTerminalState)
             {
-                newState = newState.Apply(HttpClientProvider.Instance, responseHandlers);
+                newState = newState.Apply(responseHandlers);
             }
 
             Console.WriteLine("Finished");

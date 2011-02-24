@@ -29,7 +29,7 @@ namespace Tests.Restbucks.Client.States
         {
             var state = new StartedState(null, CreateUninitializedContext());
 
-            var newState = state.Apply(new StubHttpClientProvider(), new StubResponseHandlers());
+            var newState = state.Apply(new StubResponseHandlers());
 
             Assert.IsInstanceOf(typeof (StartedState), newState);
             Assert.AreNotEqual(state, newState);
@@ -40,7 +40,7 @@ namespace Tests.Restbucks.Client.States
         {
             var state = new StartedState(null, CreateUninitializedContext());
 
-            var newState = state.Apply(new StubHttpClientProvider(), new StubResponseHandlers());
+            var newState = state.Apply(new StubResponseHandlers());
 
             var context = newState.GetPrivateFieldValue<ApplicationContext>("context");
             Assert.AreEqual(SemanticContext.Started, context.Get<string>(ApplicationContextKeys.SemanticContext));
@@ -52,7 +52,7 @@ namespace Tests.Restbucks.Client.States
             var response = new HttpResponseMessage();
             var state = new StartedState(null, CreateUninitializedContext());
 
-            var newState = state.Apply(new StubHttpClientProvider(response), new StubResponseHandlers(new StubHttpClientProvider(response)));
+            var newState = state.Apply(new StubResponseHandlers(new StubHttpClientProvider(response)));
 
             Assert.AreEqual(response, newState.GetPrivateFieldValue<HttpResponseMessage>("response"));
         }
@@ -62,7 +62,7 @@ namespace Tests.Restbucks.Client.States
         {
             var state = new StartedState(CreateEntryPointResponseMessage(), CreateStartedContext());
 
-            var newState = state.Apply(new StubHttpClientProvider(), new StubResponseHandlers());
+            var newState = state.Apply(new StubResponseHandlers());
 
             Assert.IsInstanceOf(typeof (StartedState), newState);
             Assert.AreNotEqual(state, newState);
@@ -73,7 +73,7 @@ namespace Tests.Restbucks.Client.States
         {
             var state = new StartedState(CreateEntryPointResponseMessage(), CreateStartedContext());
 
-            var newState = state.Apply(new StubHttpClientProvider(), new StubResponseHandlers());
+            var newState = state.Apply(new StubResponseHandlers());
 
             var context = newState.GetPrivateFieldValue<ApplicationContext>("context");
             Assert.AreEqual(SemanticContext.Rfq, context.Get<string>(ApplicationContextKeys.SemanticContext));
@@ -85,7 +85,7 @@ namespace Tests.Restbucks.Client.States
             var response = new HttpResponseMessage();
             var state = new StartedState(CreateEntryPointResponseMessage(), CreateStartedContext());
 
-            var newState = state.Apply(new StubHttpClientProvider(response), new StubResponseHandlers(new StubHttpClientProvider(response)));
+            var newState = state.Apply(new StubResponseHandlers(new StubHttpClientProvider(response)));
 
             Assert.AreEqual(response, newState.GetPrivateFieldValue<HttpResponseMessage>("response"));
         }
@@ -95,7 +95,7 @@ namespace Tests.Restbucks.Client.States
         {
             var state = new StartedState(CreateRfqResponseMessage(), CreateRfqContext());
 
-            var newState = state.Apply(new StubHttpClientProvider(), new StubResponseHandlers());
+            var newState = state.Apply(new StubResponseHandlers());
 
             Assert.IsInstanceOf(typeof (QuoteRequestedState), newState);
             Assert.AreNotEqual(state, newState);
@@ -106,7 +106,7 @@ namespace Tests.Restbucks.Client.States
         {
             var state = new StartedState(CreateRfqResponseMessage(), CreateRfqContext());
 
-            var newState = state.Apply(new StubHttpClientProvider(), new StubResponseHandlers());
+            var newState = state.Apply(new StubResponseHandlers());
 
             var context = newState.GetPrivateFieldValue<ApplicationContext>("context");
             Assert.IsFalse(context.ContainsKey(ApplicationContextKeys.SemanticContext));
@@ -118,7 +118,7 @@ namespace Tests.Restbucks.Client.States
             var response = new HttpResponseMessage();
             var state = new StartedState(CreateRfqResponseMessage(), CreateRfqContext());
 
-            var newState = state.Apply(new StubHttpClientProvider(response), new StubResponseHandlers(new StubHttpClientProvider(response)));
+            var newState = state.Apply(new StubResponseHandlers(new StubHttpClientProvider(response)));
 
             Assert.AreEqual(response, newState.GetPrivateFieldValue<HttpResponseMessage>("response"));
         }

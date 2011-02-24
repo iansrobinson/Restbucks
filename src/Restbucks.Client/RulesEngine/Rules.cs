@@ -22,11 +22,11 @@ namespace Restbucks.Client.RulesEngine
             this.rules = rules;
         }
 
-        public IState Evaluate(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
+        public IState Evaluate(HttpResponseMessage response, ApplicationContext context)
         {
             foreach (var rule in rules)
             {
-                var result = rule.Evaluate(response, context, clientProvider);
+                var result = rule.Evaluate(response, context);
                 if (result.IsSuccessful)
                 {
                     return result.Value;

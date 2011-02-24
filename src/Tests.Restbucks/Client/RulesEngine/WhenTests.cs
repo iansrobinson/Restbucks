@@ -2,7 +2,6 @@
 using System.Net.Http;
 using NUnit.Framework;
 using Restbucks.Client;
-using Restbucks.Client.Http;
 using Restbucks.Client.Keys;
 using Restbucks.Client.RulesEngine;
 using Restbucks.Client.States;
@@ -23,7 +22,7 @@ namespace Tests.Restbucks.Client.RulesEngine
 
             var context = new ApplicationContext();
 
-            rule.Evaluate(new HttpResponseMessage(), context, HttpClientProvider.Instance);
+            rule.Evaluate(new HttpResponseMessage(), context);
 
             Assert.AreEqual("value", context.Get<string>(new StringKey("key-name")));
         }
@@ -36,7 +35,7 @@ namespace Tests.Restbucks.Client.RulesEngine
                 .UpdateContext(DoNothingContextAction())
                 .ReturnState(CreateDummyState());
 
-            var result = rule.Evaluate(new HttpResponseMessage(), new ApplicationContext(), HttpClientProvider.Instance);
+            var result = rule.Evaluate(new HttpResponseMessage(), new ApplicationContext());
 
             Assert.IsInstanceOf(typeof (DummyState), result.Value);
         }
@@ -71,9 +70,9 @@ namespace Tests.Restbucks.Client.RulesEngine
             Assert.AreEqual(f, func);
         }
 
-        private static Func<HttpResponseMessage, ApplicationContext, IHttpClientProvider, IState> CreateDummyState()
+        private static Func<HttpResponseMessage, ApplicationContext, IState> CreateDummyState()
         {
-            return (r, c, p) => new DummyState();
+            return (r, c) => new DummyState();
         }
 
         private static Action<ApplicationContext> DoNothingContextAction()
@@ -91,7 +90,7 @@ namespace Tests.Restbucks.Client.RulesEngine
 
         public class DummyState : IState
         {
-            public IState Apply(IHttpClientProvider clientProvider, IResponseHandlers handlers)
+            public IState Apply(IResponseHandlers handlers)
             {
                 throw new NotImplementedException();
             }

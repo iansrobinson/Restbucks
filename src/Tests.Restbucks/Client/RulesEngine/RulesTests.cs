@@ -4,9 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using NUnit.Framework;
 using Restbucks.Client;
-using Restbucks.Client.Http;
 using Restbucks.Client.Keys;
-using Restbucks.Client.ResponseHandlers;
 using Restbucks.Client.RulesEngine;
 using Restbucks.Client.States;
 
@@ -28,24 +26,24 @@ namespace Tests.Restbucks.Client.RulesEngine
                              },
                          () => new SuccessfulResponseHandler(),
                          c => c.Set(ApplicationContextKeys.SemanticContext, "context-name"),
-                         (r, c, p) => new DummyState()),
+                         (r, c) => new DummyState()),
                 new Rule(() =>
                              {
                                  processOrder.Enqueue("second");
                                  return false;
                              }, () => new SuccessfulResponseHandler(),
                          c => c.Set(ApplicationContextKeys.SemanticContext, "context-name"),
-                         (r, c, p) => new DummyState()),
+                         (r, c) => new DummyState()),
                 new Rule(() =>
                              {
                                  processOrder.Enqueue("third");
                                  return false;
                              }, () => new SuccessfulResponseHandler(),
                          c => c.Set(ApplicationContextKeys.SemanticContext, "context-name"),
-                         (r, c, p) => new DummyState())
+                         (r, c) => new DummyState())
                 );
 
-            rules.Evaluate(null, new ApplicationContext(), HttpClientProvider.Instance);
+            rules.Evaluate(null, new ApplicationContext());
 
             Assert.IsTrue(processOrder.SequenceEqual(new[] {"first", "second", "third"}));
         }
@@ -58,11 +56,11 @@ namespace Tests.Restbucks.Client.RulesEngine
                 new Rule(() => true,
                          () => handler,
                          c => c.Set(ApplicationContextKeys.SemanticContext, "context-name"),
-                         (r, c, p) => new DummyState()));
+                         (r, c) => new DummyState()));
 
             Assert.IsFalse(handler.WasCalled);
 
-            rules.Evaluate(null, new ApplicationContext(), HttpClientProvider.Instance);
+            rules.Evaluate(null, new ApplicationContext());
 
             Assert.IsTrue(handler.WasCalled);
         }
@@ -77,13 +75,13 @@ namespace Tests.Restbucks.Client.RulesEngine
                 new Rule(() => true,
                          () => firstHandler,
                          c => c.Set(ApplicationContextKeys.SemanticContext, "context-name"),
-                         (r, c, p) => new DummyState()),
+                         (r, c) => new DummyState()),
                 new Rule(() => true,
                          () => secondHandler,
                          c => c.Set(ApplicationContextKeys.SemanticContext, "context-name"),
-                         (r, c, p) => new DummyState()));
+                         (r, c) => new DummyState()));
 
-            rules.Evaluate(null, new ApplicationContext(), HttpClientProvider.Instance);
+            rules.Evaluate(null, new ApplicationContext());
 
             Assert.IsTrue(firstHandler.WasCalled);
             Assert.IsTrue(secondHandler.WasCalled);
@@ -97,8 +95,8 @@ namespace Tests.Restbucks.Client.RulesEngine
                 new Rule(() => true,
                          () => new SuccessfulResponseHandler(),
                          c => c.Set(ApplicationContextKeys.SemanticContext, "context-name"),
-                         (r, c, p) => null));
-            rules.Evaluate(null, new ApplicationContext(), HttpClientProvider.Instance);
+                         (r, c) => null));
+            rules.Evaluate(null, new ApplicationContext());
         }
 
         [Test]
@@ -109,19 +107,19 @@ namespace Tests.Restbucks.Client.RulesEngine
                 new Rule(() => true,
                          () => new UnsuccessfulResponseHandler(),
                          c => c.Set(ApplicationContextKeys.SemanticContext, "context-name"),
-                         (r, c, p) => new DummyState()),
-                new ElseRule(c => c.Set(ApplicationContextKeys.SemanticContext, "context-name"), (h, c, r) => new DummyState()),
+                         (r, c) => new DummyState()),
+                new ElseRule(c => c.Set(ApplicationContextKeys.SemanticContext, "context-name"), (h, c) => new DummyState()),
                 new Rule(() => true,
                          () => new SuccessfulResponseHandler(),
                          c => c.Set(ApplicationContextKeys.SemanticContext, "context-name"),
-                         (r, c, p) => new DummyState()));
+                         (r, c) => new DummyState()));
         }
 
         [Test]
         public void ShouldReturnTerminalStateWhenNoRuleSucceedsAndNoElseRuleIsSupplied()
         {
             var rules = new Rules();
-            var state = rules.Evaluate(new HttpResponseMessage(), new ApplicationContext(), HttpClientProvider.Instance);
+            var state = rules.Evaluate(new HttpResponseMessage(), new ApplicationContext());
 
             Assert.IsInstanceOf(typeof (TerminalState), state);
         }
@@ -130,12 +128,12 @@ namespace Tests.Restbucks.Client.RulesEngine
         public void ShouldEvaluateSuppliedElseRuleIfNoOtherRuleSucceeds()
         {
             var rules = new Rules(
-                new Rule(() => false, () => new UnsuccessfulResponseHandler(), c => { }, (r, c, p) => new DummyState()),
-                new ElseRule(c => c.Set(new StringKey("key"), "value"), (h, c, r) => new DummyTerminalState()));
+                new Rule(() => false, () => new UnsuccessfulResponseHandler(), c => { }, (r, c) => new DummyState()),
+                new ElseRule(c => c.Set(new StringKey("key"), "value"), (r, c) => new DummyTerminalState()));
 
             var context = new ApplicationContext();
 
-            var state = rules.Evaluate(new HttpResponseMessage(), context, HttpClientProvider.Instance);
+            var state = rules.Evaluate(new HttpResponseMessage(), context);
 
             Assert.AreEqual("value", context.Get<string>(new StringKey("key")));
             Assert.IsInstanceOf(typeof (DummyTerminalState), state);
@@ -185,7 +183,7 @@ namespace Tests.Restbucks.Client.RulesEngine
 
         private class DummyState : IState
         {
-            public IState Apply(IHttpClientProvider clientProvider, IResponseHandlers handlers)
+            public IState Apply(IResponseHandlers handlers)
             {
                 throw new NotImplementedException();
             }
@@ -198,7 +196,7 @@ namespace Tests.Restbucks.Client.RulesEngine
 
         private class DummyTerminalState : IState
         {
-            public IState Apply(IHttpClientProvider clientProvider, IResponseHandlers handlers)
+            public IState Apply(IResponseHandlers handlers)
             {
                 throw new NotImplementedException();
             }

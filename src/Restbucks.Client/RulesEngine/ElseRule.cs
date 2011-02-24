@@ -6,19 +6,19 @@ namespace Restbucks.Client.RulesEngine
     public class ElseRule : IRule
     {
         private readonly Action<ApplicationContext> contextAction;
-        private readonly Func<HttpResponseMessage, ApplicationContext, IHttpClientProvider, IState> createState;
+        private readonly Func<HttpResponseMessage, ApplicationContext, IState> createState;
 
-        public ElseRule(Action<ApplicationContext> contextAction, Func<HttpResponseMessage, ApplicationContext, IHttpClientProvider, IState> createState)
+        public ElseRule(Action<ApplicationContext> contextAction, Func<HttpResponseMessage, ApplicationContext, IState> createState)
         {
             this.contextAction = contextAction;
             this.createState = createState;
         }
 
-        Result<IState> IRule.Evaluate(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
+        Result<IState> IRule.Evaluate(HttpResponseMessage response, ApplicationContext context)
         {
             contextAction(context);
 
-            var state = createState(response, context, clientProvider);
+            var state = createState(response, context);
 
             if (state == null)
             {

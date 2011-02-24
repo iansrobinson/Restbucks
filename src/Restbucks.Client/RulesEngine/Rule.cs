@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net.Http;
-using Restbucks.Client.ResponseHandlers;
 using Restbucks.RestToolkit.Utils;
 
 namespace Restbucks.Client.RulesEngine
@@ -10,9 +9,9 @@ namespace Restbucks.Client.RulesEngine
         private readonly Func<bool> condition;
         private readonly Func<IResponseHandler> createResponseHandler;
         private readonly Action<ApplicationContext> contextAction;
-        private readonly Func<HttpResponseMessage, ApplicationContext, IHttpClientProvider, IState> createState;
+        private readonly Func<HttpResponseMessage, ApplicationContext, IState> createState;
 
-        public Rule(Func<bool> condition, Func<IResponseHandler> createResponseHandler, Action<ApplicationContext> contextAction, Func<HttpResponseMessage, ApplicationContext, IHttpClientProvider, IState> createState)
+        public Rule(Func<bool> condition, Func<IResponseHandler> createResponseHandler, Action<ApplicationContext> contextAction, Func<HttpResponseMessage, ApplicationContext, IState> createState)
         {
             Check.IsNotNull(condition, "condition");
             Check.IsNotNull(createResponseHandler, "createResponseHandler");
@@ -25,7 +24,7 @@ namespace Restbucks.Client.RulesEngine
             this.createState = createState;
         }
 
-        Result<IState> IRule.Evaluate(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
+        Result<IState> IRule.Evaluate(HttpResponseMessage response, ApplicationContext context)
         {
             if (!condition())
             {
@@ -38,10 +37,10 @@ namespace Restbucks.Client.RulesEngine
             {
                 return new Result<IState>(false, null);
             }
-            
+
             contextAction(context);
 
-            var state = createState(result.Value, context, clientProvider);
+            var state = createState(result.Value, context);
 
             if (state == null)
             {

@@ -37,7 +37,7 @@ namespace Restbucks.Client.RulesEngine
             return this;
         }
 
-        public Rule ReturnState(Func<HttpResponseMessage, ApplicationContext, IHttpClientProvider, IState> createState)
+        public Rule ReturnState(Func<HttpResponseMessage, ApplicationContext, IState> createState)
         {
             return new Rule(condition, createResponseHandler, contextAction, createState);
         }
@@ -56,6 +56,6 @@ namespace Restbucks.Client.RulesEngine
 
     public interface IReturnState
     {
-        Rule ReturnState(Func<HttpResponseMessage, ApplicationContext, IHttpClientProvider, IState> createState);
+        Rule ReturnState(Func<HttpResponseMessage, ApplicationContext, IState> createState);
     }
 }
