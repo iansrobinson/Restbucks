@@ -6,7 +6,7 @@ namespace Restbucks.Client.RulesEngine
 {
     public interface IRule
     {
-        HandlerResult Evaluate(MethodInfo getResponseHandler, IResponseHandlerProvider responseHandlers, HttpResponseMessage response, ApplicationContext context);
-        IState CreateNewState(IResponseHandlerProvider responseHandlers, ApplicationContext context, HttpResponseMessage response);
+        HandlerResult Evaluate(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider);
+        IState CreateNewState(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider);
     }
 }

@@ -2,6 +2,7 @@
 using System.Net.Http;
 using NUnit.Framework;
 using Restbucks.Client;
+using Restbucks.Client.Http;
 using Restbucks.Client.Keys;
 using Restbucks.Client.ResponseHandlers;
 using Restbucks.Client.RulesEngine;
@@ -21,7 +22,7 @@ namespace Tests.Restbucks.Client.RulesEngine
 
             var context = new ApplicationContext();
 
-            rule.CreateNewState(new ResponseHandlerProvider(), context, new HttpResponseMessage());
+            rule.CreateNewState(new HttpResponseMessage(), context, HttpClientProvider.Instance);
 
             Assert.AreEqual("value", context.Get<string>(new StringKey("key-name")));
         }
@@ -34,14 +35,14 @@ namespace Tests.Restbucks.Client.RulesEngine
                 .UpdateContext(DoNothingContextAction())
                 .ReturnState(CreateDummyState());
 
-            var state = rule.CreateNewState(new ResponseHandlerProvider(), new ApplicationContext(), new HttpResponseMessage());
+            var state = rule.CreateNewState(new HttpResponseMessage(), new ApplicationContext(), HttpClientProvider.Instance);
 
             Assert.IsInstanceOf(typeof(DummyState), state);
         }
 
-        private static Func<IResponseHandlerProvider, ApplicationContext, HttpResponseMessage, IState> CreateDummyState()
+        private static Func<HttpResponseMessage, ApplicationContext, IHttpClientProvider, IState> CreateDummyState()
         {
-            return (h, c, m) => new DummyState();
+            return (r, c, p) => new DummyState();
         }
 
         private static Action<ApplicationContext> DoNothingContextAction()
@@ -51,7 +52,7 @@ namespace Tests.Restbucks.Client.RulesEngine
 
         public class DummyHandler : IResponseHandler
         {
-            public HandlerResult Handle(HttpResponseMessage response, ApplicationContext context)
+            public HandlerResult Handle(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
             {
                 throw new NotImplementedException();
             }

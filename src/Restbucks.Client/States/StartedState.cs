@@ -11,15 +11,15 @@ namespace Restbucks.Client.States
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        private readonly IResponseHandlerProvider responseHandlers;
+        private readonly IHttpClientProvider clientProvider;
         private readonly ApplicationContext context;
         private readonly HttpResponseMessage response;
 
-        public StartedState(IResponseHandlerProvider responseHandlers, ApplicationContext context, HttpResponseMessage response)
+        public StartedState(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
         {
-            this.responseHandlers = responseHandlers;
-            this.context = context;
             this.response = response;
+            this.context = context;
+            this.clientProvider = clientProvider;
         }
 
         public IState Apply()
@@ -40,7 +40,7 @@ namespace Restbucks.Client.States
                     .UpdateContext(ClearSemanticContext())
                     .ReturnState(NewQuoteRequestedState));
 
-            return rules.Evaluate(responseHandlers, context, response);
+            return rules.Evaluate(response, context, clientProvider);
         }
 
         private static Action<ApplicationContext> ClearSemanticContext()
@@ -53,14 +53,14 @@ namespace Restbucks.Client.States
             return c => c.Set(ApplicationContextKeys.SemanticContext, value);
         }
 
-        private static IState NewStartState(IResponseHandlerProvider h, ApplicationContext c, HttpResponseMessage r)
+        private static IState NewStartState(HttpResponseMessage r, ApplicationContext c, IHttpClientProvider p)
         {
-            return new StartedState(h, c, r);
+            return new StartedState(r, c, p);
         }
 
-        private static IState NewQuoteRequestedState(IResponseHandlerProvider h, ApplicationContext c, HttpResponseMessage r)
+        private static IState NewQuoteRequestedState(HttpResponseMessage r, ApplicationContext c, IHttpClientProvider p)
         {
-            return new QuoteRequestedState(h, c, r);
+            return new QuoteRequestedState(r, c, p);
         }
 
         private bool IsUninitialized()

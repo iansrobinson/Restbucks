@@ -6,10 +6,12 @@ using System.Net.Http.Headers;
 using NUnit.Framework;
 using Restbucks.Client;
 using Restbucks.Client.Formatters;
+using Restbucks.Client.Http;
 using Restbucks.Client.ResponseHandlers;
 using Restbucks.Client.States;
 using Restbucks.MediaType;
 using Rhino.Mocks;
+using Tests.Restbucks.Client.Helpers;
 using Tests.Restbucks.Client.States.Helpers;
 using Tests.Restbucks.MediaType.Helpers;
 
@@ -21,38 +23,20 @@ namespace Tests.Restbucks.Client.States
         [Test]
         public void IsNotATerminalState()
         {
-            var state = new StartedState(new ResponseHandlerProvider(), new ApplicationContext(), null);
+            var state = new StartedState(null, new ApplicationContext(), HttpClientProvider.Instance);
             Assert.IsFalse(state.IsTerminalState);
-        }
-
-        [Test]
-        public void WhenContextNameIsEmptyShouldDelegateToInitializedResponseHandler()
-        {
-            var context = new ApplicationContext();
-
-            var mocks = new MockRepository();
-            var handler = mocks.StrictMock<IResponseHandler>();
-
-            using (mocks.Record())
-            {
-                Expect.Call(handler.Handle(null, context)).Return(new HandlerResult(true, CreateResponseMessage()));
-            }
-            mocks.Playback();
-
-            var handlerProvider = new StubResponseHandlerProvider(typeof (UninitializedResponseHandler), handler);
-
-            var state = new StartedState(handlerProvider, context, null);
-            state.Apply();
-
-            mocks.VerifyAll();
         }
 
         [Test]
         public void WhenContextNameIsEmptyShouldReturnNewStartState()
         {
-            var responseHandlers = new StubResponseHandlerProvider(typeof (UninitializedResponseHandler), StubResponseHandler.Instance);
+            var response = new HttpResponseMessage();
+            var mockEndpoint = new MockEndpoint(response);
+
             var context = new ApplicationContext();
-            var state = new StartedState(responseHandlers, context, null);
+            context.Set(ApplicationContextKeys.EntryPointUri, new Uri("http://localhost/shop"));
+
+            var state = new StartedState(null, context, new MockEndpointHttpClientProvider(mockEndpoint));
 
             var newState = state.Apply();
 
@@ -63,9 +47,13 @@ namespace Tests.Restbucks.Client.States
         [Test]
         public void WhenContextNameIsEmptyReturnedStartStateContextNameShouldBeStarted()
         {
-            var responseHandlers = new StubResponseHandlerProvider(typeof (UninitializedResponseHandler), StubResponseHandler.Instance);
+            var response = new HttpResponseMessage();
+            var mockEndpoint = new MockEndpoint(response);
+
             var context = new ApplicationContext();
-            var state = new StartedState(responseHandlers, context, null);
+            context.Set(ApplicationContextKeys.EntryPointUri, new Uri("http://localhost/shop"));
+
+            var state = new StartedState(null, context, new MockEndpointHttpClientProvider(mockEndpoint));
 
             var newState = state.Apply();
 
@@ -76,13 +64,17 @@ namespace Tests.Restbucks.Client.States
         [Test]
         public void WhenContextNameIsEmptyReturnedStartStateShouldContainNewResponse()
         {
-            var responseHandlers = new StubResponseHandlerProvider(typeof (UninitializedResponseHandler), StubResponseHandler.Instance);
+            var response = new HttpResponseMessage();
+            var mockEndpoint = new MockEndpoint(response);
+
             var context = new ApplicationContext();
-            var state = new StartedState(responseHandlers, context, null);
+            context.Set(ApplicationContextKeys.EntryPointUri, new Uri("http://localhost/shop"));
+
+            var state = new StartedState(null, context, new MockEndpointHttpClientProvider(mockEndpoint));
 
             var newState = state.Apply();
 
-            Assert.AreEqual(StubResponseHandler.NewResponse, PrivateField.GetValue<HttpResponseMessage>("response", newState));
+            Assert.AreEqual(response, PrivateField.GetValue<HttpResponseMessage>("response", newState));
         }
 
         private static HttpResponseMessage CreateResponseMessage()
@@ -130,7 +122,7 @@ namespace Tests.Restbucks.Client.States
             {
             }
 
-            public HandlerResult Handle(HttpResponseMessage response, ApplicationContext context)
+            public HandlerResult Handle(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
             {
                 return new HandlerResult(true, NewResponse);
             }

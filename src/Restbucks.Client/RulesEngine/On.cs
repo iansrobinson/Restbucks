@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net.Http;
-using Restbucks.Client.ResponseHandlers;
 
 namespace Restbucks.Client.RulesEngine
 {
@@ -23,7 +22,7 @@ namespace Restbucks.Client.RulesEngine
             return this;
         }
 
-        public Actions ReturnState(Func<IResponseHandlerProvider, ApplicationContext, HttpResponseMessage, IState> createState)
+        public Actions ReturnState(Func<HttpResponseMessage, ApplicationContext, IHttpClientProvider, IState> createState)
         {
             return new Actions(contextAction, createState);
         }
@@ -36,15 +35,15 @@ namespace Restbucks.Client.RulesEngine
 
     public interface IReturnStateEx
     {
-        Actions ReturnState(Func<IResponseHandlerProvider, ApplicationContext, HttpResponseMessage, IState> createState);
+        Actions ReturnState(Func<HttpResponseMessage, ApplicationContext, IHttpClientProvider, IState> createState);
     }
 
     public class Actions
     {
         private readonly Action<ApplicationContext> contextAction;
-        private readonly Func<IResponseHandlerProvider, ApplicationContext, HttpResponseMessage, IState> createState;
+        private readonly Func<HttpResponseMessage, ApplicationContext, IHttpClientProvider, IState> createState;
 
-        public Actions(Action<ApplicationContext> contextAction, Func<IResponseHandlerProvider, ApplicationContext, HttpResponseMessage, IState> createState)
+        public Actions(Action<ApplicationContext> contextAction, Func<HttpResponseMessage, ApplicationContext, IHttpClientProvider, IState> createState)
         {
             this.contextAction = contextAction;
             this.createState = createState;
@@ -55,7 +54,7 @@ namespace Restbucks.Client.RulesEngine
             get { return contextAction; }
         }
 
-        public Func<IResponseHandlerProvider, ApplicationContext, HttpResponseMessage, IState> CreateState
+        public Func<HttpResponseMessage, ApplicationContext, IHttpClientProvider, IState> CreateState
         {
             get { return createState; }
         }

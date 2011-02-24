@@ -28,8 +28,8 @@ namespace Tests.Restbucks.Client.ResponseHandlers
             var mockEndpoint = new MockEndpoint(CreateRequestForQuoteCreatedResponse());
             var context = CreateContext();
 
-            var responseHandler = new RequestForQuoteFormResponseHandler(new MockEndpointHttpClientProvider(mockEndpoint));
-            responseHandler.Handle(CreateRequestForQuoteResponse(), context);
+            var responseHandler = new RequestForQuoteFormResponseHandler();
+            responseHandler.Handle(CreateRequestForQuoteResponse(), context, new MockEndpointHttpClientProvider(mockEndpoint));
 
             var requestEntityBody = mockEndpoint.ReceivedRequest.Content.ReadAsObject<Shop>(RestbucksMediaTypeFormatter.Instance);
 
@@ -50,8 +50,8 @@ namespace Tests.Restbucks.Client.ResponseHandlers
             var mockEndpoint = new MockEndpoint(CreateRequestForQuoteCreatedResponse());
             var context = CreateContext();
 
-            var responseHandler = new RequestForQuoteFormResponseHandler(new MockEndpointHttpClientProvider(mockEndpoint));
-            responseHandler.Handle(CreateRequestForQuoteResponse(), context);
+            var responseHandler = new RequestForQuoteFormResponseHandler();
+            responseHandler.Handle(CreateRequestForQuoteResponse(), context, new MockEndpointHttpClientProvider(mockEndpoint));
 
             Assert.AreEqual(ExpectedMethod, mockEndpoint.ReceivedRequest.Method.Method);
         }
@@ -62,8 +62,8 @@ namespace Tests.Restbucks.Client.ResponseHandlers
             var mockEndpoint = new MockEndpoint(CreateRequestForQuoteCreatedResponse());
             var context = CreateContext();
 
-            var responseHandler = new RequestForQuoteFormResponseHandler(new MockEndpointHttpClientProvider(mockEndpoint));
-            responseHandler.Handle(CreateRequestForQuoteResponse(), context);
+            var responseHandler = new RequestForQuoteFormResponseHandler();
+            responseHandler.Handle(CreateRequestForQuoteResponse(), context, new MockEndpointHttpClientProvider(mockEndpoint));
 
             Assert.AreEqual(ExpectedContentType, mockEndpoint.ReceivedRequest.Content.Headers.ContentType.MediaType);
         }

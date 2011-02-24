@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Http;
-using System.Reflection;
 using Restbucks.Client.ResponseHandlers;
 using Restbucks.RestToolkit.Utils;
 
@@ -10,52 +8,38 @@ namespace Restbucks.Client.RulesEngine
     public class Rule : IRule
     {
         private readonly Func<bool> condition;
-        private readonly Type responseHandlerType;
+        private readonly Func<IResponseHandler> createResponseHandler;
         private readonly Action<ApplicationContext> contextAction;
-        private readonly Func<IResponseHandlerProvider, ApplicationContext, HttpResponseMessage, IState> createState;
+        private readonly Func<HttpResponseMessage, ApplicationContext, IHttpClientProvider, IState> createState;
 
-        public Rule(Func<bool> condition, Type responseHandlerType, Action<ApplicationContext> contextAction, Func<IResponseHandlerProvider, ApplicationContext, HttpResponseMessage, IState> createState)
+        public Rule(Func<bool> condition, Func<IResponseHandler> createResponseHandler, Action<ApplicationContext> contextAction, Func<HttpResponseMessage, ApplicationContext, IHttpClientProvider, IState> createState)
         {
             Check.IsNotNull(condition, "condition");
             Check.IsNotNull(contextAction, "contextAction");
             Check.IsNotNull(createState, "createState");
 
             this.condition = condition;
-            this.responseHandlerType = responseHandlerType;
+            this.createResponseHandler = createResponseHandler;
             this.contextAction = contextAction;
             this.createState = createState;
         }
 
-        HandlerResult IRule.Evaluate(MethodInfo getResponseHandler, IResponseHandlerProvider responseHandlers, HttpResponseMessage response, ApplicationContext context)
+        HandlerResult IRule.Evaluate(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
         {
             if (!condition())
             {
                 return new HandlerResult(false, null);
             }
-            
-            var genericMethod = getResponseHandler.MakeGenericMethod(new[] {responseHandlerType});
-            IResponseHandler handler;
-            try
-            {
-                handler = genericMethod.Invoke(responseHandlers, null) as IResponseHandler;
-            }
-            catch (TargetInvocationException ex)
-            {
-                if (ex.InnerException.GetType().Equals(typeof (KeyNotFoundException)))
-                {
-                    throw new ResponseHandlerMissingException(string.Format("Response handler missing. Type: [{0}].", responseHandlerType.FullName));
-                }
-                throw;
-            }
 
-            return handler.Handle(response, context);
+            var handler = createResponseHandler();
+            return handler.Handle(response, context, clientProvider);
         }
 
-        IState IRule.CreateNewState(IResponseHandlerProvider responseHandlers, ApplicationContext context, HttpResponseMessage response)
+        IState IRule.CreateNewState(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
         {
             contextAction(context);
 
-            var state = createState(responseHandlers, context, response);
+            var state = createState(response, context, clientProvider);
 
             if (state == null)
             {

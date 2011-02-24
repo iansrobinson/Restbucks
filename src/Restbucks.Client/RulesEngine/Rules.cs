@@ -24,16 +24,14 @@ namespace Restbucks.Client.RulesEngine
             this.rules = rules;
         }
 
-        public IState Evaluate(IResponseHandlerProvider responseHandlers, ApplicationContext context, HttpResponseMessage response)
+        public IState Evaluate(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
         {
-            var getResponseHandler = responseHandlers.GetType().GetMethod("GetFor", BindingFlags.Instance | BindingFlags.Public);
-
             foreach (var rule in rules)
             {
-                var result = rule.Evaluate(getResponseHandler, responseHandlers, response, context);
+                var result = rule.Evaluate(response, context, clientProvider);
                 if (result.IsSuccessful)
                 {
-                    return rule.CreateNewState(responseHandlers, context, result.Response);
+                    return rule.CreateNewState(result.Response, context, clientProvider);
                 }
             }
 

@@ -12,7 +12,7 @@ namespace Restbucks.Client.RulesEngine
             return new InnerElse(contextAction);
         }
 
-        public static IRule ReturnState(Func<IResponseHandlerProvider, ApplicationContext, HttpResponseMessage, IState> createState)
+        public static IRule ReturnState(Func<HttpResponseMessage, ApplicationContext, IHttpClientProvider, IState> createState)
         {
             return ((IElse) new InnerElse(c => { })).ReturnState(createState);
         }
@@ -26,21 +26,21 @@ namespace Restbucks.Client.RulesEngine
                 this.contextAction = contextAction;
             }
 
-            IRule IElse.ReturnState(Func<IResponseHandlerProvider, ApplicationContext, HttpResponseMessage, IState> createState)
+            IRule IElse.ReturnState(Func<HttpResponseMessage, ApplicationContext, IHttpClientProvider, IState> createState)
             {
                 return new ElseRule(contextAction, createState);
             }
 
             IRule IElse.Terminate()
             {
-                return ReturnState((h, c, m) => new TerminalState());
+                return ReturnState((m, c, p) => new TerminalState());
             }
         }
     }
 
     public interface IElse
     {
-        IRule ReturnState(Func<IResponseHandlerProvider, ApplicationContext, HttpResponseMessage, IState> createState);
+        IRule ReturnState(Func<HttpResponseMessage, ApplicationContext, IHttpClientProvider, IState> createState);
         IRule Terminate();
     }
 }

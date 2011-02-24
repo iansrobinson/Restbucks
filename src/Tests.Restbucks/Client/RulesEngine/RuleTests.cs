@@ -14,26 +14,26 @@ namespace Tests.Restbucks.Client.RulesEngine
         [ExpectedException(ExpectedException = typeof(ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: condition")]
         public void ThrowsExceptionIfConditionIsNull()
         {
-            new Rule(null, typeof (DummyResponseHandler), c => { }, (h, c, r) => null);
+            new Rule(null, () => new DummyResponseHandler(), c => { }, (r, c, p) => null);
         }
 
         [Test]
         [ExpectedException(ExpectedException = typeof(ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: contextAction")]
         public void ThrowsExceptionIfContextActionIsNull()
         {
-            new Rule(()=> true, typeof(DummyResponseHandler), null, (h, c, r) => null);
+            new Rule(() => true, () => new DummyResponseHandler(), null, (r, c, p) => null);
         }
 
         [Test]
         [ExpectedException(ExpectedException = typeof(ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: createState")]
         public void ThrowsExceptionIfCreateStateFunctionIsNull()
         {
-            new Rule(() => true, typeof(DummyResponseHandler), c=> { }, null);
+            new Rule(() => true, () => new DummyResponseHandler(), c => { }, null);
         }
 
         private class DummyResponseHandler : IResponseHandler
         {
-            public HandlerResult Handle(HttpResponseMessage response, ApplicationContext context)
+            public HandlerResult Handle(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
             {
                 throw new NotImplementedException();
             }

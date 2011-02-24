@@ -14,14 +14,7 @@ namespace Restbucks.Client.ResponseHandlers
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        private readonly IHttpClientProvider clientProvider;
-
-        public RequestForQuoteFormResponseHandler(IHttpClientProvider clientProvider)
-        {
-            this.clientProvider = clientProvider;
-        }
-
-        public HandlerResult Handle(HttpResponseMessage response, ApplicationContext context)
+        public HandlerResult Handle(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
         {
             Log.Debug("  Submitting a request for quote...");
 

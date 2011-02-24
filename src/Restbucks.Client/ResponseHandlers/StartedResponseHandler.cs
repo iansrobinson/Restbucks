@@ -12,15 +12,8 @@ namespace Restbucks.Client.ResponseHandlers
     public class StartedResponseHandler : IResponseHandler
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        
-        private readonly IHttpClientProvider clientProvider;
 
-        public StartedResponseHandler(IHttpClientProvider clientProvider)
-        {
-            this.clientProvider = clientProvider;
-        }
-
-        public HandlerResult Handle(HttpResponseMessage response, ApplicationContext context)
+        public HandlerResult Handle(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
         {
             Log.Debug("  Getting request-for-quote form...");
             

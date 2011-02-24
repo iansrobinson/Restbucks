@@ -6,15 +6,15 @@ namespace Restbucks.Client.States
 {
     public class QuoteRequestedState : IState
     {
-        private readonly IResponseHandlerProvider responseHandlers;
-        private readonly ApplicationContext context;
         private readonly HttpResponseMessage response;
+        private readonly ApplicationContext context;
+        private readonly IHttpClientProvider clientProvider;
 
-        public QuoteRequestedState(IResponseHandlerProvider responseHandlers, ApplicationContext context, HttpResponseMessage response)
+        public QuoteRequestedState(HttpResponseMessage response, ApplicationContext context, IHttpClientProvider clientProvider)
         {
-            this.responseHandlers = responseHandlers;
-            this.context = context;
             this.response = response;
+            this.context = context;
+            this.clientProvider = clientProvider;
         }
 
         public IState Apply()

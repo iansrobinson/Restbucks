@@ -12,7 +12,7 @@ namespace Restbucks.Client.RulesEngine
         }
 
         private readonly Func<bool> condition;
-        private Type responseHandlerType;
+        private Func<IResponseHandler> createResponseHandler;
         private Action<ApplicationContext> contextAction;
 
         private When(Func<bool> condition)
@@ -20,15 +20,26 @@ namespace Restbucks.Client.RulesEngine
             this.condition = condition;
         }
 
-        public Rule InvokeHandler<T>(Actions actions) where T : IResponseHandler
+        public IUpdateContext InvokeHandler(IResponseHandler responseHandler)
         {
-            responseHandlerType = typeof(T);
-            return new Rule(condition, responseHandlerType, actions.ContextAction, actions.CreateState);
+            createResponseHandler = () => responseHandler;
+            return this;
         }
 
-        public IUpdateContext InvokeHandler<T>() where T : IResponseHandler
+        public Rule InvokeHandler<T>(Actions actions) where T : IResponseHandler, new()
         {
-            responseHandlerType = typeof (T);
+            return new Rule(condition, () => new T(), actions.ContextAction, actions.CreateState);
+        }
+
+        public IUpdateContext InvokeHandler<T>() where T : IResponseHandler, new()
+        {
+            createResponseHandler = () => new T();
+            return this;
+        }
+
+        public IUpdateContext InvokeHandler(Func<IResponseHandler> createResponseHandler)
+        {
+            this.createResponseHandler = createResponseHandler;
             return this;
         }
 
@@ -38,16 +49,18 @@ namespace Restbucks.Client.RulesEngine
             return this;
         }
 
-        public Rule ReturnState(Func<IResponseHandlerProvider, ApplicationContext, HttpResponseMessage, IState> createState)
+        public Rule ReturnState(Func<HttpResponseMessage, ApplicationContext, IHttpClientProvider, IState> createState)
         {
-            return new Rule(condition, responseHandlerType, contextAction, createState);
+            return new Rule(condition, createResponseHandler, contextAction, createState);
         }
     }
 
     public interface IInvokeHandler
     {
-        IUpdateContext InvokeHandler<T>() where T : IResponseHandler;
-        Rule InvokeHandler<T>(Actions actions) where T : IResponseHandler;
+        IUpdateContext InvokeHandler<T>() where T : IResponseHandler, new();
+        IUpdateContext InvokeHandler(Func<IResponseHandler> createResponseHandler);
+        IUpdateContext InvokeHandler(IResponseHandler responseHandler);
+        Rule InvokeHandler<T>(Actions actions) where T : IResponseHandler, new();
     }
 
     public interface IUpdateContext
@@ -57,6 +70,6 @@ namespace Restbucks.Client.RulesEngine
 
     public interface IReturnState
     {
-        Rule ReturnState(Func<IResponseHandlerProvider, ApplicationContext, HttpResponseMessage, IState> createState);
+        Rule ReturnState(Func<HttpResponseMessage, ApplicationContext, IHttpClientProvider, IState> createState);
     }
 }

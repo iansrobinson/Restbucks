@@ -27,8 +27,8 @@ namespace Tests.Restbucks.Client.ResponseHandlers
             var context = new ApplicationContext();
             context.Set(ApplicationContextKeys.EntryPointUri, EntryPointUri);
 
-            var handler = new UninitializedResponseHandler(new MockEndpointHttpClientProvider(mockEndpoint));
-            handler.Handle(null, context);
+            var handler = new UninitializedResponseHandler();
+            handler.Handle(null, context, new MockEndpointHttpClientProvider(mockEndpoint));
 
             Assert.AreEqual(EntryPointUri, mockEndpoint.ReceivedRequest.RequestUri);
         }
@@ -42,8 +42,8 @@ namespace Tests.Restbucks.Client.ResponseHandlers
             var context = new ApplicationContext();
             context.Set(ApplicationContextKeys.EntryPointUri, EntryPointUri);
 
-            var handler = new UninitializedResponseHandler(new MockEndpointHttpClientProvider(mockEndpoint));
-            var result = handler.Handle(null, context);
+            var handler = new UninitializedResponseHandler();
+            var result = handler.Handle(null, context, new MockEndpointHttpClientProvider(mockEndpoint));
 
             Assert.AreEqual(response, result.Response);
         }
