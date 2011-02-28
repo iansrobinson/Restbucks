@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using NUnit.Framework;
 using Restbucks.NewClient;
 using Rhino.Mocks;
@@ -12,81 +9,119 @@ namespace Tests.Restbucks.NewClient
     [TestFixture]
     public class RuleTests
     {
+        private static readonly HttpResponseMessage PreviousResponse = new HttpResponseMessage();
+        private static readonly HttpResponseMessage NewResponse = new HttpResponseMessage();
+        private static readonly IState NewState = new DummyState();
+        
         [Test]
         public void ShouldExecuteActionIfConditionIsApplicable()
         {
             var condition = MockRepository.GenerateStub<ICondition>();
-            condition.Expect(c => c.IsApplicable(new HttpResponseMessage())).IgnoreArguments().Return(true);
+            condition.Expect(c => c.IsApplicable(PreviousResponse)).Return(true);
 
             var action = MockRepository.GenerateStrictMock<IAction>();
-            action.Expect(a => a.Execute()).Return(new HttpResponseMessage());
+            action.Expect(a => a.Execute()).Return(NewResponse);
 
-            var rule = new Rule(condition, action);
-            rule.Evaluate(new HttpResponseMessage());
+            var stateFactory = MockRepository.GenerateStub<IStateFactory>();
+
+            var rule = new Rule(condition, action, stateFactory);
+            rule.Evaluate(PreviousResponse);
 
             action.VerifyAllExpectations();
         }
 
         [Test]
-        public void ShouldReturnSuccessfulResultIfActionIsExecuted()
+        public void ShouldCreateNewStateIfActionIsSuccessful()
         {
-            var response = new HttpResponseMessage();
-            
             var condition = MockRepository.GenerateStub<ICondition>();
-            condition.Expect(c => c.IsApplicable(new HttpResponseMessage())).IgnoreArguments().Return(true);
+            condition.Expect(c => c.IsApplicable(PreviousResponse)).Return(true);
 
             var action = MockRepository.GenerateStub<IAction>();
-            action.Expect(a => a.Execute()).Return(response);
+            action.Expect(a => a.Execute()).Return(NewResponse);
 
-            var rule = new Rule(condition, action);
-            var result = rule.Evaluate(new HttpResponseMessage());
+            var stateFactory = MockRepository.GenerateStub<IStateFactory>();
+            stateFactory.Expect(f => f.Create(NewResponse)).IgnoreArguments().Return(NewState);
+
+            var rule = new Rule(condition, action, stateFactory);
+            var result = rule.Evaluate(PreviousResponse);
+
+            Assert.AreEqual(NewState, result.State);
+        }
+
+        [Test]
+        public void ShouldReturnSuccessfulResultIfConditionIsApplicable()
+        {
+            var condition = MockRepository.GenerateStub<ICondition>();
+            condition.Expect(c => c.IsApplicable(PreviousResponse)).Return(true);
+
+            var action = MockRepository.GenerateStub<IAction>();
+            action.Expect(a => a.Execute()).Return(NewResponse);
+
+            var stateFactory = MockRepository.GenerateStub<IStateFactory>();           
+            stateFactory.Expect(f => f.Create(NewResponse)).Return(NewState);
+
+            var rule = new Rule(condition, action, stateFactory);
+            var result = rule.Evaluate(PreviousResponse);
 
             Assert.IsTrue(result.IsSuccessful);
-            Assert.AreEqual(response, result.Response);
         }
 
         [Test]
         public void ShouldNotExecuteActionIfConditionIsNotApplicable()
         {
             var condition = MockRepository.GenerateStub<ICondition>();
-            condition.Expect(c => c.IsApplicable(new HttpResponseMessage())).IgnoreArguments().Return(false);
+            condition.Expect(c => c.IsApplicable(PreviousResponse)).Return(false);
 
             var action = MockRepository.GenerateStrictMock<IAction>();
             action.AssertWasNotCalled(a => a.Execute());
 
-            var rule = new Rule(condition, action);
-            rule.Evaluate(new HttpResponseMessage());
+            var stateFactory = MockRepository.GenerateStub<IStateFactory>();
+
+            var rule = new Rule(condition, action, stateFactory);
+            rule.Evaluate(PreviousResponse);
 
             action.VerifyAllExpectations();
         }
 
         [Test]
-        public void ShouldReturnUnsuccessfulResultIfActionIsNotExecuted()
+        public void ShouldReturnUnsuccessfulResultIfConditionIsNotApplicable()
         {
             var condition = MockRepository.GenerateStub<ICondition>();
-            condition.Expect(c => c.IsApplicable(new HttpResponseMessage())).IgnoreArguments().Return(false);
+            condition.Expect(c => c.IsApplicable(PreviousResponse)).Return(false);
 
             var action = MockRepository.GenerateStub<IAction>();
+            var stateFactory = MockRepository.GenerateStub<IStateFactory>();
 
-            var rule = new Rule(condition, action);
-            var result = rule.Evaluate(new HttpResponseMessage());
+            var rule = new Rule(condition, action, stateFactory);
+            var result = rule.Evaluate(PreviousResponse);
 
             Assert.IsFalse(result.IsSuccessful);
-            Assert.IsNull(result.Response);
+            Assert.IsNull(result.State);
         }
 
         [Test]
-        [ExpectedException(ExpectedException = typeof(ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: condition")]
+        [ExpectedException(ExpectedException = typeof (ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: condition")]
         public void ThrowsExceptionIfConditionIsNull()
         {
-            new Rule(null, MockRepository.GenerateStub<IAction>());
+            new Rule(null, MockRepository.GenerateStub<IAction>(), MockRepository.GenerateStub<IStateFactory>());
         }
 
         [Test]
-        [ExpectedException(ExpectedException = typeof(ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: action")]
+        [ExpectedException(ExpectedException = typeof (ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: action")]
         public void ThrowsExceptionIfActionIsNull()
         {
-            new Rule(MockRepository.GenerateStub<ICondition>(), null);
+            new Rule(MockRepository.GenerateStub<ICondition>(), null, MockRepository.GenerateStub<IStateFactory>());
+        }
+
+        [Test]
+        [ExpectedException(ExpectedException = typeof(ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: stateFactory")]
+        public void ThrowsExceptionIfStateFactoryIsNull()
+        {
+            new Rule(MockRepository.GenerateStub<ICondition>(), MockRepository.GenerateStub<IAction>(), null);
+        }
+
+        private class DummyState : IState
+        {          
         }
     }
 }

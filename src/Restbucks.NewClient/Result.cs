@@ -1,18 +1,16 @@
-﻿using System.Net.Http;
-
-namespace Restbucks.NewClient
+﻿namespace Restbucks.NewClient
 {
     public class Result
     {
         public static readonly Result Unsuccessful = new Result(false, null);
-        
-        private readonly bool isSuccessful;
-        private readonly HttpResponseMessage response;
 
-        public Result(bool isSuccessful, HttpResponseMessage response)
+        private readonly bool isSuccessful;
+        private readonly IState state;
+
+        public Result(bool isSuccessful, IState state)
         {
             this.isSuccessful = isSuccessful;
-            this.response = response;
+            this.state = state;
         }
 
         public bool IsSuccessful
@@ -20,9 +18,9 @@ namespace Restbucks.NewClient
             get { return isSuccessful; }
         }
 
-        public HttpResponseMessage Response
+        public IState State
         {
-            get { return response; }
+            get { return state; }
         }
     }
 }
