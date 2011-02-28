@@ -19,16 +19,14 @@ namespace Restbucks.MediaType
             this.links = new List<Link>(links).AsReadOnly();
             this.forms = new List<Form>(forms).AsReadOnly();
 
-            links.ToList().ForEach(ThrowIfNamespacePrefixesConflict);
+            ValidateNamespacePrefixesDoNotConflict();
         }
 
-        private void ThrowIfNamespacePrefixesConflict(Link link)
+        private void ValidateNamespacePrefixesDoNotConflict()
         {
             var rels = (from rel in
                             ((from Link l in links select l.Rels)
                             .SelectMany(rel => rel))
-                            .Union(
-                                from rel in link.Rels select rel)
                         where rel.GetType().Equals(typeof (CompactUriLinkRelation))
                         select (CompactUriLinkRelation) rel);
 

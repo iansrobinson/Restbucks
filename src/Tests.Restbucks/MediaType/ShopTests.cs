@@ -45,6 +45,15 @@ namespace Tests.Restbucks.MediaType
         }
 
         [Test]
+        public void DoesNotThrowExceptionWhenAddingMoreThanOneLinkWithCompactUriLnkRelationsWithSamePrefixes()
+        {
+            new ShopBuilder(new Uri("http://localhost"))
+                .AddLink(new Link(new Uri("http://localhost/link1"), RestbucksMediaType.Value, RbNs1, TwNs1, RbNs1))
+                .AddLink(new Link(new Uri("http://localhost/link1"), RestbucksMediaType.Value, RbNs1, TwNs1, RbNs1))
+                .Build();
+        }
+
+        [Test]
         public void ShouldUseSuppliedUriAsBaseUri()
         {
             var shop = new ShopBuilder(new Uri("http://localhost:8080/virtual-directory")).Build();
