@@ -7,7 +7,6 @@ using Restbucks.MediaType;
 using Restbucks.Quoting;
 using Restbucks.Quoting.Service.Resources;
 using Rhino.Mocks;
-using Tests.Restbucks.MediaType.Helpers;
 using Tests.Restbucks.Quoting.Service.Resources.Helpers;
 using Is = Rhino.Mocks.Constraints.Is;
 
@@ -24,9 +23,10 @@ namespace Tests.Restbucks.Quoting.Service.Resources
             var mocks = new MockRepository();
             var quoteEngine = mocks.StrictMock<IQuotationEngine>();
 
-            var shop = new ShopBuilder().Build()
+            var shop = new ShopBuilder(new Uri("http://localhost/"))
                 .AddItem(new Item("item1", new Amount("g", 250)))
-                .AddItem(new Item("item2", new Amount("kg", 2)));
+                .AddItem(new Item("item2", new Amount("kg", 2)))
+                .Build();
 
             var quote = new Quotation(
                 Guid.Empty,
@@ -122,7 +122,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
             var request = new HttpRequestMessage {RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri<Quotes>(BaseAddress)};
             var response = new HttpResponseMessage();
 
-            quotes.Post(new ShopBuilder().Build(), request, response);
+            quotes.Post(new ShopBuilder(new Uri("http://localhost")).Build(), request, response);
 
             return response;
         }
@@ -134,7 +134,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
             var request = new HttpRequestMessage {RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri<Quotes>(BaseAddress)};
             var response = new HttpResponseMessage();
 
-            return quotes.Post(new ShopBuilder().Build(), request, response);
+            return quotes.Post(new ShopBuilder(new Uri("http://localhost")).Build(), request, response);
         }
     }
 }

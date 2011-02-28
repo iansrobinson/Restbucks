@@ -6,7 +6,6 @@ using NUnit.Framework;
 using Restbucks.MediaType;
 using Restbucks.MediaType.Formatters;
 using Restbucks.Quoting.Service;
-using Tests.Restbucks.MediaType.Helpers;
 
 namespace Tests.Restbucks.MediaType.Formatters
 {
@@ -16,7 +15,7 @@ namespace Tests.Restbucks.MediaType.Formatters
         [Test]
         public void ShouldCreateShopRootElement()
         {
-            var formatter = new ShopFormatter(new ShopBuilder().Build());
+            var formatter = new ShopFormatter(new ShopBuilder(new Uri("http://localhost")).Build());
             var xml = new XmlOutput(formatter.CreateXml());
 
             Assert.AreEqual(1, xml.GetNodeCount("r:shop"));
@@ -25,9 +24,10 @@ namespace Tests.Restbucks.MediaType.Formatters
         [Test]
         public void ShouldCreateLinksAsChildrenOfShopElement()
         {
-            var shop = new ShopBuilder().Build()
+            var shop = new ShopBuilder(new Uri("http://localhost/"))
                 .AddLink(new Link(new Uri("/quotes", UriKind.Relative), RestbucksMediaType.Value, LinkRelations.Rfq, LinkRelations.Prefetch))
-                .AddLink(new Link(new Uri("/order-forms/1234", UriKind.Relative), "application/xml", LinkRelations.OrderForm));
+                .AddLink(new Link(new Uri("/order-forms/1234", UriKind.Relative), "application/xml", LinkRelations.OrderForm))
+                .Build();
 
             var xml = new XmlOutput(new ShopFormatter(shop).CreateXml());
 
@@ -51,8 +51,9 @@ namespace Tests.Restbucks.MediaType.Formatters
             var rel1 = new CompactUriLinkRelation("rb", new Uri(ns1, UriKind.Absolute), "rel1");
             var rel2 = new CompactUriLinkRelation("tw", new Uri(ns2, UriKind.Absolute), "rel2");
 
-            var shop = new ShopBuilder().Build()
-                .AddLink(new Link(new Uri("/quotes", UriKind.Relative), RestbucksMediaType.Value, rel1, rel2));
+            var shop = new ShopBuilder(new Uri("http://locahost/"))
+                .AddLink(new Link(new Uri("/quotes", UriKind.Relative), RestbucksMediaType.Value, rel1, rel2))
+                .Build();
 
             var xml = new XmlOutput(new ShopFormatter(shop).CreateXml());
 
@@ -63,9 +64,10 @@ namespace Tests.Restbucks.MediaType.Formatters
         [Test]
         public void ShouldAddItemElementsAsChildrenOfItems()
         {
-            var shop = new ShopBuilder().Build()
+            var shop = new ShopBuilder(new Uri("http://localhost/"))
                 .AddItem(new Item("item1", new Amount("g", 250)))
-                .AddItem(new Item("item2", new Amount("g", 500), new Cost("GBP", 5.50)));
+                .AddItem(new Item("item2", new Amount("g", 500), new Cost("GBP", 5.50)))
+                .Build();
 
             var xml = new XmlOutput(new ShopFormatter(shop).CreateXml());
 
@@ -86,7 +88,7 @@ namespace Tests.Restbucks.MediaType.Formatters
         [Test]
         public void ShouldNotAddItemsElementIfThereAreNoItemsInShop()
         {
-            var shop = new ShopBuilder().Build();
+            var shop = new ShopBuilder(new Uri("http://localhost")).Build();
             var xml = new XmlOutput(new ShopFormatter(shop).CreateXml());
             Assert.IsNull(xml.GetNode("r:shop/r:items"));
         }
@@ -94,9 +96,11 @@ namespace Tests.Restbucks.MediaType.Formatters
         [Test]
         public void ShouldAddFormsAsChildrenOfShopElement()
         {
-            var shop = new ShopBuilder().Build()
+            var shop = new ShopBuilder(new Uri("http://localhost"))
                 .AddForm(new Form("request-for-quote", new Uri("/quotes", UriKind.Relative), "post", RestbucksMediaType.Value, new Uri("http://schemas.restbucks.com/shop")))
-                .AddForm(new Form("order", new Uri("/orders", UriKind.Relative), "put", RestbucksMediaType.Value, new ShopBuilder().Build()));
+                .AddForm(new Form("order", new Uri("/orders", UriKind.Relative), "put", RestbucksMediaType.Value, new ShopBuilder(new Uri("http://localhost"))
+                                                                                                                      .Build()))
+                .Build();
 
             var output = new XmlOutput(new ShopFormatter(shop).CreateXml());
 
@@ -117,10 +121,10 @@ namespace Tests.Restbucks.MediaType.Formatters
             Assert.AreEqual(string.Empty, output.GetNodeValue("r:shop/x:model[2]/x:instance/r:shop"));
         }
 
-        [Test] 
+        [Test]
         public void ShouldAddXmlBaseAttributeToRootElement()
         {
-            var formatter = new ShopFormatter(new ShopBuilder().WithBaseUri(new Uri("http://restbucks.com:8080/shop")).Build());
+            var formatter = new ShopFormatter(new ShopBuilder(new Uri("http://restbucks.com:8080/shop")).Build());
             var xml = new XmlOutput(formatter.CreateXml());
 
             Assert.AreEqual("http://restbucks.com:8080/shop", xml.GetNodeValue("r:shop/@xml:base"));
@@ -129,7 +133,7 @@ namespace Tests.Restbucks.MediaType.Formatters
         [Test]
         public void ShouldNotAddXmlBaseAttributeToRootElementIfBaseUriIsNull()
         {
-            var formatter = new ShopFormatter(new ShopBuilder().WithBaseUri(null).Build());
+            var formatter = new ShopFormatter(new ShopBuilder(null).Build());
             var xml = new XmlOutput(formatter.CreateXml());
 
             Assert.IsNull(xml.GetNode("r:shop/@xml:base"));

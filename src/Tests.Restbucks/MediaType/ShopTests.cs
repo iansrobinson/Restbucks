@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Linq;
 using NUnit.Framework;
 using Restbucks.MediaType;
-using Tests.Restbucks.MediaType.Helpers;
 
 namespace Tests.Restbucks.MediaType
 {
@@ -21,32 +19,35 @@ namespace Tests.Restbucks.MediaType
         [ExpectedException(ExpectedException = typeof (NamespacePrefixConflictException), ExpectedMessage = "One or more namespace prefixes are each associated with more than one namespace: 'rb'.")]
         public void ShouldThrowExceptionWhenAddingLinkWithACompactUriLinkRelationWithSamePrefixAsExistingLinkRelationButDifferentNamespace()
         {
-            new ShopBuilder().Build()
+            new ShopBuilder(new Uri("http://localhost"))
                 .AddLink(new Link(new Uri("http://localhost/link1"), RestbucksMediaType.Value, RbNs1))
-                .AddLink(new Link(new Uri("http://localhost/link2"), RestbucksMediaType.Value, RbNs2));
+                .AddLink(new Link(new Uri("http://localhost/link2"), RestbucksMediaType.Value, RbNs2))
+                .Build();
         }
 
         [Test]
-        [ExpectedException(ExpectedException = typeof(NamespacePrefixConflictException), ExpectedMessage = "One or more namespace prefixes are each associated with more than one namespace: 'rb'.")]
+        [ExpectedException(ExpectedException = typeof (NamespacePrefixConflictException), ExpectedMessage = "One or more namespace prefixes are each associated with more than one namespace: 'rb'.")]
         public void ShouldThrowExceptionWhenAddingLinkWithCompactUriLinkRelationsWithSamePrefixButDifferentNamespace()
         {
-            new ShopBuilder().Build()
-                .AddLink(new Link(new Uri("http://localhost/link1"), RestbucksMediaType.Value, RbNs1, RbNs2));
+            new ShopBuilder(new Uri("http://localhost"))
+                .AddLink(new Link(new Uri("http://localhost/link1"), RestbucksMediaType.Value, RbNs1, RbNs2))
+                .Build();
         }
 
         [Test]
-        [ExpectedException(ExpectedException = typeof(NamespacePrefixConflictException), ExpectedMessage = "One or more namespace prefixes are each associated with more than one namespace: 'rb, tw'.")]
+        [ExpectedException(ExpectedException = typeof (NamespacePrefixConflictException), ExpectedMessage = "One or more namespace prefixes are each associated with more than one namespace: 'rb, tw'.")]
         public void ShouldThrowExceptionWhenAddingLinkWithMoreThanOneCompactUriLinkRelationWithSamePrefixAsExistingLinkRelationButDifferentNamespace()
         {
-            new ShopBuilder().Build()
+            new ShopBuilder(new Uri("http://localhost"))
                 .AddLink(new Link(new Uri("http://localhost/link1"), RestbucksMediaType.Value, RbNs1, TwNs1))
-                .AddLink(new Link(new Uri("http://localhost/link2"), RestbucksMediaType.Value, RbNs2, TwNs2));
+                .AddLink(new Link(new Uri("http://localhost/link2"), RestbucksMediaType.Value, RbNs2, TwNs2))
+                .Build();
         }
 
         [Test]
         public void ShouldUseSuppliedUriAsBaseUri()
         {
-            var shop = new ShopBuilder().WithBaseUri(new Uri("http://localhost:8080/virtual-directory")).Build();
+            var shop = new ShopBuilder(new Uri("http://localhost:8080/virtual-directory")).Build();
             Assert.AreEqual(new Uri("http://localhost:8080/virtual-directory"), shop.BaseUri);
         }
     }

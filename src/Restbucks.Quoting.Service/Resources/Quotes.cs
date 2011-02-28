@@ -42,9 +42,11 @@ namespace Restbucks.Quoting.Service.Resources
             response.Headers.Location = uriFactory.CreateAbsoluteUri<Quote>(baseUri, quote.Id);
             response.Headers.CacheControl = new CacheControlHeaderValue {NoCache = true, NoStore = true};
 
-            return new Shop(baseUri, quote.LineItems.Select(li => new LineItemToItem(li).Adapt()))
+            return new ShopBuilder(baseUri)
+                .AddItems(quote.LineItems.Select(li => new LineItemToItem(li).Adapt()))
                 .AddLink(new Link(uriFactory.CreateRelativeUri<Quote>(quote.Id), RestbucksMediaType.Value, LinkRelations.Self))
-                .AddLink(new Link(uriFactory.CreateRelativeUri<OrderForm>(quote.Id), RestbucksMediaType.Value, LinkRelations.OrderForm));
+                .AddLink(new Link(uriFactory.CreateRelativeUri<OrderForm>(quote.Id), RestbucksMediaType.Value, LinkRelations.OrderForm))
+                .Build();
         }
     }
 }

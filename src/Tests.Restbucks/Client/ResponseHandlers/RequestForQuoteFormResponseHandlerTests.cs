@@ -11,14 +11,13 @@ using Restbucks.Client.Keys;
 using Restbucks.Client.ResponseHandlers;
 using Restbucks.MediaType;
 using Tests.Restbucks.Client.Helpers;
-using Tests.Restbucks.MediaType.Helpers;
 
 namespace Tests.Restbucks.Client.ResponseHandlers
 {
     [TestFixture]
     public class RequestForQuoteFormResponseHandlerTests
     {
-        private static readonly Shop NeededItems = new Shop(null).AddItem(new Item("coffee", new Amount("g", 125)));
+        private static readonly Shop NeededItems = new ShopBuilder(null).AddItem(new Item("coffee", new Amount("g", 125))).Build();
         private const string ExpectedMethod = "put";
         private const string ExpectedContentType = "application/restbucks+xml";
 
@@ -78,17 +77,17 @@ namespace Tests.Restbucks.Client.ResponseHandlers
 
         private static HttpResponseMessage CreateRequestForQuoteResponse()
         {
-            var entityBody = new Shop(new Uri("http://restbucks.com/virtual-directory/"))
+            var entityBody = new ShopBuilder(new Uri("http://restbucks.com/virtual-directory/"))
                 .AddForm(new Form("request-for-quote", new Uri("quotes", UriKind.Relative),
-                             ExpectedMethod, ExpectedContentType,
-                             new Uri("http://schemas.restbucks.com/shop")));
+                                  ExpectedMethod, ExpectedContentType,
+                                  new Uri("http://schemas.restbucks.com/shop"))).Build();
 
             return CreateResponseMessage(HttpStatusCode.OK, entityBody);
         }
 
         private static HttpResponseMessage CreateRequestForQuoteCreatedResponse()
         {
-            return CreateResponseMessage(HttpStatusCode.Created, new ShopBuilder().Build());
+            return CreateResponseMessage(HttpStatusCode.Created, new ShopBuilder(new Uri("http://localhost")).Build());
         }
 
         private static HttpResponseMessage CreateResponseMessage(HttpStatusCode statusCode, Shop entityBody)

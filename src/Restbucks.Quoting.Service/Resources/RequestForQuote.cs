@@ -23,11 +23,12 @@ namespace Restbucks.Quoting.Service.Resources
         public Shop Get(HttpRequestMessage request, HttpResponseMessage response)
         {
             response.Headers.CacheControl = new CacheControlHeaderValue {Public = true, MaxAge = new TimeSpan(24, 0, 0)};
-            return new Shop(uriFactory.CreateBaseUri<RequestForQuote>(request.RequestUri))
+            return new ShopBuilder(uriFactory.CreateBaseUri<RequestForQuote>(request.RequestUri))
                 .AddForm(new Form(FormSemantics.Rfq,
                                   uriFactory.CreateRelativeUri<Quotes>(),
                                   "post", RestbucksMediaType.Value,
-                                  new Uri("http://schemas.restbucks.com/shop")));
+                                  new Uri("http://schemas.restbucks.com/shop")))
+                .Build();
         }
     }
 }

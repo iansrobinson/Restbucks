@@ -13,7 +13,7 @@ namespace Restbucks.Client.ConsoleHost
         {
             XmlConfigurator.Configure();
 
-            var items = new Shop(null).AddItem(new Item("coffee", new Amount("g", 125)));
+            var items = new ShopBuilder(null).AddItem(new Item("coffee", new Amount("g", 125))).Build();
 
             var context = new ApplicationContext();
             context.Set(ApplicationContextKeys.EntryPointUri, new Uri("http://localhost/restbucks/shop/"));

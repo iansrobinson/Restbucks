@@ -1,41 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Restbucks.MediaType
 {
     public class Shop
-    {
+    {        
         private readonly Uri baseUri;
-        private readonly IList<Item> items;
-        private readonly IList<Link> links;
-        private readonly IList<Form> forms;
+        private readonly ReadOnlyCollection<Item> items;
+        private readonly ReadOnlyCollection<Link> links;
+        private readonly ReadOnlyCollection<Form> forms;
 
-        public Shop(Uri baseUri) : this(baseUri, new Item[] {})
-        {
-        }
-
-        public Shop(Uri baseUri, IEnumerable<Item> items)
+        public Shop(Uri baseUri, IEnumerable<Item> items, IEnumerable<Link> links, IEnumerable<Form> forms)
         {
             this.baseUri = baseUri;
-            this.items = new List<Item>(items);
+            this.items = new List<Item>(items).AsReadOnly();
+            this.links = new List<Link>(links).AsReadOnly();
+            this.forms = new List<Form>(forms).AsReadOnly();
 
-            links = new List<Link>();
-            forms = new List<Form>();
-        }
-
-        public Shop AddItem(Item item)
-        {
-            items.Add(item);
-            return this;
-        }
-
-        public Shop AddLink(Link link)
-        {
-            ThrowIfNamespacePrefixesConflict(link);
-            
-            links.Add(link);
-            return this;
+            links.ToList().ForEach(ThrowIfNamespacePrefixesConflict);
         }
 
         private void ThrowIfNamespacePrefixesConflict(Link link)
@@ -60,12 +44,6 @@ namespace Restbucks.MediaType
             }
         }
 
-        public Shop AddForm(Form form)
-        {
-            forms.Add(form);
-            return this;
-        }
-
         public Uri BaseUri
         {
             get { return baseUri; }
@@ -88,17 +66,17 @@ namespace Restbucks.MediaType
 
         public bool HasItems
         {
-            get { return items.Count > 0; }
+            get { return items.Count() > 0; }
         }
 
         public bool HasLinks
         {
-            get { return links.Count > 0; }
+            get { return links.Count() > 0; }
         }
 
         public bool HasForms
         {
-            get { return forms.Count > 0; }
+            get { return forms.Count() > 0; }
         }
     }
 }

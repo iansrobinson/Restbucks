@@ -45,13 +45,16 @@ namespace Restbucks.Quoting.Service.Old.Resources
             response.Headers.CacheControl = new CacheControl {Public = true};
             response.Headers.Expires = quote.CreatedDateTime.AddDays(7.0).UtcDateTime;
 
-            return new Shop(baseUri)
+            return new ShopBuilder(baseUri)
                 .AddForm(new Form(FormSemantics.Order,
                                   OrdersUriFactoryWorker.CreateAbsoluteUri(new Uri("http://localhost:8081/")),
                                   "post",
                                   RestbucksMediaType.Value,
-                                  new Shop(baseUri, quote.LineItems.Select(li => new LineItemToItem(li).Adapt()))
-                                      .AddLink(new Link(uriFactory.CreateRelativeUri<Quote>(quote.Id), RestbucksMediaType.Value, LinkRelations.Self))));
+                                  new ShopBuilder(baseUri)
+                                      .AddItems(quote.LineItems.Select(li => new LineItemToItem(li).Adapt()))
+                                      .AddLink(new Link(uriFactory.CreateRelativeUri<Quote>(quote.Id), RestbucksMediaType.Value, LinkRelations.Self))
+                                      .Build()))
+                .Build();
         }
     }
 }

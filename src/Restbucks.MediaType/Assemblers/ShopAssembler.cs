@@ -59,12 +59,13 @@ namespace Restbucks.MediaType.Assemblers
 
         private static Shop CreateShop(XElement root, Uri baseUri)
         {
-            var shop = new Shop(baseUri);
+            var shopBuilder = new ShopBuilder(baseUri);
 
-            new ItemsAssembler(root).AssembleItems().ToList().ForEach(item => shop.AddItem(item));
-            new LinksAssembler(root).AssembleLinks().ToList().ForEach(link => shop.AddLink(link));
-            new FormsAssembler(root, baseUri).AssembleForms().ToList().ForEach(form => shop.AddForm(form));
-            return shop;
+            new ItemsAssembler(root).AssembleItems().ToList().ForEach(item => shopBuilder.AddItem(item));
+            new LinksAssembler(root).AssembleLinks().ToList().ForEach(link => shopBuilder.AddLink(link));
+            new FormsAssembler(root, baseUri).AssembleForms().ToList().ForEach(form => shopBuilder.AddForm(form));
+
+            return shopBuilder.Build();
         }
 
         private static Uri GetBaseUri(XElement element, Uri parentBaseUri)

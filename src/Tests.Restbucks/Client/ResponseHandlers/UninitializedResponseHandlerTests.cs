@@ -9,7 +9,6 @@ using Restbucks.Client.Formatters;
 using Restbucks.Client.ResponseHandlers;
 using Restbucks.MediaType;
 using Tests.Restbucks.Client.Helpers;
-using Tests.Restbucks.MediaType.Helpers;
 
 namespace Tests.Restbucks.Client.ResponseHandlers
 {
@@ -37,7 +36,7 @@ namespace Tests.Restbucks.Client.ResponseHandlers
         public void ReturnValueContainsLatestResponse()
         {
             var response = CreateResponseMessage();
-            
+
             var context = new ApplicationContext();
             context.Set(ApplicationContextKeys.EntryPointUri, EntryPointUri);
 
@@ -49,7 +48,7 @@ namespace Tests.Restbucks.Client.ResponseHandlers
 
         private static HttpResponseMessage CreateResponseMessage()
         {
-            var entity = new ShopBuilder().Build();
+            var entity = new ShopBuilder(new Uri("http://localhost")).Build();
             var stream = new MemoryStream();
 
             RestbucksMediaTypeFormatter.Instance.WriteToStream(entity, stream);

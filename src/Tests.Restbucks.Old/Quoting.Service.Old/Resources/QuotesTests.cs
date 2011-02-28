@@ -24,9 +24,9 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             var mocks = new MockRepository();
             var quoteEngine = mocks.StrictMock<IQuotationEngine>();
 
-            var shop = new Shop(BaseAddress)
+            var shop = new ShopBuilder(BaseAddress)
                 .AddItem(new Item("item1", new Amount("g", 250)))
-                .AddItem(new Item("item2", new Amount("kg", 2)));
+                .AddItem(new Item("item2", new Amount("kg", 2))).Build();
 
             var quote = new Quotation(
                 Guid.Empty,
@@ -123,7 +123,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             var quoteEngine = GetQuoteEngine(id, createdDateTime, new LineItem[] {});
             var response = new HttpResponseMessage();
             var quotes = new Quotes(DefaultUriFactory.Instance, quoteEngine);
-            var entityBody = quotes.Post(new Shop(BaseAddress), new HttpRequestMessage {Uri = GetRequestUri()}, response);
+            var entityBody = quotes.Post(new ShopBuilder(BaseAddress).Build(), new HttpRequestMessage {Uri = GetRequestUri()}, response);
 
             return new Result {EntityBody = entityBody, Response = response};
         }
