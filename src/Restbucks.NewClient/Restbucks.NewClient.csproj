@@ -73,6 +73,7 @@
     <Compile Include="Result.cs" />
     <Compile Include="Rule.cs" />
     <Compile Include="Rules.cs" />
+    <Compile Include="When.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Restbucks.RestToolkit\Restbucks.RestToolkit.csproj">
