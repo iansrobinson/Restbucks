@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Restbucks.Quoting
 {
@@ -7,13 +8,13 @@ namespace Restbucks.Quoting
     {
         private readonly Guid id;
         private readonly DateTimeOffset createdDateTime;
-        private readonly IEnumerable<LineItem> lineItems;
+        private readonly ReadOnlyCollection<LineItem> lineItems;
 
         public Quotation(Guid id, DateTimeOffset createdDateTime, IEnumerable<LineItem> lineItems)
         {
             this.id = id;
             this.createdDateTime = createdDateTime;
-            this.lineItems = lineItems;
+            this.lineItems = new List<LineItem>(lineItems).AsReadOnly();
         }
 
         public Guid Id
