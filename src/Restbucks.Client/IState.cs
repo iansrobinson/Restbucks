@@ -4,7 +4,7 @@ namespace Restbucks.Client
 {
     public interface IState
     {
-        IState Apply(IResponseHandlers handlers);
+        IState NextState(IResponseHandlers handlers);
         bool IsTerminalState { get; }
     }
 }

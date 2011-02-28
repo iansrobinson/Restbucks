@@ -126,6 +126,13 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
         }
 
         [Test]
+        public void FormIdShouldBeOrder()
+        {
+            var result = ExecuteRequestReturnResult(Guid.NewGuid(), DateTime.Now);
+            Assert.AreEqual("order", result.EntityBody.Forms.First().Id);
+        }
+
+        [Test]
         public void FormMethodShouldBePost()
         {
             var result = ExecuteRequestReturnResult(Guid.NewGuid(), DateTime.Now);

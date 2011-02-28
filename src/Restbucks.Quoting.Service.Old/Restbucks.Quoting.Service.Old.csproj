@@ -86,6 +86,7 @@
     <Compile Include="Adapters\MoneyToCost.cs" />
     <Compile Include="Adapters\QuantityToAmount.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="FormSemantics.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

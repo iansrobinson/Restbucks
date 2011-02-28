@@ -79,8 +79,7 @@ namespace Tests.Restbucks.Client.ResponseHandlers
         private static HttpResponseMessage CreateRequestForQuoteResponse()
         {
             var entityBody = new Shop(new Uri("http://restbucks.com/virtual-directory/"))
-                .AddForm(new Form(
-                             new Uri("quotes", UriKind.Relative),
+                .AddForm(new Form("request-for-quote", new Uri("quotes", UriKind.Relative),
                              ExpectedMethod, ExpectedContentType,
                              new Uri("http://schemas.restbucks.com/shop")));
 

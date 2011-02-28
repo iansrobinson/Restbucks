@@ -116,6 +116,13 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         }
 
         [Test]
+        public void FormIdShouldBeOrder()
+        {
+            var entityBody = ExecuteRequestReturnEntityBody();
+            Assert.AreEqual("order", entityBody.Forms.First().Id);
+        }
+
+        [Test]
         public void FormMethodShouldBePost()
         {
             var entityBody = ExecuteRequestReturnEntityBody();

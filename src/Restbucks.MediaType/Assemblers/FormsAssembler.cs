@@ -23,6 +23,8 @@ namespace Restbucks.MediaType.Assemblers
                    let submission = form.Element(Namespaces.XForms + "submission")
                    let instance = form.Element(Namespaces.XForms + "instance")
                    select new Form(
+                       form.Attribute("id")
+                           .ApplyNonEmptyValueOrDefault(),
                        submission.Attribute("resource")
                            .ApplyNonEmptyValueOrDefault(value => new Uri(value, UriKind.RelativeOrAbsolute)),
                        submission.Attribute("method")

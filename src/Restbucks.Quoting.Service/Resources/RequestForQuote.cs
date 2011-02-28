@@ -24,10 +24,10 @@ namespace Restbucks.Quoting.Service.Resources
         {
             response.Headers.CacheControl = new CacheControlHeaderValue {Public = true, MaxAge = new TimeSpan(24, 0, 0)};
             return new Shop(uriFactory.CreateBaseUri<RequestForQuote>(request.RequestUri))
-                .AddForm(new Form(
-                             uriFactory.CreateRelativeUri<Quotes>(),
-                             "post", RestbucksMediaType.Value,
-                             new Uri("http://schemas.restbucks.com/shop")));
+                .AddForm(new Form(FormSemantics.Rfq,
+                                  uriFactory.CreateRelativeUri<Quotes>(),
+                                  "post", RestbucksMediaType.Value,
+                                  new Uri("http://schemas.restbucks.com/shop")));
         }
     }
 }

@@ -27,7 +27,7 @@ namespace Tests.Restbucks.Client.States
 
             var state = new StartedState(null, CreateUninitializedContext());
 
-            var newState = state.Apply(handlers);
+            var newState = state.NextState(handlers);
 
             Assert.IsInstanceOf(typeof (StartedState), newState);
             Assert.AreNotEqual(state, newState);
@@ -41,7 +41,7 @@ namespace Tests.Restbucks.Client.States
 
             var state = new StartedState(null, CreateUninitializedContext());
 
-            var newState = state.Apply(handlers);
+            var newState = state.NextState(handlers);
 
             var context = newState.GetPrivateFieldValue<ApplicationContext>("context");
             Assert.AreEqual(SemanticContext.Started, context.Get<string>(ApplicationContextKeys.SemanticContext));
@@ -57,7 +57,7 @@ namespace Tests.Restbucks.Client.States
 
             var state = new StartedState(null, CreateUninitializedContext());
 
-            var newState = state.Apply(handlers);
+            var newState = state.NextState(handlers);
 
             Assert.AreEqual(response, newState.GetPrivateFieldValue<HttpResponseMessage>("response"));
         }
@@ -70,7 +70,7 @@ namespace Tests.Restbucks.Client.States
 
             var state = new StartedState(new HttpResponseMessage(), CreateStartedContext());
 
-            var newState = state.Apply(handlers);
+            var newState = state.NextState(handlers);
 
             Assert.IsInstanceOf(typeof (StartedState), newState);
             Assert.AreNotEqual(state, newState);
@@ -84,7 +84,7 @@ namespace Tests.Restbucks.Client.States
 
             var state = new StartedState(new HttpResponseMessage(), CreateStartedContext());
 
-            var newState = state.Apply(handlers);
+            var newState = state.NextState(handlers);
 
             var context = newState.GetPrivateFieldValue<ApplicationContext>("context");
             Assert.AreEqual(SemanticContext.Rfq, context.Get<string>(ApplicationContextKeys.SemanticContext));
@@ -100,7 +100,7 @@ namespace Tests.Restbucks.Client.States
 
             var state = new StartedState(new HttpResponseMessage(), CreateStartedContext());
 
-            var newState = state.Apply(handlers);
+            var newState = state.NextState(handlers);
 
             Assert.AreEqual(response, newState.GetPrivateFieldValue<HttpResponseMessage>("response"));
         }
@@ -113,7 +113,7 @@ namespace Tests.Restbucks.Client.States
 
             var state = new StartedState(new HttpResponseMessage(), CreateRfqContext());
 
-            var newState = state.Apply(handlers);
+            var newState = state.NextState(handlers);
 
             Assert.IsInstanceOf(typeof (QuoteRequestedState), newState);
             Assert.AreNotEqual(state, newState);
@@ -127,7 +127,7 @@ namespace Tests.Restbucks.Client.States
 
             var state = new StartedState(new HttpResponseMessage(), CreateRfqContext());
 
-            var newState = state.Apply(handlers);
+            var newState = state.NextState(handlers);
 
             var context = newState.GetPrivateFieldValue<ApplicationContext>("context");
             Assert.IsFalse(context.ContainsKey(ApplicationContextKeys.SemanticContext));
@@ -143,7 +143,7 @@ namespace Tests.Restbucks.Client.States
 
             var state = new StartedState(new HttpResponseMessage(), CreateRfqContext());
 
-            var newState = state.Apply(handlers);
+            var newState = state.NextState(handlers);
 
             Assert.AreEqual(response, newState.GetPrivateFieldValue<HttpResponseMessage>("response"));
         }

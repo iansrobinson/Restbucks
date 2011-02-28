@@ -95,20 +95,22 @@ namespace Tests.Restbucks.MediaType.Formatters
         public void ShouldAddFormsAsChildrenOfShopElement()
         {
             var shop = new ShopBuilder().Build()
-                .AddForm(new Form(new Uri("/quotes", UriKind.Relative), "post", RestbucksMediaType.Value, new Uri("http://schemas.restbucks.com/shop")))
-                .AddForm(new Form(new Uri("/orders", UriKind.Relative), "put", RestbucksMediaType.Value, new ShopBuilder().Build()));
+                .AddForm(new Form("request-for-quote", new Uri("/quotes", UriKind.Relative), "post", RestbucksMediaType.Value, new Uri("http://schemas.restbucks.com/shop")))
+                .AddForm(new Form("order", new Uri("/orders", UriKind.Relative), "put", RestbucksMediaType.Value, new ShopBuilder().Build()));
 
             var output = new XmlOutput(new ShopFormatter(shop).CreateXml());
 
             Assert.AreEqual(2, output.GetNodeCount("r:shop/x:model"));
 
             Assert.AreEqual("http://schemas.restbucks.com/shop", output.GetNodeValue("r:shop/x:model[1]/@schema"));
+            Assert.AreEqual("request-for-quote", output.GetNodeValue("r:shop/x:model[1]/@id"));
             Assert.AreEqual("/quotes", output.GetNodeValue("r:shop/x:model[1]/x:submission/@resource"));
             Assert.AreEqual("post", output.GetNodeValue("r:shop/x:model[1]/x:submission/@method"));
             Assert.AreEqual(RestbucksMediaType.Value, output.GetNodeValue("r:shop/x:model[1]/x:submission/@mediatype"));
             Assert.AreEqual(string.Empty, output.GetNodeValue("r:shop/x:model[1]/x:instance"));
 
             Assert.IsNull(output.GetNode("r:shop/x:model[2]/@schema"));
+            Assert.AreEqual("order", output.GetNodeValue("r:shop/x:model[2]/@id"));
             Assert.AreEqual("/orders", output.GetNodeValue("r:shop/x:model[2]/x:submission/@resource"));
             Assert.AreEqual("put", output.GetNodeValue("r:shop/x:model[2]/x:submission/@method"));
             Assert.AreEqual(RestbucksMediaType.Value, output.GetNodeValue("r:shop/x:model[2]/x:submission/@mediatype"));

@@ -46,12 +46,12 @@ namespace Restbucks.Quoting.Service.Old.Resources
             response.Headers.Expires = quote.CreatedDateTime.AddDays(7.0).UtcDateTime;
 
             return new Shop(baseUri)
-                .AddForm(new Form(
-                             OrdersUriFactoryWorker.CreateAbsoluteUri(new Uri("http://localhost:8081/")),
-                             "post",
-                             RestbucksMediaType.Value,
-                             new Shop(baseUri, quote.LineItems.Select(li => new LineItemToItem(li).Adapt()))
-                                 .AddLink(new Link(uriFactory.CreateRelativeUri<Quote>(quote.Id), RestbucksMediaType.Value, LinkRelations.Self))));
+                .AddForm(new Form(FormSemantics.Order,
+                                  OrdersUriFactoryWorker.CreateAbsoluteUri(new Uri("http://localhost:8081/")),
+                                  "post",
+                                  RestbucksMediaType.Value,
+                                  new Shop(baseUri, quote.LineItems.Select(li => new LineItemToItem(li).Adapt()))
+                                      .AddLink(new Link(uriFactory.CreateRelativeUri<Quote>(quote.Id), RestbucksMediaType.Value, LinkRelations.Self))));
         }
     }
 }

@@ -57,6 +57,15 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
         }
 
         [Test]
+        public void FormIdShouldBeRequestForQuote()
+        {
+            var entityBody = GetRequestForQuoteEntityBody();
+            var form = entityBody.Forms.First();
+
+            Assert.AreEqual("request-for-quote", form.Id);
+        }
+
+        [Test]
         public void FormShouldRequirePost()
         {
             var entityBody = GetRequestForQuoteEntityBody();

@@ -22,10 +22,10 @@ namespace Restbucks.Quoting.Service.Old.Resources
 
             response.Headers.CacheControl = new CacheControl {Public = true, MaxAge = new TimeSpan(24, 0, 0)};
             return new Shop(baseUri)
-                .AddForm(new Form(
-                             uriFactory.CreateRelativeUri<Quotes>(),
-                             "post", "application/restbucks+xml",
-                             new Uri("http://schemas.restbucks.com/shop")));
+                .AddForm(new Form(FormSemantics.Rfq,
+                                  uriFactory.CreateRelativeUri<Quotes>(),
+                                  "post", "application/restbucks+xml",
+                                  new Uri("http://schemas.restbucks.com/shop")));
         }
     }
 }

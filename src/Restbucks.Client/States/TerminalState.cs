@@ -4,7 +4,7 @@ namespace Restbucks.Client.States
 {
     public class TerminalState : IState
     {
-        public IState Apply(IResponseHandlers handlers)
+        public IState NextState(IResponseHandlers handlers)
         {
             throw new InvalidOperationException();
         }

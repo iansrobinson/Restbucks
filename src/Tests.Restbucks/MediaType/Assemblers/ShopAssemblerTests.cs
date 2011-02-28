@@ -100,11 +100,11 @@ namespace Tests.Restbucks.MediaType.Assemblers
         {
             const string xml = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <shop xmlns=""http://schemas.restbucks.com/shop"">
-  <model schema=""http://schemas.restbucks.com/shop"" xmlns=""http://www.w3.org/2002/xforms"">
+  <model id=""request-for-quote"" schema=""http://schemas.restbucks.com/shop"" xmlns=""http://www.w3.org/2002/xforms"">
     <instance />
     <submission resource=""/quotes"" method=""post"" mediatype=""application/restbucks+xml"" />
   </model>
-  <model xmlns=""http://www.w3.org/2002/xforms"">
+  <model id=""order"" xmlns=""http://www.w3.org/2002/xforms"">
     <instance>
       <shop xmlns=""http://schemas.restbucks.com/shop"" />
     </instance>
@@ -125,6 +125,7 @@ namespace Tests.Restbucks.MediaType.Assemblers
             Assert.IsNull(firstForm.Instance);
             Assert.AreEqual("/quotes", firstForm.Resource.ToString());
             Assert.AreEqual("post", firstForm.Method);
+            Assert.AreEqual("request-for-quote", firstForm.Id);
             Assert.AreEqual(RestbucksMediaType.Value, firstForm.MediaType);
 
             var secondForm = shop.Forms.Last();
@@ -132,6 +133,7 @@ namespace Tests.Restbucks.MediaType.Assemblers
             Assert.IsNotNull(secondForm.Instance);
             Assert.AreEqual("/orders", secondForm.Resource.ToString());
             Assert.AreEqual("put", secondForm.Method);
+            Assert.AreEqual("order", secondForm.Id);
             Assert.AreEqual("application/xml", secondForm.MediaType);
         }
 
@@ -176,11 +178,11 @@ namespace Tests.Restbucks.MediaType.Assemblers
         {
             const string xml = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <shop xmlns=""http://schemas.restbucks.com/shop"">
-  <model schema=""http://schemas.restbucks.com/shop"" xmlns=""http://www.w3.org/2002/xforms"">
+  <model id=""request-for-quote"" schema=""http://schemas.restbucks.com/shop"" xmlns=""http://www.w3.org/2002/xforms"">
     <instance />
     <submission resource=""http://localhost/quotes"" method=""post"" mediatype=""application/restbucks+xml"" />
   </model>
-  <model xmlns=""http://www.w3.org/2002/xforms"">
+  <model id=""order"" xmlns=""http://www.w3.org/2002/xforms"">
     <instance>
       <shop xmlns=""http://schemas.restbucks.com/shop"" />
     </instance>
@@ -196,7 +198,7 @@ namespace Tests.Restbucks.MediaType.Assemblers
         {
             const string xml = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <shop xmlns=""http://schemas.restbucks.com/shop"" xml:base=""http://restbucks.com/"">
-  <model xmlns=""http://www.w3.org/2002/xforms"">
+  <model id=""order"" xmlns=""http://www.w3.org/2002/xforms"">
     <instance>
       <shop xmlns=""http://schemas.restbucks.com/shop""/>
     </instance>
@@ -213,7 +215,7 @@ namespace Tests.Restbucks.MediaType.Assemblers
         {
             const string xml = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <shop xmlns=""http://schemas.restbucks.com/shop"" xml:base=""http://restbucks.com/"">
-  <model xmlns=""http://www.w3.org/2002/xforms"">
+  <model id=""order"" xmlns=""http://www.w3.org/2002/xforms"">
     <instance>
       <shop xmlns=""http://schemas.restbucks.com/shop"" xml:base=""http://iansrobinson.com/""/>
     </instance>

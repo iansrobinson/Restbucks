@@ -16,6 +16,7 @@ namespace Restbucks.MediaType.Formatters
         public IEnumerable<XElement> CreateXml()
         {
             return shop.Forms.Select(form => new XElement(Namespaces.XForms + "model",
+                                                          form.Id != null ? new XAttribute("id", form.Id) : null,
                                                           form.Schema != null ? new XAttribute("schema", form.Schema) : null,
                                                           new XElement(Namespaces.XForms + "instance",
                                                                        form.Instance != null ? new ShopFormatter(form.Instance).CreateXml() : null),

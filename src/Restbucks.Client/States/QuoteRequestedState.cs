@@ -14,7 +14,7 @@ namespace Restbucks.Client.States
             this.context = context;
         }
 
-        public IState Apply(IResponseHandlers handlers)
+        public IState NextState(IResponseHandlers handlers)
         {
             throw new NotImplementedException();
         }
