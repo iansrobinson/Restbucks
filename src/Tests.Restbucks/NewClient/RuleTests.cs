@@ -19,7 +19,7 @@ namespace Tests.Restbucks.NewClient
             var condition = MockRepository.GenerateStub<ICondition>();
             condition.Expect(c => c.IsApplicable(PreviousResponse)).Return(true);
 
-            var action = MockRepository.GenerateStrictMock<IAction>();
+            var action = MockRepository.GenerateMock<IAction>();
             action.Expect(a => a.Execute()).Return(NewResponse);
 
             var stateFactory = MockRepository.GenerateStub<IStateFactory>();
@@ -72,7 +72,7 @@ namespace Tests.Restbucks.NewClient
             var condition = MockRepository.GenerateStub<ICondition>();
             condition.Expect(c => c.IsApplicable(PreviousResponse)).Return(false);
 
-            var action = MockRepository.GenerateStrictMock<IAction>();
+            var action = MockRepository.GenerateMock<IAction>();
             action.AssertWasNotCalled(a => a.Execute());
 
             var stateFactory = MockRepository.GenerateStub<IStateFactory>();

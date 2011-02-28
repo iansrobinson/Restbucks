@@ -29,13 +29,7 @@ namespace Tests.Restbucks.Quoting.Service.Processors
         [Test]
         public void DoesNotUseSuppliedFormsSignerIfEntityBodyIsNull()
         {
-            var mocks = new MockRepository();
-            var formsSigner = mocks.StrictMock<ISignForms>();
-
-            using (mocks.Record())
-            {
-            }
-            mocks.Playback();
+            var formsSigner = MockRepository.GenerateMock<ISignForms>();
 
             var processor = new FormsIntegrityResponseProcessor(formsSigner);
             var response = new HttpResponseMessage();
@@ -43,7 +37,7 @@ namespace Tests.Restbucks.Quoting.Service.Processors
             processor.Initialize();
             processor.Execute(new object[] {response});
 
-            mocks.VerifyAll();
+            formsSigner.AssertWasNotCalled(fs => fs.SignForms(null, null), fs => fs.IgnoreArguments());
         }
 
         [Test]

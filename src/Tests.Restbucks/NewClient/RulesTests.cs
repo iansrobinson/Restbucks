@@ -15,9 +15,9 @@ namespace Tests.Restbucks.NewClient
 
             var mocks = new MockRepository();
 
-            var rule1 = mocks.StrictMock<IRule>();
-            var rule2 = mocks.StrictMock<IRule>();
-            var rule3 = mocks.StrictMock<IRule>();
+            var rule1 = mocks.DynamicMock<IRule>();
+            var rule2 = mocks.DynamicMock<IRule>();
+            var rule3 = mocks.DynamicMock<IRule>();
 
             using (mocks.Ordered())
             {
@@ -31,6 +31,26 @@ namespace Tests.Restbucks.NewClient
             rules.Evaluate(response);
 
             mocks.VerifyAll();
+        }
+
+        [Test]
+        public void ShouldNotEvaluateSubsequentRulesFollowingASuccussfulRule()
+        {
+            var response = new HttpResponseMessage();
+
+            var rule1 = MockRepository.GenerateMock<IRule>();
+            var rule2 = MockRepository.GenerateMock<IRule>();
+            var rule3 = MockRepository.GenerateMock<IRule>();
+
+            rule1.Expect(r => r.Evaluate(response)).Return(Result.Unsuccessful);
+            rule2.Expect(r => r.Evaluate(response)).Return(new Result(true, MockRepository.GenerateStub<IState>()));
+
+            var rules = new Rules(rule1, rule2, rule3);
+            rules.Evaluate(response);
+
+            rule1.VerifyAllExpectations();
+            rule2.VerifyAllExpectations();
+            rule3.AssertWasNotCalled(r => r.Evaluate(response));
         }
     }
 }

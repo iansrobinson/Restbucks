@@ -21,8 +21,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
         [Test]
         public void ShouldReturnNewQuoteFromQuoteEngine()
         {
-            var mocks = new MockRepository();
-            var quoteEngine = mocks.StrictMock<IQuotationEngine>();
+            var quoteEngine = MockRepository.GenerateMock<IQuotationEngine>();
 
             var shop = new ShopBuilder(BaseAddress)
                 .AddItem(new Item("item1", new Amount("g", 250)))
@@ -37,21 +36,16 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
                         new LineItem("item2", new Quantity("kg", 2), new Money("GBP", 2.00))
                     });
 
-            using (mocks.Record())
-            {
-                Expect
-                    .Call(quoteEngine.CreateQuote(null))
-                    .Constraints(Is.Matching<QuotationRequest>(qr => Matching.QuoteRequestItemsMatchItems(qr.Items, shop.Items)))
-                    .Return(quote);
-            }
-            mocks.Playback();
+            quoteEngine.Expect(q => q.CreateQuote(null))
+                .Constraints(Is.Matching<QuotationRequest>(qr => Matching.QuoteRequestItemsMatchItems(qr.Items, shop.Items)))
+                .Return(quote);
 
             var result = new Quotes(DefaultUriFactory.Instance, quoteEngine).Post(shop, new HttpRequestMessage {Uri = GetRequestUri()}, new HttpResponseMessage());
 
             Assert.True(result.HasItems);
             Assert.True(Matching.LineItemsMatchItems(quote.LineItems, result.Items));
 
-            mocks.VerifyAll();
+            quoteEngine.VerifyAllExpectations();
         }
 
         [Test]

@@ -13,9 +13,13 @@ namespace Restbucks.NewClient
             this.rules = rules;
         }
 
-        public void Evaluate(HttpResponseMessage response)
+        public IState Evaluate(HttpResponseMessage response)
         {
-            rules.ToList().ForEach(r => r.Evaluate(response));
+            return (from rule in rules
+                    select rule.Evaluate(response)
+                    into result
+                    where result.IsSuccessful
+                    select result.State).FirstOrDefault();
         }
     }
 }

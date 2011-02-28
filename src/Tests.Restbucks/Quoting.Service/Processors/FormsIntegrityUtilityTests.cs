@@ -245,14 +245,8 @@ namespace Tests.Restbucks.Quoting.Service.Processors
 </shop>";
             const string expectedXml = @"<shop xmlns=""http://schemas.restbucks.com/shop""><status>Awaiting Payment</status></shop>";
 
-            var mocks = new MockRepository();
-            var signature = mocks.StrictMock<IGenerateSignature>();
-
-            using (mocks.Record())
-            {
-                Expect.Call(signature.GenerateSignature(expectedXml)).Return("signature");
-            }
-            mocks.Playback();
+            var signature = MockRepository.GenerateMock<IGenerateSignature>();
+            signature.Expect(s => s.GenerateSignature(expectedXml)).Return("signature");
 
             using (var streamIn = new MemoryStream())
             {
@@ -267,7 +261,7 @@ namespace Tests.Restbucks.Quoting.Service.Processors
                 }
             }
 
-            mocks.VerifyAll();
+            signature.VerifyAllExpectations();
         }
 
         private static void AssertProtectingFormCreatesExpectedXml(string originalXml, string expectedXml, IGenerateSignature signature)
