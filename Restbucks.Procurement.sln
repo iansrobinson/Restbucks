@@ -32,6 +32,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restbucks.Client", "src\Res
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restbucks.Client.ConsoleHost", "src\Restbucks.Client.ConsoleHost\Restbucks.Client.ConsoleHost.csproj", "{A83DC1E3-0E28-4BC0-86C0-862866867928}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restbucks.NewClient", "src\Restbucks.NewClient\Restbucks.NewClient.csproj", "{6C975D85-C264-4987-A176-7ECCC51235AA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -132,6 +134,16 @@ Global
 		{A83DC1E3-0E28-4BC0-86C0-862866867928}.Release|Mixed Platforms.Build.0 = Release|x86
 		{A83DC1E3-0E28-4BC0-86C0-862866867928}.Release|x86.ActiveCfg = Release|x86
 		{A83DC1E3-0E28-4BC0-86C0-862866867928}.Release|x86.Build.0 = Release|x86
+		{6C975D85-C264-4987-A176-7ECCC51235AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C975D85-C264-4987-A176-7ECCC51235AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C975D85-C264-4987-A176-7ECCC51235AA}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{6C975D85-C264-4987-A176-7ECCC51235AA}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{6C975D85-C264-4987-A176-7ECCC51235AA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6C975D85-C264-4987-A176-7ECCC51235AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C975D85-C264-4987-A176-7ECCC51235AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C975D85-C264-4987-A176-7ECCC51235AA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{6C975D85-C264-4987-A176-7ECCC51235AA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{6C975D85-C264-4987-A176-7ECCC51235AA}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -146,5 +158,6 @@ Global
 		{849CB5F7-0DA0-4883-94CE-A408582C891B} = {6787D83F-1EB9-4DD2-AF6E-070C07B2F069}
 		{4FF3C7CB-505C-47EA-AD0B-F3063B6F8B03} = {6787D83F-1EB9-4DD2-AF6E-070C07B2F069}
 		{A83DC1E3-0E28-4BC0-86C0-862866867928} = {6787D83F-1EB9-4DD2-AF6E-070C07B2F069}
+		{6C975D85-C264-4987-A176-7ECCC51235AA} = {6787D83F-1EB9-4DD2-AF6E-070C07B2F069}
 	EndGlobalSection
 EndGlobal

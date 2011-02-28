@@ -19,10 +19,10 @@ namespace Restbucks.MediaType
             this.links = new List<Link>(links).AsReadOnly();
             this.forms = new List<Form>(forms).AsReadOnly();
 
-            ValidateNamespacePrefixesDoNotConflict();
+            ValidateCompactUriNamespacePrefixesDoNotConflict();
         }
 
-        private void ValidateNamespacePrefixesDoNotConflict()
+        private void ValidateCompactUriNamespacePrefixesDoNotConflict()
         {
             var rels = (from rel in
                             ((from Link l in links select l.Rels)
