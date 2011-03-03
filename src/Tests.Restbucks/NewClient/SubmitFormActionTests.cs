@@ -9,7 +9,6 @@ using NUnit.Framework;
 using Restbucks.Client.Formatters;
 using Restbucks.MediaType;
 using Restbucks.NewClient;
-using Rhino.Mocks;
 using Tests.Restbucks.Client.Helpers;
 
 namespace Tests.Restbucks.NewClient
@@ -17,7 +16,7 @@ namespace Tests.Restbucks.NewClient
     [TestFixture]
     public class SubmitFormActionTests
     {
-        private static readonly IFormInfo FormInfo = CreateFormInfo();
+        private static readonly FormInfo FormInfo = CreateFormInfo();
         private static readonly Shop FormData = CreateEntityBody();
         private static readonly IContentFormatter[] Formatters = GetFormatters();
 
@@ -75,21 +74,18 @@ namespace Tests.Restbucks.NewClient
         [Test]
         public void ShouldDoConditionalFormSubmissionIfEtagIsSupplied()
         {
-            var formInfo = CreateFormInfo();
-            formInfo.Expect(f => f.Etag).Return(new EntityTagHeaderValue(@"""xyz"""));
-            
             var mockEndpoint = new MockEndpoint(new HttpResponseMessage());
-            var client = new HttpClient { Channel = mockEndpoint };
+            var client = new HttpClient {Channel = mockEndpoint};
 
-            var action = new SubmitFormAction(formInfo, client, FormData, Formatters);
+            var action = new SubmitFormAction(FormInfo, client, FormData, Formatters);
             action.Execute();
 
-            Assert.AreEqual(new EntityTagHeaderValue(@"""xyz"""), mockEndpoint.ReceivedRequest.Headers.IfMatch.First());
+            Assert.AreEqual(FormInfo.Etag, mockEndpoint.ReceivedRequest.Headers.IfMatch.First());
         }
 
         private static IContentFormatter[] GetFormatters()
         {
-            return new IContentFormatter[] {new DummyFormatter(), new RestbucksFormatter() };
+            return new IContentFormatter[] {new DummyFormatter(), new RestbucksFormatter()};
         }
 
         private static Shop CreateEntityBody()
@@ -97,13 +93,9 @@ namespace Tests.Restbucks.NewClient
             return new ShopBuilder(null).AddItem(new Item("coffee", new Amount("g", 250))).Build();
         }
 
-        private static IFormInfo CreateFormInfo()
+        private static FormInfo CreateFormInfo()
         {
-            var formInfo = MockRepository.GenerateStub<IFormInfo>();
-            formInfo.Expect(f => f.ResourceUri).Return(new Uri("http://restbucks.com/orders"));
-            formInfo.Expect(f => f.Method).Return(HttpMethod.Post);
-            formInfo.Expect(f => f.ContentType).Return(new MediaTypeHeaderValue(RestbucksMediaType.Value));
-            return formInfo;
+            return new FormInfo(new Uri("http://restbucks.com/orders"), HttpMethod.Post, new MediaTypeHeaderValue(RestbucksMediaType.Value), new EntityTagHeaderValue(@"""xyz"""));
         }
 
         private class RestbucksFormatter : IContentFormatter

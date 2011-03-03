@@ -64,9 +64,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FormInfo.cs" />
     <Compile Include="IAction.cs" />
     <Compile Include="ICondition.cs" />
-    <Compile Include="IFormInfo.cs" />
     <Compile Include="IRule.cs" />
     <Compile Include="IState.cs" />
     <Compile Include="IStateFactory.cs" />

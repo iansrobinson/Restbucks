@@ -6,12 +6,12 @@ namespace Restbucks.NewClient
 {
     public class SubmitFormAction : IAction
     {
-        private readonly IFormInfo formInfo;
+        private readonly FormInfo formInfo;
         private readonly HttpClient client;
         private readonly object formData;
         private readonly IContentFormatter[] formatters;
 
-        public SubmitFormAction(IFormInfo formInfo, HttpClient client, object formData, params IContentFormatter[] formatters)
+        public SubmitFormAction(FormInfo formInfo, HttpClient client, object formData, params IContentFormatter[] formatters)
         {
             this.formInfo = formInfo;
             this.client = client;
