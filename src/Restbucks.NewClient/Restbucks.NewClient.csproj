@@ -74,7 +74,9 @@
     <Compile Include="Result.cs" />
     <Compile Include="Rule.cs" />
     <Compile Include="Rules.cs" />
+    <Compile Include="StateFactoryCollection.cs" />
     <Compile Include="SubmitFormAction.cs" />
+    <Compile Include="UnsuccessfulState.cs" />
     <Compile Include="When.cs" />
   </ItemGroup>
   <ItemGroup>
