@@ -64,22 +64,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FormInfo.cs" />
-    <Compile Include="IAction.cs" />
-    <Compile Include="ICondition.cs" />
-    <Compile Include="IRule.cs" />
-    <Compile Include="IState.cs" />
-    <Compile Include="IStateFactory.cs" />
-    <Compile Include="On.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Result.cs" />
-    <Compile Include="Rule.cs" />
-    <Compile Include="Rules.cs" />
-    <Compile Include="StateFactory.cs" />
-    <Compile Include="StateFactoryCollection.cs" />
-    <Compile Include="SubmitFormAction.cs" />
-    <Compile Include="UnsuccessfulState.cs" />
-    <Compile Include="When.cs" />
+    <Compile Include="RulesEngine\FormInfo.cs" />
+    <Compile Include="RulesEngine\IAction.cs" />
+    <Compile Include="RulesEngine\ICondition.cs" />
+    <Compile Include="RulesEngine\IRule.cs" />
+    <Compile Include="RulesEngine\IState.cs" />
+    <Compile Include="RulesEngine\IStateFactory.cs" />
+    <Compile Include="RulesEngine\On.cs" />
+    <Compile Include="RulesEngine\Result.cs" />
+    <Compile Include="RulesEngine\Rule.cs" />
+    <Compile Include="RulesEngine\Rules.cs" />
+    <Compile Include="RulesEngine\StateFactory.cs" />
+    <Compile Include="RulesEngine\StateFactoryCollection.cs" />
+    <Compile Include="RulesEngine\SubmitFormAction.cs" />
+    <Compile Include="RulesEngine\UnsuccessfulState.cs" />
+    <Compile Include="RulesEngine\When.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Restbucks.RestToolkit\Restbucks.RestToolkit.csproj">
@@ -87,6 +87,7 @@
       <Name>Restbucks.RestToolkit</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

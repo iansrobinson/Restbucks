@@ -2,7 +2,7 @@
 using System.Net.Http;
 using Microsoft.Net.Http;
 
-namespace Restbucks.NewClient
+namespace Restbucks.NewClient.RulesEngine
 {
     public class SubmitFormAction : IAction
     {

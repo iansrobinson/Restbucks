@@ -112,11 +112,11 @@
     <Compile Include="MediaType\ShopTests.cs" />
     <Compile Include="MediaType\StringLinkRelationTests.cs" />
     <Compile Include="MediaType\UriLinkRelationTests.cs" />
-    <Compile Include="NewClient\RulesTests.cs" />
-    <Compile Include="NewClient\RuleTests.cs" />
-    <Compile Include="NewClient\StateFactoryCollectionTests.cs" />
-    <Compile Include="NewClient\SubmitFormActionTests.cs" />
-    <Compile Include="NewClient\WhenTests.cs" />
+    <Compile Include="NewClient\RulesEngine\RulesTests.cs" />
+    <Compile Include="NewClient\RulesEngine\RuleTests.cs" />
+    <Compile Include="NewClient\RulesEngine\StateFactoryCollectionTests.cs" />
+    <Compile Include="NewClient\RulesEngine\SubmitFormActionTests.cs" />
+    <Compile Include="NewClient\RulesEngine\WhenTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Quoting.Service\ConfigTests.cs" />
     <Compile Include="Quoting.Service\Processors\FormsIntegrityResponseProcessorTests.cs" />

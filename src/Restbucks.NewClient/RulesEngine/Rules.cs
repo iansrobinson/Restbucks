@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Net.Http;
 
-namespace Restbucks.NewClient
+namespace Restbucks.NewClient.RulesEngine
 {
     public class Rules
     {

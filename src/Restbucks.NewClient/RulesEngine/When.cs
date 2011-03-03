@@ -5,7 +5,7 @@ using System.Net;
 using System.Net.Http;
 using Restbucks.RestToolkit.Utils;
 
-namespace Restbucks.NewClient
+namespace Restbucks.NewClient.RulesEngine
 {
     public class When : IExecuteAction, IReturnState
     {

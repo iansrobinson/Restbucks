@@ -8,10 +8,10 @@ using Microsoft.Net.Http;
 using NUnit.Framework;
 using Restbucks.Client.Formatters;
 using Restbucks.MediaType;
-using Restbucks.NewClient;
+using Restbucks.NewClient.RulesEngine;
 using Tests.Restbucks.Client.Helpers;
 
-namespace Tests.Restbucks.NewClient
+namespace Tests.Restbucks.NewClient.RulesEngine
 {
     [TestFixture]
     public class SubmitFormActionTests

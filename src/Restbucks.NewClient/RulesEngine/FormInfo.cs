@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 
-namespace Restbucks.NewClient
+namespace Restbucks.NewClient.RulesEngine
 {
     public class FormInfo
     {

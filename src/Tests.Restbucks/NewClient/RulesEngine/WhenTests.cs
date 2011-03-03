@@ -2,10 +2,10 @@
 using System.Net;
 using System.Net.Http;
 using NUnit.Framework;
-using Restbucks.NewClient;
+using Restbucks.NewClient.RulesEngine;
 using Rhino.Mocks;
 
-namespace Tests.Restbucks.NewClient
+namespace Tests.Restbucks.NewClient.RulesEngine
 {
     [TestFixture]
     public class WhenTests
