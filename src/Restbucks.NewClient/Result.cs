@@ -1,4 +1,6 @@
-﻿namespace Restbucks.NewClient
+﻿using System.Net;
+
+namespace Restbucks.NewClient
 {
     public class Result
     {

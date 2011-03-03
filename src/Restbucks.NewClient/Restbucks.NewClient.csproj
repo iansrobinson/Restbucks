@@ -70,10 +70,12 @@
     <Compile Include="IRule.cs" />
     <Compile Include="IState.cs" />
     <Compile Include="IStateFactory.cs" />
+    <Compile Include="On.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Result.cs" />
     <Compile Include="Rule.cs" />
     <Compile Include="Rules.cs" />
+    <Compile Include="StateFactory.cs" />
     <Compile Include="StateFactoryCollection.cs" />
     <Compile Include="SubmitFormAction.cs" />
     <Compile Include="UnsuccessfulState.cs" />

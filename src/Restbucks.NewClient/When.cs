@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Net.Http;
+using Restbucks.RestToolkit.Utils;
 
 namespace Restbucks.NewClient
 {
@@ -11,6 +15,11 @@ namespace Restbucks.NewClient
         public static IExecuteAction IsTrue<T>() where T : ICondition, new()
         {
             return new When(new T());
+        }
+
+        public static IExecuteAction IsTrue(Func<HttpResponseMessage, bool> condition)
+        {
+            return new When(new ConditionWrapper(condition));
         }
 
         private When(ICondition condition)
@@ -29,18 +38,33 @@ namespace Restbucks.NewClient
             return new Rule(condition, action, new StateFactory(createState));
         }
 
-        private class StateFactory : IStateFactory
+        public IRule Return(IEnumerable<KeyValuePair<HttpStatusCode, IStateFactory>> createStateByStatusCode, Func<HttpResponseMessage, IState> defaultCreateState = null)
         {
-            private readonly Func<HttpResponseMessage, IState> createState;
+            Check.IsNotNull(createStateByStatusCode, "createStateByStatusCode");
+            
+            var stateFactories = new Dictionary<HttpStatusCode, IStateFactory>();
+            createStateByStatusCode.ToList().ForEach(kv => stateFactories.Add(kv.Key, kv.Value));
 
-            public StateFactory(Func<HttpResponseMessage, IState> createState)
+            if (defaultCreateState == null)
             {
-                this.createState = createState;
+                return new Rule(condition, action, new StateFactoryCollection(stateFactories));
             }
 
-            public IState Create(HttpResponseMessage response)
+            return new Rule(condition, action, new StateFactoryCollection(stateFactories, new StateFactory(defaultCreateState)));
+        }
+
+        private class ConditionWrapper : ICondition
+        {
+            private readonly Func<HttpResponseMessage, bool> condition;
+
+            public ConditionWrapper(Func<HttpResponseMessage, bool> condition)
             {
-                return createState(response);
+                this.condition = condition;
+            }
+
+            public bool IsApplicable(HttpResponseMessage response)
+            {
+                return condition(response);
             }
         }
     }
@@ -53,5 +77,6 @@ namespace Restbucks.NewClient
     public interface IReturnState
     {
         IRule ReturnState(Func<HttpResponseMessage, IState> createState);
+        IRule Return(IEnumerable<KeyValuePair<HttpStatusCode, IStateFactory>> createStateByStatusCode, Func<HttpResponseMessage, IState> defaultCreateState = null);
     }
 }
