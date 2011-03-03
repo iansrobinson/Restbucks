@@ -72,6 +72,21 @@ namespace Tests.Restbucks.NewClient
             Assert.AreEqual(FormData.Items.First().Description, receivedFormData.Items.First().Description);
         }
 
+        [Test]
+        public void ShouldDoConditionalFormSubmissionIfEtagIsSupplied()
+        {
+            var formInfo = CreateFormInfo();
+            formInfo.Expect(f => f.Etag).Return(new EntityTagHeaderValue(@"""xyz"""));
+            
+            var mockEndpoint = new MockEndpoint(new HttpResponseMessage());
+            var client = new HttpClient { Channel = mockEndpoint };
+
+            var action = new SubmitFormAction(formInfo, client, FormData, Formatters);
+            action.Execute();
+
+            Assert.AreEqual(new EntityTagHeaderValue(@"""xyz"""), mockEndpoint.ReceivedRequest.Headers.IfMatch.First());
+        }
+
         private static IContentFormatter[] GetFormatters()
         {
             return new IContentFormatter[] {new DummyFormatter(), new RestbucksFormatter() };

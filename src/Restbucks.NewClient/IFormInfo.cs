@@ -9,5 +9,6 @@ namespace Restbucks.NewClient
         Uri ResourceUri { get; }
         HttpMethod Method { get; }
         MediaTypeHeaderValue ContentType { get; }
+        EntityTagHeaderValue Etag { get; }
     }
 }

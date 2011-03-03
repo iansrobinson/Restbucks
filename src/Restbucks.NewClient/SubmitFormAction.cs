@@ -28,12 +28,19 @@ namespace Restbucks.NewClient
             var content = formData.ToContent(formatter);
             content.Headers.ContentType = formInfo.ContentType;
 
-            return client.Send(new HttpRequestMessage
-                                   {
-                                       RequestUri = formInfo.ResourceUri,
-                                       Method = formInfo.Method,
-                                       Content = content
-                                   });
+            var request = new HttpRequestMessage
+                                         {
+                                             RequestUri = formInfo.ResourceUri,
+                                             Method = formInfo.Method,
+                                             Content = content
+                                         };
+
+            if (formInfo.Etag != null)
+            {
+                request.Headers.IfMatch.Add(formInfo.Etag);
+            }
+
+            return client.Send(request);
         }
     }
 }
