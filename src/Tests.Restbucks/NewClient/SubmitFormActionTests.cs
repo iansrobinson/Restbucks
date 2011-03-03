@@ -83,6 +83,20 @@ namespace Tests.Restbucks.NewClient
             Assert.AreEqual(FormInfo.Etag, mockEndpoint.ReceivedRequest.Headers.IfMatch.First());
         }
 
+        [Test]
+        public void ShouldNotDoConditionalFormSubmissionIfEtagIsNotSupplied()
+        {
+            var formInfo = new FormInfo(new Uri("http://restbucks.com/orders"), HttpMethod.Post, new MediaTypeHeaderValue(RestbucksMediaType.Value));
+            
+            var mockEndpoint = new MockEndpoint(new HttpResponseMessage());
+            var client = new HttpClient { Channel = mockEndpoint };
+
+            var action = new SubmitFormAction(formInfo, client, FormData, Formatters);
+            action.Execute();
+
+            Assert.AreEqual(0, mockEndpoint.ReceivedRequest.Headers.IfMatch.Count());
+        }
+
         private static IContentFormatter[] GetFormatters()
         {
             return new IContentFormatter[] {new DummyFormatter(), new RestbucksFormatter()};

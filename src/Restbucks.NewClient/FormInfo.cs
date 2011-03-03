@@ -42,5 +42,10 @@ namespace Restbucks.NewClient
         {
             get { return etag; }
         }
+
+        public FormInfo WithNewEtag(EntityTagHeaderValue newEtag)
+        {
+            return new FormInfo(resourceUri, method, contentType, newEtag);
+        }
     }
 }
