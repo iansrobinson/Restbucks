@@ -26,7 +26,7 @@ namespace Tests.Restbucks.NewClient
             var content = CreateContent();
 
             var form = new RestbucksForm("rfq");
-            var formInfo = form.GetFormInfo(new HttpResponseMessage { Content = content }, new ApplicationContext(Input), new HttpContentAdapter(RestbucksMediaTypeFormatter.Instance));
+            var formInfo = form.GetFormInfo(new HttpResponseMessage { Content = content }, new HttpContentAdapter(RestbucksMediaTypeFormatter.Instance), new ApplicationContext(Input));
 
             Assert.AreEqual(ContentType,  formInfo.ContentType);
             Assert.AreEqual(Method, formInfo.Method);
@@ -39,7 +39,7 @@ namespace Tests.Restbucks.NewClient
             var content = CreateContent();
 
             var form = new RestbucksForm("rfq");
-            var formInfo = form.GetFormInfo(new HttpResponseMessage { Content = content }, new ApplicationContext(Input), new HttpContentAdapter(RestbucksMediaTypeFormatter.Instance));
+            var formInfo = form.GetFormInfo(new HttpResponseMessage { Content = content }, new HttpContentAdapter(RestbucksMediaTypeFormatter.Instance), new ApplicationContext(Input));
 
             Assert.AreEqual(Input.BaseUri, formInfo.FormData.ReadAsObject<Shop>(RestbucksMediaTypeFormatter.Instance).BaseUri);
         }
@@ -50,7 +50,7 @@ namespace Tests.Restbucks.NewClient
             var content = CreateContent();
 
             var form = new RestbucksForm("order");
-            var formInfo = form.GetFormInfo(new HttpResponseMessage { Content = content }, new ApplicationContext(Input), new HttpContentAdapter(RestbucksMediaTypeFormatter.Instance));
+            var formInfo = form.GetFormInfo(new HttpResponseMessage { Content = content }, new HttpContentAdapter(RestbucksMediaTypeFormatter.Instance), new ApplicationContext(Input));
 
             Assert.AreEqual(FormBody.BaseUri, formInfo.FormData.ReadAsObject<Shop>(RestbucksMediaTypeFormatter.Instance).BaseUri);
         }
@@ -62,7 +62,7 @@ namespace Tests.Restbucks.NewClient
             var content = CreateContent();
             
             var form = new RestbucksForm("xyz");
-            form.GetFormInfo(new HttpResponseMessage { Content = content }, new ApplicationContext(new object()), new HttpContentAdapter(RestbucksMediaTypeFormatter.Instance));
+            form.GetFormInfo(new HttpResponseMessage { Content = content }, new HttpContentAdapter(RestbucksMediaTypeFormatter.Instance), new ApplicationContext(new object()));
         }
 
         private static HttpContent CreateContent()

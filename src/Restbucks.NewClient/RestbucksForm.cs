@@ -20,7 +20,7 @@ namespace Restbucks.NewClient
             this.id = id;
         }
 
-        public FormInfo GetFormInfo(HttpResponseMessage response, ApplicationContext context, HttpContentAdapter contentAdapter)
+        public FormInfo GetFormInfo(HttpResponseMessage response, HttpContentAdapter contentAdapter, ApplicationContext context)
         {
             var entityBody = contentAdapter.CreateObject(response.Content);
             var form = (from f in ((Shop) entityBody).Forms

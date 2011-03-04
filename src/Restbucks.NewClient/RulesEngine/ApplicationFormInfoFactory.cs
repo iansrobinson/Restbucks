@@ -4,20 +4,20 @@ namespace Restbucks.NewClient.RulesEngine
 {
     public class ApplicationFormInfoFactory : IFormInfoFactory
     {
-        private readonly IFormStrategy formStrategy;
-        private readonly ApplicationContext context;
+        private readonly IFormStrategy formStrategy;       
         private readonly HttpContentAdapter contentAdapter;
+        private readonly ApplicationContext context;
 
-        public ApplicationFormInfoFactory(IFormStrategy formStrategy, ApplicationContext context, HttpContentAdapter contentAdapter)
+        public ApplicationFormInfoFactory(IFormStrategy formStrategy, HttpContentAdapter contentAdapter, ApplicationContext context)
         {
-            this.formStrategy = formStrategy;
-            this.context = context;
+            this.formStrategy = formStrategy;         
             this.contentAdapter = contentAdapter;
+            this.context = context;
         }
 
         public FormInfo CreateFormInfo(HttpResponseMessage response)
         {
-            return formStrategy.GetFormInfo(response, context, contentAdapter);
+            return formStrategy.GetFormInfo(response, contentAdapter, context);
         }
     }
 }

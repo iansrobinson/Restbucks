@@ -65,8 +65,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="RestbucksForm.cs" />
+    <Compile Include="RestbucksLink.cs" />
     <Compile Include="RulesEngine\Actions.cs" />
     <Compile Include="RulesEngine\ApplicationFormInfoFactory.cs" />
+    <Compile Include="RulesEngine\ApplicationLinkInfoFactory.cs" />
+    <Compile Include="RulesEngine\ClickLink.cs" />
     <Compile Include="RulesEngine\FormNotFoundException.cs" />
     <Compile Include="RulesEngine\IFormInfoFactory.cs" />
     <Compile Include="RulesEngine\IFormStrategy.cs" />
@@ -77,9 +80,12 @@
     <Compile Include="RulesEngine\IAction.cs" />
     <Compile Include="RulesEngine\ICondition.cs" />
     <Compile Include="RulesEngine\ApplicationContext.cs" />
+    <Compile Include="RulesEngine\ILinkInfoFactory.cs" />
+    <Compile Include="RulesEngine\ILinkStrategy.cs" />
     <Compile Include="RulesEngine\IRule.cs" />
     <Compile Include="RulesEngine\IState.cs" />
     <Compile Include="RulesEngine\IStateFactory.cs" />
+    <Compile Include="RulesEngine\LinkInfo.cs" />
     <Compile Include="RulesEngine\On.cs" />
     <Compile Include="RulesEngine\Result.cs" />
     <Compile Include="RulesEngine\Rule.cs" />
