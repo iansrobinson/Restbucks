@@ -15,7 +15,7 @@ namespace Restbucks.NewClient.RulesEngine
             this.client = client;       
         }
 
-        public HttpResponseMessage Execute()
+        public HttpResponseMessage Execute(HttpResponseMessage previousResponse)
         {
             var request = new HttpRequestMessage
                               {

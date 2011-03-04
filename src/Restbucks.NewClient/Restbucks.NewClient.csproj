@@ -64,6 +64,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RulesEngine\Actions.cs" />
     <Compile Include="RulesEngine\FormNotFoundException.cs" />
     <Compile Include="RulesEngine\IFormStrategy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

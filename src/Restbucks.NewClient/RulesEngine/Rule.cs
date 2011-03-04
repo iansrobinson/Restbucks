@@ -24,7 +24,7 @@ namespace Restbucks.NewClient.RulesEngine
         {
             if (condition.IsApplicable(previousResponse))
             {
-                var newResponse = action.Execute();
+                var newResponse = action.Execute(previousResponse);
                 return new Result(true, stateFactory.Create(newResponse));
             }
 

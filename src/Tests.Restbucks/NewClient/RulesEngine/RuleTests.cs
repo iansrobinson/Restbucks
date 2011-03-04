@@ -20,7 +20,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             condition.Expect(c => c.IsApplicable(PreviousResponse)).Return(true);
 
             var action = MockRepository.GenerateMock<IAction>();
-            action.Expect(a => a.Execute()).Return(NewResponse);
+            action.Expect(a => a.Execute(PreviousResponse)).Return(NewResponse);
 
             var stateFactory = MockRepository.GenerateStub<IStateFactory>();
 
@@ -37,7 +37,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             condition.Expect(c => c.IsApplicable(PreviousResponse)).Return(true);
 
             var action = MockRepository.GenerateStub<IAction>();
-            action.Expect(a => a.Execute()).Return(NewResponse);
+            action.Expect(a => a.Execute(PreviousResponse)).Return(NewResponse);
 
             var stateFactory = MockRepository.GenerateStub<IStateFactory>();
             stateFactory.Expect(f => f.Create(NewResponse)).IgnoreArguments().Return(NewState);
@@ -55,7 +55,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             condition.Expect(c => c.IsApplicable(PreviousResponse)).Return(true);
 
             var action = MockRepository.GenerateStub<IAction>();
-            action.Expect(a => a.Execute()).Return(NewResponse);
+            action.Expect(a => a.Execute(PreviousResponse)).Return(NewResponse);
 
             var stateFactory = MockRepository.GenerateStub<IStateFactory>();           
             stateFactory.Expect(f => f.Create(NewResponse)).Return(NewState);
@@ -73,7 +73,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             condition.Expect(c => c.IsApplicable(PreviousResponse)).Return(false);
 
             var action = MockRepository.GenerateMock<IAction>();
-            action.AssertWasNotCalled(a => a.Execute());
+            action.AssertWasNotCalled(a => a.Execute(PreviousResponse));
 
             var stateFactory = MockRepository.GenerateStub<IStateFactory>();
 
