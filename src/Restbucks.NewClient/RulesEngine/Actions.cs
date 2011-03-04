@@ -5,49 +5,20 @@ namespace Restbucks.NewClient.RulesEngine
     public class Actions
     {
         private readonly HttpContentAdapter contentAdapter;
-        private readonly ApplicationContext applicationContext;
+        private readonly ApplicationContext context;
         private readonly HttpClient client;
 
+        public Actions(HttpContentAdapter contentAdapter, ApplicationContext context, HttpClient client)
+        {
+            this.contentAdapter = contentAdapter;
+            this.context = context;
+            this.client = client;
+        }
 
         public IAction SubmitForm(IFormStrategy formStrategy)
         {
-            return new DoSubmitForm(formStrategy, contentAdapter, applicationContext, client);
-        }
-
-        private class DoSubmitForm : IAction
-        {
-
-            private readonly IFormStrategy formStrategy;
-            private readonly HttpContentAdapter contentAdapter;
-            private readonly HttpClient client;
-            private readonly ApplicationContext applicationContext;
-
-            public DoSubmitForm(IFormStrategy formStrategy, HttpContentAdapter contentAdapter, ApplicationContext applicationContext, HttpClient client)
-            {
-                this.formStrategy = formStrategy;
-                this.contentAdapter = contentAdapter;
-                this.client = client;
-                this.applicationContext = applicationContext;
-            }
-
-            public HttpResponseMessage Execute(HttpResponseMessage previousResponse)
-            {
-                var formInfo = formStrategy.GetFormInfo(previousResponse, applicationContext, contentAdapter);
-
-                var request = new HttpRequestMessage
-                                  {
-                                      RequestUri = formInfo.ResourceUri,
-                                      Method = formInfo.Method,
-                                      Content = contentAdapter.CreateContent(formInfo.FormData, formInfo.ContentType)
-                                  };
-
-                if (formInfo.Etag != null)
-                {
-                    request.Headers.IfMatch.Add(formInfo.Etag);
-                }
-
-                return client.Send(request);
-            }
+            var formInfoFactory = new ApplicationFormInfoFactory(formStrategy, context, contentAdapter);
+            return new SubmitForm(formInfoFactory, client);
         }
     }
 }

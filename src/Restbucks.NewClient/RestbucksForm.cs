@@ -38,19 +38,5 @@ namespace Restbucks.NewClient
 
             return new FormInfo(form.Resource, new HttpMethod(form.Method), new MediaTypeHeaderValue(form.MediaType), null, content);
         }
-
-        private Form GetForm(object entityBody)
-        {
-            var form = (from f in ((Shop) entityBody).Forms
-                        where f.Id.Equals(id)
-                        select f).FirstOrDefault();
-
-            if (form == null)
-            {
-                throw new FormNotFoundException(string.Format("Could not find form with id '{0}'.", id));
-            }
-
-            return form;
-        }
     }
 }

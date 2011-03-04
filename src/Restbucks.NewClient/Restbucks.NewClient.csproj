@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="RulesEngine\Actions.cs" />
+    <Compile Include="RulesEngine\ApplicationFormInfoFactory.cs" />
     <Compile Include="RulesEngine\FormNotFoundException.cs" />
     <Compile Include="RulesEngine\IFormInfoFactory.cs" />
     <Compile Include="RulesEngine\IFormStrategy.cs" />
