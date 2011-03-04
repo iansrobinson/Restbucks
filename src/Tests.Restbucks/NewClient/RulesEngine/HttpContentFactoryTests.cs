@@ -36,6 +36,21 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             Assert.IsTrue(content.ReadAsString().Length > 0);
         }
 
+        [Test]
+        [ExpectedException(ExpectedException = typeof(ArgumentException), ExpectedMessage = "Must supply at least one content formatter.\r\nParameter name: formatters")]
+        public void ThrowsExceptionIfContentFormattersCollectionIsEmpty()
+        {
+            new HttpContentFactory();
+        }
+
+        [Test]
+        [ExpectedException(ExpectedException = typeof(FormatterNotFoundException), ExpectedMessage = "Formatter not found for content type 'application/vnd.restbucks+xml'.")]
+        public void ThrowsExceptionIfNoFormatterExistsForContentType()
+        {
+            var factory = new HttpContentFactory(new DummyFormatter());
+            factory.CreateContent(EntityBody, new MediaTypeHeaderValue("application/vnd.restbucks+xml"));
+        }
+
         private class RestbucksFormatter : IContentFormatter
         {
             public void WriteToStream(object instance, Stream stream)
