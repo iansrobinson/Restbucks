@@ -2,7 +2,7 @@
 
 namespace Restbucks.NewClient.RulesEngine
 {
-    public class SubmitFormAction : IAction
+    public class SubmitFormAction
     {
         private readonly FormInfo formInfo;
         private readonly HttpContentAdapter contentAdapter;
@@ -15,7 +15,7 @@ namespace Restbucks.NewClient.RulesEngine
             this.client = client;       
         }
 
-        public HttpResponseMessage Execute(HttpResponseMessage previousResponse)
+        public HttpResponseMessage Execute()
         {
             var request = new HttpRequestMessage
                               {
