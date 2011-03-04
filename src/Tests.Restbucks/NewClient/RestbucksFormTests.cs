@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using Microsoft.Net.Http;
 using NUnit.Framework;
+using Restbucks.Client.Formatters;
 using Restbucks.MediaType;
 using Restbucks.NewClient;
 using Restbucks.NewClient.RulesEngine;
@@ -15,75 +17,41 @@ namespace Tests.Restbucks.NewClient
         private static readonly HttpMethod Method = HttpMethod.Put;
         private static readonly MediaTypeHeaderValue ContentType = new MediaTypeHeaderValue(RestbucksMediaType.Value);
         private static readonly Shop FormBody = new ShopBuilder(null).Build();
-        private static readonly ApplicationContext ApplicationContext = new ApplicationContext(new object());
+        private static readonly Shop Input = new ShopBuilder(null).Build();
 
         [Test]
         public void ShouldReturnCorrectFormInfoForForm()
         {
-            var entityBody = CreateEntityBody();
+            var content = CreateContent();
 
             var form = new RestbucksForm("rfq");
-            var formInfo = form.GetFormInfo(entityBody, ApplicationContext);
+            var formInfo = form.GetFormInfo(new HttpResponseMessage { Content = content }, new ApplicationContext(Input), new HttpContentAdapter(RestbucksMediaTypeFormatter.Instance));
 
-            Assert.AreEqual(ResourceUri, formInfo.ResourceUri);
+            Assert.AreEqual(ContentType,  formInfo.ContentType);
+            Assert.AreEqual(null, formInfo.Etag);
             Assert.AreEqual(Method, formInfo.Method);
-            Assert.AreEqual(ContentType, formInfo.ContentType);
-        }
-
-        [Test]
-        public void ShouldReturnInputAsFormDataWhenFormBodyIsEmpty()
-        {
-            var entityBody = CreateEntityBody();
-
-            var form = new RestbucksForm("rfq");
-            var formInfo = form.GetFormInfo(entityBody, ApplicationContext);
-
-            Assert.AreEqual(ApplicationContext.Input, formInfo.FormData);
-        }
-
-        [Test]
-        public void ShouldReturnFormBodyAsFormDataWhenFormBodyIsNotEmpty()
-        {
-            var entityBody = CreateEntityBody();
-
-            var form = new RestbucksForm("order");
-            var formInfo = form.GetFormInfo(entityBody, ApplicationContext);
-
-            Assert.AreEqual(FormBody, formInfo.FormData);
-        }
-
-        [Test]
-        [ExpectedException(ExpectedException = typeof (ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: entityBody")]
-        public void ThrowsExceptionIfCallingGetFormInfoWithNullEntityBody()
-        {
-            var form = new RestbucksForm("order");
-            form.GetFormInfo(null, ApplicationContext);
-        }
-
-        [Test]
-        [ExpectedException(ExpectedException = typeof (ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: input")]
-        public void ThrowsExceptionIfCallingGetFormInfoWithNullInput()
-        {
-            var form = new RestbucksForm("order");
-            form.GetFormInfo(CreateEntityBody(), null);
+            Assert.AreEqual(ResourceUri, formInfo.ResourceUri);
         }
 
         [Test]
         [ExpectedException(ExpectedException = typeof (FormNotFoundException), ExpectedMessage = "Could not find form with id 'xyz'.")]
         public void ThrowsExceptionIfFormCannotBeFound()
         {
+            var content = CreateContent();
+            
             var form = new RestbucksForm("xyz");
-            form.GetFormInfo(CreateEntityBody(), ApplicationContext);
+            form.GetFormInfo(new HttpResponseMessage { Content = content }, new ApplicationContext(new object()), new HttpContentAdapter(RestbucksMediaTypeFormatter.Instance));
         }
 
-       
-
-        private static Shop CreateEntityBody()
+        private static HttpContent CreateContent()
         {
-            return new ShopBuilder(null)
+            var entityBody = new ShopBuilder(null)
                 .AddForm(new Form("rfq", ResourceUri, Method.ToString(), ContentType.MediaType, null as Shop))
                 .AddForm(new Form("order", new Uri("http://localhost/orders"), "post", "application/xml", FormBody))
                 .Build();
+            var content = entityBody.ToContent(RestbucksMediaTypeFormatter.Instance);
+            content.Headers.ContentType = ContentType;
+            return content;
         }
     }
 }

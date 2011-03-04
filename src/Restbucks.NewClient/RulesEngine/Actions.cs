@@ -32,8 +32,7 @@ namespace Restbucks.NewClient.RulesEngine
 
             public HttpResponseMessage Execute(HttpResponseMessage previousResponse)
             {
-                var entityBody = contentAdapter.CreateObject(previousResponse.Content);
-                var formInfo = formStrategy.GetFormInfo(entityBody, applicationContext);
+                var formInfo = formStrategy.GetFormInfo(previousResponse, applicationContext, contentAdapter);
 
                 var request = new HttpRequestMessage
                                   {

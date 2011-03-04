@@ -1,10 +1,8 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Restbucks.MediaType;
 using Restbucks.NewClient.RulesEngine;
-using Restbucks.RestToolkit.Utils;
 
 namespace Restbucks.NewClient
 {
@@ -14,7 +12,7 @@ namespace Restbucks.NewClient
         {
             return new RestbucksForm(id);
         }
-        
+
         private readonly string id;
 
         public RestbucksForm(string id)
@@ -22,21 +20,12 @@ namespace Restbucks.NewClient
             this.id = id;
         }
 
-        public FormInfo GetFormInfo(object entityBody, ApplicationContext applicationContext)
-        {
-            Check.IsNotNull(entityBody, "entityBody");
-            Check.IsNotNull(applicationContext, "input");
-            
-            var form = GetForm(entityBody);
-            return new FormInfo(form.Resource, new HttpMethod(form.Method), new MediaTypeHeaderValue(form.MediaType), null, null);
-        }
-
         public FormInfo GetFormInfo(HttpResponseMessage response, ApplicationContext context, HttpContentAdapter contentAdapter)
         {
             var entityBody = contentAdapter.CreateObject(response.Content);
-            var form = (from f in ((Shop)entityBody).Forms
-                                  where f.Id.Equals(id)
-                                  select f).FirstOrDefault();
+            var form = (from f in ((Shop) entityBody).Forms
+                        where f.Id.Equals(id)
+                        select f).FirstOrDefault();
 
             if (form == null)
             {
@@ -52,9 +41,9 @@ namespace Restbucks.NewClient
 
         private Form GetForm(object entityBody)
         {
-            var form = (from f in ((Shop)entityBody).Forms
-                                  where f.Id.Equals(id)
-                                  select f).FirstOrDefault();
+            var form = (from f in ((Shop) entityBody).Forms
+                        where f.Id.Equals(id)
+                        select f).FirstOrDefault();
 
             if (form == null)
             {
