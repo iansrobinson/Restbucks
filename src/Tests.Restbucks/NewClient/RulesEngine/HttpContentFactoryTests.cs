@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using Microsoft.Net.Http;
 using NUnit.Framework;
@@ -14,26 +15,27 @@ namespace Tests.Restbucks.NewClient.RulesEngine
     [TestFixture]
     public class HttpContentFactoryTests
     {
-        private static readonly Shop EntityBody = new ShopBuilder(null).AddItem(new Item("coffee", new Amount("g", 250))).Build();
+        private static readonly Shop EntityBody = CreateEntityBody();
+        private static readonly HttpContent Content = CreateHttpContent();
 
         [Test]
         public void ShouldCreateHttpContentWithCorrectContentTypeHeader()
         {
             var factory = new HttpContentFactory(RestbucksMediaTypeFormatter.Instance);
-            var content = factory.CreateContent(EntityBody, new MediaTypeHeaderValue("application/vnd.restbucks+xml"));
+            var newContent = factory.CreateContent(EntityBody, new MediaTypeHeaderValue("application/vnd.restbucks+xml"));
 
-            Assert.AreEqual(new MediaTypeHeaderValue(RestbucksMediaType.Value), content.Headers.ContentType);
-            Assert.IsTrue(content.ReadAsString().Length > 0);
+            Assert.AreEqual(new MediaTypeHeaderValue(RestbucksMediaType.Value), newContent.Headers.ContentType);
+            Assert.IsTrue(newContent.ReadAsString().Length > 0);
         }
 
         [Test]
         public void ShouldSelectCorrectFormatterFromFormattersWithMultipleSupportedTypes()
         {
             var factory = new HttpContentFactory(new DummyFormatter(), new RestbucksFormatter());
-            var content = factory.CreateContent(EntityBody, new MediaTypeHeaderValue("application/vnd.restbucks+xml"));
+            var newContent = factory.CreateContent(EntityBody, new MediaTypeHeaderValue("application/vnd.restbucks+xml"));
 
-            Assert.AreEqual(new MediaTypeHeaderValue("application/vnd.restbucks+xml"), content.Headers.ContentType);
-            Assert.IsTrue(content.ReadAsString().Length > 0);
+            Assert.AreEqual(new MediaTypeHeaderValue("application/vnd.restbucks+xml"), newContent.Headers.ContentType);
+            Assert.IsTrue(newContent.ReadAsString().Length > 0);
         }
 
         [Test]
@@ -49,6 +51,27 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         {
             var factory = new HttpContentFactory(new DummyFormatter());
             factory.CreateContent(EntityBody, new MediaTypeHeaderValue("application/vnd.restbucks+xml"));
+        }
+
+        [Test]
+        public void ShouldCreateObjectFromContent()
+        {
+            var factory = new HttpContentFactory(RestbucksMediaTypeFormatter.Instance);
+            var entityBody = (Shop) factory.CreateObject(Content);
+
+            Assert.IsTrue(entityBody.HasItems);
+        }
+
+        private static Shop CreateEntityBody()
+        {
+            return new ShopBuilder(null).AddItem(new Item("coffee", new Amount("g", 250))).Build();
+        }
+
+        private static HttpContent CreateHttpContent()
+        {
+            var content = EntityBody.ToContent(RestbucksMediaTypeFormatter.Instance);
+            content.Headers.ContentType = new MediaTypeHeaderValue(RestbucksMediaType.Value);
+            return content;
         }
 
         private class RestbucksFormatter : IContentFormatter
