@@ -36,7 +36,7 @@ namespace Restbucks.NewClient
             var contentType = new MediaTypeHeaderValue(form.MediaType);
             var content = contentAdapter.CreateContent(formData, contentType);
 
-            return new FormInfo(form.Resource, new HttpMethod(form.Method), new MediaTypeHeaderValue(form.MediaType), null, content);
+            return new FormInfo(form.Resource, new HttpMethod(form.Method), new MediaTypeHeaderValue(form.MediaType), content);
         }
     }
 }

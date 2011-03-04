@@ -24,11 +24,6 @@ namespace Restbucks.NewClient.RulesEngine
                                   Content = formInfo.FormData
                               };
 
-            if (formInfo.Etag != null)
-            {
-                request.Headers.IfMatch.Add(formInfo.Etag);
-            }
-
             return client.Send(request);
         }
     }

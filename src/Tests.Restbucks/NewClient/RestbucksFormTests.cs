@@ -29,7 +29,6 @@ namespace Tests.Restbucks.NewClient
             var formInfo = form.GetFormInfo(new HttpResponseMessage { Content = content }, new ApplicationContext(Input), new HttpContentAdapter(RestbucksMediaTypeFormatter.Instance));
 
             Assert.AreEqual(ContentType,  formInfo.ContentType);
-            Assert.AreEqual(null, formInfo.Etag);
             Assert.AreEqual(Method, formInfo.Method);
             Assert.AreEqual(ResourceUri, formInfo.ResourceUri);
         }
