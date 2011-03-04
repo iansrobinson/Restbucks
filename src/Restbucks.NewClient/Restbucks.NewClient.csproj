@@ -68,7 +68,7 @@
     <Compile Include="RulesEngine\ActionFactory.cs" />
     <Compile Include="RulesEngine\FormatterNotFoundException.cs" />
     <Compile Include="RulesEngine\FormInfo.cs" />
-    <Compile Include="RulesEngine\HttpContentFactory.cs" />
+    <Compile Include="RulesEngine\HttpContentAdapter.cs" />
     <Compile Include="RulesEngine\IAction.cs" />
     <Compile Include="RulesEngine\ICondition.cs" />
     <Compile Include="RulesEngine\IRule.cs" />

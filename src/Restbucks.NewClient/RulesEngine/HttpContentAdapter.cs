@@ -7,11 +7,11 @@ using Microsoft.Net.Http;
 
 namespace Restbucks.NewClient.RulesEngine
 {
-    public class HttpContentFactory
+    public class HttpContentAdapter
     {
         private readonly IEnumerable<IContentFormatter> formatters;
 
-        public HttpContentFactory(params IContentFormatter[] formatters)
+        public HttpContentAdapter(params IContentFormatter[] formatters)
         {
             if (formatters.Length.Equals(0))
             {

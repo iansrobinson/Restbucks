@@ -6,14 +6,14 @@ namespace Restbucks.NewClient.RulesEngine
     {
         private readonly FormInfo formInfo;
         private readonly object formData;
-        private readonly HttpContentFactory contentFactory;
+        private readonly HttpContentAdapter contentAdapter;
         private readonly HttpClient client;
 
-        public SubmitFormAction(FormInfo formInfo, object formData, HttpContentFactory contentFactory, HttpClient client)
+        public SubmitFormAction(FormInfo formInfo, object formData, HttpContentAdapter contentAdapter, HttpClient client)
         {
             this.formInfo = formInfo;
             this.formData = formData;
-            this.contentFactory = contentFactory;
+            this.contentAdapter = contentAdapter;
             this.client = client;       
         }
 
@@ -23,7 +23,7 @@ namespace Restbucks.NewClient.RulesEngine
                               {
                                   RequestUri = formInfo.ResourceUri,
                                   Method = formInfo.Method,
-                                  Content = contentFactory.CreateContent(formData, formInfo.ContentType)
+                                  Content = contentAdapter.CreateContent(formData, formInfo.ContentType)
                               };
 
             if (formInfo.Etag != null)

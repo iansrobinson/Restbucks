@@ -11,20 +11,20 @@ namespace Restbucks.NewClient.RulesEngine
 {
     public class ActionFactory
     {
-        private readonly HttpContentFactory contentFactory;
+        private readonly HttpContentAdapter contentAdapter;
         private readonly HttpClient client;
         private readonly object items;
         
         public IAction SubmitForm(HttpResponseMessage response)
         {
-            var entityBody = contentFactory.CreateObject(response.Content);
+            var entityBody = contentAdapter.CreateObject(response.Content);
             var shop = entityBody as Shop;
 
             var form = shop.Forms.First();
 
             var formInfo = new FormInfo(form.Resource, Enum.Parse(typeof(HttpMethod), form.Method) as HttpMethod, new MediaTypeHeaderValue(form.MediaType));
             
-            return new SubmitFormAction(formInfo, items, contentFactory, client);
+            return new SubmitFormAction(formInfo, items, contentAdapter, client);
         }
     }
 }
