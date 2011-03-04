@@ -76,6 +76,8 @@ namespace Tests.Restbucks.NewClient
             form.GetFormInfo(CreateEntityBody(), ApplicationContext);
         }
 
+       
+
         private static Shop CreateEntityBody()
         {
             return new ShopBuilder(null)

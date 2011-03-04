@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Restbucks.MediaType;
@@ -27,7 +28,26 @@ namespace Restbucks.NewClient
             Check.IsNotNull(applicationContext, "input");
             
             var form = GetForm(entityBody);
-            return new FormInfo(form.Resource, new HttpMethod(form.Method), new MediaTypeHeaderValue(form.MediaType), null, form.Instance ?? applicationContext.Input);
+            return new FormInfo(form.Resource, new HttpMethod(form.Method), new MediaTypeHeaderValue(form.MediaType), null, null);
+        }
+
+        public FormInfo GetFormInfo(HttpResponseMessage response, ApplicationContext context, HttpContentAdapter contentAdapter)
+        {
+            var entityBody = contentAdapter.CreateObject(response.Content);
+            var form = (from f in ((Shop)entityBody).Forms
+                                  where f.Id.Equals(id)
+                                  select f).FirstOrDefault();
+
+            if (form == null)
+            {
+                throw new FormNotFoundException(string.Format("Could not find form with id '{0}'.", id));
+            }
+
+            var formData = form.Instance ?? context.Input;
+            var contentType = new MediaTypeHeaderValue(form.MediaType);
+            var content = contentAdapter.CreateContent(formData, contentType);
+
+            return new FormInfo(form.Resource, new HttpMethod(form.Method), new MediaTypeHeaderValue(form.MediaType), null, content);
         }
 
         private Form GetForm(object entityBody)

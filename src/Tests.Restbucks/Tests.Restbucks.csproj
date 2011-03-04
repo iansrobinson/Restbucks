@@ -117,7 +117,7 @@
     <Compile Include="NewClient\RulesEngine\RulesTests.cs" />
     <Compile Include="NewClient\RulesEngine\RuleTests.cs" />
     <Compile Include="NewClient\RulesEngine\StateFactoryCollectionTests.cs" />
-    <Compile Include="NewClient\RulesEngine\SubmitFormActionTests.cs" />
+    <Compile Include="NewClient\RulesEngine\SubmitFormTests.cs" />
     <Compile Include="NewClient\RulesEngine\WhenTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Quoting.Service\ConfigTests.cs" />
