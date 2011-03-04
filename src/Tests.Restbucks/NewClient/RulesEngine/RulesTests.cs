@@ -34,7 +34,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         }
 
         [Test]
-        public void ShouldNotEvaluateSubsequentRulesFollowingASuccussfulRule()
+        public void ShouldNotEvaluateSubsequentRulesFollowingASuccessfulRule()
         {
             var response = new HttpResponseMessage();
 
