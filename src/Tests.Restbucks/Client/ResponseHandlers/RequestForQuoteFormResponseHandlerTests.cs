@@ -19,7 +19,7 @@ namespace Tests.Restbucks.Client.ResponseHandlers
     {
         private static readonly Shop NeededItems = new ShopBuilder(null).AddItem(new Item("coffee", new Amount("g", 125))).Build();
         private const string ExpectedMethod = "put";
-        private const string ExpectedContentType = "application/restbucks+xml";
+        private const string ExpectedContentType = "application/vnd.restbucks+xml";
 
         [Test]
         public void ShouldUseControlDataToSelectNeededItemsFromContextAndSendInRequest()

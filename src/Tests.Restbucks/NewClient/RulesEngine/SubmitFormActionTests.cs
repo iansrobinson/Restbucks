@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -18,7 +16,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
     {
         private static readonly FormInfo FormInfo = CreateFormInfo();
         private static readonly Shop FormData = CreateEntityBody();
-        private static readonly IContentFormatter[] Formatters = GetFormatters();
+        private static readonly HttpContentFactory ContentFactory = new HttpContentFactory(RestbucksMediaTypeFormatter.Instance);
 
         [Test]
         public void ShouldSubmitFormToSuppliedResourceUri()
@@ -26,7 +24,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var mockEndpoint = new MockEndpoint(new HttpResponseMessage());
             var client = new HttpClient {Channel = mockEndpoint};
 
-            var action = new SubmitFormAction(FormInfo, client, FormData, Formatters);
+            var action = new SubmitFormAction(FormInfo, FormData, ContentFactory, client);
             action.Execute();
 
             Assert.AreEqual(FormInfo.ResourceUri, mockEndpoint.ReceivedRequest.RequestUri);
@@ -38,7 +36,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var mockEndpoint = new MockEndpoint(new HttpResponseMessage());
             var client = new HttpClient {Channel = mockEndpoint};
 
-            var action = new SubmitFormAction(FormInfo, client, FormData, Formatters);
+            var action = new SubmitFormAction(FormInfo, FormData, ContentFactory, client);
             action.Execute();
 
             Assert.AreEqual(FormInfo.Method, mockEndpoint.ReceivedRequest.Method);
@@ -50,7 +48,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var mockEndpoint = new MockEndpoint(new HttpResponseMessage());
             var client = new HttpClient {Channel = mockEndpoint};
 
-            var action = new SubmitFormAction(FormInfo, client, FormData, Formatters);
+            var action = new SubmitFormAction(FormInfo, FormData, ContentFactory, client);
             action.Execute();
 
             Assert.AreEqual(FormInfo.ContentType, mockEndpoint.ReceivedRequest.Content.Headers.ContentType);
@@ -62,7 +60,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var mockEndpoint = new MockEndpoint(new HttpResponseMessage());
             var client = new HttpClient {Channel = mockEndpoint};
 
-            var action = new SubmitFormAction(FormInfo, client, FormData, Formatters);
+            var action = new SubmitFormAction(FormInfo, FormData, ContentFactory, client);
             action.Execute();
 
             var receivedFormData = mockEndpoint.ReceivedRequest.Content.ReadAsObject<Shop>(RestbucksMediaTypeFormatter.Instance);
@@ -77,7 +75,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var mockEndpoint = new MockEndpoint(new HttpResponseMessage());
             var client = new HttpClient {Channel = mockEndpoint};
 
-            var action = new SubmitFormAction(FormInfo, client, FormData, Formatters);
+            var action = new SubmitFormAction(FormInfo, FormData, ContentFactory, client);
             action.Execute();
 
             Assert.AreEqual(FormInfo.Etag, mockEndpoint.ReceivedRequest.Headers.IfMatch.First());
@@ -87,19 +85,14 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         public void ShouldNotDoConditionalFormSubmissionIfEtagIsNotSupplied()
         {
             var formInfo = new FormInfo(new Uri("http://restbucks.com/orders"), HttpMethod.Post, new MediaTypeHeaderValue(RestbucksMediaType.Value));
-            
-            var mockEndpoint = new MockEndpoint(new HttpResponseMessage());
-            var client = new HttpClient { Channel = mockEndpoint };
 
-            var action = new SubmitFormAction(formInfo, client, FormData, Formatters);
+            var mockEndpoint = new MockEndpoint(new HttpResponseMessage());
+            var client = new HttpClient {Channel = mockEndpoint};
+
+            var action = new SubmitFormAction(formInfo, FormData, ContentFactory, client);
             action.Execute();
 
             Assert.AreEqual(0, mockEndpoint.ReceivedRequest.Headers.IfMatch.Count());
-        }
-
-        private static IContentFormatter[] GetFormatters()
-        {
-            return new IContentFormatter[] {new DummyFormatter(), new RestbucksFormatter()};
         }
 
         private static Shop CreateEntityBody()
@@ -110,53 +103,6 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         private static FormInfo CreateFormInfo()
         {
             return new FormInfo(new Uri("http://restbucks.com/orders"), HttpMethod.Post, new MediaTypeHeaderValue(RestbucksMediaType.Value), new EntityTagHeaderValue(@"""xyz"""));
-        }
-
-        private class RestbucksFormatter : IContentFormatter
-        {
-            public void WriteToStream(object instance, Stream stream)
-            {
-                RestbucksMediaTypeFormatter.Instance.WriteToStream(instance, stream);
-            }
-
-            public object ReadFromStream(Stream stream)
-            {
-                return RestbucksMediaTypeFormatter.Instance.ReadFromStream(stream);
-            }
-
-            public IEnumerable<MediaTypeHeaderValue> SupportedMediaTypes
-            {
-                get
-                {
-                    return new[] {new MediaTypeHeaderValue("application/restbucks+xml")}
-                        .Concat(RestbucksMediaTypeFormatter.Instance.SupportedMediaTypes);
-                }
-            }
-        }
-
-        private class DummyFormatter : IContentFormatter
-        {
-            public void WriteToStream(object instance, Stream stream)
-            {
-                throw new NotImplementedException();
-            }
-
-            public object ReadFromStream(Stream stream)
-            {
-                throw new NotImplementedException();
-            }
-
-            public IEnumerable<MediaTypeHeaderValue> SupportedMediaTypes
-            {
-                get
-                {
-                    return new[]
-                               {
-                                   new MediaTypeHeaderValue("application/xml"),
-                                   new MediaTypeHeaderValue("text/html")
-                               };
-                }
-            }
         }
     }
 }

@@ -1,39 +1,30 @@
-﻿using System.Linq;
-using System.Net.Http;
-using Microsoft.Net.Http;
+﻿using System.Net.Http;
 
 namespace Restbucks.NewClient.RulesEngine
 {
     public class SubmitFormAction : IAction
     {
         private readonly FormInfo formInfo;
-        private readonly HttpClient client;
         private readonly object formData;
-        private readonly IContentFormatter[] formatters;
+        private readonly HttpContentFactory contentFactory;
+        private readonly HttpClient client;
 
-        public SubmitFormAction(FormInfo formInfo, HttpClient client, object formData, params IContentFormatter[] formatters)
+        public SubmitFormAction(FormInfo formInfo, object formData, HttpContentFactory contentFactory, HttpClient client)
         {
             this.formInfo = formInfo;
-            this.client = client;
             this.formData = formData;
-            this.formatters = formatters;
+            this.contentFactory = contentFactory;
+            this.client = client;       
         }
 
         public HttpResponseMessage Execute()
         {
-            var formatter = (from f in formatters
-                             where f.SupportedMediaTypes.Contains(formInfo.ContentType)
-                             select f).FirstOrDefault();
-
-            var content = formData.ToContent(formatter);
-            content.Headers.ContentType = formInfo.ContentType;
-
             var request = new HttpRequestMessage
-                                         {
-                                             RequestUri = formInfo.ResourceUri,
-                                             Method = formInfo.Method,
-                                             Content = content
-                                         };
+                              {
+                                  RequestUri = formInfo.ResourceUri,
+                                  Method = formInfo.Method,
+                                  Content = contentFactory.CreateContent(formData, formInfo.ContentType)
+                              };
 
             if (formInfo.Etag != null)
             {

@@ -2,6 +2,6 @@
 {
     public static class RestbucksMediaType
     {
-        public const string Value = "application/restbucks+xml";
+        public const string Value = "application/vnd.restbucks+xml";
     }
 }

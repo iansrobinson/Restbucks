@@ -30,7 +30,7 @@ namespace Tests.Restbucks.MediaType.Assemblers
             const string xml = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <shop xmlns:rb=""http://relations.restbucks.com/"" xmlns=""http://schemas.restbucks.com/shop"">
   <link rel=""rb:rfq prefetch"" type=""application/xml"" href=""/quotes"" />
-  <link rel=""rb:order-form"" type=""application/restbucks+xml"" href=""/order-forms/1234"" />
+  <link rel=""rb:order-form"" type=""application/vnd.restbucks+xml"" href=""/order-forms/1234"" />
 </shop>";
 
             var shop = new ShopAssembler(XElement.Parse(xml), new Uri("http://localhost/")).AssembleShop();
@@ -102,7 +102,7 @@ namespace Tests.Restbucks.MediaType.Assemblers
 <shop xmlns=""http://schemas.restbucks.com/shop"">
   <model id=""request-for-quote"" schema=""http://schemas.restbucks.com/shop"" xmlns=""http://www.w3.org/2002/xforms"">
     <instance />
-    <submission resource=""/quotes"" method=""post"" mediatype=""application/restbucks+xml"" />
+    <submission resource=""/quotes"" method=""post"" mediatype=""application/vnd.restbucks+xml"" />
   </model>
   <model id=""order"" xmlns=""http://www.w3.org/2002/xforms"">
     <instance>

@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RulesEngine\FormInfo.cs" />
+    <Compile Include="RulesEngine\HttpContentFactory.cs" />
     <Compile Include="RulesEngine\IAction.cs" />
     <Compile Include="RulesEngine\ICondition.cs" />
     <Compile Include="RulesEngine\IRule.cs" />
