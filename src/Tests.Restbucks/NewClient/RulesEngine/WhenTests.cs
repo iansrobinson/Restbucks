@@ -14,7 +14,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         public void ShouldReturnRuleWhoseActionExecutesIfConditionIsTrue()
         {
             var previousResponse = new HttpResponseMessage();
-            
+
             var action = MockRepository.GenerateMock<IAction>();
             action.Expect(a => a.Execute(previousResponse)).Return(new HttpResponseMessage());
 
@@ -26,7 +26,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
                                 On.Status(HttpStatusCode.Accepted).Do(r => null)
                             },
                         r => null);
-           
+
             rule.Evaluate(previousResponse);
 
             action.VerifyAllExpectations();
@@ -36,7 +36,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         public void ShouldReturnRuleThatCreatesStateBasedOnResponseStatusCode()
         {
             var previousResponse = new HttpResponseMessage();
-            
+
             var action = MockRepository.GenerateStub<IAction>();
             action.Expect(a => a.Execute(previousResponse)).Return(new HttpResponseMessage {StatusCode = HttpStatusCode.Accepted});
 
@@ -61,7 +61,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         public void ShouldReturnRuleThatCreatesDefaultStateIfResponseStatusCodeDoesNotMatch()
         {
             var previousResponse = new HttpResponseMessage();
-            
+
             var action = MockRepository.GenerateStub<IAction>();
             action.Expect(a => a.Execute(previousResponse)).Return(new HttpResponseMessage {StatusCode = HttpStatusCode.Unauthorized});
 
@@ -86,7 +86,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         public void ShouldReturnRuleThatCreatesUnsuccessfulStateIfResponseStatusCodeDoesNotMatchAndNoDefaultSupplied()
         {
             var previousResponse = new HttpResponseMessage();
-            
+
             var action = MockRepository.GenerateStub<IAction>();
             action.Expect(a => a.Execute(previousResponse)).Return(new HttpResponseMessage {StatusCode = HttpStatusCode.Unauthorized});
 
@@ -120,7 +120,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         public void ShouldReturnRuleThatCreatesStateIrrespectiveOfStatusCode()
         {
             var previousResponse = new HttpResponseMessage();
-            
+
             var action = MockRepository.GenerateStub<IAction>();
             action.Expect(a => a.Execute(previousResponse)).Return(new HttpResponseMessage {StatusCode = HttpStatusCode.Accepted});
 

@@ -15,14 +15,15 @@ namespace Tests.Restbucks.NewClient
         private static readonly HttpMethod Method = HttpMethod.Put;
         private static readonly MediaTypeHeaderValue ContentType = new MediaTypeHeaderValue(RestbucksMediaType.Value);
         private static readonly Shop FormBody = new ShopBuilder(null).Build();
-        
+        private static readonly ApplicationContext ApplicationContext = new ApplicationContext(new object());
+
         [Test]
         public void ShouldReturnCorrectFormInfoForForm()
         {
             var entityBody = CreateEntityBody();
 
             var form = new RestbucksForm("rfq");
-            var formInfo = form.GetFormInfo(entityBody, new object());
+            var formInfo = form.GetFormInfo(entityBody, ApplicationContext);
 
             Assert.AreEqual(ResourceUri, formInfo.ResourceUri);
             Assert.AreEqual(Method, formInfo.Method);
@@ -32,37 +33,35 @@ namespace Tests.Restbucks.NewClient
         [Test]
         public void ShouldReturnInputAsFormDataWhenFormBodyIsEmpty()
         {
-            var input = new Object();
             var entityBody = CreateEntityBody();
 
             var form = new RestbucksForm("rfq");
-            var formInfo = form.GetFormInfo(entityBody, input);
+            var formInfo = form.GetFormInfo(entityBody, ApplicationContext);
 
-            Assert.AreEqual(input, formInfo.FormData);
+            Assert.AreEqual(ApplicationContext.Input, formInfo.FormData);
         }
 
         [Test]
         public void ShouldReturnFormBodyAsFormDataWhenFormBodyIsNotEmpty()
         {
-            var input = new Object();
             var entityBody = CreateEntityBody();
 
             var form = new RestbucksForm("order");
-            var formInfo = form.GetFormInfo(entityBody, input);
+            var formInfo = form.GetFormInfo(entityBody, ApplicationContext);
 
             Assert.AreEqual(FormBody, formInfo.FormData);
         }
 
         [Test]
-        [ExpectedException(ExpectedException = typeof(ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: entityBody")]
+        [ExpectedException(ExpectedException = typeof (ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: entityBody")]
         public void ThrowsExceptionIfCallingGetFormInfoWithNullEntityBody()
         {
             var form = new RestbucksForm("order");
-            form.GetFormInfo(null, new object());
+            form.GetFormInfo(null, ApplicationContext);
         }
 
         [Test]
-        [ExpectedException(ExpectedException = typeof(ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: input")]
+        [ExpectedException(ExpectedException = typeof (ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: input")]
         public void ThrowsExceptionIfCallingGetFormInfoWithNullInput()
         {
             var form = new RestbucksForm("order");
@@ -70,11 +69,11 @@ namespace Tests.Restbucks.NewClient
         }
 
         [Test]
-        [ExpectedException(ExpectedException = typeof(FormNotFoundException), ExpectedMessage = "Could not find form with id 'xyz'.")]
+        [ExpectedException(ExpectedException = typeof (FormNotFoundException), ExpectedMessage = "Could not find form with id 'xyz'.")]
         public void ThrowsExceptionIfFormCannotBeFound()
         {
             var form = new RestbucksForm("xyz");
-            form.GetFormInfo(CreateEntityBody(), new object());
+            form.GetFormInfo(CreateEntityBody(), ApplicationContext);
         }
 
         private static Shop CreateEntityBody()

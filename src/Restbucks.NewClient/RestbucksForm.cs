@@ -21,13 +21,13 @@ namespace Restbucks.NewClient
             this.id = id;
         }
 
-        public FormInfo GetFormInfo(object entityBody, object input)
+        public FormInfo GetFormInfo(object entityBody, ApplicationContext applicationContext)
         {
             Check.IsNotNull(entityBody, "entityBody");
-            Check.IsNotNull(input, "input");
+            Check.IsNotNull(applicationContext, "input");
             
             var form = GetForm(entityBody);
-            return new FormInfo(form.Resource, new HttpMethod(form.Method), new MediaTypeHeaderValue(form.MediaType), null, form.Instance ?? input);
+            return new FormInfo(form.Resource, new HttpMethod(form.Method), new MediaTypeHeaderValue(form.MediaType), null, form.Instance ?? applicationContext.Input);
         }
 
         private Form GetForm(object entityBody)

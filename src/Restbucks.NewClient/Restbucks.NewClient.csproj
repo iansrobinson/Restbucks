@@ -74,6 +74,7 @@
     <Compile Include="RulesEngine\HttpContentAdapter.cs" />
     <Compile Include="RulesEngine\IAction.cs" />
     <Compile Include="RulesEngine\ICondition.cs" />
+    <Compile Include="RulesEngine\ApplicationContext.cs" />
     <Compile Include="RulesEngine\IRule.cs" />
     <Compile Include="RulesEngine\IState.cs" />
     <Compile Include="RulesEngine\IStateFactory.cs" />

@@ -1,35 +1,54 @@
-﻿//using System;
-//using System.Net.Http;
-//
-//namespace Restbucks.NewClient.RulesEngine
-//{
-//    public class Actions
-//    {
-//        private readonly HttpContentAdapter contentAdapter;
-//        private readonly object input;
-//        private readonly HttpClient client;
-//
-//        public IAction SubmitForm(IFormStrategy formStrategy)
-//        {
-//            var response = new HttpResponseMessage();
-//            return CreateSubmitFormAction(response, formStrategy);
-//        }
-//
-//        private IAction CreateSubmitFormAction(HttpResponseMessage response, IFormStrategy formStrategy)
-//        {
-//            var entityBody = contentAdapter.CreateObject(response.Content);
-//            var formInfo = formStrategy.GetFormInfo(entityBody, input);
-//            return new SubmitFormAction(formInfo, contentAdapter, client);
-//        }
-//
-//        private class DeferredAction : IAction
-//        {
-//            private readonly Func<HttpRequestMessage, HttpResponseMessage> action;
-//
-//            public HttpResponseMessage Execute()
-//            {
-//                throw new NotImplementedException();
-//            }
-//        }
-//    }
-//}
+﻿using System.Net.Http;
+
+namespace Restbucks.NewClient.RulesEngine
+{
+    public class Actions
+    {
+        private readonly HttpContentAdapter contentAdapter;
+        private readonly ApplicationContext applicationContext;
+        private readonly HttpClient client;
+
+
+        public IAction SubmitForm(IFormStrategy formStrategy)
+        {
+            return new DoSubmitForm(formStrategy, contentAdapter, applicationContext, client);
+        }
+
+        private class DoSubmitForm : IAction
+        {
+
+            private readonly IFormStrategy formStrategy;
+            private readonly HttpContentAdapter contentAdapter;
+            private readonly HttpClient client;
+            private readonly ApplicationContext applicationContext;
+
+            public DoSubmitForm(IFormStrategy formStrategy, HttpContentAdapter contentAdapter, ApplicationContext applicationContext, HttpClient client)
+            {
+                this.formStrategy = formStrategy;
+                this.contentAdapter = contentAdapter;
+                this.client = client;
+                this.applicationContext = applicationContext;
+            }
+
+            public HttpResponseMessage Execute(HttpResponseMessage previousResponse)
+            {
+                var entityBody = contentAdapter.CreateObject(previousResponse.Content);
+                var formInfo = formStrategy.GetFormInfo(entityBody, applicationContext);
+
+                var request = new HttpRequestMessage
+                                  {
+                                      RequestUri = formInfo.ResourceUri,
+                                      Method = formInfo.Method,
+                                      Content = contentAdapter.CreateContent(formInfo.FormData, formInfo.ContentType)
+                                  };
+
+                if (formInfo.Etag != null)
+                {
+                    request.Headers.IfMatch.Add(formInfo.Etag);
+                }
+
+                return client.Send(request);
+            }
+        }
+    }
+}
