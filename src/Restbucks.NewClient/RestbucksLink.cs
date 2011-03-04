@@ -29,7 +29,7 @@ namespace Restbucks.NewClient
 
             if (link == null)
             {
-                throw new FormNotFoundException(string.Format("Could not find link with link relation '{0}'.", relation.Value));
+                throw new ControlNotFoundException(string.Format("Could not find link with link relation '{0}'.", relation.Value));
             }
 
             return new LinkInfo(link.Href, new MediaTypeHeaderValue(link.MediaType));

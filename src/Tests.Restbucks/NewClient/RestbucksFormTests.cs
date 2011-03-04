@@ -56,7 +56,7 @@ namespace Tests.Restbucks.NewClient
         }
 
         [Test]
-        [ExpectedException(ExpectedException = typeof (FormNotFoundException), ExpectedMessage = "Could not find form with id 'xyz'.")]
+        [ExpectedException(ExpectedException = typeof (ControlNotFoundException), ExpectedMessage = "Could not find form with id 'xyz'.")]
         public void ThrowsExceptionIfFormCannotBeFound()
         {
             var content = CreateContent();

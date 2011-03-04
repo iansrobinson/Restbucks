@@ -29,7 +29,7 @@ namespace Restbucks.NewClient
 
             if (form == null)
             {
-                throw new FormNotFoundException(string.Format("Could not find form with id '{0}'.", id));
+                throw new ControlNotFoundException(string.Format("Could not find form with id '{0}'.", id));
             }
 
             var formData = form.Instance ?? context.Input;
