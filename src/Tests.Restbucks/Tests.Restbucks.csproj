@@ -112,6 +112,7 @@
     <Compile Include="MediaType\ShopTests.cs" />
     <Compile Include="MediaType\StringLinkRelationTests.cs" />
     <Compile Include="MediaType\UriLinkRelationTests.cs" />
+    <Compile Include="NewClient\RestbucksFormTests.cs" />
     <Compile Include="NewClient\RulesEngine\HttpContentAdapterTests.cs" />
     <Compile Include="NewClient\RulesEngine\RulesTests.cs" />
     <Compile Include="NewClient\RulesEngine\RuleTests.cs" />

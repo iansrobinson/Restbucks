@@ -64,7 +64,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RulesEngine\FormNotFoundException.cs" />
+    <Compile Include="RulesEngine\IFormStrategy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RestbucksForm.cs" />
     <Compile Include="RulesEngine\FormatterNotFoundException.cs" />
     <Compile Include="RulesEngine\FormInfo.cs" />
     <Compile Include="RulesEngine\HttpContentAdapter.cs" />
