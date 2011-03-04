@@ -21,24 +21,17 @@ namespace Restbucks.NewClient
             this.id = id;
         }
 
-        public FormInfo GetFormInfo(object entityBody)
+        public FormInfo GetFormInfo(object entityBody, object input)
         {
-            var form = GetForm(entityBody);
-            return new FormInfo(form.Resource, new HttpMethod(form.Method), new MediaTypeHeaderValue(form.MediaType));
-        }
-
-        public object GetFormData(object entityBody, object input)
-        {
+            Check.IsNotNull(entityBody, "entityBody");
             Check.IsNotNull(input, "input");
             
             var form = GetForm(entityBody);
-            return form.Instance ?? input;
+            return new FormInfo(form.Resource, new HttpMethod(form.Method), new MediaTypeHeaderValue(form.MediaType), null, form.Instance ?? input);
         }
 
         private Form GetForm(object entityBody)
         {
-            Check.IsNotNull(entityBody, "entityBody");
-
             var form = (from f in ((Shop)entityBody).Forms
                                   where f.Id.Equals(id)
                                   select f).FirstOrDefault();

@@ -22,7 +22,7 @@ namespace Tests.Restbucks.NewClient
             var entityBody = CreateEntityBody();
 
             var form = new RestbucksForm("rfq");
-            var formInfo = form.GetFormInfo(entityBody);
+            var formInfo = form.GetFormInfo(entityBody, new object());
 
             Assert.AreEqual(ResourceUri, formInfo.ResourceUri);
             Assert.AreEqual(Method, formInfo.Method);
@@ -36,9 +36,9 @@ namespace Tests.Restbucks.NewClient
             var entityBody = CreateEntityBody();
 
             var form = new RestbucksForm("rfq");
-            var formData = form.GetFormData(entityBody, input);
+            var formInfo = form.GetFormInfo(entityBody, input);
 
-            Assert.AreEqual(input, formData);
+            Assert.AreEqual(input, formInfo.FormData);
         }
 
         [Test]
@@ -48,9 +48,9 @@ namespace Tests.Restbucks.NewClient
             var entityBody = CreateEntityBody();
 
             var form = new RestbucksForm("order");
-            var formData = form.GetFormData(entityBody, input);
+            var formInfo = form.GetFormInfo(entityBody, input);
 
-            Assert.AreEqual(FormBody, formData);
+            Assert.AreEqual(FormBody, formInfo.FormData);
         }
 
         [Test]
@@ -58,23 +58,15 @@ namespace Tests.Restbucks.NewClient
         public void ThrowsExceptionIfCallingGetFormInfoWithNullEntityBody()
         {
             var form = new RestbucksForm("order");
-            form.GetFormInfo(null);
-        }
-
-        [Test]
-        [ExpectedException(ExpectedException = typeof(ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: entityBody")]
-        public void ThrowsExceptionIfCallingGetFormDataWithNullEntityBody()
-        {
-            var form = new RestbucksForm("order");
-            form.GetFormData(null, new object());
+            form.GetFormInfo(null, new object());
         }
 
         [Test]
         [ExpectedException(ExpectedException = typeof(ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: input")]
-        public void ThrowsExceptionIfCallingGetFormDataWithNullInput()
+        public void ThrowsExceptionIfCallingGetFormInfoWithNullInput()
         {
             var form = new RestbucksForm("order");
-            form.GetFormData(CreateEntityBody(), null);
+            form.GetFormInfo(CreateEntityBody(), null);
         }
 
         [Test]
@@ -82,7 +74,7 @@ namespace Tests.Restbucks.NewClient
         public void ThrowsExceptionIfFormCannotBeFound()
         {
             var form = new RestbucksForm("xyz");
-            form.GetFormInfo(CreateEntityBody());
+            form.GetFormInfo(CreateEntityBody(), new object());
         }
 
         private static Shop CreateEntityBody()

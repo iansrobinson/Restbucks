@@ -24,7 +24,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var mockEndpoint = new MockEndpoint(new HttpResponseMessage());
             var client = new HttpClient {Channel = mockEndpoint};
 
-            var action = new SubmitFormAction(FormInfo, FormData, ContentAdapter, client);
+            var action = new SubmitFormAction(FormInfo, ContentAdapter, client);
             action.Execute();
 
             Assert.AreEqual(FormInfo.ResourceUri, mockEndpoint.ReceivedRequest.RequestUri);
@@ -36,7 +36,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var mockEndpoint = new MockEndpoint(new HttpResponseMessage());
             var client = new HttpClient {Channel = mockEndpoint};
 
-            var action = new SubmitFormAction(FormInfo, FormData, ContentAdapter, client);
+            var action = new SubmitFormAction(FormInfo, ContentAdapter, client);
             action.Execute();
 
             Assert.AreEqual(FormInfo.Method, mockEndpoint.ReceivedRequest.Method);
@@ -48,7 +48,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var mockEndpoint = new MockEndpoint(new HttpResponseMessage());
             var client = new HttpClient {Channel = mockEndpoint};
 
-            var action = new SubmitFormAction(FormInfo, FormData, ContentAdapter, client);
+            var action = new SubmitFormAction(FormInfo, ContentAdapter, client);
             action.Execute();
 
             Assert.AreEqual(FormInfo.ContentType, mockEndpoint.ReceivedRequest.Content.Headers.ContentType);
@@ -60,7 +60,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var mockEndpoint = new MockEndpoint(new HttpResponseMessage());
             var client = new HttpClient {Channel = mockEndpoint};
 
-            var action = new SubmitFormAction(FormInfo, FormData, ContentAdapter, client);
+            var action = new SubmitFormAction(FormInfo, ContentAdapter, client);
             action.Execute();
 
             var receivedFormData = mockEndpoint.ReceivedRequest.Content.ReadAsObject<Shop>(RestbucksMediaTypeFormatter.Instance);
@@ -75,7 +75,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var mockEndpoint = new MockEndpoint(new HttpResponseMessage());
             var client = new HttpClient {Channel = mockEndpoint};
 
-            var action = new SubmitFormAction(FormInfo, FormData, ContentAdapter, client);
+            var action = new SubmitFormAction(FormInfo, ContentAdapter, client);
             action.Execute();
 
             Assert.AreEqual(FormInfo.Etag, mockEndpoint.ReceivedRequest.Headers.IfMatch.First());
@@ -84,12 +84,12 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         [Test]
         public void ShouldNotDoConditionalFormSubmissionIfEtagIsNotSupplied()
         {
-            var formInfo = new FormInfo(new Uri("http://restbucks.com/orders"), HttpMethod.Post, new MediaTypeHeaderValue(RestbucksMediaType.Value));
+            var formInfo = new FormInfo(new Uri("http://restbucks.com/orders"), HttpMethod.Post, new MediaTypeHeaderValue(RestbucksMediaType.Value), null, CreateEntityBody());
 
             var mockEndpoint = new MockEndpoint(new HttpResponseMessage());
             var client = new HttpClient {Channel = mockEndpoint};
 
-            var action = new SubmitFormAction(formInfo, FormData, ContentAdapter, client);
+            var action = new SubmitFormAction(formInfo, ContentAdapter, client);
             action.Execute();
 
             Assert.AreEqual(0, mockEndpoint.ReceivedRequest.Headers.IfMatch.Count());
@@ -102,7 +102,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
 
         private static FormInfo CreateFormInfo()
         {
-            return new FormInfo(new Uri("http://restbucks.com/orders"), HttpMethod.Post, new MediaTypeHeaderValue(RestbucksMediaType.Value), new EntityTagHeaderValue(@"""xyz"""));
+            return new FormInfo(new Uri("http://restbucks.com/orders"), HttpMethod.Post, new MediaTypeHeaderValue(RestbucksMediaType.Value), new EntityTagHeaderValue(@"""xyz"""), CreateEntityBody());
         }
     }
 }

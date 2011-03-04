@@ -10,17 +10,15 @@ namespace Restbucks.NewClient.RulesEngine
         private readonly HttpMethod method;
         private readonly MediaTypeHeaderValue contentType;
         private readonly EntityTagHeaderValue etag;
+        private readonly object formData;
 
-        public FormInfo(Uri resourceUri, HttpMethod method, MediaTypeHeaderValue contentType) : this(resourceUri, method, contentType, null)
-        {
-        }
-
-        public FormInfo(Uri resourceUri, HttpMethod method, MediaTypeHeaderValue contentType, EntityTagHeaderValue etag)
+        public FormInfo(Uri resourceUri, HttpMethod method, MediaTypeHeaderValue contentType, EntityTagHeaderValue etag, object formData)
         {
             this.resourceUri = resourceUri;
             this.method = method;
             this.contentType = contentType;
             this.etag = etag;
+            this.formData = formData;
         }
 
         public Uri ResourceUri
@@ -43,9 +41,9 @@ namespace Restbucks.NewClient.RulesEngine
             get { return etag; }
         }
 
-        public FormInfo WithNewEtag(EntityTagHeaderValue newEtag)
+        public object FormData
         {
-            return new FormInfo(resourceUri, method, contentType, newEtag);
+            get { return formData; }
         }
     }
 }
