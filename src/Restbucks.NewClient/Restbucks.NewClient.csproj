@@ -70,7 +70,10 @@
     <Compile Include="RulesEngine\ApplicationFormInfoFactory.cs" />
     <Compile Include="RulesEngine\ApplicationLinkInfoFactory.cs" />
     <Compile Include="RulesEngine\ClickLink.cs" />
+    <Compile Include="RulesEngine\Conditions.cs" />
     <Compile Include="RulesEngine\ControlNotFoundException.cs" />
+    <Compile Include="RulesEngine\IActions.cs" />
+    <Compile Include="RulesEngine\IConditions.cs" />
     <Compile Include="RulesEngine\IFormInfoFactory.cs" />
     <Compile Include="RulesEngine\IFormStrategy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

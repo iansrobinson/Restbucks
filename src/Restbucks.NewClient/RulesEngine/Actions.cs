@@ -3,7 +3,7 @@ using System.Net.Http;
 
 namespace Restbucks.NewClient.RulesEngine
 {
-    public class Actions
+    public class Actions : IActions
     {
         private readonly HttpContentAdapter contentAdapter;
         private readonly ApplicationContext context;

@@ -2,6 +2,8 @@
 using System.Net;
 using System.Net.Http;
 using NUnit.Framework;
+using Restbucks.MediaType;
+using Restbucks.NewClient;
 using Restbucks.NewClient.RulesEngine;
 using Rhino.Mocks;
 
@@ -90,8 +92,6 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var action = MockRepository.GenerateStub<IAction>();
             action.Expect(a => a.Execute(previousResponse)).Return(new HttpResponseMessage {StatusCode = HttpStatusCode.Unauthorized});
 
-            var state = MockRepository.GenerateStub<IState>();
-
             var rule = When.IsTrue(r => true)
                 .ExecuteAction(action)
                 .Return(new[]
@@ -127,6 +127,33 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var state = MockRepository.GenerateStub<IState>();
 
             var rule = When.IsTrue(r => true)
+                .ExecuteAction(action)
+                .ReturnState(r => state);
+
+            var result = rule.Evaluate(previousResponse);
+
+            Assert.IsTrue(result.IsSuccessful);
+            Assert.AreEqual(state, result.State);
+        }
+
+        [Test]
+        [Ignore("Some odd things in stub")]
+        public void ShouldAllowConditionsToBeUsedToCreateComplexConditions()
+        {
+            var previousResponse = new HttpResponseMessage();
+
+            var conditions = MockRepository.GenerateStub<IConditions>();
+            conditions.Expect(c => c.FormExists(null)).IgnoreArguments().Return(r => true);
+            conditions.Expect(c => c.LinkExists(null)).IgnoreArguments().Return(r => true);
+
+            var action = MockRepository.GenerateStub<IAction>();
+            action.Expect(a => a.Execute(previousResponse)).Return(new HttpResponseMessage {StatusCode = HttpStatusCode.Accepted});
+
+            var state = MockRepository.GenerateStub<IState>();
+
+            var rule = When.IsTrue(
+                conditions.LinkExists(RestbucksLink.WithRel(new StringLinkRelation("prefetch"))),
+                conditions.FormExists(RestbucksForm.WithId("rfq")))
                 .ExecuteAction(action)
                 .ReturnState(r => state);
 

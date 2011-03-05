@@ -17,9 +17,9 @@ namespace Restbucks.NewClient.RulesEngine
             return new When(new T());
         }
 
-        public static IExecuteAction IsTrue(Func<HttpResponseMessage, bool> condition)
+        public static IExecuteAction IsTrue(params Func<HttpResponseMessage, bool>[] conditions)
         {
-            return new When(new ConditionWrapper(condition));
+            return new When(new ConditionWrapper(conditions));
         }
 
         private When(ICondition condition)
@@ -41,7 +41,7 @@ namespace Restbucks.NewClient.RulesEngine
         public IRule Return(IEnumerable<KeyValuePair<HttpStatusCode, IStateFactory>> createStateByStatusCode, Func<HttpResponseMessage, IState> defaultCreateState = null)
         {
             Check.IsNotNull(createStateByStatusCode, "createStateByStatusCode");
-            
+
             var stateFactories = new Dictionary<HttpStatusCode, IStateFactory>();
             createStateByStatusCode.ToList().ForEach(kv => stateFactories.Add(kv.Key, kv.Value));
 
@@ -55,16 +55,16 @@ namespace Restbucks.NewClient.RulesEngine
 
         private class ConditionWrapper : ICondition
         {
-            private readonly Func<HttpResponseMessage, bool> condition;
+            private readonly IEnumerable<Func<HttpResponseMessage, bool>> conditions;
 
-            public ConditionWrapper(Func<HttpResponseMessage, bool> condition)
+            public ConditionWrapper(params Func<HttpResponseMessage, bool>[] conditions)
             {
-                this.condition = condition;
+                this.conditions = conditions;
             }
 
             public bool IsApplicable(HttpResponseMessage response)
             {
-                return condition(response);
+                return conditions.Aggregate(true, (result, condition) => result && condition(response), result => result);
             }
         }
     }
