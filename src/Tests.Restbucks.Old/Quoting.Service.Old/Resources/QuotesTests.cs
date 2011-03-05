@@ -94,8 +94,8 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
             var id = Guid.NewGuid();
             var result = ExecuteRequestReturnResult(id, DateTime.Now);
 
-            Assert.IsNotNull(result.EntityBody.Links.Single(l => l.Rels.First().SerializableValue.Equals("rb:order-form")));
-            Assert.AreEqual(new Uri("order-form/" + id.ToString("N"), UriKind.Relative), result.EntityBody.Links.Single(l => l.Rels.First().SerializableValue.Equals("rb:order-form")).Href.ToString());
+            Assert.IsNotNull(result.EntityBody.Links.Single(l => l.Rels.First().DisplayValue.Equals("rb:order-form")));
+            Assert.AreEqual(new Uri("order-form/" + id.ToString("N"), UriKind.Relative), result.EntityBody.Links.Single(l => l.Rels.First().DisplayValue.Equals("rb:order-form")).Href.ToString());
         }
 
         [Test]

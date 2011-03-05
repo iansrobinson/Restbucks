@@ -43,13 +43,13 @@ namespace Tests.Restbucks.MediaType.Assemblers
             Assert.AreEqual(2, shop.Links.Count());
 
             var firstLink = shop.Links.First();
-            Assert.AreEqual("rb:rfq", firstLink.Rels.First().SerializableValue);
-            Assert.AreEqual("prefetch", firstLink.Rels.Last().SerializableValue);
+            Assert.AreEqual("rb:rfq", firstLink.Rels.First().DisplayValue);
+            Assert.AreEqual("prefetch", firstLink.Rels.Last().DisplayValue);
             Assert.AreEqual("/quotes", firstLink.Href.ToString());
             Assert.AreEqual("application/xml", firstLink.MediaType);
 
             var secondLink = shop.Links.Last();
-            Assert.AreEqual("rb:order-form", secondLink.Rels.First().SerializableValue);
+            Assert.AreEqual("rb:order-form", secondLink.Rels.First().DisplayValue);
             Assert.AreEqual("/order-forms/1234", secondLink.Href.ToString());
             Assert.AreEqual(RestbucksMediaType.Value, secondLink.MediaType);
         }

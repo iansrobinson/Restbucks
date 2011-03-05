@@ -25,7 +25,7 @@ namespace Tests.Restbucks.MediaType
         {
             var linkRelation = LinkRelation.Parse("rb:rfq", s => "http://relations.restbucks.com/");
             Assert.IsInstanceOf<CompactUriLinkRelation>(linkRelation);
-            Assert.AreEqual("rb:rfq", linkRelation.SerializableValue);
+            Assert.AreEqual("rb:rfq", linkRelation.DisplayValue);
             Assert.AreEqual("http://relations.restbucks.com/rfq", linkRelation.Value);
         }
 

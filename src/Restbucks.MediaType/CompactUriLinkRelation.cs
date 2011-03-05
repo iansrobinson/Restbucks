@@ -7,7 +7,7 @@ namespace Restbucks.MediaType
         private readonly string prefix;
         private readonly Uri uri;
         private readonly string value;
-        private readonly string serializableValue;
+        private readonly string displayValue;
 
         public CompactUriLinkRelation(string prefix, Uri uri, string reference)
         {
@@ -15,7 +15,7 @@ namespace Restbucks.MediaType
             this.uri = uri;
 
             value = string.Format("{0}{1}", uri.AbsoluteUri, reference);
-            serializableValue = string.Format("{0}:{1}", prefix, reference);
+            displayValue = string.Format("{0}:{1}", prefix, reference);
         }
 
         public string Prefix
@@ -33,9 +33,9 @@ namespace Restbucks.MediaType
             get { return value; }
         }
 
-        public override string SerializableValue
+        public override string DisplayValue
         {
-            get { return serializableValue; }
+            get { return displayValue; }
         }
     }
 }

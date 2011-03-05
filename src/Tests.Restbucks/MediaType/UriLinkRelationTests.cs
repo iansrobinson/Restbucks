@@ -18,7 +18,7 @@ namespace Tests.Restbucks.MediaType
         public void SerializableValueShouldReturnAbsoluteUri()
         {
             var linkRelation = new UriLinkRelation(new Uri("http://relations.restbucks.com/order-form"));
-            Assert.AreEqual("http://relations.restbucks.com/order-form", linkRelation.SerializableValue);
+            Assert.AreEqual("http://relations.restbucks.com/order-form", linkRelation.DisplayValue);
         }
     }
 }

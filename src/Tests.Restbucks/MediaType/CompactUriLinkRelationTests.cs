@@ -18,7 +18,7 @@ namespace Tests.Restbucks.MediaType
         public void SerializableValueShouldReturnCompactUri()
         {
             var linkRelation = new CompactUriLinkRelation("rb", new Uri("http://relations.restbucks.com/"), "order-form");
-            Assert.AreEqual("rb:order-form", linkRelation.SerializableValue);
+            Assert.AreEqual("rb:order-form", linkRelation.DisplayValue);
         }
 
         [Test]

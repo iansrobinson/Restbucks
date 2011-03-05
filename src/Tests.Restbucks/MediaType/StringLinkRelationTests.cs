@@ -17,7 +17,7 @@ namespace Tests.Restbucks.MediaType
         public void SerializableValueShouldReturnToken()
         {
             var linkRelation = new StringLinkRelation("self");
-            Assert.AreEqual("self", linkRelation.SerializableValue);
+            Assert.AreEqual("self", linkRelation.DisplayValue);
         }
     }
 }

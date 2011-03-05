@@ -26,7 +26,7 @@ namespace Restbucks.MediaType.Formatters
         {
             var stringBuilder = link.Rels.Aggregate(
                 new StringBuilder(), 
-                (builder, rel) => builder.Append(" ").Append(rel.SerializableValue));
+                (builder, rel) => builder.Append(" ").Append(rel.DisplayValue));
             return stringBuilder.ToString().Trim();
         }
     }

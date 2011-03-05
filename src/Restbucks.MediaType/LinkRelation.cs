@@ -30,6 +30,6 @@ namespace Restbucks.MediaType
         }
 
         public abstract string Value { get; }
-        public abstract string SerializableValue { get; }
+        public abstract string DisplayValue { get; }
     }
 }

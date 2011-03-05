@@ -14,7 +14,7 @@
             get { return value; }
         }
 
-        public override string SerializableValue
+        public override string DisplayValue
         {
             get { return value; }
         }
