@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Restbucks.MediaType;
@@ -22,8 +23,8 @@ namespace Restbucks.NewClient
 
         public FormInfo GetFormInfo(HttpResponseMessage response, HttpContentAdapter contentAdapter, ApplicationContext context)
         {
-            var entityBody = contentAdapter.CreateObject(response.Content);
-            var form = (from f in ((Shop) entityBody).Forms
+            var entityBody = (Shop)contentAdapter.CreateObject(response.Content);
+            var form = (from f in entityBody.Forms
                         where f.Id.Equals(id)
                         select f).FirstOrDefault();
 
@@ -35,8 +36,9 @@ namespace Restbucks.NewClient
             var formData = form.Instance ?? context.Input;
             var contentType = new MediaTypeHeaderValue(form.MediaType);
             var content = contentAdapter.CreateContent(formData, contentType);
+            var resourceUri = form.Resource.IsAbsoluteUri ? form.Resource : new Uri(entityBody.BaseUri, form.Resource);
 
-            return new FormInfo(form.Resource, new HttpMethod(form.Method), new MediaTypeHeaderValue(form.MediaType), content);
+            return new FormInfo(resourceUri, new HttpMethod(form.Method), new MediaTypeHeaderValue(form.MediaType), content);
         }
     }
 }
