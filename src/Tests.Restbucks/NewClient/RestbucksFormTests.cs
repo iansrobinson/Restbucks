@@ -67,6 +67,29 @@ namespace Tests.Restbucks.NewClient
             Assert.AreEqual(new Uri("htp://localhost/virtual-directory/request-for-quote"), formInfo.ResourceUri);
         }
 
+        [Test]
+        public void TryGetShouldReturnTrueAndSetFormInfoIfFormExists()
+        {
+            FormInfo formInfo;
+            var form = new RestbucksForm("rfq");
+            var result = form.TryGetFormInfo(new HttpResponseMessage { Content = CreateContent() }, new HttpContentAdapter(RestbucksMediaTypeFormatter.Instance), new ApplicationContext(Input), out formInfo);
+
+            Assert.IsTrue(result);
+            Assert.AreEqual(ContentType, formInfo.ContentType);
+            Assert.AreEqual(Method, formInfo.Method);
+        }
+
+        [Test]
+        public void TryGetShouldReturnFalseAndSetFormInfoToNullIfFormDoesNotExist()
+        {
+            FormInfo formInfo;
+            var form = new RestbucksForm("xyz");
+            var result = form.TryGetFormInfo(new HttpResponseMessage { Content = CreateContent() }, new HttpContentAdapter(RestbucksMediaTypeFormatter.Instance), new ApplicationContext(Input), out formInfo);
+
+            Assert.IsFalse(result);
+            Assert.IsNull(formInfo);
+        }
+
         private static HttpContent CreateContent()
         {
             var entityBody = new ShopBuilder(new Uri("htp://localhost/virtual-directory/"))
