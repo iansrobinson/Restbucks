@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\..\lib\log4net\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Http.Extensions">
       <HintPath>..\..\lib\http\Microsoft.Http.Extensions.dll</HintPath>
     </Reference>
@@ -66,6 +69,9 @@
   <ItemGroup>
     <Compile Include="RestbucksForm.cs" />
     <Compile Include="RestbucksLink.cs" />
+    <Compile Include="RestbucksFormatter.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="RulesEngine\Actions.cs" />
     <Compile Include="RulesEngine\ApplicationFormInfoFactory.cs" />
     <Compile Include="RulesEngine\ApplicationLinkInfoFactory.cs" />

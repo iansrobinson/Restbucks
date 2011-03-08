@@ -3,7 +3,7 @@ using System.Net.Http;
 
 namespace Restbucks.NewClient.RulesEngine
 {
-    public class Conditions : IConditions
+    public class Conditions
     {
         private readonly HttpContentAdapter contentAdapter;
         private readonly ApplicationContext context;

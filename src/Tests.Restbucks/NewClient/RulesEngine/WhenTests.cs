@@ -137,15 +137,15 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         }
 
         [Test]
-        [Ignore("Some odd things in stub")]
+        [Ignore]
         public void ShouldAllowConditionsToBeUsedToCreateComplexConditions()
         {
             var previousResponse = new HttpResponseMessage();
 
             var conditions = MockRepository.GenerateStub<IConditions>();
-            conditions.Expect(c => c.FormExists(null)).IgnoreArguments().Return(r => true);
             conditions.Expect(c => c.LinkExists(null)).IgnoreArguments().Return(r => true);
-
+            conditions.Expect(c => c.FormExists(MockRepository.GenerateStub<IFormStrategy>())).IgnoreArguments().Return(r => true);
+           
             var action = MockRepository.GenerateStub<IAction>();
             action.Expect(a => a.Execute(previousResponse)).Return(new HttpResponseMessage {StatusCode = HttpStatusCode.Accepted});
 

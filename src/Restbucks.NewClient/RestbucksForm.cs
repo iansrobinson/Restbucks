@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using Microsoft.Net.Http;
 using Restbucks.MediaType;
 using Restbucks.NewClient.RulesEngine;
 
@@ -36,7 +37,7 @@ namespace Restbucks.NewClient
 
         public bool TryGetFormInfo(HttpResponseMessage response, HttpContentAdapter contentAdapter, ApplicationContext context, out FormInfo formInfo)
         {
-            var entityBody = (Shop)contentAdapter.CreateObject(response.Content);
+            var entityBody = response.Content.ReadAsObject<Shop>(RestbucksFormatter.Instance);
             var form = (from f in entityBody.Forms
                         where f.Id.Equals(id)
                         select f).FirstOrDefault();
