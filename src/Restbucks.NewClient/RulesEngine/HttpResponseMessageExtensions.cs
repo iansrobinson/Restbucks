@@ -8,5 +8,10 @@ namespace Restbucks.NewClient.RulesEngine
         {
             return strategy.LinkExists(response);
         }
+
+        public static bool FormExists(this HttpResponseMessage response, IFormStrategy strategy)
+        {
+            return strategy.FormExists(response);
+        }
     }
 }
