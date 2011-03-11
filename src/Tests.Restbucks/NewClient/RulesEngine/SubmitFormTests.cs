@@ -20,7 +20,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         [Test]
         public void ShouldSubmitFormWithCorrectControlData()
         {
-            var formInfo = new FormInfo(ResourceUri, HttpMethod, ContentType, CreateContent());
+            var formInfo = new FormInfo(ResourceUri, HttpMethod, ContentType);
 
             var formInfoFactory = MockRepository.GenerateStub<IFormInfoFactory>();
             formInfoFactory.Expect(f => f.CreateFormInfo(PreviousResponse)).Return(formInfo);
@@ -34,13 +34,6 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             Assert.AreEqual(ResourceUri, mockEndpoint.ReceivedRequest.RequestUri);
             Assert.AreEqual(HttpMethod, mockEndpoint.ReceivedRequest.Method);
             Assert.AreEqual(ContentType, mockEndpoint.ReceivedRequest.Content.Headers.ContentType);
-        }
-
-        private static HttpContent CreateContent()
-        {
-            var content = new StringContent(string.Empty);
-            content.Headers.ContentType = new MediaTypeHeaderValue(RestbucksMediaType.Value);
-            return content;
         }
     }
 }

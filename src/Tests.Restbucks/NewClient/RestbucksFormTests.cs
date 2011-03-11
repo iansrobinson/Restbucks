@@ -18,49 +18,30 @@ namespace Tests.Restbucks.NewClient
         private static readonly MediaTypeHeaderValue ContentType = new MediaTypeHeaderValue(RestbucksMediaType.Value);
 
         private static readonly Shop FormBody = new ShopBuilder(new Uri("http://localhost")).Build();
-        private static readonly Shop Input = new ShopBuilder(new Uri("http://restbucks.com")).Build();
 
         [Test]
         public void ShouldReturnCorrectFormInfoForForm()
         {
-            var form = new RestbucksForm("rfq");
-            var formInfo = form.GetFormInfo(new HttpResponseMessage { Content = CreateContent() }, new HttpContentAdapter(RestbucksMediaTypeFormatter.Instance), new ApplicationContext(Input));
+            var form = RestbucksForm.WithId("rfq");
+            var formInfo = form.GetFormInfo(CreateResponse());
 
             Assert.AreEqual(ContentType,  formInfo.ContentType);
             Assert.AreEqual(Method, formInfo.Method);
         }
 
         [Test]
-        public void FormDataShouldContainInputIfFormBodyIsEmpty()
-        {
-            var form = new RestbucksForm("rfq");
-            var formInfo = form.GetFormInfo(new HttpResponseMessage { Content = CreateContent() }, new HttpContentAdapter(RestbucksMediaTypeFormatter.Instance), new ApplicationContext(Input));
-
-            Assert.AreEqual(Input.BaseUri, formInfo.FormData.ReadAsObject<Shop>(RestbucksMediaTypeFormatter.Instance).BaseUri);
-        }
-
-        [Test]
-        public void FormDataShouldContainFormBodyIfFormBodyIsNotEmpty()
-        {
-            var form = new RestbucksForm("order");
-            var formInfo = form.GetFormInfo(new HttpResponseMessage { Content = CreateContent() }, new HttpContentAdapter(RestbucksMediaTypeFormatter.Instance), new ApplicationContext(Input));
-
-            Assert.AreEqual(FormBody.BaseUri, formInfo.FormData.ReadAsObject<Shop>(RestbucksMediaTypeFormatter.Instance).BaseUri);
-        }
-
-        [Test]
         [ExpectedException(ExpectedException = typeof (ControlNotFoundException), ExpectedMessage = "Could not find form with id 'xyz'.")]
         public void ThrowsExceptionIfFormCannotBeFound()
         {
-            var form = new RestbucksForm("xyz");
-            form.GetFormInfo(new HttpResponseMessage { Content = CreateContent() }, new HttpContentAdapter(RestbucksMediaTypeFormatter.Instance), new ApplicationContext(new object()));
+            var form = RestbucksForm.WithId("xyz");
+            form.GetFormInfo(CreateResponse());
         }
 
         [Test]
         public void ShouldFormatRelativeResourceUriAsAbsoluteUri()
         {
-            var form = new RestbucksForm("rfq");
-            var formInfo = form.GetFormInfo(new HttpResponseMessage { Content = CreateContent() }, new HttpContentAdapter(RestbucksMediaTypeFormatter.Instance), new ApplicationContext(Input));
+            var form = RestbucksForm.WithId("rfq");
+            var formInfo = form.GetFormInfo(CreateResponse());
 
             Assert.AreEqual(ContentType, formInfo.ContentType);
             Assert.AreEqual(Method, formInfo.Method);
@@ -71,8 +52,8 @@ namespace Tests.Restbucks.NewClient
         public void TryGetShouldReturnTrueAndSetFormInfoIfFormExists()
         {
             FormInfo formInfo;
-            var form = new RestbucksForm("rfq");
-            var result = form.TryGetFormInfo(new HttpResponseMessage { Content = CreateContent() }, new HttpContentAdapter(RestbucksMediaTypeFormatter.Instance), new ApplicationContext(Input), out formInfo);
+            var form = RestbucksForm.WithId("rfq");
+            var result = form.TryGetFormInfo(CreateResponse(), out formInfo);
 
             Assert.IsTrue(result);
             Assert.AreEqual(ContentType, formInfo.ContentType);
@@ -83,14 +64,28 @@ namespace Tests.Restbucks.NewClient
         public void TryGetShouldReturnFalseAndSetFormInfoToNullIfFormDoesNotExist()
         {
             FormInfo formInfo;
-            var form = new RestbucksForm("xyz");
-            var result = form.TryGetFormInfo(new HttpResponseMessage { Content = CreateContent() }, new HttpContentAdapter(RestbucksMediaTypeFormatter.Instance), new ApplicationContext(Input), out formInfo);
+            var form = RestbucksForm.WithId("xyz");
+            var result = form.TryGetFormInfo(CreateResponse(), out formInfo);
 
             Assert.IsFalse(result);
             Assert.IsNull(formInfo);
         }
 
-        private static HttpContent CreateContent()
+        [Test]
+        public void ShouldReturnTrueIfFormExists()
+        {
+            var form = RestbucksForm.WithId("rfq");         
+            Assert.IsTrue(form.FormExists(CreateResponse()));
+        }
+
+        [Test]
+        public void ShouldReturnFalseIfFormDoesNotExist()
+        {
+            var form = RestbucksForm.WithId("xyz");
+            Assert.IsFalse(form.FormExists(CreateResponse()));
+        }
+
+        private static HttpResponseMessage CreateResponse()
         {
             var entityBody = new ShopBuilder(new Uri("htp://localhost/virtual-directory/"))
                 .AddForm(new Form("rfq", ResourceUri, Method.ToString(), ContentType.MediaType, null as Shop))
@@ -98,7 +93,8 @@ namespace Tests.Restbucks.NewClient
                 .Build();
             var content = entityBody.ToContent(RestbucksMediaTypeFormatter.Instance);
             content.Headers.ContentType = ContentType;
-            return content;
+
+            return new HttpResponseMessage{Content = content};
         }
     }
 }

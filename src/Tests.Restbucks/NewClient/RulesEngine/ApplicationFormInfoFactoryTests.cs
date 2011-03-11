@@ -17,7 +17,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var adapter = new HttpContentAdapter(RestbucksMediaTypeFormatter.Instance);
 
             var strategy = MockRepository.GenerateMock<IFormStrategy>();
-            strategy.Expect(s => s.GetFormInfo(response, adapter, context)).Return(null);
+            strategy.Expect(s => s.GetFormInfo(response)).Return(null);
 
             var factory = new ApplicationFormInfoFactory(strategy, adapter, context);
             factory.CreateFormInfo(response);

@@ -27,7 +27,7 @@ namespace Restbucks.NewClient
         
         private readonly LinkRelation relation;
 
-        public RestbucksLink(LinkRelation relation)
+        private RestbucksLink(LinkRelation relation)
         {
             this.relation = relation;
         }
@@ -66,12 +66,8 @@ namespace Restbucks.NewClient
 
         public bool LinkExists(HttpResponseMessage response)
         {
-            var entityBody = response.Content.ReadAsObject<Shop>(RestbucksFormatter.Instance);
-            var link = (from l in (entityBody).Links
-                        where l.Rels.Contains(relation, LinkRelationEqualityComparer.Instance)
-                        select l).FirstOrDefault();
-
-            return link != null;
+            LinkInfo linkInfo;
+            return TryGetLinkInfo(response, out linkInfo);
         }
     }
 }

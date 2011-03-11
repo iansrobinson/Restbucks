@@ -17,15 +17,15 @@ namespace Restbucks.NewClient
 
         private readonly string id;
 
-        public RestbucksForm(string id)
+        private RestbucksForm(string id)
         {
             this.id = id;
         }
 
-        public FormInfo GetFormInfo(HttpResponseMessage response, HttpContentAdapter contentAdapter, ApplicationContext context)
+        public FormInfo GetFormInfo(HttpResponseMessage response)
         {
             FormInfo formInfo;
-            var success = TryGetFormInfo(response, contentAdapter, context, out formInfo);
+            var success = TryGetFormInfo(response, out formInfo);
             
             if (!success)
             {
@@ -35,7 +35,7 @@ namespace Restbucks.NewClient
             return formInfo;
         }
 
-        public bool TryGetFormInfo(HttpResponseMessage response, HttpContentAdapter contentAdapter, ApplicationContext context, out FormInfo formInfo)
+        public bool TryGetFormInfo(HttpResponseMessage response, out FormInfo formInfo)
         {
             var entityBody = response.Content.ReadAsObject<Shop>(RestbucksFormatter.Instance);
             var form = (from f in entityBody.Forms
@@ -48,13 +48,16 @@ namespace Restbucks.NewClient
                 return false;
             }
 
-            var formData = form.Instance ?? context.Input;
-            var contentType = new MediaTypeHeaderValue(form.MediaType);
-            var content = contentAdapter.CreateContent(formData, contentType);
             var resourceUri = form.Resource.IsAbsoluteUri ? form.Resource : new Uri(entityBody.BaseUri, form.Resource);
 
-            formInfo = new FormInfo(resourceUri, new HttpMethod(form.Method), new MediaTypeHeaderValue(form.MediaType), content);
+            formInfo = new FormInfo(resourceUri, new HttpMethod(form.Method), new MediaTypeHeaderValue(form.MediaType));
             return true;
+        }
+
+        public bool FormExists(HttpResponseMessage response)
+        {
+            FormInfo formInfo;
+            return TryGetFormInfo(response, out formInfo);
         }
     }
 }

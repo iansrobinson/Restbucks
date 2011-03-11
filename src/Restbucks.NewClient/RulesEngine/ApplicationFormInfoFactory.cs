@@ -17,7 +17,7 @@ namespace Restbucks.NewClient.RulesEngine
 
         public FormInfo CreateFormInfo(HttpResponseMessage response)
         {
-            return formStrategy.GetFormInfo(response, contentAdapter, context);
+            return formStrategy.GetFormInfo(response);
         }
     }
 }
