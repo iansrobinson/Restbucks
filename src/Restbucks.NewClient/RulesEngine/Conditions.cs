@@ -23,7 +23,7 @@ namespace Restbucks.NewClient.RulesEngine
         public Func<HttpResponseMessage, bool> LinkExists(ILinkStrategy linkStrategy)
         {
             LinkInfo linkInfo;
-            return r => linkStrategy.TryGetLinkInfo(r, contentAdapter, out linkInfo);
+            return r => linkStrategy.TryGetLinkInfo(r, out linkInfo);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Restbucks.NewClient.RulesEngine
 
         public LinkInfo CreateLinkInfo(HttpResponseMessage response)
         {
-            return linkStrategy.GetLinkInfo(response, contentAdapter);
+            return linkStrategy.GetLinkInfo(response);
         }
     }
 }

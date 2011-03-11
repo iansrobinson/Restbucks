@@ -116,6 +116,7 @@
     <Compile Include="NewClient\RestbucksLinkTests.cs" />
     <Compile Include="NewClient\RulesEngine\ApplicationFormInfoFactoryTests.cs" />
     <Compile Include="NewClient\RulesEngine\HttpContentAdapterTests.cs" />
+    <Compile Include="NewClient\RulesEngine\HttpResponseMessageExtensionsTests.cs" />
     <Compile Include="NewClient\RulesEngine\RulesTests.cs" />
     <Compile Include="NewClient\RulesEngine\RuleTests.cs" />
     <Compile Include="NewClient\RulesEngine\StateFactoryCollectionTests.cs" />

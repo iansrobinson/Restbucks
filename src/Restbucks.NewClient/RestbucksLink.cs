@@ -14,6 +14,16 @@ namespace Restbucks.NewClient
         {
             return new RestbucksLink(rel);
         }
+
+        public static ILinkStrategy WithRel(string rel)
+        {
+            return WithRel(new StringLinkRelation(rel));
+        }
+
+        public static ILinkStrategy WithRel(Uri rel)
+        {
+            return WithRel(new UriLinkRelation(rel));
+        }
         
         private readonly LinkRelation relation;
 
@@ -22,10 +32,10 @@ namespace Restbucks.NewClient
             this.relation = relation;
         }
 
-        public LinkInfo GetLinkInfo(HttpResponseMessage response, HttpContentAdapter contentAdapter)
+        public LinkInfo GetLinkInfo(HttpResponseMessage response)
         {
             LinkInfo linkInfo;
-            var success = TryGetLinkInfo(response, contentAdapter, out linkInfo);
+            var success = TryGetLinkInfo(response, out linkInfo);
 
             if (!success)
             {
@@ -35,7 +45,7 @@ namespace Restbucks.NewClient
             return linkInfo;
         }
 
-        public bool TryGetLinkInfo(HttpResponseMessage response, HttpContentAdapter contentAdapter, out LinkInfo linkInfo)
+        public bool TryGetLinkInfo(HttpResponseMessage response, out LinkInfo linkInfo)
         {
             var entityBody = response.Content.ReadAsObject<Shop>(RestbucksFormatter.Instance);
             var link = (from l in (entityBody).Links
@@ -52,6 +62,16 @@ namespace Restbucks.NewClient
             linkInfo = new LinkInfo(resourceUri, new MediaTypeHeaderValue(link.MediaType));
 
             return true;
+        }
+
+        public bool LinkExists(HttpResponseMessage response)
+        {
+            var entityBody = response.Content.ReadAsObject<Shop>(RestbucksFormatter.Instance);
+            var link = (from l in (entityBody).Links
+                        where l.Rels.Contains(relation, LinkRelationEqualityComparer.Instance)
+                        select l).FirstOrDefault();
+
+            return link != null;
         }
     }
 }

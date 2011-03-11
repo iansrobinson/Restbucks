@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using Microsoft.Net.Http;
 using NUnit.Framework;
 using Restbucks.Client.Formatters;
 using Restbucks.MediaType;
@@ -15,10 +16,8 @@ namespace Tests.Restbucks.NewClient
         [Test]
         public void ShouldConvertRelativeUrisToAbsoluteUris()
         {
-            var contentAdapter = new HttpContentAdapter(RestbucksMediaTypeFormatter.Instance);
-
-            var link = new RestbucksLink(new StringLinkRelation("rfq"));
-            var linkInfo = link.GetLinkInfo(new HttpResponseMessage {Content = contentAdapter.CreateContent(CreateEntityBody(), new MediaTypeHeaderValue(RestbucksMediaType.Value))}, contentAdapter);
+            var link = RestbucksLink.WithRel("rfq");
+            var linkInfo = link.GetLinkInfo(CreateResponse());
 
             Assert.AreEqual(new Uri("http://localhost/virtual-directory/request-for-quote"), linkInfo.ResourceUri);
         }
@@ -27,10 +26,8 @@ namespace Tests.Restbucks.NewClient
         [ExpectedException(ExpectedException = typeof (ControlNotFoundException), ExpectedMessage = "Could not find link with link relation 'xyz'.")]
         public void ThrowsExceptionIfLinkCannotBeFound()
         {
-            var contentAdapter = new HttpContentAdapter(RestbucksMediaTypeFormatter.Instance);
-
-            var link = new RestbucksLink(new StringLinkRelation("xyz"));
-            var linkInfo = link.GetLinkInfo(new HttpResponseMessage {Content = contentAdapter.CreateContent(CreateEntityBody(), new MediaTypeHeaderValue(RestbucksMediaType.Value))}, contentAdapter);
+            var link = RestbucksLink.WithRel("xyz");
+            var linkInfo = link.GetLinkInfo(CreateResponse());
 
             Assert.AreEqual(new Uri("http://localhost/virtual-directory/request-for-quote"), linkInfo.ResourceUri);
         }
@@ -38,11 +35,9 @@ namespace Tests.Restbucks.NewClient
         [Test]
         public void TryGetShouldReturnTrueAndSetLinkInfoIfLinkExists()
         {
-            var contentAdapter = new HttpContentAdapter(RestbucksMediaTypeFormatter.Instance);
-
-            var link = new RestbucksLink(new StringLinkRelation("rfq"));
+            var link = RestbucksLink.WithRel(new StringLinkRelation("rfq"));
             LinkInfo linkInfo;
-            var result = link.TryGetLinkInfo(new HttpResponseMessage {Content = contentAdapter.CreateContent(CreateEntityBody(), new MediaTypeHeaderValue(RestbucksMediaType.Value))}, contentAdapter, out linkInfo);
+            var result = link.TryGetLinkInfo(CreateResponse(), out linkInfo);
 
             Assert.IsTrue(result);
             Assert.AreEqual(new Uri("http://localhost/virtual-directory/request-for-quote"), linkInfo.ResourceUri);
@@ -51,24 +46,49 @@ namespace Tests.Restbucks.NewClient
         [Test]
         public void TryGetShouldReturnFalseAndSetLinkInfoToNullIfLinkDoesNotExist()
         {
-            var contentAdapter = new HttpContentAdapter(RestbucksMediaTypeFormatter.Instance);
-
-            var link = new RestbucksLink(new StringLinkRelation("xyz"));
+            var link = RestbucksLink.WithRel(new StringLinkRelation("xyz"));
             LinkInfo linkInfo;
-            var result = link.TryGetLinkInfo(new HttpResponseMessage { Content = contentAdapter.CreateContent(CreateEntityBody(), new MediaTypeHeaderValue(RestbucksMediaType.Value)) }, contentAdapter, out linkInfo);
+            var result = link.TryGetLinkInfo(CreateResponse(), out linkInfo);
 
             Assert.IsFalse(result);
             Assert.IsNull(linkInfo);
         }
 
-        private static Shop CreateEntityBody()
+        [Test]
+        public void ShouldReturnTrueIfLinkExists()
         {
-            return new ShopBuilder(new Uri("http://localhost/virtual-directory/"))
+            var link = RestbucksLink.WithRel(new Uri("http://relations/rfq"));
+            var result = link.LinkExists(CreateResponse());
+
+            Assert.IsTrue(result);
+        }
+
+        [Test]
+        public void ShouldReturnFalseIfLinkDoesNotExist()
+        {
+            var link = RestbucksLink.WithRel(new Uri("http://relations/xyz"));
+            var result = link.LinkExists(CreateResponse());
+
+            Assert.IsFalse(result);
+        }
+
+        private static HttpResponseMessage CreateResponse()
+        {
+            var entityBody = new ShopBuilder(new Uri("http://localhost/virtual-directory/"))
                 .AddLink(new Link(
                              new Uri("request-for-quote", UriKind.Relative),
                              RestbucksMediaType.Value,
                              new StringLinkRelation("rfq")))
+                .AddLink(new Link(
+                             new Uri("request-for-quote", UriKind.Relative),
+                             RestbucksMediaType.Value,
+                             new UriLinkRelation(new Uri("http://relations/rfq"))))
                 .Build();
+
+            var content = entityBody.ToContent(RestbucksMediaTypeFormatter.Instance);
+            content.Headers.ContentType = new MediaTypeHeaderValue(RestbucksMediaType.Value);
+
+            return new HttpResponseMessage {Content = content};
         }
     }
 }
