@@ -72,12 +72,11 @@
     <Compile Include="RestbucksFormatter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="RulesEngine\Actions.cs" />
     <Compile Include="RulesEngine\ClickLink.cs" />
     <Compile Include="RulesEngine\ControlNotFoundException.cs" />
     <Compile Include="RulesEngine\HttpResponseMessageExtensions.cs" />
+    <Compile Include="RulesEngine\IAction.cs" />
     <Compile Include="RulesEngine\IActionInvoker.cs" />
-    <Compile Include="RulesEngine\IActions.cs" />
     <Compile Include="RulesEngine\IConditions.cs" />
     <Compile Include="RulesEngine\IFormStrategy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
