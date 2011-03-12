@@ -73,15 +73,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="RulesEngine\Actions.cs" />
-    <Compile Include="RulesEngine\ApplicationFormInfoFactory.cs" />
-    <Compile Include="RulesEngine\ApplicationLinkInfoFactory.cs" />
     <Compile Include="RulesEngine\ClickLink.cs" />
     <Compile Include="RulesEngine\Conditions.cs" />
     <Compile Include="RulesEngine\ControlNotFoundException.cs" />
     <Compile Include="RulesEngine\HttpResponseMessageExtensions.cs" />
     <Compile Include="RulesEngine\IActions.cs" />
     <Compile Include="RulesEngine\IConditions.cs" />
-    <Compile Include="RulesEngine\IFormInfoFactory.cs" />
     <Compile Include="RulesEngine\IFormStrategy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RulesEngine\FormatterNotFoundException.cs" />
@@ -90,7 +87,6 @@
     <Compile Include="RulesEngine\IAction.cs" />
     <Compile Include="RulesEngine\ICondition.cs" />
     <Compile Include="RulesEngine\ApplicationContext.cs" />
-    <Compile Include="RulesEngine\ILinkInfoFactory.cs" />
     <Compile Include="RulesEngine\ILinkStrategy.cs" />
     <Compile Include="RulesEngine\IRule.cs" />
     <Compile Include="RulesEngine\IState.cs" />

@@ -23,11 +23,7 @@ namespace Restbucks.NewClient.RulesEngine
 
         public IAction ClickLink(ILinkStrategy linkStrategy)
         {
-            return new DeferredAction(() =>
-                                          {
-                                              var linkInfoFactory = new ApplicationLinkInfoFactory(linkStrategy, contentAdapter);
-                                              return new ClickLink(linkInfoFactory, client);
-                                          });
+            return new DeferredAction(() => new ClickLink(linkStrategy, client));
         }
 
         private class DeferredAction : IAction

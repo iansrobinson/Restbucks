@@ -4,18 +4,18 @@ namespace Restbucks.NewClient.RulesEngine
 {
     public class ClickLink : IAction
     {
-        private readonly ILinkInfoFactory linkInfoFactory;
+        private readonly ILinkStrategy linkStrategy;
         private readonly HttpClient client;
 
-        public ClickLink(ILinkInfoFactory linkInfoFactory, HttpClient client)
+        public ClickLink(ILinkStrategy linkStrategy, HttpClient client)
         {
-            this.linkInfoFactory = linkInfoFactory;
+            this.linkStrategy = linkStrategy;
             this.client = client;
         }
 
         public HttpResponseMessage Execute(HttpResponseMessage previousResponse)
         {
-            var linkInfo = linkInfoFactory.CreateLinkInfo(previousResponse);
+            var linkInfo = linkStrategy.GetLinkInfo(previousResponse);
 
             var request = new HttpRequestMessage
                               {
