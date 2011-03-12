@@ -29,7 +29,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var client = new HttpClient {Channel = mockEndpoint};
 
             var submitForm = new SubmitForm(formStrategy, client);
-            submitForm.Execute(PreviousResponse);
+            submitForm.Invoke(PreviousResponse);
 
             Assert.AreEqual(ResourceUri, mockEndpoint.ReceivedRequest.RequestUri);
             Assert.AreEqual(HttpMethod, mockEndpoint.ReceivedRequest.Method);

@@ -10,7 +10,7 @@ namespace Restbucks.NewClient.RulesEngine
     public class When : IExecuteAction, IReturnState
     {
         private readonly ICondition condition;
-        private IAction action;
+        private IActionInvoker actionInvoker;
 
         public static IExecuteAction IsTrue<T>() where T : ICondition, new()
         {
@@ -27,15 +27,15 @@ namespace Restbucks.NewClient.RulesEngine
             this.condition = condition;
         }
 
-        public IReturnState ExecuteAction(IAction action)
+        public IReturnState ExecuteAction(IActionInvoker actionInvoker)
         {
-            this.action = action;
+            this.actionInvoker = actionInvoker;
             return this;
         }
 
         public IRule ReturnState(Func<HttpResponseMessage, IState> createState)
         {
-            return new Rule(condition, action, new StateFactory(createState));
+            return new Rule(condition, actionInvoker, new StateFactory(createState));
         }
 
         public IRule Return(IEnumerable<KeyValuePair<HttpStatusCode, IStateFactory>> createStateByStatusCode, Func<HttpResponseMessage, IState> defaultCreateState = null)
@@ -47,10 +47,10 @@ namespace Restbucks.NewClient.RulesEngine
 
             if (defaultCreateState == null)
             {
-                return new Rule(condition, action, new StateFactoryCollection(stateFactories));
+                return new Rule(condition, actionInvoker, new StateFactoryCollection(stateFactories));
             }
 
-            return new Rule(condition, action, new StateFactoryCollection(stateFactories, new StateFactory(defaultCreateState)));
+            return new Rule(condition, actionInvoker, new StateFactoryCollection(stateFactories, new StateFactory(defaultCreateState)));
         }
 
         private class ConditionWrapper : ICondition
@@ -71,7 +71,7 @@ namespace Restbucks.NewClient.RulesEngine
 
     public interface IExecuteAction
     {
-        IReturnState ExecuteAction(IAction action);
+        IReturnState ExecuteAction(IActionInvoker actionInvoker);
     }
 
     public interface IReturnState

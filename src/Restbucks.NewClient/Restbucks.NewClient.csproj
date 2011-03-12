@@ -76,13 +76,13 @@
     <Compile Include="RulesEngine\ClickLink.cs" />
     <Compile Include="RulesEngine\ControlNotFoundException.cs" />
     <Compile Include="RulesEngine\HttpResponseMessageExtensions.cs" />
+    <Compile Include="RulesEngine\IActionInvoker.cs" />
     <Compile Include="RulesEngine\IActions.cs" />
     <Compile Include="RulesEngine\IConditions.cs" />
     <Compile Include="RulesEngine\IFormStrategy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RulesEngine\FormatterNotFoundException.cs" />
     <Compile Include="RulesEngine\FormInfo.cs" />
-    <Compile Include="RulesEngine\IAction.cs" />
     <Compile Include="RulesEngine\ICondition.cs" />
     <Compile Include="RulesEngine\ApplicationContext.cs" />
     <Compile Include="RulesEngine\ILinkStrategy.cs" />

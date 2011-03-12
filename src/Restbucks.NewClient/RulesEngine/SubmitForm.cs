@@ -2,7 +2,7 @@
 
 namespace Restbucks.NewClient.RulesEngine
 {
-    public class SubmitForm : IAction
+    public class SubmitForm : IActionInvoker
     {
         private readonly IFormStrategy formStrategy;
         private readonly HttpClient client;
@@ -13,7 +13,7 @@ namespace Restbucks.NewClient.RulesEngine
             this.client = client;
         }
 
-        public HttpResponseMessage Execute(HttpResponseMessage previousResponse)
+        public HttpResponseMessage Invoke(HttpResponseMessage previousResponse)
         {
             var formInfo = formStrategy.GetFormInfo(previousResponse);
             

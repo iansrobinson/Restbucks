@@ -19,8 +19,8 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var condition = MockRepository.GenerateStub<ICondition>();
             condition.Expect(c => c.IsApplicable(PreviousResponse)).Return(true);
 
-            var action = MockRepository.GenerateMock<IAction>();
-            action.Expect(a => a.Execute(PreviousResponse)).Return(NewResponse);
+            var action = MockRepository.GenerateMock<IActionInvoker>();
+            action.Expect(a => a.Invoke(PreviousResponse)).Return(NewResponse);
 
             var stateFactory = MockRepository.GenerateStub<IStateFactory>();
 
@@ -36,8 +36,8 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var condition = MockRepository.GenerateStub<ICondition>();
             condition.Expect(c => c.IsApplicable(PreviousResponse)).Return(true);
 
-            var action = MockRepository.GenerateStub<IAction>();
-            action.Expect(a => a.Execute(PreviousResponse)).Return(NewResponse);
+            var action = MockRepository.GenerateStub<IActionInvoker>();
+            action.Expect(a => a.Invoke(PreviousResponse)).Return(NewResponse);
 
             var stateFactory = MockRepository.GenerateStub<IStateFactory>();
             stateFactory.Expect(f => f.Create(NewResponse)).IgnoreArguments().Return(NewState);
@@ -54,8 +54,8 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var condition = MockRepository.GenerateStub<ICondition>();
             condition.Expect(c => c.IsApplicable(PreviousResponse)).Return(true);
 
-            var action = MockRepository.GenerateStub<IAction>();
-            action.Expect(a => a.Execute(PreviousResponse)).Return(NewResponse);
+            var action = MockRepository.GenerateStub<IActionInvoker>();
+            action.Expect(a => a.Invoke(PreviousResponse)).Return(NewResponse);
 
             var stateFactory = MockRepository.GenerateStub<IStateFactory>();           
             stateFactory.Expect(f => f.Create(NewResponse)).Return(NewState);
@@ -72,8 +72,8 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var condition = MockRepository.GenerateStub<ICondition>();
             condition.Expect(c => c.IsApplicable(PreviousResponse)).Return(false);
 
-            var action = MockRepository.GenerateMock<IAction>();
-            action.AssertWasNotCalled(a => a.Execute(PreviousResponse));
+            var action = MockRepository.GenerateMock<IActionInvoker>();
+            action.AssertWasNotCalled(a => a.Invoke(PreviousResponse));
 
             var stateFactory = MockRepository.GenerateStub<IStateFactory>();
 
@@ -89,7 +89,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var condition = MockRepository.GenerateStub<ICondition>();
             condition.Expect(c => c.IsApplicable(PreviousResponse)).Return(false);
 
-            var action = MockRepository.GenerateStub<IAction>();
+            var action = MockRepository.GenerateStub<IActionInvoker>();
             var stateFactory = MockRepository.GenerateStub<IStateFactory>();
 
             var rule = new Rule(condition, action, stateFactory);
@@ -103,7 +103,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         [ExpectedException(ExpectedException = typeof (ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: condition")]
         public void ThrowsExceptionIfConditionIsNull()
         {
-            new Rule(null, MockRepository.GenerateStub<IAction>(), MockRepository.GenerateStub<IStateFactory>());
+            new Rule(null, MockRepository.GenerateStub<IActionInvoker>(), MockRepository.GenerateStub<IStateFactory>());
         }
 
         [Test]
@@ -117,7 +117,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         [ExpectedException(ExpectedException = typeof(ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: stateFactory")]
         public void ThrowsExceptionIfStateFactoryIsNull()
         {
-            new Rule(MockRepository.GenerateStub<ICondition>(), MockRepository.GenerateStub<IAction>(), null);
+            new Rule(MockRepository.GenerateStub<ICondition>(), MockRepository.GenerateStub<IActionInvoker>(), null);
         }
 
         private class DummyState : IState

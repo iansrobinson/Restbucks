@@ -6,17 +6,17 @@ namespace Restbucks.NewClient.RulesEngine
     public class Rule : IRule
     {
         private readonly ICondition condition;
-        private readonly IAction action;
+        private readonly IActionInvoker actionInvoker;
         private readonly IStateFactory stateFactory;
 
-        public Rule(ICondition condition, IAction action, IStateFactory stateFactory)
+        public Rule(ICondition condition, IActionInvoker actionInvoker, IStateFactory stateFactory)
         {
             Check.IsNotNull(condition, "condition");
-            Check.IsNotNull(action, "action");
+            Check.IsNotNull(actionInvoker, "action");
             Check.IsNotNull(stateFactory, "stateFactory");
 
             this.condition = condition;
-            this.action = action;
+            this.actionInvoker = actionInvoker;
             this.stateFactory = stateFactory;
         }
 
@@ -24,7 +24,7 @@ namespace Restbucks.NewClient.RulesEngine
         {
             if (condition.IsApplicable(previousResponse))
             {
-                var newResponse = action.Execute(previousResponse);
+                var newResponse = actionInvoker.Invoke(previousResponse);
                 return new Result(true, stateFactory.Create(newResponse));
             }
 

@@ -14,28 +14,28 @@ namespace Restbucks.NewClient.RulesEngine
             this.client = client;
         }
 
-        public IAction SubmitForm(IFormStrategy formStrategy)
+        public IActionInvoker SubmitForm(IFormStrategy formStrategy)
         {
-            return new DeferredAction(() => new SubmitForm(formStrategy, client));
+            return new DeferredActionInvoker(() => new SubmitForm(formStrategy, client));
         }
 
-        public IAction ClickLink(ILinkStrategy linkStrategy)
+        public IActionInvoker ClickLink(ILinkStrategy linkStrategy)
         {
-            return new DeferredAction(() => new ClickLink(linkStrategy, client));
+            return new DeferredActionInvoker(() => new ClickLink(linkStrategy, client));
         }
 
-        private class DeferredAction : IAction
+        private class DeferredActionInvoker : IActionInvoker
         {
-            private readonly Func<IAction> createAction;
+            private readonly Func<IActionInvoker> createAction;
 
-            public DeferredAction(Func<IAction> createAction)
+            public DeferredActionInvoker(Func<IActionInvoker> createAction)
             {
                 this.createAction = createAction;
             }
 
-            public HttpResponseMessage Execute(HttpResponseMessage previousResponse)
+            public HttpResponseMessage Invoke(HttpResponseMessage previousResponse)
             {
-                return createAction().Execute(previousResponse);
+                return createAction().Invoke(previousResponse);
             }
         }
     }
