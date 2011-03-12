@@ -16,14 +16,12 @@ namespace Restbucks.NewClient.RulesEngine
 
         public Func<HttpResponseMessage, bool> FormExists(IFormStrategy formStrategy)
         {
-            FormInfo formInfo;
-            return r => formStrategy.TryGetFormInfo(r, out formInfo);
+            return r => formStrategy.GetFormInfo(r) != null;
         }
 
         public Func<HttpResponseMessage, bool> LinkExists(ILinkStrategy linkStrategy)
         {
-            LinkInfo linkInfo;
-            return r => linkStrategy.TryGetLinkInfo(r, out linkInfo);
+            return r => linkStrategy.GetLinkInfo(r) != null;
         }
     }
 }

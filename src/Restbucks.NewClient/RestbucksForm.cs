@@ -35,7 +35,13 @@ namespace Restbucks.NewClient
             return formInfo;
         }
 
-        public bool TryGetFormInfo(HttpResponseMessage response, out FormInfo formInfo)
+        public bool FormExists(HttpResponseMessage response)
+        {
+            FormInfo formInfo;
+            return TryGetFormInfo(response, out formInfo);
+        }
+
+        private bool TryGetFormInfo(HttpResponseMessage response, out FormInfo formInfo)
         {
             var entityBody = response.Content.ReadAsObject<Shop>(RestbucksFormatter.Instance);
             var form = (from f in entityBody.Forms
@@ -52,12 +58,6 @@ namespace Restbucks.NewClient
 
             formInfo = new FormInfo(resourceUri, new HttpMethod(form.Method), new MediaTypeHeaderValue(form.MediaType));
             return true;
-        }
-
-        public bool FormExists(HttpResponseMessage response)
-        {
-            FormInfo formInfo;
-            return TryGetFormInfo(response, out formInfo);
         }
     }
 }

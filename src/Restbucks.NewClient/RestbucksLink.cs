@@ -33,7 +33,7 @@ namespace Restbucks.NewClient
         }
 
         public LinkInfo GetLinkInfo(HttpResponseMessage response)
-        {
+        {            
             LinkInfo linkInfo;
             var success = TryGetLinkInfo(response, out linkInfo);
 
@@ -45,7 +45,13 @@ namespace Restbucks.NewClient
             return linkInfo;
         }
 
-        public bool TryGetLinkInfo(HttpResponseMessage response, out LinkInfo linkInfo)
+        public bool LinkExists(HttpResponseMessage response)
+        {
+            LinkInfo linkInfo;
+            return TryGetLinkInfo(response, out linkInfo);
+        }
+
+        private bool TryGetLinkInfo(HttpResponseMessage response, out LinkInfo linkInfo)
         {
             var entityBody = response.Content.ReadAsObject<Shop>(RestbucksFormatter.Instance);
             var link = (from l in (entityBody).Links
@@ -62,12 +68,6 @@ namespace Restbucks.NewClient
             linkInfo = new LinkInfo(resourceUri, new MediaTypeHeaderValue(link.MediaType));
 
             return true;
-        }
-
-        public bool LinkExists(HttpResponseMessage response)
-        {
-            LinkInfo linkInfo;
-            return TryGetLinkInfo(response, out linkInfo);
         }
     }
 }

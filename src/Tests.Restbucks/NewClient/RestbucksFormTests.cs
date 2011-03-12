@@ -49,29 +49,6 @@ namespace Tests.Restbucks.NewClient
         }
 
         [Test]
-        public void TryGetShouldReturnTrueAndSetFormInfoIfFormExists()
-        {
-            FormInfo formInfo;
-            var form = RestbucksForm.WithId("rfq");
-            var result = form.TryGetFormInfo(CreateResponse(), out formInfo);
-
-            Assert.IsTrue(result);
-            Assert.AreEqual(ContentType, formInfo.ContentType);
-            Assert.AreEqual(Method, formInfo.Method);
-        }
-
-        [Test]
-        public void TryGetShouldReturnFalseAndSetFormInfoToNullIfFormDoesNotExist()
-        {
-            FormInfo formInfo;
-            var form = RestbucksForm.WithId("xyz");
-            var result = form.TryGetFormInfo(CreateResponse(), out formInfo);
-
-            Assert.IsFalse(result);
-            Assert.IsNull(formInfo);
-        }
-
-        [Test]
         public void ShouldReturnTrueIfFormExists()
         {
             var form = RestbucksForm.WithId("rfq");         

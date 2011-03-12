@@ -33,28 +33,6 @@ namespace Tests.Restbucks.NewClient
         }
 
         [Test]
-        public void TryGetShouldReturnTrueAndSetLinkInfoIfLinkExists()
-        {
-            var link = RestbucksLink.WithRel(new StringLinkRelation("rfq"));
-            LinkInfo linkInfo;
-            var result = link.TryGetLinkInfo(CreateResponse(), out linkInfo);
-
-            Assert.IsTrue(result);
-            Assert.AreEqual(new Uri("http://localhost/virtual-directory/request-for-quote"), linkInfo.ResourceUri);
-        }
-
-        [Test]
-        public void TryGetShouldReturnFalseAndSetLinkInfoToNullIfLinkDoesNotExist()
-        {
-            var link = RestbucksLink.WithRel(new StringLinkRelation("xyz"));
-            LinkInfo linkInfo;
-            var result = link.TryGetLinkInfo(CreateResponse(), out linkInfo);
-
-            Assert.IsFalse(result);
-            Assert.IsNull(linkInfo);
-        }
-
-        [Test]
         public void ShouldReturnTrueIfLinkExists()
         {
             var link = RestbucksLink.WithRel(new Uri("http://relations/rfq"));
