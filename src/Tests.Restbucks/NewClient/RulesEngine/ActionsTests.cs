@@ -24,5 +24,17 @@ namespace Tests.Restbucks.NewClient.RulesEngine
 
             action.VerifyAllExpectations();
         }
+
+        [Test]
+        public void ShouldReturnInvokerThatInvokesSuppliedFunction()
+        {
+            var newResponse = new HttpResponseMessage();
+            var client = new HttpClient();
+
+            var actions = new Actions(client);
+            var invoker = actions.Do((r, c) => newResponse);
+
+            Assert.AreEqual(newResponse, invoker.Invoke(new HttpResponseMessage()));
+        }
     }
 }
