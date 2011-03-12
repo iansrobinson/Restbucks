@@ -17,9 +17,9 @@ namespace Restbucks.NewClient.RulesEngine
             return new When(new T());
         }
 
-        public static IExecuteAction IsTrue(params Func<HttpResponseMessage, bool>[] conditions)
+        public static IExecuteAction IsTrue(Func<HttpResponseMessage, bool> condition)
         {
-            return new When(new ConditionWrapper(conditions));
+            return new When(new ConditionWrapper(condition));
         }
 
         private When(ICondition condition)
@@ -55,16 +55,16 @@ namespace Restbucks.NewClient.RulesEngine
 
         private class ConditionWrapper : ICondition
         {
-            private readonly IEnumerable<Func<HttpResponseMessage, bool>> conditions;
+            private readonly Func<HttpResponseMessage, bool> condition;
 
-            public ConditionWrapper(params Func<HttpResponseMessage, bool>[] conditions)
+            public ConditionWrapper(Func<HttpResponseMessage, bool> condition)
             {
-                this.conditions = conditions;
+                this.condition = condition;
             }
 
             public bool IsApplicable(HttpResponseMessage response)
             {
-                return conditions.Aggregate(true, (result, condition) => result && condition(response), result => result);
+                return condition(response);
             }
         }
     }

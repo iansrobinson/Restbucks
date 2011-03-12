@@ -82,7 +82,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RulesEngine\FormatterNotFoundException.cs" />
     <Compile Include="RulesEngine\FormInfo.cs" />
-    <Compile Include="RulesEngine\HttpContentAdapter.cs" />
     <Compile Include="RulesEngine\IAction.cs" />
     <Compile Include="RulesEngine\ICondition.cs" />
     <Compile Include="RulesEngine\ApplicationContext.cs" />

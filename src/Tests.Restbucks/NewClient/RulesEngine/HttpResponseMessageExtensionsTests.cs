@@ -17,28 +17,28 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         public void ShouldReturnTrueIfLinkExists()
         {
             var response = CreateResponse();
-            Assert.IsTrue(response.LinkExists(RestbucksLink.WithRel("rfq")));
+            Assert.IsTrue(response.ContainsLink(RestbucksLink.WithRel("rfq")));
         }
 
         [Test]
         public void ShouldReturnFalseIfLinkDoesNotExist()
         {
             var response = CreateResponse();
-            Assert.IsFalse(response.LinkExists(RestbucksLink.WithRel("xyz")));
+            Assert.IsFalse(response.ContainsLink(RestbucksLink.WithRel("xyz")));
         }
 
         [Test]
         public void ShouldReturnTrueIfFormExists()
         {
             var response = CreateResponse();
-            Assert.IsTrue(response.FormExists(RestbucksForm.WithId("order")));
+            Assert.IsTrue(response.ContainsForm(RestbucksForm.WithId("order")));
         }
 
         [Test]
         public void ShouldReturnFalseIfFormDoesNotExist()
         {
             var response = CreateResponse();
-            Assert.IsFalse(response.FormExists(RestbucksForm.WithId("xyz")));
+            Assert.IsFalse(response.ContainsForm(RestbucksForm.WithId("xyz")));
         }
 
         private static HttpResponseMessage CreateResponse()
