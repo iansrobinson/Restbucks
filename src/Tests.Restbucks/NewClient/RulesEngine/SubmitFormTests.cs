@@ -22,13 +22,13 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         {
             var formInfo = new FormInfo(ResourceUri, HttpMethod, ContentType);
 
-            var formInfoFactory = MockRepository.GenerateStub<IFormInfoFactory>();
-            formInfoFactory.Expect(f => f.CreateFormInfo(PreviousResponse)).Return(formInfo);
+            var formStrategy = MockRepository.GenerateStub<IFormStrategy>();
+            formStrategy.Expect(f => f.GetFormInfo(PreviousResponse)).Return(formInfo);
 
             var mockEndpoint = new MockEndpoint(new HttpResponseMessage());
             var client = new HttpClient {Channel = mockEndpoint};
 
-            var submitForm = new SubmitForm(formInfoFactory, client);
+            var submitForm = new SubmitForm(formStrategy, client);
             submitForm.Execute(PreviousResponse);
 
             Assert.AreEqual(ResourceUri, mockEndpoint.ReceivedRequest.RequestUri);

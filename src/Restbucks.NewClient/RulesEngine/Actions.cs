@@ -18,20 +18,16 @@ namespace Restbucks.NewClient.RulesEngine
 
         public IAction SubmitForm(IFormStrategy formStrategy)
         {
-            return new DeferredAction(() =>
-            {
-                var formInfoFactory = new ApplicationFormInfoFactory(formStrategy, contentAdapter, context);
-                return new SubmitForm(formInfoFactory, client);
-            });
+            return new DeferredAction(() => new SubmitForm(formStrategy, client));
         }
 
         public IAction ClickLink(ILinkStrategy linkStrategy)
         {
             return new DeferredAction(() =>
-            {
-                var linkInfoFactory = new ApplicationLinkInfoFactory(linkStrategy, contentAdapter);
-                return new ClickLink(linkInfoFactory, client);
-            });
+                                          {
+                                              var linkInfoFactory = new ApplicationLinkInfoFactory(linkStrategy, contentAdapter);
+                                              return new ClickLink(linkInfoFactory, client);
+                                          });
         }
 
         private class DeferredAction : IAction

@@ -4,19 +4,19 @@ namespace Restbucks.NewClient.RulesEngine
 {
     public class SubmitForm : IAction
     {
-        private readonly IFormInfoFactory formInfoFactory;
+        private readonly IFormStrategy formStrategy;
         private readonly HttpClient client;
 
-        public SubmitForm(IFormInfoFactory formInfoFactory, HttpClient client)
+        public SubmitForm(IFormStrategy formStrategy, HttpClient client)
         {
-            this.formInfoFactory = formInfoFactory;
+            this.formStrategy = formStrategy;
             this.client = client;
         }
 
         public HttpResponseMessage Execute(HttpResponseMessage previousResponse)
         {
-            var formInfo = formInfoFactory.CreateFormInfo(previousResponse);
-
+            var formInfo = formStrategy.GetFormInfo(previousResponse);
+            
             var content = new StringContent(string.Empty);
             content.Headers.ContentType = formInfo.ContentType;
 
