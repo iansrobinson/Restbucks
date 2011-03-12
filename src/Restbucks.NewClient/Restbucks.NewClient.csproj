@@ -74,7 +74,6 @@
     </Compile>
     <Compile Include="RulesEngine\Actions.cs" />
     <Compile Include="RulesEngine\ClickLink.cs" />
-    <Compile Include="RulesEngine\Conditions.cs" />
     <Compile Include="RulesEngine\ControlNotFoundException.cs" />
     <Compile Include="RulesEngine\HttpResponseMessageExtensions.cs" />
     <Compile Include="RulesEngine\IActions.cs" />
