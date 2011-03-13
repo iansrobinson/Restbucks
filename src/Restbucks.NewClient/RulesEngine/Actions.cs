@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using Restbucks.RestToolkit.Utils;
 
 namespace Restbucks.NewClient.RulesEngine
 {
@@ -9,6 +10,7 @@ namespace Restbucks.NewClient.RulesEngine
 
         public Actions(HttpClient client)
         {
+            Check.IsNotNull(client, "client");
             this.client = client;
         }
 

@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using NUnit.Framework;
 using Restbucks.NewClient.RulesEngine;
 using Rhino.Mocks;
@@ -35,6 +36,13 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var invoker = actions.Do((r, c) => newResponse);
 
             Assert.AreEqual(newResponse, invoker.Invoke(new HttpResponseMessage()));
+        }
+
+        [Test]
+        [ExpectedException(ExpectedException = typeof(ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: client")]
+        public void ThrowsExceptionIfHttpClientIsNull()
+        {
+            new Actions(null);
         }
     }
 }
