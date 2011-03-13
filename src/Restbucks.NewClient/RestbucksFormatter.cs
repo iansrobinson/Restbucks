@@ -38,7 +38,7 @@ namespace Restbucks.NewClient
             }
             catch (Exception ex)
             {
-                Log.Warn("Unexpected error writing application/restbucks+xml to response stream.", ex);
+                Log.Warn(string.Format("Unexpected error writing {0} to response stream.", RestbucksMediaType.Value), ex);
                 throw;
             }
         }
@@ -73,14 +73,14 @@ namespace Restbucks.NewClient
             }
             catch (Exception ex)
             {
-                Log.Warn("Unexpected error reading application/restbucks+xml from request stream.", ex);
+                Log.Warn(string.Format("Unexpected error reading {0} from request stream.", RestbucksMediaType.Value), ex);
                 throw;
             }
         }
 
         public IEnumerable<MediaTypeHeaderValue> SupportedMediaTypes
         {
-            get { return new[] {new MediaTypeHeaderValue(RestbucksMediaType.Value),}; }
+            get { return new[] {new MediaTypeHeaderValue(RestbucksMediaType.Value)}; }
         }
     }
 }

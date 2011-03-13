@@ -38,7 +38,7 @@ namespace Restbucks.Quoting.Service.Processors
             }
             catch (Exception ex)
             {
-                Log.Warn("Unexpected error writing application/restbucks+xml to response stream.", ex);
+                Log.Warn(string.Format("Unexpected error writing {0} to response stream.", RestbucksMediaType.Value), ex);
                 throw;
             }
         }
@@ -57,15 +57,23 @@ namespace Restbucks.Quoting.Service.Processors
 
             try
             {
+                if (stream.Position != 0)
+                {
+                    if (!stream.CanSeek)
+                    {
+                        throw new InvalidOperationException("The stream was already consumed. It cannot be read again.");
+                    }
+                    stream.Seek(0, SeekOrigin.Begin);
+                }
                 return new ShopAssembler(XElement.Load(stream)).AssembleShop();
             }
-            catch (XmlException)
+            catch (XmlException ex)
             {
-                throw new InvalidFormatException("Incorrectly formatted entity body. Request must be formatted according to application/restbucks+xml.");
+                throw new InvalidFormatException("Incorrectly formatted entity body. Request must be formatted according to application/restbucks+xml.", ex);
             }
             catch (Exception ex)
             {
-                Log.Warn("Unexpected error reading application/restbucks+xml from request stream.", ex);
+                Log.Warn(string.Format("Unexpected error reading {0} from request stream.", RestbucksMediaType.Value), ex);
                 throw;
             }
         }
