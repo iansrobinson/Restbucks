@@ -16,7 +16,6 @@ namespace Tests.Restbucks.NewClient.RulesEngine
     public class HttpResponseMessageTests
     {
         [Test]
-        [Ignore("Can't get this to work")]
         public void CanCallReadAsObjectMoreThanOnce()
         {
             var response = CreateResponse();
@@ -48,24 +47,6 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             content.Headers.ContentType = new MediaTypeHeaderValue(RestbucksMediaType.Value);
 
             return new HttpResponseMessage {Content = content};
-        }
-    }
-
-    public class InternedHttpContent : HttpContent
-    {
-        protected override Task SerializeToStreamAsync(Stream stream, TransportContext context)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void SerializeToStream(Stream stream, TransportContext context)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override bool TryComputeLength(out long length)
-        {
-            throw new NotImplementedException();
         }
     }
 }

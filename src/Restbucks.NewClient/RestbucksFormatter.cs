@@ -57,11 +57,19 @@ namespace Restbucks.NewClient
 
             try
             {
+                if (stream.Position != 0)
+                {
+                    if (!stream.CanSeek)
+                    {
+                        throw new InvalidOperationException("The stream was already consumed. It cannot be read again.");
+                    }
+                    stream.Seek(0, SeekOrigin.Begin);
+                }
                 return new ShopAssembler(XElement.Load(stream)).AssembleShop();
             }
-            catch (XmlException)
+            catch (XmlException ex)
             {
-                throw new InvalidFormatException("Incorrectly formatted entity body. Request must be formatted according to application/restbucks+xml.");
+                throw new InvalidFormatException("Incorrectly formatted entity body. Request must be formatted according to application/restbucks+xml.", ex);
             }
             catch (Exception ex)
             {

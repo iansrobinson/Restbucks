@@ -140,7 +140,6 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         }
 
         [Test]
-        [Ignore]
         public void ShouldAllowComplexConditions()
         {
             var previousResponse = CreateResponse();
