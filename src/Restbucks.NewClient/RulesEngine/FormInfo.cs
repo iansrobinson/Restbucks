@@ -9,12 +9,14 @@ namespace Restbucks.NewClient.RulesEngine
         private readonly Uri resourceUri;
         private readonly HttpMethod method;
         private readonly MediaTypeHeaderValue contentType;
+        private readonly IFormDataStrategy formDataStrategy;
         
-        public FormInfo(Uri resourceUri, HttpMethod method, MediaTypeHeaderValue contentType)
+        public FormInfo(Uri resourceUri, HttpMethod method, MediaTypeHeaderValue contentType, IFormDataStrategy formDataStrategy)
         {
             this.resourceUri = resourceUri;
             this.method = method;
             this.contentType = contentType;
+            this.formDataStrategy = formDataStrategy;
         }
 
         public Uri ResourceUri
@@ -30,6 +32,11 @@ namespace Restbucks.NewClient.RulesEngine
         public MediaTypeHeaderValue ContentType
         {
             get { return contentType; }
+        }
+
+        public IFormDataStrategy FormDataStrategy
+        {
+            get { return formDataStrategy; }
         }
     }
 }

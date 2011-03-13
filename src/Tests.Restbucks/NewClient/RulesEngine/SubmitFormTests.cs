@@ -20,7 +20,8 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         [Test]
         public void ShouldSubmitFormWithCorrectControlData()
         {
-            var formInfo = new FormInfo(ResourceUri, HttpMethod, ContentType);
+            var formDataStrategy = MockRepository.GenerateStub<IFormDataStrategy>();
+            var formInfo = new FormInfo(ResourceUri, HttpMethod, ContentType, formDataStrategy);
 
             var formStrategy = MockRepository.GenerateStub<IFormStrategy>();
             formStrategy.Expect(f => f.GetFormInfo(PreviousResponse)).Return(formInfo);

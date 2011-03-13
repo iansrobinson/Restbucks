@@ -55,9 +55,18 @@ namespace Restbucks.NewClient
             }
 
             var resourceUri = form.Resource.IsAbsoluteUri ? form.Resource : new Uri(entityBody.BaseUri, form.Resource);
+            var formDataStrategy = new RestbucksFormDataStrategy();
 
-            formInfo = new FormInfo(resourceUri, new HttpMethod(form.Method), new MediaTypeHeaderValue(form.MediaType));
+            formInfo = new FormInfo(resourceUri, new HttpMethod(form.Method), new MediaTypeHeaderValue(form.MediaType), formDataStrategy);
             return true;
+        }
+
+        private class RestbucksFormDataStrategy : IFormDataStrategy
+        {
+            public HttpContent CreateFormData(HttpResponseMessage previousResponse, ApplicationContext context)
+            {
+                return null;
+            }
         }
     }
 }
