@@ -1,14 +1,8 @@
-﻿using System;
-using System.IO;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
-using Microsoft.Net.Http;
+﻿using Microsoft.Net.Http;
 using NUnit.Framework;
-using Restbucks.Client.Formatters;
 using Restbucks.MediaType;
 using Restbucks.NewClient;
+using Tests.Restbucks.NewClient.Helpers;
 
 namespace Tests.Restbucks.NewClient.RulesEngine
 {
@@ -18,35 +12,13 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         [Test]
         public void CanCallReadAsObjectMoreThanOnce()
         {
-            var response = CreateResponse();
+            var response = StubResponse.CreateResponse();
 
-            var entityBody1 = response.Content.ReadAsObject<Shop>(RestbucksFormatter.Instance);          
+            var entityBody1 = response.Content.ReadAsObject<Shop>(RestbucksFormatter.Instance);
             var entityBody2 = response.Content.ReadAsObject<Shop>(RestbucksFormatter.Instance);
 
-            Assert.AreEqual(new Uri("http://localhost/virtual-directory/"), entityBody1.BaseUri);
-            Assert.AreEqual(new Uri("http://localhost/virtual-directory/"), entityBody2.BaseUri);
-        }
-
-        private static HttpResponseMessage CreateResponse()
-        {
-            var entityBody = new ShopBuilder(new Uri("http://localhost/virtual-directory/"))
-                .AddLink(new Link(
-                             new Uri("request-for-quote", UriKind.Relative),
-                             RestbucksMediaType.Value,
-                             new StringLinkRelation("prefetch")))
-                .AddForm(new Form(
-                             "order-form",
-                             new Uri("orders", UriKind.Relative),
-                             "post",
-                             RestbucksMediaType.Value,
-                             null as Shop))
-                .Build();
-
-            var content = entityBody.ToContent(RestbucksMediaTypeFormatter.Instance);
-            content.LoadIntoBuffer();
-            content.Headers.ContentType = new MediaTypeHeaderValue(RestbucksMediaType.Value);
-
-            return new HttpResponseMessage {Content = content};
+            Assert.AreEqual(StubResponse.BaseUri, entityBody1.BaseUri);
+            Assert.AreEqual(StubResponse.BaseUri, entityBody2.BaseUri);
         }
     }
 }

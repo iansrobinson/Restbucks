@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using Microsoft.Net.Http;
 using NUnit.Framework;
-using Restbucks.Client.Formatters;
 using Restbucks.MediaType;
 using Restbucks.NewClient;
 using Restbucks.NewClient.RulesEngine;
 using Rhino.Mocks;
+using Tests.Restbucks.NewClient.Helpers;
 
 namespace Tests.Restbucks.NewClient.RulesEngine
 {
@@ -142,14 +140,14 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         [Test]
         public void ShouldAllowComplexConditions()
         {
-            var previousResponse = CreateResponse();
+            var previousResponse = StubResponse.CreateResponse();
 
             var actionInvoker = MockRepository.GenerateStub<IActionInvoker>();
             actionInvoker.Expect(a => a.Invoke(previousResponse)).Return(new HttpResponseMessage {StatusCode = HttpStatusCode.Accepted});
 
             var state = MockRepository.GenerateStub<IState>();
 
-            var rule = When.IsTrue(r => r.ContainsLink(RestbucksLink.WithRel(new StringLinkRelation("prefetch")))
+            var rule = When.IsTrue(r => r.ContainsLink(RestbucksLink.WithRel(new StringLinkRelation("http://relations.restbucks.com/rfq")))
                                         && r.ContainsForm(RestbucksForm.WithId("order-form")))
                 .ExecuteAction(actionInvoker)
                 .ReturnState(r => state);
@@ -158,27 +156,6 @@ namespace Tests.Restbucks.NewClient.RulesEngine
 
             Assert.IsTrue(result.IsSuccessful);
             Assert.AreEqual(state, result.State);
-        }
-
-        private static HttpResponseMessage CreateResponse()
-        {
-            var entityBody = new ShopBuilder(new Uri("http://localhost/virtual-directory/"))
-                .AddLink(new Link(
-                             new Uri("request-for-quote", UriKind.Relative),
-                             RestbucksMediaType.Value,
-                             new StringLinkRelation("prefetch")))
-                .AddForm(new Form(
-                             "order-form",
-                             new Uri("orders", UriKind.Relative),
-                             "post",
-                             RestbucksMediaType.Value,
-                             null as Shop))
-                .Build();
-
-            var content = entityBody.ToContent(RestbucksMediaTypeFormatter.Instance);
-            content.Headers.ContentType = new MediaTypeHeaderValue(RestbucksMediaType.Value);
-
-            return new HttpResponseMessage {Content = content};
         }
     }
 }

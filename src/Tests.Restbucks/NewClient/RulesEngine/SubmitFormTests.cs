@@ -6,6 +6,7 @@ using Restbucks.MediaType;
 using Restbucks.NewClient.RulesEngine;
 using Rhino.Mocks;
 using Tests.Restbucks.Client.Helpers;
+using Tests.Restbucks.NewClient.Helpers;
 
 namespace Tests.Restbucks.NewClient.RulesEngine
 {
