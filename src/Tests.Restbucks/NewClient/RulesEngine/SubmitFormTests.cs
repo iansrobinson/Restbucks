@@ -6,7 +6,6 @@ using Restbucks.MediaType;
 using Restbucks.NewClient.RulesEngine;
 using Rhino.Mocks;
 using Tests.Restbucks.Client.Helpers;
-using Tests.Restbucks.NewClient.Helpers;
 
 namespace Tests.Restbucks.NewClient.RulesEngine
 {
@@ -22,6 +21,8 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         public void ShouldSubmitFormWithCorrectControlData()
         {
             var formDataStrategy = MockRepository.GenerateStub<IFormDataStrategy>();
+            formDataStrategy.Stub(s => s.CreateFormData(PreviousResponse)).Return(new StringContent(string.Empty));
+
             var formInfo = new FormInfo(ResourceUri, HttpMethod, ContentType, formDataStrategy);
 
             var formStrategy = MockRepository.GenerateStub<IFormStrategy>();
@@ -50,7 +51,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             formStrategy.Expect(f => f.GetFormInfo(PreviousResponse)).Return(formInfo);
 
             var mockEndpoint = new MockEndpoint(new HttpResponseMessage());
-            var client = new HttpClient { Channel = mockEndpoint };
+            var client = new HttpClient {Channel = mockEndpoint};
 
             var submitForm = new SubmitForm(formStrategy);
             submitForm.Execute(PreviousResponse, client);
