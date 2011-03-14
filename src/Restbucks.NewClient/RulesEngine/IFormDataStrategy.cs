@@ -4,6 +4,6 @@ namespace Restbucks.NewClient.RulesEngine
 {
     public interface IFormDataStrategy
     {
-        HttpContent CreateFormData(HttpResponseMessage previousResponse, ApplicationContext context);
+        HttpContent CreateFormData(HttpResponseMessage previousResponse);
     }
 }

@@ -63,7 +63,7 @@ namespace Restbucks.NewClient
 
         private class RestbucksFormDataStrategy : IFormDataStrategy
         {
-            public HttpContent CreateFormData(HttpResponseMessage previousResponse, ApplicationContext context)
+            public HttpContent CreateFormData(HttpResponseMessage previousResponse)
             {
                 return null;
             }

@@ -37,5 +37,25 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             Assert.AreEqual(HttpMethod, mockEndpoint.ReceivedRequest.Method);
             Assert.AreEqual(ContentType, mockEndpoint.ReceivedRequest.Content.Headers.ContentType);
         }
+
+        [Test]
+        public void ShouldUseFormDataStrategyToCreateFormdata()
+        {
+            var formDataStrategy = MockRepository.GenerateMock<IFormDataStrategy>();
+            formDataStrategy.Expect(s => s.CreateFormData(PreviousResponse)).Return(new StringContent(string.Empty));
+
+            var formInfo = new FormInfo(ResourceUri, HttpMethod, ContentType, formDataStrategy);
+
+            var formStrategy = MockRepository.GenerateStub<IFormStrategy>();
+            formStrategy.Expect(f => f.GetFormInfo(PreviousResponse)).Return(formInfo);
+
+            var mockEndpoint = new MockEndpoint(new HttpResponseMessage());
+            var client = new HttpClient { Channel = mockEndpoint };
+
+            var submitForm = new SubmitForm(formStrategy);
+            submitForm.Execute(PreviousResponse, client);
+
+            formDataStrategy.VerifyAllExpectations();
+        }
     }
 }
