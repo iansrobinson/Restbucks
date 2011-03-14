@@ -9,7 +9,6 @@ namespace Restbucks.NewClient.RulesEngine
         private readonly IDictionary<HttpStatusCode, IStateFactory> factoryWorkers;
         private readonly IStateFactory defaultWorker;
 
-
         public StateFactoryCollection(IDictionary<HttpStatusCode, IStateFactory> factoryWorkers) : this(factoryWorkers, UnsuccessfulStateFactory.Instance)
         {
         }

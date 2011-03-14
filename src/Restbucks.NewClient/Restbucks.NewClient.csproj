@@ -77,6 +77,7 @@
     <Compile Include="RulesEngine\Actions.cs" />
     <Compile Include="RulesEngine\ClickLink.cs" />
     <Compile Include="RulesEngine\ControlNotFoundException.cs" />
+    <Compile Include="RulesEngine\EntityBodyKey.cs" />
     <Compile Include="RulesEngine\HttpResponseMessageExtensions.cs" />
     <Compile Include="RulesEngine\IAction.cs" />
     <Compile Include="RulesEngine\IActionInvoker.cs" />
@@ -88,6 +89,7 @@
     <Compile Include="RulesEngine\FormInfo.cs" />
     <Compile Include="RulesEngine\ICondition.cs" />
     <Compile Include="RulesEngine\ApplicationContext.cs" />
+    <Compile Include="RulesEngine\IKey.cs" />
     <Compile Include="RulesEngine\ILinkStrategy.cs" />
     <Compile Include="RulesEngine\IRule.cs" />
     <Compile Include="RulesEngine\IState.cs" />
@@ -99,6 +101,7 @@
     <Compile Include="RulesEngine\Rules.cs" />
     <Compile Include="RulesEngine\StateFactory.cs" />
     <Compile Include="RulesEngine\StateFactoryCollection.cs" />
+    <Compile Include="RulesEngine\StringKey.cs" />
     <Compile Include="RulesEngine\SubmitForm.cs" />
     <Compile Include="RulesEngine\UnsuccessfulState.cs" />
     <Compile Include="RulesEngine\When.cs" />

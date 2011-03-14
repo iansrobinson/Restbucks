@@ -1,17 +1,27 @@
-﻿namespace Restbucks.NewClient.RulesEngine
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Restbucks.NewClient.RulesEngine
 {
     public class ApplicationContext
     {
-        private readonly object input;
+        private readonly IDictionary<IKey, object> values;
 
-        public ApplicationContext(object input)
+        public ApplicationContext(params KeyValuePair<IKey, object>[] values)
         {
-            this.input = input;
+            this.values = new Dictionary<IKey, object>(values.Length);
+            values.ToList().ForEach(kv => this.values.Add(kv));
         }
 
         public object Input
         {
-            get { return input; }
+            get { return null; }
+        }
+
+        public T Get<T>(IKey key)
+        {
+            return (T) values[key];
         }
     }
 }
