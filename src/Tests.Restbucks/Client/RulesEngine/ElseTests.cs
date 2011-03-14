@@ -6,7 +6,7 @@ using Restbucks.Client;
 using Restbucks.Client.Keys;
 using Restbucks.Client.RulesEngine;
 using Restbucks.Client.States;
-using Tests.Restbucks.Client.States.Helpers;
+using Tests.Restbucks.Util;
 
 namespace Tests.Restbucks.Client.RulesEngine
 {

@@ -1,9 +1,12 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using NUnit.Framework;
+using Restbucks.MediaType;
 using Restbucks.NewClient;
 using Restbucks.NewClient.RulesEngine;
 using Tests.Restbucks.NewClient.Helpers;
+using Tests.Restbucks.Util;
 
 namespace Tests.Restbucks.NewClient
 {
@@ -49,6 +52,26 @@ namespace Tests.Restbucks.NewClient
         {
             var form = RestbucksForm.WithId("xyz");
             Assert.IsFalse(form.FormExists(StubResponse.CreateResponse()));
+        }
+
+        [Test]
+        public void ShouldReturnPrepopulatedFormDataStrategyIfFormDataIsNotNull()
+        {
+            var form = new Form("order-form", new Uri("http://localhost/orders"), "post", RestbucksMediaType.Value, new ShopBuilder(null).Build());
+            var dataStrategy = RestbucksForm.CreateDataStrategy(form);
+
+            Assert.IsInstanceOf(typeof(PrepopulatedFormDataStrategy), dataStrategy);
+            Assert.AreEqual(form, dataStrategy.GetPrivateFieldValue<Form>("form"));
+        }
+
+        [Test]
+        public void ShouldReturnApplicationContextFormDataStrategyIfFormDataIsNull()
+        {
+            var form = new Form("order-form", new Uri("http://localhost/orders"), "post", RestbucksMediaType.Value, null as Shop);
+            var dataStrategy = RestbucksForm.CreateDataStrategy(form);
+
+            Assert.IsInstanceOf(typeof(ApplicationContextFormDataStrategy), dataStrategy);
+           
         }
     }
 }

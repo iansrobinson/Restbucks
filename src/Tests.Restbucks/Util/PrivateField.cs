@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Tests.Restbucks.Client.States.Helpers
+namespace Tests.Restbucks.Util
 {
     public static class PrivateField
     {

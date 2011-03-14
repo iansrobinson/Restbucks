@@ -5,7 +5,7 @@ using Restbucks.Client.ResponseHandlers;
 using Restbucks.Client.RulesEngine;
 using Restbucks.Client.States;
 using Rhino.Mocks;
-using Tests.Restbucks.Client.States.Helpers;
+using Tests.Restbucks.Util;
 
 namespace Tests.Restbucks.Client.States
 {

@@ -15,6 +15,16 @@ namespace Restbucks.NewClient
             return new RestbucksForm(id);
         }
 
+        public static IFormDataStrategy CreateDataStrategy(Form form)
+        {
+            if (form.Instance == null)
+            {
+                return new ApplicationContextFormDataStrategy();
+            }
+
+            return new PrepopulatedFormDataStrategy(form);
+        }
+
         private readonly string id;
 
         private RestbucksForm(string id)
@@ -55,18 +65,10 @@ namespace Restbucks.NewClient
             }
 
             var resourceUri = form.Resource.IsAbsoluteUri ? form.Resource : new Uri(entityBody.BaseUri, form.Resource);
-            var formDataStrategy = new RestbucksFormDataStrategy();
+            var formDataStrategy = CreateDataStrategy(form);
 
             formInfo = new FormInfo(resourceUri, new HttpMethod(form.Method), new MediaTypeHeaderValue(form.MediaType), formDataStrategy);
             return true;
-        }
-
-        private class RestbucksFormDataStrategy : IFormDataStrategy
-        {
-            public HttpContent CreateFormData(HttpResponseMessage previousResponse)
-            {
-                return null;
-            }
         }
     }
 }

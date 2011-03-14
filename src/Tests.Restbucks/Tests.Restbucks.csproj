@@ -98,7 +98,6 @@
     <Compile Include="Client\RulesEngine\RulesTests.cs" />
     <Compile Include="Client\RulesEngine\RuleTests.cs" />
     <Compile Include="Client\RulesEngine\WhenTests.cs" />
-    <Compile Include="Client\States\Helpers\PrivateField.cs" />
     <Compile Include="Client\States\StartedStateTests.cs" />
     <Compile Include="MediaType\Assemblers\LinksAssemblerTests.cs" />
     <Compile Include="MediaType\Assemblers\ShopAssemblerTests.cs" />
@@ -151,6 +150,7 @@
     <Compile Include="RestToolkit\Hypermedia\UriFactoryWorkerTests.cs" />
     <Compile Include="RestToolkit\Utils\CheckStringTests.cs" />
     <Compile Include="RestToolkit\Utils\XmlTransformTests.cs" />
+    <Compile Include="Util\PrivateField.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Restbucks.Client\Restbucks.Client.csproj">
@@ -178,7 +178,9 @@
       <Name>Restbucks.RestToolkit</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Client\States\Helpers\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

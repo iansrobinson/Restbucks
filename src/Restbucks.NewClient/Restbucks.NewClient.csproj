@@ -67,6 +67,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationContextFormDataStrategy.cs" />
+    <Compile Include="PrepopulatedFormDataStrategy.cs" />
     <Compile Include="RestbucksForm.cs" />
     <Compile Include="RestbucksLink.cs" />
     <Compile Include="RestbucksFormatter.cs">
