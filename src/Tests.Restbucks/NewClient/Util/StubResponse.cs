@@ -5,7 +5,7 @@ using Microsoft.Net.Http;
 using Restbucks.Client.Formatters;
 using Restbucks.MediaType;
 
-namespace Tests.Restbucks.NewClient.Helpers
+namespace Tests.Restbucks.NewClient.Util
 {
     public static class StubResponse
     {
@@ -22,11 +22,11 @@ namespace Tests.Restbucks.NewClient.Helpers
             new UriLinkRelation(new Uri("http://relations.restbucks.com/rfq")));
 
         public static readonly Form Form = new Form(
-                             "order-form",
-                             new Uri("orders", UriKind.Relative),
-                             "post",
-                             RestbucksMediaType.Value,
-                             null as Shop);
+            "order-form",
+            new Uri("orders", UriKind.Relative),
+            "post",
+            RestbucksMediaType.Value,
+            null as Shop);
         
         public static HttpResponseMessage CreateResponse()
         {

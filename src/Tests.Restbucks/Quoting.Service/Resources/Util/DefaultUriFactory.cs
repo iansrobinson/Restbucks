@@ -1,8 +1,7 @@
 ﻿using Restbucks.Quoting.Service.Resources;
-using Restbucks.RestToolkit;
 using Restbucks.RestToolkit.Hypermedia;
 
-namespace Tests.Restbucks.Quoting.Service.Resources.Helpers
+namespace Tests.Restbucks.Quoting.Service.Resources.Util
 {
     public static class DefaultUriFactory
     {

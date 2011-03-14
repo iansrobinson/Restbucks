@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using Restbucks.MediaType;
 using Restbucks.NewClient;
-using Tests.Restbucks.NewClient.Helpers;
+using Tests.Restbucks.NewClient.Util;
 
 namespace Tests.Restbucks.NewClient.RulesEngine
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using Restbucks.Quoting;
 
-namespace Tests.Restbucks.Quoting.Service.Resources.Helpers
+namespace Tests.Restbucks.Quoting.Service.Resources.Util
 {
     public class StubQuotationEngine : IQuotationEngine
     {

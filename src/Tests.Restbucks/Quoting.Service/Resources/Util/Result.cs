@@ -1,7 +1,7 @@
 ﻿using System.Net.Http;
 using Restbucks.MediaType;
 
-namespace Tests.Restbucks.Quoting.Service.Resources.Helpers
+namespace Tests.Restbucks.Quoting.Service.Resources.Util
 {
     public class Result
     {

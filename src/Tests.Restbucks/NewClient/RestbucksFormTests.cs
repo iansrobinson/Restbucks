@@ -5,7 +5,7 @@ using NUnit.Framework;
 using Restbucks.MediaType;
 using Restbucks.NewClient;
 using Restbucks.NewClient.RulesEngine;
-using Tests.Restbucks.NewClient.Helpers;
+using Tests.Restbucks.NewClient.Util;
 using Tests.Restbucks.Util;
 
 namespace Tests.Restbucks.NewClient
@@ -70,8 +70,7 @@ namespace Tests.Restbucks.NewClient
             var form = new Form("order-form", new Uri("http://localhost/orders"), "post", RestbucksMediaType.Value, null as Shop);
             var dataStrategy = RestbucksForm.CreateDataStrategy(form);
 
-            Assert.IsInstanceOf(typeof(ApplicationContextFormDataStrategy), dataStrategy);
-           
+            Assert.IsInstanceOf(typeof(ApplicationContextFormDataStrategy), dataStrategy);           
         }
     }
 }

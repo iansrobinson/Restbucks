@@ -8,7 +8,7 @@ using Restbucks.Quoting;
 using Restbucks.Quoting.Service.Resources;
 using Rhino.Mocks;
 using Tests.Restbucks.Quoting.Service.Resources.helpers;
-using Tests.Restbucks.Quoting.Service.Resources.Helpers;
+using Tests.Restbucks.Quoting.Service.Resources.Util;
 
 namespace Tests.Restbucks.Quoting.Service.Resources
 {

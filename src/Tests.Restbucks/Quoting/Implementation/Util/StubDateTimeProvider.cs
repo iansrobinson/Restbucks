@@ -1,7 +1,7 @@
 ﻿using System;
 using Restbucks.Quoting;
 
-namespace Tests.Restbucks.Quoting.Implementation.Helpers
+namespace Tests.Restbucks.Quoting.Implementation.Util
 {
     public class StubDateTimeProvider : IDateTimeProvider
     {
