@@ -14,7 +14,7 @@ namespace Restbucks.NewClient
             this.form = form;
         }
 
-        public HttpContent CreateFormData(HttpResponseMessage previousResponse)
+        public HttpContent CreateFormData(HttpResponseMessage previousResponse, ApplicationContext context)
         {
             throw new NotImplementedException();
         }

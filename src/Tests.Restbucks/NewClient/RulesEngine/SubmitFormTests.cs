@@ -21,7 +21,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         public void ShouldSubmitFormWithCorrectControlData()
         {
             var formDataStrategy = MockRepository.GenerateStub<IFormDataStrategy>();
-            formDataStrategy.Stub(s => s.CreateFormData(PreviousResponse)).Return(new StringContent(string.Empty));
+            formDataStrategy.Stub(s => s.CreateFormData(PreviousResponse, null)).Return(new StringContent(string.Empty));
 
             var formInfo = new FormInfo(ResourceUri, HttpMethod, ContentType, formDataStrategy);
 
@@ -40,10 +40,10 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         }
 
         [Test]
-        public void ShouldUseFormDataStrategyToCreateFormdata()
+        public void ShouldUseFormDataStrategyToCreateFormData()
         {
             var formDataStrategy = MockRepository.GenerateMock<IFormDataStrategy>();
-            formDataStrategy.Expect(s => s.CreateFormData(PreviousResponse)).Return(new StringContent(string.Empty));
+            formDataStrategy.Expect(s => s.CreateFormData(PreviousResponse, null)).Return(new StringContent(string.Empty));
 
             var formInfo = new FormInfo(ResourceUri, HttpMethod, ContentType, formDataStrategy);
 

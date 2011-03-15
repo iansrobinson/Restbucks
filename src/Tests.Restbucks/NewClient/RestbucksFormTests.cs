@@ -74,6 +74,7 @@ namespace Tests.Restbucks.NewClient
 
             Assert.IsInstanceOf(typeof(ApplicationContextFormDataStrategy), dataStrategy);
             Assert.AreEqual(expectedKey, dataStrategy.GetPrivateFieldValue<EntityBodyKey>("key"));
+            Assert.AreEqual(new MediaTypeHeaderValue(form.MediaType), dataStrategy.GetPrivateFieldValue<MediaTypeHeaderValue>("contentType"));
         }
 
         [Test]

@@ -15,7 +15,7 @@ namespace Restbucks.NewClient.RulesEngine
         {
             var formInfo = formStrategy.GetFormInfo(previousResponse);
 
-            var content = formInfo.DataStrategy.CreateFormData(previousResponse);
+            var content = formInfo.DataStrategy.CreateFormData(previousResponse, null);
             content.Headers.ContentType = formInfo.ContentType;
 
             var request = new HttpRequestMessage
