@@ -17,17 +17,18 @@ namespace Restbucks.NewClient
 
         public static IFormDataStrategy CreateDataStrategy(Form form)
         {
+            var contentType = new MediaTypeHeaderValue(form.MediaType);
+                
             if (form.Instance == null)
             {
                 if (form.Schema == null)
                 {
                     throw new InvalidOperationException(string.Format("Unable to create a data strategy for empty form with null schema attribute. Id: '{0}'.", form.Id));
                 }
-                var contentType = new MediaTypeHeaderValue(form.MediaType);
                 return new ApplicationContextFormDataStrategy(new EntityBodyKey(form.Id, contentType, form.Schema), contentType);
             }
 
-            return new PrepopulatedFormDataStrategy(form);
+            return new PrepopulatedFormDataStrategy(form, contentType);
         }
 
         private readonly string id;

@@ -62,6 +62,7 @@ namespace Tests.Restbucks.NewClient
 
             Assert.IsInstanceOf(typeof(PrepopulatedFormDataStrategy), dataStrategy);
             Assert.AreEqual(form, dataStrategy.GetPrivateFieldValue<Form>("form"));
+            Assert.AreEqual(new MediaTypeHeaderValue(form.MediaType), dataStrategy.GetPrivateFieldValue<MediaTypeHeaderValue>("contentType"));
         }
 
         [Test]
@@ -83,7 +84,6 @@ namespace Tests.Restbucks.NewClient
         {
             var form = new Form("order-form", new Uri("http://localhost/orders"), "post", RestbucksMediaType.Value, null as Shop);
             RestbucksForm.CreateDataStrategy(form);
-
         }
     }
 }

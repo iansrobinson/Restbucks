@@ -13,20 +13,27 @@ namespace Tests.Restbucks.NewClient
     [TestFixture]
     public class ApplicationContextFormDataStrategyTests
     {
+        private static readonly Shop EntityBody = new ShopBuilder(new Uri("http://localhost/restbucks/")).Build();
+        private static readonly MediaTypeHeaderValue ContentType = new MediaTypeHeaderValue(RestbucksMediaType.Value);
+        private static readonly EntityBodyKey Key = new EntityBodyKey("order-form", ContentType, new Uri("http://schemas/shop"));
+        private static readonly ApplicationContext Context = new ApplicationContext(new KeyValuePair<IKey, object>(Key, EntityBody));
+
         [Test]
         public void ShouldRetrieveFormDataFromApplicationContextBasedOnKey()
         {
-            var baseUri = new Uri("http://localhost/restbucks/");
-            var entityBody = new ShopBuilder(baseUri).Build();
+            var strategy = new ApplicationContextFormDataStrategy(Key, ContentType);
+            var content = strategy.CreateFormData(new HttpResponseMessage(), Context);
 
-            var contentType = new MediaTypeHeaderValue(RestbucksMediaType.Value);
-            var key = new EntityBodyKey("order-form", contentType, new Uri("http://schemas/shop"));
-            var context = new ApplicationContext(new KeyValuePair<IKey, object>(key, entityBody));
+            Assert.AreEqual(EntityBody.BaseUri, content.ReadAsObject<Shop>(RestbucksFormatter.Instance).BaseUri);
+        }
 
-            var strategy = new ApplicationContextFormDataStrategy(key, contentType);
-            var content = strategy.CreateFormData(new HttpResponseMessage(), context);
+        [Test]
+        public void ShouldAddContentTypeHeaderToContent()
+        {
+            var strategy = new ApplicationContextFormDataStrategy(Key, ContentType);
+            var content = strategy.CreateFormData(new HttpResponseMessage(), Context);
 
-            Assert.AreEqual(baseUri, content.ReadAsObject<Shop>(RestbucksFormatter.Instance).BaseUri);
+            Assert.AreEqual(ContentType, content.Headers.ContentType);
         }
     }
 }
