@@ -1,4 +1,6 @@
-﻿namespace Restbucks.NewClient.RulesEngine
+﻿using Restbucks.RestToolkit.Utils;
+
+namespace Restbucks.NewClient.RulesEngine
 {
     public class StringKey : IKey
     {
@@ -6,6 +8,7 @@
 
         public StringKey(string value)
         {
+            CheckString.Is(Not.NullOrEmptyOrWhitespace, value, "value");
             this.value = value;
         }
 
