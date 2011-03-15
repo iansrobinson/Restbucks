@@ -20,8 +20,10 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         [Test]
         public void ShouldSubmitFormWithCorrectControlData()
         {
+            var context = new ApplicationContext();
+            
             var formDataStrategy = MockRepository.GenerateStub<IFormDataStrategy>();
-            formDataStrategy.Stub(s => s.CreateFormData(PreviousResponse, null)).Return(new StringContent(string.Empty));
+            formDataStrategy.Stub(s => s.CreateFormData(PreviousResponse, context)).Return(new StringContent(string.Empty));
 
             var formInfo = new FormInfo(ResourceUri, HttpMethod, ContentType, formDataStrategy);
 
@@ -32,7 +34,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var client = new HttpClient {Channel = mockEndpoint};
 
             var submitForm = new SubmitForm(formStrategy);
-            submitForm.Execute(PreviousResponse, client);
+            submitForm.Execute(PreviousResponse, client, context);
 
             Assert.AreEqual(ResourceUri, mockEndpoint.ReceivedRequest.RequestUri);
             Assert.AreEqual(HttpMethod, mockEndpoint.ReceivedRequest.Method);
@@ -42,8 +44,10 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         [Test]
         public void ShouldUseFormDataStrategyToCreateFormData()
         {
+            var context = new ApplicationContext();
+            
             var formDataStrategy = MockRepository.GenerateMock<IFormDataStrategy>();
-            formDataStrategy.Expect(s => s.CreateFormData(PreviousResponse, null)).Return(new StringContent(string.Empty));
+            formDataStrategy.Expect(s => s.CreateFormData(PreviousResponse, context)).Return(new StringContent(string.Empty));
 
             var formInfo = new FormInfo(ResourceUri, HttpMethod, ContentType, formDataStrategy);
 
@@ -54,7 +58,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var client = new HttpClient {Channel = mockEndpoint};
 
             var submitForm = new SubmitForm(formStrategy);
-            submitForm.Execute(PreviousResponse, client);
+            submitForm.Execute(PreviousResponse, client, context);
 
             formDataStrategy.VerifyAllExpectations();
         }

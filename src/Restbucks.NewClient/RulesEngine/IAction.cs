@@ -4,6 +4,6 @@ namespace Restbucks.NewClient.RulesEngine
 {
     public interface IAction
     {
-        HttpResponseMessage Execute(HttpResponseMessage previousResponse, HttpClient client);
+        HttpResponseMessage Execute(HttpResponseMessage previousResponse, HttpClient client, ApplicationContext context);
     }
 }

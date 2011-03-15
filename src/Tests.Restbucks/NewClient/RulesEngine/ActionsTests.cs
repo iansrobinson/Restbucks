@@ -14,11 +14,12 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         {
             var response = new HttpResponseMessage();
             var client = new HttpClient();
+            var context = new ApplicationContext();
 
             var action = MockRepository.GenerateMock<IAction>();
-            action.Expect(a => a.Execute(response, client));
+            action.Expect(a => a.Execute(response, client, context));
 
-            var actions = new Actions(client);
+            var actions = new Actions(client, context);
             var invoker = actions.Do(action);
 
             invoker.Invoke(response);
@@ -30,10 +31,9 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         public void ShouldReturnInvokerThatInvokesSuppliedFunction()
         {
             var newResponse = new HttpResponseMessage();
-            var client = new HttpClient();
-
-            var actions = new Actions(client);
-            var invoker = actions.Do((r, c) => newResponse);
+            
+            var actions = new Actions(new HttpClient(), new ApplicationContext());
+            var invoker = actions.Do((r, cl, ct) => newResponse);
 
             Assert.AreEqual(newResponse, invoker.Invoke(new HttpResponseMessage()));
         }
@@ -42,7 +42,14 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         [ExpectedException(ExpectedException = typeof(ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: client")]
         public void ThrowsExceptionIfHttpClientIsNull()
         {
-            new Actions(null);
+            new Actions(null, new ApplicationContext());
+        }
+
+        [Test]
+        [ExpectedException(ExpectedException = typeof(ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: context")]
+        public void ThrowsExceptionIfContextIsNull()
+        {
+            new Actions(new HttpClient(), null);
         }
     }
 }

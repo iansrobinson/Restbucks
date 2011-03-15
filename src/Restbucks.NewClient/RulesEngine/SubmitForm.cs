@@ -11,11 +11,12 @@ namespace Restbucks.NewClient.RulesEngine
             this.formStrategy = formStrategy;
         }
 
-        public HttpResponseMessage Execute(HttpResponseMessage previousResponse, HttpClient client)
+        public HttpResponseMessage Execute(HttpResponseMessage previousResponse, HttpClient client, ApplicationContext context)
         {
             var formInfo = formStrategy.GetFormInfo(previousResponse);
 
-            var content = formInfo.DataStrategy.CreateFormData(previousResponse, null);
+            var content = formInfo.DataStrategy.CreateFormData(previousResponse, context);
+            //TODO get rid of setting content-type here
             content.Headers.ContentType = formInfo.ContentType;
 
             var request = new HttpRequestMessage
