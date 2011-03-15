@@ -87,6 +87,32 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         }
 
         [Test]
+        public void ShouldAllowValueToBeUpdated()
+        {
+            var newValue = new ExampleObject();
+            var newContext = Context.GetNewContextBuilder().Update(new StringKey("key"), newValue).Build();
+
+            Assert.AreEqual(newValue, newContext.Get<ExampleObject>(new StringKey("key")));
+        }
+
+        [Test]
+        public void ValueShouldNotBeUpdatedInOriginalContext()
+        {
+            var newValue = new ExampleObject();
+            Context.GetNewContextBuilder().Update(new StringKey("key"), newValue).Build();
+
+            Assert.AreNotEqual(newValue, Context.Get<ExampleObject>(new StringKey("key")));
+            Assert.AreEqual(FirstValue, Context.Get<ExampleObject>(new StringKey("key")));
+        }
+
+        [Test]
+        [ExpectedException(ExpectedException = typeof(InvalidOperationException), ExpectedMessage = "Unable to replace an existing value with a value of a different type.")]
+        public void ThrowsExceptionIfTryingToUpdateValueWithValueOfDifferentType()
+        {
+            Context.GetNewContextBuilder().Update(new StringKey("key"), new DifferentObject()).Build();
+        }
+
+        [Test]
         [ExpectedException(typeof (InvalidCastException))]
         public void ThrowsExceptionIfReturnValueIsDifferentTypeFromGenericParameter()
         {

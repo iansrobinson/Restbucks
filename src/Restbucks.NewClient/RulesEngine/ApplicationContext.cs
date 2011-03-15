@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Restbucks.NewClient.RulesEngine
@@ -47,6 +48,23 @@ namespace Restbucks.NewClient.RulesEngine
             public ApplicationContextBuilder Remove(IKey key)
             {
                 values.Remove(key);
+                return this;
+            }
+
+            public ApplicationContextBuilder Update(IKey key, object value)
+            {
+                if (values.ContainsKey(key))
+                {
+                    if (!values[key].GetType().Equals(value.GetType()))
+                    {
+                        throw new InvalidOperationException("Unable to replace an existing value with a value of a different type.");
+                    }
+                    values[key] = value;
+                }
+                else
+                {
+                    values.Add(key, value);
+                } 
                 return this;
             }
 
