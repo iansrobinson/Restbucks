@@ -26,7 +26,7 @@ namespace Tests.Restbucks.NewClient.Util
             new Uri("orders", UriKind.Relative),
             "post",
             RestbucksMediaType.Value,
-            null as Shop);
+            new Uri("http://schemas/shop"));
         
         public static HttpResponseMessage CreateResponse()
         {

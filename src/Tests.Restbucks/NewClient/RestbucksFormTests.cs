@@ -67,10 +67,22 @@ namespace Tests.Restbucks.NewClient
         [Test]
         public void ShouldReturnApplicationContextFormDataStrategyIfFormDataIsNull()
         {
-            var form = new Form("order-form", new Uri("http://localhost/orders"), "post", RestbucksMediaType.Value, null as Shop);
+            var form = new Form("order-form", new Uri("http://localhost/orders"), "post", RestbucksMediaType.Value, new Uri("http://schemas/shop"));
             var dataStrategy = RestbucksForm.CreateDataStrategy(form);
 
-            Assert.IsInstanceOf(typeof(ApplicationContextFormDataStrategy), dataStrategy);           
+            var expectedKey = new EntityBodyKey(form.Id, new MediaTypeHeaderValue(form.MediaType), form.Schema);
+
+            Assert.IsInstanceOf(typeof(ApplicationContextFormDataStrategy), dataStrategy);
+            Assert.AreEqual(expectedKey, dataStrategy.GetPrivateFieldValue<EntityBodyKey>("key"));
+        }
+
+        [Test]
+        [ExpectedException(ExpectedException = typeof(InvalidOperationException), ExpectedMessage = "Unable to create a data strategy for empty form with null schema attribute. Id: 'order-form'.")]
+        public void ThrowsExceptionWhenGettingDataStrategyForFormWithNullFormDataButNoSchema()
+        {
+            var form = new Form("order-form", new Uri("http://localhost/orders"), "post", RestbucksMediaType.Value, null as Shop);
+            RestbucksForm.CreateDataStrategy(form);
+
         }
     }
 }
