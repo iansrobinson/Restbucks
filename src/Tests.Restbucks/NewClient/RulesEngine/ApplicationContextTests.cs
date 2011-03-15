@@ -43,23 +43,47 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         public void ShouldAllowNewValueToBeAdded()
         {
             var newValue = new object();
-            var newContext = ApplicationContext.GetBuilder(Context).Add(new StringKey("new-key"), newValue).Build();
+            var newContext = Context.GetNewContextBuilder().Add(new StringKey("new-key"), newValue).Build();
 
             Assert.AreEqual(newValue, newContext.Get<object>(new StringKey("new-key")));
         }
 
         [Test]
-        public void ShouldReturnNewContextWhenAddingValue()
+        public void ShouldReturnNewContextAfterBuilding()
         {
-            var newContext = ApplicationContext.GetBuilder(Context).Add(new StringKey("new-key"), new object()).Build();
+            var newContext = Context.GetNewContextBuilder().Add(new StringKey("new-key"), new object()).Build();
             Assert.AreNotEqual(Context, newContext);
         }
 
         [Test]
         public void NewValueShouldNotBeAddedToOriginalContext()
         {
-            ApplicationContext.GetBuilder(Context).Add(new StringKey("new-key"), new object()).Build();
+            Context.GetNewContextBuilder().Add(new StringKey("new-key"), new object()).Build();
             Assert.IsFalse(Context.ContainsKey(new StringKey("new-key")));
+        }
+
+        [Test]
+        public void ShouldNotAllowNewValueToBeAddedToNewContextOnceBuildHasBeenCalled()
+        {
+            var builder = Context.GetNewContextBuilder();
+            var newContext = builder.Build();
+            builder.Add(new StringKey("new-key"), new object());
+
+            Assert.IsFalse(newContext.ContainsKey(new StringKey("new-key")));
+        }
+
+        [Test]
+        public void ShouldAllowKeyToBeRemoved()
+        {
+            var newContext = Context.GetNewContextBuilder().Remove(new StringKey("key")).Build();
+            Assert.IsFalse(newContext.ContainsKey(new StringKey("key")));
+        }
+
+        [Test]
+        public void ValueShouldNotBeRemovedFromOriginalContext()
+        {
+            Context.GetNewContextBuilder().Remove(new StringKey("key")).Build();
+            Assert.IsTrue(Context.ContainsKey(new StringKey("key")));
         }
 
         [Test]

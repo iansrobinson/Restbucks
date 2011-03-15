@@ -5,11 +5,6 @@ namespace Restbucks.NewClient.RulesEngine
 {
     public class ApplicationContext
     {
-        public static ApplicationContextBuilder GetBuilder(ApplicationContext context)
-        {
-            return new ApplicationContextBuilder(context.values.ToArray());
-        }
-
         private readonly IDictionary<IKey, object> values;
 
         public ApplicationContext(params KeyValuePair<IKey, object>[] values)
@@ -28,6 +23,11 @@ namespace Restbucks.NewClient.RulesEngine
             return values.ContainsKey(key);
         }
 
+        public ApplicationContextBuilder GetNewContextBuilder()
+        {
+            return new ApplicationContextBuilder(values.ToArray());
+        }
+
         public class ApplicationContextBuilder
         {
             private readonly IDictionary<IKey, object> values;
@@ -41,6 +41,12 @@ namespace Restbucks.NewClient.RulesEngine
             public ApplicationContextBuilder Add(IKey key, object value)
             {
                 values.Add(key, value);
+                return this;
+            }
+
+            public ApplicationContextBuilder Remove(IKey key)
+            {
+                values.Remove(key);
                 return this;
             }
 
