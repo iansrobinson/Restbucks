@@ -81,6 +81,7 @@
     <Compile Include="RulesEngine\HttpResponseMessageExtensions.cs" />
     <Compile Include="RulesEngine\IAction.cs" />
     <Compile Include="RulesEngine\IActionInvoker.cs" />
+    <Compile Include="RulesEngine\IApplicationContextBuilder.cs" />
     <Compile Include="RulesEngine\IConditions.cs" />
     <Compile Include="RulesEngine\IFormDataStrategy.cs" />
     <Compile Include="RulesEngine\IFormStrategy.cs" />

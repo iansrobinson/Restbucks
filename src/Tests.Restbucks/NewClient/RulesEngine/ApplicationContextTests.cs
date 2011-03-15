@@ -36,7 +36,6 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         {
             Assert.IsFalse(Context.ContainsKey(new StringKey("not-a-key")));
             Assert.IsFalse(Context.ContainsKey(new EntityBodyKey("different-id", new MediaTypeHeaderValue(RestbucksMediaType.Value), new Uri("http://schemas/shop"))));
-
         }
 
         [Test]

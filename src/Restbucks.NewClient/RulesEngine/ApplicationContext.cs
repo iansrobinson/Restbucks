@@ -24,12 +24,12 @@ namespace Restbucks.NewClient.RulesEngine
             return values.ContainsKey(key);
         }
 
-        public ApplicationContextBuilder GetNewContextBuilder()
+        public IApplicationContextBuilder GetNewContextBuilder()
         {
             return new ApplicationContextBuilder(values.ToArray());
         }
 
-        public class ApplicationContextBuilder
+        private class ApplicationContextBuilder : IApplicationContextBuilder
         {
             private readonly IDictionary<IKey, object> values;
 
@@ -39,19 +39,19 @@ namespace Restbucks.NewClient.RulesEngine
                 values.ToList().ForEach(kv => this.values.Add(kv));
             }
 
-            public ApplicationContextBuilder Add(IKey key, object value)
+            public IApplicationContextBuilder Add(IKey key, object value)
             {
                 values.Add(key, value);
                 return this;
             }
 
-            public ApplicationContextBuilder Remove(IKey key)
+            public IApplicationContextBuilder Remove(IKey key)
             {
                 values.Remove(key);
                 return this;
             }
 
-            public ApplicationContextBuilder Update(IKey key, object value)
+            public IApplicationContextBuilder Update(IKey key, object value)
             {
                 if (values.ContainsKey(key))
                 {
@@ -64,7 +64,7 @@ namespace Restbucks.NewClient.RulesEngine
                 else
                 {
                     values.Add(key, value);
-                } 
+                }
                 return this;
             }
 
