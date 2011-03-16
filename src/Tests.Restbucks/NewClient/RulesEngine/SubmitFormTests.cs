@@ -22,18 +22,18 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         {
             var context = new ApplicationContext();
             
-            var formDataStrategy = MockRepository.GenerateStub<IFormDataStrategy>();
-            formDataStrategy.Stub(s => s.CreateFormData(PreviousResponse, context)).Return(new StringContent(string.Empty));
+            var dummyFormDataStrategy = MockRepository.GenerateStub<IFormDataStrategy>();
+            dummyFormDataStrategy.Stub(s => s.CreateFormData(PreviousResponse, context)).Return(new StringContent(string.Empty));
 
-            var formInfo = new FormInfo(ResourceUri, HttpMethod, ContentType, formDataStrategy);
+            var formInfo = new FormInfo(ResourceUri, HttpMethod, ContentType, dummyFormDataStrategy);
 
-            var formStrategy = MockRepository.GenerateStub<IFormStrategy>();
-            formStrategy.Expect(f => f.GetFormInfo(PreviousResponse)).Return(formInfo);
+            var dummyFormStrategy = MockRepository.GenerateStub<IFormStrategy>();
+            dummyFormStrategy.Expect(f => f.GetFormInfo(PreviousResponse)).Return(formInfo);
 
             var mockEndpoint = new MockEndpoint(new HttpResponseMessage());
             var client = new HttpClient {Channel = mockEndpoint};
 
-            var submitForm = new SubmitForm(formStrategy);
+            var submitForm = new SubmitForm(dummyFormStrategy);
             submitForm.Execute(PreviousResponse, context, client);
 
             Assert.AreEqual(ResourceUri, mockEndpoint.ReceivedRequest.RequestUri);
@@ -46,21 +46,21 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         {
             var context = new ApplicationContext();
             
-            var formDataStrategy = MockRepository.GenerateMock<IFormDataStrategy>();
-            formDataStrategy.Expect(s => s.CreateFormData(PreviousResponse, context)).Return(new StringContent(string.Empty));
+            var mockFormDataStrategy = MockRepository.GenerateMock<IFormDataStrategy>();
+            mockFormDataStrategy.Expect(s => s.CreateFormData(PreviousResponse, context)).Return(new StringContent(string.Empty));
 
-            var formInfo = new FormInfo(ResourceUri, HttpMethod, ContentType, formDataStrategy);
+            var formInfo = new FormInfo(ResourceUri, HttpMethod, ContentType, mockFormDataStrategy);
 
-            var formStrategy = MockRepository.GenerateStub<IFormStrategy>();
-            formStrategy.Expect(f => f.GetFormInfo(PreviousResponse)).Return(formInfo);
+            var dummyFormStrategy = MockRepository.GenerateStub<IFormStrategy>();
+            dummyFormStrategy.Expect(f => f.GetFormInfo(PreviousResponse)).Return(formInfo);
 
             var mockEndpoint = new MockEndpoint(new HttpResponseMessage());
             var client = new HttpClient {Channel = mockEndpoint};
 
-            var submitForm = new SubmitForm(formStrategy);
+            var submitForm = new SubmitForm(dummyFormStrategy);
             submitForm.Execute(PreviousResponse, context, client);
 
-            formDataStrategy.VerifyAllExpectations();
+            mockFormDataStrategy.VerifyAllExpectations();
         }
     }
 }

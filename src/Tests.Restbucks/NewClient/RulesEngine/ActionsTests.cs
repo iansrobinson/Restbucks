@@ -16,15 +16,15 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var client = new HttpClient();
             var context = new ApplicationContext();
 
-            var action = MockRepository.GenerateMock<IAction>();
-            action.Expect(a => a.Execute(response, context, client));
+            var mockAction = MockRepository.GenerateMock<IAction>();
+            mockAction.Expect(a => a.Execute(response, context, client));
 
             var actions = new Actions(client);
-            var invoker = actions.Do(action);
+            var invoker = actions.Do(mockAction);
 
             invoker.Invoke(response, context);
 
-            action.VerifyAllExpectations();
+            mockAction.VerifyAllExpectations();
         }
 
         [Test]

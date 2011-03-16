@@ -17,33 +17,33 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         [Test]
         public void ShouldExecuteActionIfConditionIsApplicable()
         {
-            var condition = MockRepository.GenerateStub<ICondition>();
-            condition.Expect(c => c.IsApplicable(PreviousResponse, Context)).Return(true);
+            var dummyCondition = MockRepository.GenerateStub<ICondition>();
+            dummyCondition.Expect(c => c.IsApplicable(PreviousResponse, Context)).Return(true);
 
-            var action = MockRepository.GenerateMock<IActionInvoker>();
-            action.Expect(a => a.Invoke(PreviousResponse, Context)).Return(NewResponse);
+            var mockAction = MockRepository.GenerateMock<IActionInvoker>();
+            mockAction.Expect(a => a.Invoke(PreviousResponse, Context)).Return(NewResponse);
 
-            var stateFactory = MockRepository.GenerateStub<IStateFactory>();
+            var dummyStateFactory = MockRepository.GenerateStub<IStateFactory>();
 
-            var rule = new Rule(condition, action, stateFactory);
+            var rule = new Rule(dummyCondition, mockAction, dummyStateFactory);
             rule.Evaluate(PreviousResponse, Context);
 
-            action.VerifyAllExpectations();
+            mockAction.VerifyAllExpectations();
         }
 
         [Test]
         public void ShouldCreateNewStateIfActionIsSuccessful()
         {
-            var condition = MockRepository.GenerateStub<ICondition>();
-            condition.Expect(c => c.IsApplicable(PreviousResponse, Context)).Return(true);
+            var dummyCondition = MockRepository.GenerateStub<ICondition>();
+            dummyCondition.Expect(c => c.IsApplicable(PreviousResponse, Context)).Return(true);
 
-            var action = MockRepository.GenerateStub<IActionInvoker>();
-            action.Expect(a => a.Invoke(PreviousResponse, Context)).Return(NewResponse);
+            var dummyAction = MockRepository.GenerateStub<IActionInvoker>();
+            dummyAction.Expect(a => a.Invoke(PreviousResponse, Context)).Return(NewResponse);
 
-            var stateFactory = MockRepository.GenerateStub<IStateFactory>();
-            stateFactory.Expect(f => f.Create(NewResponse, Context)).IgnoreArguments().Return(NewState);
+            var dummyStateFactory = MockRepository.GenerateStub<IStateFactory>();
+            dummyStateFactory.Expect(f => f.Create(NewResponse, Context)).IgnoreArguments().Return(NewState);
 
-            var rule = new Rule(condition, action, stateFactory);
+            var rule = new Rule(dummyCondition, dummyAction, dummyStateFactory);
             var result = rule.Evaluate(PreviousResponse, Context);
 
             Assert.AreEqual(NewState, result.State);
@@ -52,16 +52,16 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         [Test]
         public void ShouldReturnSuccessfulResultIfConditionIsApplicable()
         {
-            var condition = MockRepository.GenerateStub<ICondition>();
-            condition.Expect(c => c.IsApplicable(PreviousResponse, Context)).Return(true);
+            var dummyCondition = MockRepository.GenerateStub<ICondition>();
+            dummyCondition.Expect(c => c.IsApplicable(PreviousResponse, Context)).Return(true);
 
-            var action = MockRepository.GenerateStub<IActionInvoker>();
-            action.Expect(a => a.Invoke(PreviousResponse, Context)).Return(NewResponse);
+            var dummyAction = MockRepository.GenerateStub<IActionInvoker>();
+            dummyAction.Expect(a => a.Invoke(PreviousResponse, Context)).Return(NewResponse);
 
-            var stateFactory = MockRepository.GenerateStub<IStateFactory>();           
-            stateFactory.Expect(f => f.Create(NewResponse, Context)).Return(NewState);
+            var dummyStateFactory = MockRepository.GenerateStub<IStateFactory>();           
+            dummyStateFactory.Expect(f => f.Create(NewResponse, Context)).Return(NewState);
 
-            var rule = new Rule(condition, action, stateFactory);
+            var rule = new Rule(dummyCondition, dummyAction, dummyStateFactory);
             var result = rule.Evaluate(PreviousResponse, Context);
 
             Assert.IsTrue(result.IsSuccessful);
@@ -70,30 +70,30 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         [Test]
         public void ShouldNotExecuteActionIfConditionIsNotApplicable()
         {
-            var condition = MockRepository.GenerateStub<ICondition>();
-            condition.Expect(c => c.IsApplicable(PreviousResponse, Context)).Return(false);
+            var dummyCondition = MockRepository.GenerateStub<ICondition>();
+            dummyCondition.Expect(c => c.IsApplicable(PreviousResponse, Context)).Return(false);
 
-            var action = MockRepository.GenerateMock<IActionInvoker>();
-            action.AssertWasNotCalled(a => a.Invoke(PreviousResponse, Context));
+            var mockAction = MockRepository.GenerateMock<IActionInvoker>();
+            mockAction.AssertWasNotCalled(a => a.Invoke(PreviousResponse, Context));
 
-            var stateFactory = MockRepository.GenerateStub<IStateFactory>();
+            var dummyStateFactory = MockRepository.GenerateStub<IStateFactory>();
 
-            var rule = new Rule(condition, action, stateFactory);
+            var rule = new Rule(dummyCondition, mockAction, dummyStateFactory);
             rule.Evaluate(PreviousResponse, Context);
 
-            action.VerifyAllExpectations();
+            mockAction.VerifyAllExpectations();
         }
 
         [Test]
         public void ShouldReturnUnsuccessfulResultIfConditionIsNotApplicable()
         {
-            var condition = MockRepository.GenerateStub<ICondition>();
-            condition.Expect(c => c.IsApplicable(PreviousResponse, Context)).Return(false);
+            var dummyCondition = MockRepository.GenerateStub<ICondition>();
+            dummyCondition.Expect(c => c.IsApplicable(PreviousResponse, Context)).Return(false);
 
-            var action = MockRepository.GenerateStub<IActionInvoker>();
-            var stateFactory = MockRepository.GenerateStub<IStateFactory>();
+            var dummyAction = MockRepository.GenerateStub<IActionInvoker>();
+            var dummyStateFactory = MockRepository.GenerateStub<IStateFactory>();
 
-            var rule = new Rule(condition, action, stateFactory);
+            var rule = new Rule(dummyCondition, dummyAction, dummyStateFactory);
             var result = rule.Evaluate(PreviousResponse, Context);
 
             Assert.IsFalse(result.IsSuccessful);

@@ -20,7 +20,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
         [Test]
         public void ShouldBaseOrderFormOnQuoteFromQuoteEngine()
         {
-            var quoteEngine = MockRepository.GenerateMock<IQuotationEngine>();
+            var mockQuoteEngine = MockRepository.GenerateMock<IQuotationEngine>();
 
             var id = Guid.NewGuid();
 
@@ -33,16 +33,16 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
                         new LineItem("item2", new Quantity("kg", 2), new Money("GBP", 2.00))
                     });
 
-            quoteEngine.Expect(q => q.GetQuote(id)).Return(quote);
+            mockQuoteEngine.Expect(q => q.GetQuote(id)).Return(quote);
             
             var request = CreateHttpRequestMessage(id);
-            var result = new OrderForm(DefaultUriFactory.Instance, quoteEngine).Get(id.ToString("N"), request, new HttpResponseMessage());
+            var result = new OrderForm(DefaultUriFactory.Instance, mockQuoteEngine).Get(id.ToString("N"), request, new HttpResponseMessage());
 
             Assert.True(result.HasForms);
             Assert.True(result.Forms.First().Instance.HasItems);
             Assert.True(Matching.LineItemsMatchItems(quote.LineItems, result.Forms.First().Instance.Items));
             
-            quoteEngine.VerifyAllExpectations();
+            mockQuoteEngine.VerifyAllExpectations();
         }
 
         [Test]

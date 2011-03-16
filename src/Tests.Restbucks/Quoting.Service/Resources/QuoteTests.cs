@@ -20,7 +20,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         [Test]
         public void ShouldGetQuoteFromQuoteEngine()
         {
-            var quoteEngine = MockRepository.GenerateMock<IQuotationEngine>();
+            var mockQuoteEngine = MockRepository.GenerateMock<IQuotationEngine>();
 
             var id = Guid.NewGuid();
 
@@ -33,16 +33,16 @@ namespace Tests.Restbucks.Quoting.Service.Resources
                         new LineItem("item2", new Quantity("kg", 2), new Money("GBP", 2.00))
                     });
 
-            quoteEngine.Expect(q => q.GetQuote(id)).Return(expectedQuote);
+            mockQuoteEngine.Expect(q => q.GetQuote(id)).Return(expectedQuote);
 
             var request = new HttpRequestMessage { RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri <Quote>(BaseAddress, id) };
-            var quote = new QuoteBuilder().WithQuotationEngine(quoteEngine).Build();
+            var quote = new QuoteBuilder().WithQuotationEngine(mockQuoteEngine).Build();
             var result = quote.Get(id.ToString("N"), request, new HttpResponseMessage());
 
             Assert.True(result.HasItems);
             Assert.True(Matching.LineItemsMatchItems(expectedQuote.LineItems, result.Items));
 
-            quoteEngine.VerifyAllExpectations();
+            mockQuoteEngine.VerifyAllExpectations();
         }
 
         [Test]

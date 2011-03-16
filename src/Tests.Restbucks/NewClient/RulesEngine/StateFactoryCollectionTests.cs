@@ -18,27 +18,27 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         [Test]
         public void ShouldInvokeCorrectWorkerBasedOnHttpStatusCode()
         {
-            var worker = MockRepository.GenerateMock<IStateFactory>();   
-            worker.Expect(w => w.Create(Response, Context)).Return(DummyState);
+            var mockWorker = MockRepository.GenerateMock<IStateFactory>();   
+            mockWorker.Expect(w => w.Create(Response, Context)).Return(DummyState);
 
-            var factory = new StateFactoryCollection(new Dictionary<HttpStatusCode, IStateFactory> {{HttpStatusCode.Accepted, worker}});
+            var factory = new StateFactoryCollection(new Dictionary<HttpStatusCode, IStateFactory> {{HttpStatusCode.Accepted, mockWorker}});
 
             factory.Create(Response, Context);
 
-            worker.VerifyAllExpectations();
+            mockWorker.VerifyAllExpectations();
         }
 
         [Test]
         public void ShouldInvokeDefaultWorkerIfStatusCodeIsNotRecognized()
         {
-            var defaultWorker = MockRepository.GenerateMock<IStateFactory>();
-            defaultWorker.Expect(w => w.Create(Response, Context)).Return(DummyState);
+            var mockDefaultWorker = MockRepository.GenerateMock<IStateFactory>();
+            mockDefaultWorker.Expect(w => w.Create(Response, Context)).Return(DummyState);
 
-            var factory = new StateFactoryCollection(new Dictionary<HttpStatusCode, IStateFactory> { { HttpStatusCode.OK, DummyWorker } }, defaultWorker);
+            var factory = new StateFactoryCollection(new Dictionary<HttpStatusCode, IStateFactory> { { HttpStatusCode.OK, DummyWorker } }, mockDefaultWorker);
 
             factory.Create(Response, Context);
 
-            defaultWorker.VerifyAllExpectations();
+            mockDefaultWorker.VerifyAllExpectations();
         }
 
         [Test]

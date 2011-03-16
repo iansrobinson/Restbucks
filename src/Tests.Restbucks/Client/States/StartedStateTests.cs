@@ -22,12 +22,12 @@ namespace Tests.Restbucks.Client.States
         [Test]
         public void WhenIsUninitializedShouldReturnNewStartState()
         {
-            var handlers = MockRepository.GenerateStub<IResponseHandlers>();
-            handlers.Expect(h => h.Get<UninitializedResponseHandler>()).Return(new StubResponseHandler());
+            var dummyHandlers = MockRepository.GenerateStub<IResponseHandlers>();
+            dummyHandlers.Expect(h => h.Get<UninitializedResponseHandler>()).Return(new StubResponseHandler());
 
             var state = new StartedState(null, CreateUninitializedContext());
 
-            var newState = state.NextState(handlers);
+            var newState = state.NextState(dummyHandlers);
 
             Assert.IsInstanceOf(typeof (StartedState), newState);
             Assert.AreNotEqual(state, newState);
@@ -36,12 +36,12 @@ namespace Tests.Restbucks.Client.States
         [Test]
         public void WhenIsUninitializedReturnedStateSemanticContextShouldBeStarted()
         {
-            var handlers = MockRepository.GenerateStub<IResponseHandlers>();
-            handlers.Expect(h => h.Get<UninitializedResponseHandler>()).Return(new StubResponseHandler());
+            var dummyHandlers = MockRepository.GenerateStub<IResponseHandlers>();
+            dummyHandlers.Expect(h => h.Get<UninitializedResponseHandler>()).Return(new StubResponseHandler());
 
             var state = new StartedState(null, CreateUninitializedContext());
 
-            var newState = state.NextState(handlers);
+            var newState = state.NextState(dummyHandlers);
 
             var context = newState.GetPrivateFieldValue<ApplicationContext>("context");
             Assert.AreEqual(SemanticContext.Started, context.Get<string>(ApplicationContextKeys.SemanticContext));
@@ -52,12 +52,12 @@ namespace Tests.Restbucks.Client.States
         {
             var response = new HttpResponseMessage();
 
-            var handlers = MockRepository.GenerateStub<IResponseHandlers>();
-            handlers.Expect(h => h.Get<UninitializedResponseHandler>()).Return(new StubResponseHandler(response));
+            var dummyHandlers = MockRepository.GenerateStub<IResponseHandlers>();
+            dummyHandlers.Expect(h => h.Get<UninitializedResponseHandler>()).Return(new StubResponseHandler(response));
 
             var state = new StartedState(null, CreateUninitializedContext());
 
-            var newState = state.NextState(handlers);
+            var newState = state.NextState(dummyHandlers);
 
             Assert.AreEqual(response, newState.GetPrivateFieldValue<HttpResponseMessage>("response"));
         }
@@ -65,12 +65,12 @@ namespace Tests.Restbucks.Client.States
         [Test]
         public void WhenIsStartedShouldReturnNewStartState()
         {
-            var handlers = MockRepository.GenerateStub<IResponseHandlers>();
-            handlers.Expect(h => h.Get<StartedResponseHandler>()).Return(new StubResponseHandler());
+            var dummyHandlers = MockRepository.GenerateStub<IResponseHandlers>();
+            dummyHandlers.Expect(h => h.Get<StartedResponseHandler>()).Return(new StubResponseHandler());
 
             var state = new StartedState(new HttpResponseMessage(), CreateStartedContext());
 
-            var newState = state.NextState(handlers);
+            var newState = state.NextState(dummyHandlers);
 
             Assert.IsInstanceOf(typeof (StartedState), newState);
             Assert.AreNotEqual(state, newState);
@@ -79,12 +79,12 @@ namespace Tests.Restbucks.Client.States
         [Test]
         public void WhenIsStartedReturnedStateSemanticContextShouldBeRfq()
         {
-            var handlers = MockRepository.GenerateStub<IResponseHandlers>();
-            handlers.Expect(h => h.Get<StartedResponseHandler>()).Return(new StubResponseHandler());
+            var dummyHandlers = MockRepository.GenerateStub<IResponseHandlers>();
+            dummyHandlers.Expect(h => h.Get<StartedResponseHandler>()).Return(new StubResponseHandler());
 
             var state = new StartedState(new HttpResponseMessage(), CreateStartedContext());
 
-            var newState = state.NextState(handlers);
+            var newState = state.NextState(dummyHandlers);
 
             var context = newState.GetPrivateFieldValue<ApplicationContext>("context");
             Assert.AreEqual(SemanticContext.Rfq, context.Get<string>(ApplicationContextKeys.SemanticContext));
@@ -95,12 +95,12 @@ namespace Tests.Restbucks.Client.States
         {
             var response = new HttpResponseMessage();
 
-            var handlers = MockRepository.GenerateStub<IResponseHandlers>();
-            handlers.Expect(h => h.Get<StartedResponseHandler>()).Return(new StubResponseHandler(response));
+            var dummyHandlers = MockRepository.GenerateStub<IResponseHandlers>();
+            dummyHandlers.Expect(h => h.Get<StartedResponseHandler>()).Return(new StubResponseHandler(response));
 
             var state = new StartedState(new HttpResponseMessage(), CreateStartedContext());
 
-            var newState = state.NextState(handlers);
+            var newState = state.NextState(dummyHandlers);
 
             Assert.AreEqual(response, newState.GetPrivateFieldValue<HttpResponseMessage>("response"));
         }
@@ -108,12 +108,12 @@ namespace Tests.Restbucks.Client.States
         [Test]
         public void WhenIsRfqShouldReturnNewQuoteRequestedState()
         {
-            var handlers = MockRepository.GenerateStub<IResponseHandlers>();
-            handlers.Expect(h => h.Get<RequestForQuoteFormResponseHandler>()).Return(new StubResponseHandler());
+            var dummyHandlers = MockRepository.GenerateStub<IResponseHandlers>();
+            dummyHandlers.Expect(h => h.Get<RequestForQuoteFormResponseHandler>()).Return(new StubResponseHandler());
 
             var state = new StartedState(new HttpResponseMessage(), CreateRfqContext());
 
-            var newState = state.NextState(handlers);
+            var newState = state.NextState(dummyHandlers);
 
             Assert.IsInstanceOf(typeof (QuoteRequestedState), newState);
             Assert.AreNotEqual(state, newState);
@@ -122,12 +122,12 @@ namespace Tests.Restbucks.Client.States
         [Test]
         public void WhenIsRfqReturnedStateSemanticContextShouldBeEmpty()
         {
-            var handlers = MockRepository.GenerateStub<IResponseHandlers>();
-            handlers.Expect(h => h.Get<RequestForQuoteFormResponseHandler>()).Return(new StubResponseHandler());
+            var dummyHandlers = MockRepository.GenerateStub<IResponseHandlers>();
+            dummyHandlers.Expect(h => h.Get<RequestForQuoteFormResponseHandler>()).Return(new StubResponseHandler());
 
             var state = new StartedState(new HttpResponseMessage(), CreateRfqContext());
 
-            var newState = state.NextState(handlers);
+            var newState = state.NextState(dummyHandlers);
 
             var context = newState.GetPrivateFieldValue<ApplicationContext>("context");
             Assert.IsFalse(context.ContainsKey(ApplicationContextKeys.SemanticContext));
@@ -138,12 +138,12 @@ namespace Tests.Restbucks.Client.States
         {
             var response = new HttpResponseMessage();
 
-            var handlers = MockRepository.GenerateStub<IResponseHandlers>();
-            handlers.Expect(h => h.Get<RequestForQuoteFormResponseHandler>()).Return(new StubResponseHandler(response));
+            var dummyHandlers = MockRepository.GenerateStub<IResponseHandlers>();
+            dummyHandlers.Expect(h => h.Get<RequestForQuoteFormResponseHandler>()).Return(new StubResponseHandler(response));
 
             var state = new StartedState(new HttpResponseMessage(), CreateRfqContext());
 
-            var newState = state.NextState(handlers);
+            var newState = state.NextState(dummyHandlers);
 
             Assert.AreEqual(response, newState.GetPrivateFieldValue<HttpResponseMessage>("response"));
         }

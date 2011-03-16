@@ -19,7 +19,7 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
         [Test]
         public void ShouldGetQuoteFromQuoteEngine()
         {
-            var quoteEngine = MockRepository.GenerateMock<IQuotationEngine>();
+            var mockQuoteEngine = MockRepository.GenerateMock<IQuotationEngine>();
 
             var id = Guid.NewGuid();
 
@@ -32,15 +32,15 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
                         new LineItem("item2", new Quantity("kg", 2), new Money("GBP", 2.00))
                     });
 
-            quoteEngine.Expect(q => q.GetQuote(id)).Return(quote);
+            mockQuoteEngine.Expect(q => q.GetQuote(id)).Return(quote);
 
             var request = CreateHttpRequestMessage(id);
-            var result = new Quote(DefaultUriFactory.Instance, quoteEngine).Get(id.ToString("N"), request, new HttpResponseMessage());
+            var result = new Quote(DefaultUriFactory.Instance, mockQuoteEngine).Get(id.ToString("N"), request, new HttpResponseMessage());
 
             Assert.True(result.HasItems);
             Assert.True(Matching.LineItemsMatchItems(quote.LineItems, result.Items));
 
-            quoteEngine.VerifyAllExpectations();
+            mockQuoteEngine.VerifyAllExpectations();
         }
 
         [Test]
@@ -60,12 +60,12 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
         [Test]
         public void ShouldReturn404NotFoundWhenGettingQuoteThatDoesNotExist()
         {
-            var quoteEngine = MockRepository.GenerateStub<IQuotationEngine>();
-            quoteEngine.Stub(e => e.GetQuote(Guid.Empty)).Throw(new KeyNotFoundException());
+            var dummyQuoteEngine = MockRepository.GenerateStub<IQuotationEngine>();
+            dummyQuoteEngine.Stub(e => e.GetQuote(Guid.Empty)).Throw(new KeyNotFoundException());
 
             var response = new HttpResponseMessage();
 
-            var quote = new Quote(DefaultUriFactory.Instance, quoteEngine);
+            var quote = new Quote(DefaultUriFactory.Instance, dummyQuoteEngine);
             quote.Get(Guid.Empty.ToString("N"), new HttpRequestMessage(), response);
 
             Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
@@ -76,12 +76,12 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Resources
         {
             DateTimeOffset createdDateTime = DateTime.Now;
             
-            var quoteEngine = MockRepository.GenerateStub<IQuotationEngine>();
-            quoteEngine.Stub(e => e.GetQuote(Guid.Empty)).Return(new Quotation(Guid.Empty, createdDateTime, new LineItem[]{}));
+            var dummyQuoteEngine = MockRepository.GenerateStub<IQuotationEngine>();
+            dummyQuoteEngine.Stub(e => e.GetQuote(Guid.Empty)).Return(new Quotation(Guid.Empty, createdDateTime, new LineItem[]{}));
 
             var response = new HttpResponseMessage();
             
-            var quote = new Quote(DefaultUriFactory.Instance, quoteEngine);
+            var quote = new Quote(DefaultUriFactory.Instance, dummyQuoteEngine);
             quote.Get(Guid.Empty.ToString("N"), new HttpRequestMessage{Uri = new Uri("http://localhost/quote/")}, response);
 
             Assert.AreEqual("public", response.Headers.CacheControl.ToString());

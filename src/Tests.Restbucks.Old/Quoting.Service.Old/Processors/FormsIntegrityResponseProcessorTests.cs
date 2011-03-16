@@ -26,15 +26,15 @@ namespace Tests.Restbucks.Old.Quoting.Service.Old.Processors
         [Test]
         public void DoesNotUseSuppliedFormsSignerIfEntityBodyIsNull()
         {
-            var formsSigner = MockRepository.GenerateMock<ISignForms>();
+            var mockFormsSigner = MockRepository.GenerateMock<ISignForms>();
 
-            var processor = new FormsIntegrityResponseProcessor(formsSigner);
+            var processor = new FormsIntegrityResponseProcessor(mockFormsSigner);
             var response = new HttpResponseMessage();
 
             processor.Initialize();
             processor.Execute(new object[] {response});
 
-           formsSigner.AssertWasNotCalled(fs => fs.SignForms(null, null), fs => fs.IgnoreArguments());
+           mockFormsSigner.AssertWasNotCalled(fs => fs.SignForms(null, null), fs => fs.IgnoreArguments());
         }
 
         private class StubFormsSigner : ISignForms
