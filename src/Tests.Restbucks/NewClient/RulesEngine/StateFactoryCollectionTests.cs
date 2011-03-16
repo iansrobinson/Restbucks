@@ -22,7 +22,6 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             mockWorker.Expect(w => w.Create(Response, Context)).Return(DummyState);
 
             var factory = new StateFactoryCollection(new Dictionary<HttpStatusCode, IStateFactory> {{HttpStatusCode.Accepted, mockWorker}});
-
             factory.Create(Response, Context);
 
             mockWorker.VerifyAllExpectations();
@@ -35,7 +34,6 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             mockDefaultWorker.Expect(w => w.Create(Response, Context)).Return(DummyState);
 
             var factory = new StateFactoryCollection(new Dictionary<HttpStatusCode, IStateFactory> { { HttpStatusCode.OK, DummyWorker } }, mockDefaultWorker);
-
             factory.Create(Response, Context);
 
             mockDefaultWorker.VerifyAllExpectations();
