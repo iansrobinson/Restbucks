@@ -15,7 +15,7 @@ namespace Tests.Restbucks.Quoting.Service.Processors
         [Test]
         public void UsesSuppliedFormsSigner()
         {
-            ISignForms formsSigner = new StubFormsSigner("output");
+            ISignForms formsSigner = new DummyFormsSigner("output");
 
             var processor = new FormsIntegrityResponseProcessor(formsSigner);
             var response = new HttpResponseMessage {Content = new StringContent("input")};
@@ -45,7 +45,7 @@ namespace Tests.Restbucks.Quoting.Service.Processors
         {
             var dateTime = new DateTimeOffset(new DateTime(2011, 1, 10));
             
-            var processor = new FormsIntegrityResponseProcessor(new StubFormsSigner(string.Empty));
+            var processor = new FormsIntegrityResponseProcessor(new DummyFormsSigner(string.Empty));
 
             var response = new HttpResponseMessage { Content = new StringContent("input") };
             response.Content.Headers.ContentType = new MediaTypeHeaderValue(RestbucksMediaType.Value);          
@@ -58,11 +58,11 @@ namespace Tests.Restbucks.Quoting.Service.Processors
             Assert.AreEqual(dateTime, response.Content.Headers.Expires.Value);
         }
 
-        private class StubFormsSigner : ISignForms
+        private class DummyFormsSigner : ISignForms
         {
             private readonly string output;
 
-            public StubFormsSigner(string output)
+            public DummyFormsSigner(string output)
             {
                 this.output = output;
             }

@@ -17,10 +17,10 @@ namespace Tests.Restbucks.NewClient
         public void ShouldReturnCorrectFormInfoForForm()
         {
             var form = RestbucksForm.WithId("order-form");
-            var formInfo = form.GetFormInfo(StubResponse.CreateResponse());
+            var formInfo = form.GetFormInfo(DummyResponse.CreateResponse());
 
-            Assert.AreEqual(new MediaTypeHeaderValue(StubResponse.Form.MediaType), formInfo.ContentType);
-            Assert.AreEqual(new HttpMethod(StubResponse.Form.Method), formInfo.Method);
+            Assert.AreEqual(new MediaTypeHeaderValue(DummyResponse.Form.MediaType), formInfo.ContentType);
+            Assert.AreEqual(new HttpMethod(DummyResponse.Form.Method), formInfo.Method);
         }
 
         [Test]
@@ -28,30 +28,30 @@ namespace Tests.Restbucks.NewClient
         public void ThrowsExceptionIfFormCannotBeFound()
         {
             var form = RestbucksForm.WithId("xyz");
-            form.GetFormInfo(StubResponse.CreateResponse());
+            form.GetFormInfo(DummyResponse.CreateResponse());
         }
 
         [Test]
         public void ShouldFormatRelativeResourceUriAsAbsoluteUri()
         {
             var form = RestbucksForm.WithId("order-form");
-            var formInfo = form.GetFormInfo(StubResponse.CreateResponse());
+            var formInfo = form.GetFormInfo(DummyResponse.CreateResponse());
 
-            Assert.AreEqual(StubResponse.FormAbsoluteUri, formInfo.ResourceUri);
+            Assert.AreEqual(DummyResponse.FormAbsoluteUri, formInfo.ResourceUri);
         }
 
         [Test]
         public void ShouldReturnTrueIfFormExists()
         {
             var form = RestbucksForm.WithId("order-form");
-            Assert.IsTrue(form.FormExists(StubResponse.CreateResponse()));
+            Assert.IsTrue(form.FormExists(DummyResponse.CreateResponse()));
         }
 
         [Test]
         public void ShouldReturnFalseIfFormDoesNotExist()
         {
             var form = RestbucksForm.WithId("xyz");
-            Assert.IsFalse(form.FormExists(StubResponse.CreateResponse()));
+            Assert.IsFalse(form.FormExists(DummyResponse.CreateResponse()));
         }
 
         [Test]

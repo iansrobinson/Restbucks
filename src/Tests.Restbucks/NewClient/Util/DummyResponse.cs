@@ -7,7 +7,7 @@ using Restbucks.MediaType;
 
 namespace Tests.Restbucks.NewClient.Util
 {
-    public static class StubResponse
+    public static class DummyResponse
     {
         private static readonly Uri LinkUri = new Uri("request-for-quote", UriKind.Relative);
         private static readonly Uri FormUri = new Uri("orders", UriKind.Relative);

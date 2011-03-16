@@ -3,9 +3,9 @@ using Restbucks.Quoting;
 
 namespace Tests.Restbucks.Quoting.Service.Resources.Util
 {
-    public class StubQuotationEngine : IQuotationEngine
+    public class DummyQuotationEngine : IQuotationEngine
     {
-        public static readonly IQuotationEngine Instance = new StubQuotationEngine();
+        public static readonly IQuotationEngine Instance = new DummyQuotationEngine();
 
         public static readonly Quotation Quotation = new Quotation(
             Guid.Empty,
@@ -18,7 +18,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources.Util
 
         public static readonly string QuoteId = Quotation.Id.ToString("N");
 
-        private StubQuotationEngine()
+        private DummyQuotationEngine()
         {
         }
 

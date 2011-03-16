@@ -123,7 +123,7 @@
     <Compile Include="NewClient\RulesEngine\StateFactoryCollectionTests.cs" />
     <Compile Include="NewClient\RulesEngine\SubmitFormTests.cs" />
     <Compile Include="NewClient\RulesEngine\WhenTests.cs" />
-    <Compile Include="NewClient\Util\StubResponse.cs" />
+    <Compile Include="NewClient\Util\DummyResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Quoting.Service\ConfigTests.cs" />
     <Compile Include="Quoting.Service\Processors\FormsIntegrityResponseProcessorTests.cs" />
@@ -138,16 +138,16 @@
     </Compile>
     <Compile Include="Quoting.Service\Resources\RequestForQuoteTests.cs" />
     <Compile Include="Quoting.Service\Resources\Util\DefaultUriFactory.cs" />
+    <Compile Include="Quoting.Service\Resources\Util\DummyQuotationEngine.cs" />
     <Compile Include="Quoting.Service\Resources\Util\EmptyQuotationEngine.cs" />
     <Compile Include="Quoting.Service\Resources\Util\Matching.cs" />
     <Compile Include="Quoting.Service\Resources\Util\OrderFormBuilder.cs" />
     <Compile Include="Quoting.Service\Resources\Util\QuoteBuilder.cs" />
     <Compile Include="Quoting.Service\Resources\Util\QuotesBuilder.cs" />
     <Compile Include="Quoting.Service\Resources\Util\Result.cs" />
-    <Compile Include="Quoting.Service\Resources\Util\StubQuotationEngine.cs" />
     <Compile Include="Quoting\Implementation\QuotationEngineTests.cs" />
-    <Compile Include="Quoting\Implementation\Util\StubDateTimeProvider.cs" />
-    <Compile Include="Quoting\Implementation\Util\StubGuidProvider.cs" />
+    <Compile Include="Quoting\Implementation\Util\DummyDateTimeProvider.cs" />
+    <Compile Include="Quoting\Implementation\Util\DummyGuidProvider.cs" />
     <Compile Include="RestToolkit\Hypermedia\UriFactoryTests.cs" />
     <Compile Include="RestToolkit\Hypermedia\UriFactoryWorkerTests.cs" />
     <Compile Include="RestToolkit\Utils\CheckStringTests.cs" />

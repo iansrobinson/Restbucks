@@ -70,7 +70,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
             var response = ExecuteRequestReturnResponse();
 
             Assert.AreEqual("public", response.Headers.CacheControl.ToString());
-            Assert.AreEqual(StubQuotationEngine.Quotation.CreatedDateTime.AddDays(7.00), response.Content.Headers.Expires);
+            Assert.AreEqual(DummyQuotationEngine.Quotation.CreatedDateTime.AddDays(7.00), response.Content.Headers.Expires);
         }
 
         [Test]
@@ -89,7 +89,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
             var selfLink = formContents.Links.Single(l => l.Rels.First().Value.Equals("self"));
 
             Assert.IsNotNull(selfLink);
-            Assert.AreEqual(new Uri("quote/" + StubQuotationEngine.QuoteId, UriKind.Relative), selfLink.Href.ToString());
+            Assert.AreEqual(new Uri("quote/" + DummyQuotationEngine.QuoteId, UriKind.Relative), selfLink.Href.ToString());
         }
 
         [Test]
@@ -139,24 +139,24 @@ namespace Tests.Restbucks.Quoting.Service.Resources
 
         private static HttpResponseMessage ExecuteRequestReturnResponse()
         {
-            var orderForm = new OrderFormBuilder().WithQuotationEngine(StubQuotationEngine.Instance).Build();
+            var orderForm = new OrderFormBuilder().WithQuotationEngine(DummyQuotationEngine.Instance).Build();
 
-            var request = new HttpRequestMessage { RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri<OrderForm>(BaseAddress, StubQuotationEngine.QuoteId) };
+            var request = new HttpRequestMessage { RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri<OrderForm>(BaseAddress, DummyQuotationEngine.QuoteId) };
             var response = new HttpResponseMessage();
 
-            orderForm.Get(StubQuotationEngine.QuoteId, request, response);
+            orderForm.Get(DummyQuotationEngine.QuoteId, request, response);
 
             return response;
         }
 
         private static Shop ExecuteRequestReturnEntityBody()
         {
-            var orderForm = new OrderFormBuilder().WithQuotationEngine(StubQuotationEngine.Instance).Build();
+            var orderForm = new OrderFormBuilder().WithQuotationEngine(DummyQuotationEngine.Instance).Build();
 
-            var request = new HttpRequestMessage { RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri<OrderForm>(BaseAddress, StubQuotationEngine.QuoteId) };
+            var request = new HttpRequestMessage { RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri<OrderForm>(BaseAddress, DummyQuotationEngine.QuoteId) };
             var response = new HttpResponseMessage();
 
-            return orderForm.Get(StubQuotationEngine.QuoteId, request, response);
+            return orderForm.Get(DummyQuotationEngine.QuoteId, request, response);
         }
     }
 }

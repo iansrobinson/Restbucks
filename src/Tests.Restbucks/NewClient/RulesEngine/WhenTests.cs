@@ -133,7 +133,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         [Test]
         public void ShouldAllowComplexConditions()
         {
-            var previousResponse = StubResponse.CreateResponse();
+            var previousResponse = DummyResponse.CreateResponse();
             
             var dummyActionInvoker = MockRepository.GenerateStub<IActionInvoker>();
             dummyActionInvoker.Expect(a => a.Invoke(previousResponse, Context)).Return(new HttpResponseMessage {StatusCode = HttpStatusCode.Accepted});

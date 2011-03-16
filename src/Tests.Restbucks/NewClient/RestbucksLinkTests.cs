@@ -13,9 +13,9 @@ namespace Tests.Restbucks.NewClient
         public void ShouldConvertRelativeUrisToAbsoluteUris()
         {
             var link = RestbucksLink.WithRel("http://relations.restbucks.com/rfq");
-            var linkInfo = link.GetLinkInfo(StubResponse.CreateResponse());
+            var linkInfo = link.GetLinkInfo(DummyResponse.CreateResponse());
 
-            Assert.AreEqual(StubResponse.LinkAbsoluteUri, linkInfo.ResourceUri);
+            Assert.AreEqual(DummyResponse.LinkAbsoluteUri, linkInfo.ResourceUri);
         }
 
         [Test]
@@ -23,21 +23,21 @@ namespace Tests.Restbucks.NewClient
         public void ThrowsExceptionIfLinkCannotBeFound()
         {
             var link = RestbucksLink.WithRel("http://relations.restbucks.com/xyz");
-            link.GetLinkInfo(StubResponse.CreateResponse());
+            link.GetLinkInfo(DummyResponse.CreateResponse());
         }
 
         [Test]
         public void ShouldReturnTrueIfLinkExists()
         {
             var link = RestbucksLink.WithRel(new Uri("http://relations.restbucks.com/rfq"));
-            Assert.IsTrue(link.LinkExists(StubResponse.CreateResponse()));
+            Assert.IsTrue(link.LinkExists(DummyResponse.CreateResponse()));
         }
 
         [Test]
         public void ShouldReturnFalseIfLinkDoesNotExist()
         {
             var link = RestbucksLink.WithRel(new Uri("http://relations.restbucks.com/xyz"));
-            Assert.IsFalse(link.LinkExists(StubResponse.CreateResponse()));
+            Assert.IsFalse(link.LinkExists(DummyResponse.CreateResponse()));
         }
     }
 }

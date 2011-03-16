@@ -23,7 +23,7 @@ namespace Tests.Restbucks.Quoting.Implementation
         [Test]
         public void CanCreateQuote()
         {
-            var quote = new QuotationEngine(new StubDateTimeProvider(CreatedDateTime), new StubGuidProvider(Id))
+            var quote = new QuotationEngine(new DummyDateTimeProvider(CreatedDateTime), new DummyGuidProvider(Id))
                 .CreateQuote(QuotationRequest);
 
             AssertQuoteIsCorrect(quote);
@@ -39,7 +39,7 @@ namespace Tests.Restbucks.Quoting.Implementation
         [Test]
         public void CanRetrievePreviouslyCreatedQuote()
         {
-            var quoteEngine = new QuotationEngine(new StubDateTimeProvider(CreatedDateTime), new StubGuidProvider(Id));
+            var quoteEngine = new QuotationEngine(new DummyDateTimeProvider(CreatedDateTime), new DummyGuidProvider(Id));
 
             try
             {

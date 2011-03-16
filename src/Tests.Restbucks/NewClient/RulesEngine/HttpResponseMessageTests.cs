@@ -12,13 +12,13 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         [Test]
         public void CanCallReadAsObjectMoreThanOnce()
         {
-            var response = StubResponse.CreateResponse();
+            var response = DummyResponse.CreateResponse();
 
             var entityBody1 = response.Content.ReadAsObject<Shop>(RestbucksFormatter.Instance);
             var entityBody2 = response.Content.ReadAsObject<Shop>(RestbucksFormatter.Instance);
 
-            Assert.AreEqual(StubResponse.BaseUri, entityBody1.BaseUri);
-            Assert.AreEqual(StubResponse.BaseUri, entityBody2.BaseUri);
+            Assert.AreEqual(DummyResponse.BaseUri, entityBody1.BaseUri);
+            Assert.AreEqual(DummyResponse.BaseUri, entityBody2.BaseUri);
         }
     }
 }

@@ -3,16 +3,16 @@ using Restbucks.Quoting;
 
 namespace Tests.Restbucks.Quoting.Implementation.Util
 {
-    public class StubDateTimeProvider : IDateTimeProvider
+    public class DummyGuidProvider : IGuidProvider
     {
-        private readonly DateTimeOffset value;
+        private readonly Guid value;
 
-        public StubDateTimeProvider(DateTimeOffset value)
+        public DummyGuidProvider(Guid value)
         {
             this.value = value;
         }
 
-        public DateTimeOffset GetCurrent()
+        public Guid CreateGuid()
         {
             return value;
         }

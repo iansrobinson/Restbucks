@@ -68,7 +68,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
             var response = ExecuteRequestReturnResponse();
 
             Assert.AreEqual("public", response.Headers.CacheControl.ToString());
-            Assert.AreEqual(StubQuotationEngine.Quotation.CreatedDateTime.AddDays(7.00), response.Content.Headers.Expires);
+            Assert.AreEqual(DummyQuotationEngine.Quotation.CreatedDateTime.AddDays(7.00), response.Content.Headers.Expires);
         }
 
         [Test]
@@ -77,7 +77,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
             var entityBody = ExecuteRequestReturnEntityBody();
 
             Assert.IsNotNull(entityBody.Links.Single(l => l.Rels.First().Value.Equals("self")));
-            Assert.AreEqual(new Uri("quote/" + StubQuotationEngine.QuoteId, UriKind.Relative), entityBody.Links.Single(l => l.Rels.First().Value.Equals("self")).Href.ToString());
+            Assert.AreEqual(new Uri("quote/" + DummyQuotationEngine.QuoteId, UriKind.Relative), entityBody.Links.Single(l => l.Rels.First().Value.Equals("self")).Href.ToString());
         }
 
         [Test]
@@ -86,7 +86,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
             var entityBody = ExecuteRequestReturnEntityBody();
 
             Assert.IsNotNull(entityBody.Links.Single(l => l.Rels.First().DisplayValue.Equals("rb:order-form")));
-            Assert.AreEqual(new Uri("order-form/" + StubQuotationEngine.QuoteId, UriKind.Relative), entityBody.Links.Single(l => l.Rels.First().DisplayValue.Equals("rb:order-form")).Href.ToString());
+            Assert.AreEqual(new Uri("order-form/" + DummyQuotationEngine.QuoteId, UriKind.Relative), entityBody.Links.Single(l => l.Rels.First().DisplayValue.Equals("rb:order-form")).Href.ToString());
         }
 
         [Test]
@@ -98,24 +98,24 @@ namespace Tests.Restbucks.Quoting.Service.Resources
 
         private static HttpResponseMessage ExecuteRequestReturnResponse()
         {
-            var quote = new QuoteBuilder().WithQuotationEngine(StubQuotationEngine.Instance).Build();
+            var quote = new QuoteBuilder().WithQuotationEngine(DummyQuotationEngine.Instance).Build();
 
-            var request = new HttpRequestMessage { RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri<Quote>(BaseAddress, StubQuotationEngine.QuoteId) };
+            var request = new HttpRequestMessage { RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri<Quote>(BaseAddress, DummyQuotationEngine.QuoteId) };
             var response = new HttpResponseMessage();
 
-            quote.Get(StubQuotationEngine.QuoteId, request, response);
+            quote.Get(DummyQuotationEngine.QuoteId, request, response);
 
             return response;
         }
 
         private static Shop ExecuteRequestReturnEntityBody()
         {
-            var quote = new QuoteBuilder().WithQuotationEngine(StubQuotationEngine.Instance).Build();
+            var quote = new QuoteBuilder().WithQuotationEngine(DummyQuotationEngine.Instance).Build();
 
-            var request = new HttpRequestMessage { RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri<Quote>(BaseAddress, StubQuotationEngine.QuoteId) };
+            var request = new HttpRequestMessage { RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri<Quote>(BaseAddress, DummyQuotationEngine.QuoteId) };
             var response = new HttpResponseMessage();
 
-            return quote.Get(StubQuotationEngine.QuoteId, request, response);
+            return quote.Get(DummyQuotationEngine.QuoteId, request, response);
         }
     }
 }
