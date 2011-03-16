@@ -30,40 +30,40 @@ namespace Restbucks.NewClient.RulesEngine
 
         public IActionInvoker Do(IAction action)
         {
-            return new ActionObjectInvoker(action, client, context);
+            return new ActionObjectInvoker(action, context, client);
         }
 
-        public IActionInvoker Do(Func<HttpResponseMessage, HttpClient, ApplicationContext, HttpResponseMessage> action)
+        public IActionInvoker Do(Func<HttpResponseMessage, ApplicationContext, HttpClient, HttpResponseMessage> action)
         {
-            return new ActionFunctionInvoker(action, client, context);
+            return new ActionFunctionInvoker(action, context, client);
         }
 
         private class ActionObjectInvoker : IActionInvoker
         {
             private readonly IAction action;
-            private readonly HttpClient client;
             private readonly ApplicationContext context;
+            private readonly HttpClient client;
 
-            public ActionObjectInvoker(IAction action, HttpClient client, ApplicationContext context)
+            public ActionObjectInvoker(IAction action, ApplicationContext context, HttpClient client)
             {
                 this.action = action;
-                this.client = client;
                 this.context = context;
+                this.client = client;
             }
 
             public HttpResponseMessage Invoke(HttpResponseMessage previousResponse)
             {
-                return action.Execute(previousResponse, client, context);
+                return action.Execute(previousResponse, context, client);
             }
         }
 
         private class ActionFunctionInvoker : IActionInvoker
         {
-            private readonly Func<HttpResponseMessage, HttpClient, ApplicationContext, HttpResponseMessage> action;
+            private readonly Func<HttpResponseMessage, ApplicationContext, HttpClient, HttpResponseMessage> action;
             private readonly HttpClient client;
             private readonly ApplicationContext context;
 
-            public ActionFunctionInvoker(Func<HttpResponseMessage, HttpClient, ApplicationContext, HttpResponseMessage> action, HttpClient client, ApplicationContext context)
+            public ActionFunctionInvoker(Func<HttpResponseMessage, ApplicationContext, HttpClient, HttpResponseMessage> action, ApplicationContext context, HttpClient client)
             {
                 this.action = action;
                 this.client = client;
@@ -72,7 +72,7 @@ namespace Restbucks.NewClient.RulesEngine
 
             public HttpResponseMessage Invoke(HttpResponseMessage previousResponse)
             {
-                return action(previousResponse, client, context);
+                return action(previousResponse, context, client);
             }
         }
     }

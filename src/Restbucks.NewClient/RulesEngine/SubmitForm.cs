@@ -11,7 +11,7 @@ namespace Restbucks.NewClient.RulesEngine
             this.formStrategy = formStrategy;
         }
 
-        public HttpResponseMessage Execute(HttpResponseMessage previousResponse, HttpClient client, ApplicationContext context)
+        public HttpResponseMessage Execute(HttpResponseMessage previousResponse, ApplicationContext context, HttpClient client)
         {
             var formInfo = formStrategy.GetFormInfo(previousResponse);
 

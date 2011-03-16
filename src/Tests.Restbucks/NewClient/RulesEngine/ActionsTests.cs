@@ -17,7 +17,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var context = new ApplicationContext();
 
             var action = MockRepository.GenerateMock<IAction>();
-            action.Expect(a => a.Execute(response, client, context));
+            action.Expect(a => a.Execute(response, context, client));
 
             var actions = new Actions(client, context);
             var invoker = actions.Do(action);

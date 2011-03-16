@@ -34,7 +34,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var client = new HttpClient {Channel = mockEndpoint};
 
             var submitForm = new SubmitForm(formStrategy);
-            submitForm.Execute(PreviousResponse, client, context);
+            submitForm.Execute(PreviousResponse, context, client);
 
             Assert.AreEqual(ResourceUri, mockEndpoint.ReceivedRequest.RequestUri);
             Assert.AreEqual(HttpMethod, mockEndpoint.ReceivedRequest.Method);
@@ -58,7 +58,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var client = new HttpClient {Channel = mockEndpoint};
 
             var submitForm = new SubmitForm(formStrategy);
-            submitForm.Execute(PreviousResponse, client, context);
+            submitForm.Execute(PreviousResponse, context, client);
 
             formDataStrategy.VerifyAllExpectations();
         }
