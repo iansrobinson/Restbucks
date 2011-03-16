@@ -9,20 +9,20 @@ namespace Tests.Restbucks.NewClient.RulesEngine
     [TestFixture]
     public class ActionsTests
     {
+        private static readonly HttpResponseMessage Response = new HttpResponseMessage();
+        private static readonly HttpClient Client = new HttpClient();
+        private static readonly ApplicationContext Context = new ApplicationContext();
+        
         [Test]
         public void ShouldReturnInvokerThatInvokesSuppliedAction()
         {
-            var response = new HttpResponseMessage();
-            var client = new HttpClient();
-            var context = new ApplicationContext();
-
             var mockAction = MockRepository.GenerateMock<IAction>();
-            mockAction.Expect(a => a.Execute(response, context, client));
+            mockAction.Expect(a => a.Execute(Response, Context, Client));
 
-            var actions = new Actions(client);
+            var actions = new Actions(Client);
             var invoker = actions.Do(mockAction);
 
-            invoker.Invoke(response, context);
+            invoker.Invoke(Response, Context);
 
             mockAction.VerifyAllExpectations();
         }
@@ -30,12 +30,12 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         [Test]
         public void ShouldReturnInvokerThatInvokesSuppliedFunction()
         {
-            var newResponse = new HttpResponseMessage();
+            var expectedResponse = new HttpResponseMessage();
             
-            var actions = new Actions(new HttpClient());
-            var invoker = actions.Do((r, cl, ct) => newResponse);
+            var actions = new Actions(Client);
+            var invoker = actions.Do((r, cl, ct) => expectedResponse);
 
-            Assert.AreEqual(newResponse, invoker.Invoke(new HttpResponseMessage(), new ApplicationContext()));
+            Assert.AreEqual(expectedResponse, invoker.Invoke(Response, Context));
         }
 
         [Test]

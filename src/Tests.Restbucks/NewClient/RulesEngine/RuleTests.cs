@@ -12,7 +12,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         private static readonly HttpResponseMessage PreviousResponse = new HttpResponseMessage();
         private static readonly ApplicationContext Context = new ApplicationContext();
         private static readonly HttpResponseMessage NewResponse = new HttpResponseMessage();
-        private static readonly IState NewState = new DummyState();
+        private static readonly IState NewState = MockRepository.GenerateStub<IState>();
         
         [Test]
         public void ShouldExecuteActionIfConditionIsApplicable()
@@ -119,10 +119,6 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         public void ThrowsExceptionIfStateFactoryIsNull()
         {
             new Rule(MockRepository.GenerateStub<ICondition>(), MockRepository.GenerateStub<IActionInvoker>(), null);
-        }
-
-        private class DummyState : IState
-        {          
         }
     }
 }
