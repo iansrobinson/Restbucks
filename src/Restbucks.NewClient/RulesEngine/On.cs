@@ -19,7 +19,7 @@ namespace Restbucks.NewClient.RulesEngine
             this.statusCode = statusCode;
         }
 
-        public KeyValuePair<HttpStatusCode, IStateFactory> Do(Func<HttpResponseMessage, IState> createState)
+        public KeyValuePair<HttpStatusCode, IStateFactory> Do(Func<HttpResponseMessage, ApplicationContext, IState> createState)
         {
             return new KeyValuePair<HttpStatusCode, IStateFactory>(statusCode, new StateFactory(createState));
         }

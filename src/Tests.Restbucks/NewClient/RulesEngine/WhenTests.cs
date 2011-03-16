@@ -26,10 +26,10 @@ namespace Tests.Restbucks.NewClient.RulesEngine
                 .ExecuteAction(actionInvoker)
                 .Return(new[]
                             {
-                                On.Status(HttpStatusCode.OK).Do(r => null),
-                                On.Status(HttpStatusCode.Accepted).Do(r => null)
+                                On.Status(HttpStatusCode.OK).Do((r,c) => null),
+                                On.Status(HttpStatusCode.Accepted).Do((r,c) => null)
                             },
-                        r => null);
+                        (r, c) => null);
 
             rule.Evaluate(PreviousResponse, Context);
 
@@ -48,10 +48,10 @@ namespace Tests.Restbucks.NewClient.RulesEngine
                 .ExecuteAction(actionInvoker)
                 .Return(new[]
                             {
-                                On.Status(HttpStatusCode.OK).Do(r => null),
-                                On.Status(HttpStatusCode.Accepted).Do(r => state)
+                                On.Status(HttpStatusCode.OK).Do((r,c) => null),
+                                On.Status(HttpStatusCode.Accepted).Do((r,c) => state)
                             },
-                        r => null);
+                        (r, c) => null);
 
             var result = rule.Evaluate(PreviousResponse, Context);
 
@@ -71,10 +71,10 @@ namespace Tests.Restbucks.NewClient.RulesEngine
                 .ExecuteAction(actionInvoker)
                 .Return(new[]
                             {
-                                On.Status(HttpStatusCode.OK).Do(r => null),
-                                On.Status(HttpStatusCode.Accepted).Do(r => null)
+                                On.Status(HttpStatusCode.OK).Do((r,c) => null),
+                                On.Status(HttpStatusCode.Accepted).Do((r,c) => null)
                             },
-                        r => state);
+                        (r, c) => state);
 
             var result = rule.Evaluate(PreviousResponse, Context);
 
@@ -92,8 +92,8 @@ namespace Tests.Restbucks.NewClient.RulesEngine
                 .ExecuteAction(actionInvoker)
                 .Return(new[]
                             {
-                                On.Status(HttpStatusCode.OK).Do(r => null),
-                                On.Status(HttpStatusCode.Accepted).Do(r => null)
+                                On.Status(HttpStatusCode.OK).Do((r,c) => null),
+                                On.Status(HttpStatusCode.Accepted).Do((r,c) => null)
                             });
 
             var result = rule.Evaluate(PreviousResponse, Context);
@@ -122,7 +122,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
 
             var rule = When.IsTrue(r => true)
                 .ExecuteAction(actionInvoker)
-                .ReturnState(r => state);
+                .ReturnState((r, c) => state);
 
             var result = rule.Evaluate(PreviousResponse, Context);
 
@@ -143,7 +143,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var rule = When.IsTrue(r => r.ContainsLink(RestbucksLink.WithRel(new StringLinkRelation("http://relations.restbucks.com/rfq")))
                                         && r.ContainsForm(RestbucksForm.WithId("order-form")))
                 .ExecuteAction(actionInvoker)
-                .ReturnState(r => state);
+                .ReturnState((r, c) => state);
 
             var result = rule.Evaluate(previousResponse, Context);
 

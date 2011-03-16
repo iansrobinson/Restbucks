@@ -10,18 +10,20 @@ namespace Tests.Restbucks.NewClient.RulesEngine
     [TestFixture]
     public class StateFactoryCollectionTests
     {
+        private static readonly HttpResponseMessage Response = new HttpResponseMessage {StatusCode = HttpStatusCode.Accepted};
+        private static readonly ApplicationContext Context = new ApplicationContext();
+        private static readonly IState DummyState = MockRepository.GenerateStub<IState>();
+        private static readonly IStateFactory DummyWorker = MockRepository.GenerateStub<IStateFactory>();
+        
         [Test]
         public void ShouldInvokeCorrectWorkerBasedOnHttpStatusCode()
         {
-            var worker = MockRepository.GenerateMock<IStateFactory>();
-            var state = MockRepository.GenerateStub<IState>();
-            var response = new HttpResponseMessage {StatusCode = HttpStatusCode.Accepted};
-
-            worker.Expect(w => w.Create(response)).Return(state);
+            var worker = MockRepository.GenerateMock<IStateFactory>();   
+            worker.Expect(w => w.Create(Response, Context)).Return(DummyState);
 
             var factory = new StateFactoryCollection(new Dictionary<HttpStatusCode, IStateFactory> {{HttpStatusCode.Accepted, worker}});
 
-            factory.Create(response);
+            factory.Create(Response, Context);
 
             worker.VerifyAllExpectations();
         }
@@ -30,15 +32,11 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         public void ShouldInvokeDefaultWorkerIfStatusCodeIsNotRecognized()
         {
             var defaultWorker = MockRepository.GenerateMock<IStateFactory>();
-            var worker = MockRepository.GenerateStub<IStateFactory>();
-            var state = MockRepository.GenerateStub<IState>();
-            var response = new HttpResponseMessage { StatusCode = HttpStatusCode.Accepted };
+            defaultWorker.Expect(w => w.Create(Response, Context)).Return(DummyState);
 
-            defaultWorker.Expect(w => w.Create(response)).Return(state);
+            var factory = new StateFactoryCollection(new Dictionary<HttpStatusCode, IStateFactory> { { HttpStatusCode.OK, DummyWorker } }, defaultWorker);
 
-            var factory = new StateFactoryCollection(new Dictionary<HttpStatusCode, IStateFactory> { { HttpStatusCode.OK, worker } }, defaultWorker);
-
-            factory.Create(response);
+            factory.Create(Response, Context);
 
             defaultWorker.VerifyAllExpectations();
         }
@@ -46,12 +44,8 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         [Test]
         public void ShouldReturnUnsuccesfulStateIfStatusCodeIsNotRecognizedAndDefaultWorkerIsNotSupplied()
         {
-            var worker = MockRepository.GenerateStub<IStateFactory>();
-            var response = new HttpResponseMessage { StatusCode = HttpStatusCode.Accepted };
-
-            var factory = new StateFactoryCollection(new Dictionary<HttpStatusCode, IStateFactory> { { HttpStatusCode.OK, worker } });
-
-            Assert.IsInstanceOf(typeof(UnsuccessfulState), factory.Create(response));
+            var factory = new StateFactoryCollection(new Dictionary<HttpStatusCode, IStateFactory> { { HttpStatusCode.OK, DummyWorker } });
+            Assert.IsInstanceOf(typeof(UnsuccessfulState), factory.Create(Response, Context));
         }
     }
 }

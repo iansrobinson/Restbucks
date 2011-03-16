@@ -19,13 +19,13 @@ namespace Restbucks.NewClient.RulesEngine
             this.defaultWorker = defaultWorker;
         }
 
-        public IState Create(HttpResponseMessage response)
+        public IState Create(HttpResponseMessage response, ApplicationContext context)
         {
             if (factoryWorkers.ContainsKey(response.StatusCode))
             {
-                return factoryWorkers[response.StatusCode].Create(response);
+                return factoryWorkers[response.StatusCode].Create(response, context);
             }
-            return defaultWorker.Create(response);
+            return defaultWorker.Create(response, context);
         }
 
         private class UnsuccessfulStateFactory : IStateFactory
@@ -36,7 +36,7 @@ namespace Restbucks.NewClient.RulesEngine
             {
             }
 
-            public IState Create(HttpResponseMessage response)
+            public IState Create(HttpResponseMessage response, ApplicationContext context)
             {
                 return UnsuccessfulState.Instance;
             }

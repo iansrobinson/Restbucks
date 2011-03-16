@@ -5,16 +5,16 @@ namespace Restbucks.NewClient.RulesEngine
 {
     public class StateFactory : IStateFactory
     {
-        private readonly Func<HttpResponseMessage, IState> createState;
+        private readonly Func<HttpResponseMessage, ApplicationContext, IState> createState;
 
-        public StateFactory(Func<HttpResponseMessage, IState> createState)
+        public StateFactory(Func<HttpResponseMessage, ApplicationContext, IState> createState)
         {
             this.createState = createState;
         }
 
-        public IState Create(HttpResponseMessage response)
+        public IState Create(HttpResponseMessage response, ApplicationContext context)
         {
-            return createState(response);
+            return createState(response, context);
         }
     }
 }

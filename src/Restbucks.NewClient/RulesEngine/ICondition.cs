@@ -4,6 +4,6 @@ namespace Restbucks.NewClient.RulesEngine
 {
     public interface ICondition
     {
-        bool IsApplicable(HttpResponseMessage response);
+        bool IsApplicable(HttpResponseMessage response, ApplicationContext context);
     }
 }

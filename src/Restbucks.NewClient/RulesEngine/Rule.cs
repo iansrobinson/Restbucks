@@ -22,10 +22,10 @@ namespace Restbucks.NewClient.RulesEngine
 
         public Result Evaluate(HttpResponseMessage previousResponse, ApplicationContext context)
         {
-            if (condition.IsApplicable(previousResponse))
+            if (condition.IsApplicable(previousResponse, context))
             {
                 var newResponse = actionInvoker.Invoke(previousResponse, context);
-                return new Result(true, stateFactory.Create(newResponse));
+                return new Result(true, stateFactory.Create(newResponse, context));
             }
 
             return Result.Unsuccessful;

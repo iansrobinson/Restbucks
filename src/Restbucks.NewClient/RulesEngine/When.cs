@@ -33,12 +33,12 @@ namespace Restbucks.NewClient.RulesEngine
             return this;
         }
 
-        public IRule ReturnState(Func<HttpResponseMessage, IState> createState)
+        public IRule ReturnState(Func<HttpResponseMessage, ApplicationContext, IState> createState)
         {
             return new Rule(condition, actionInvoker, new StateFactory(createState));
         }
 
-        public IRule Return(IEnumerable<KeyValuePair<HttpStatusCode, IStateFactory>> createStateByStatusCode, Func<HttpResponseMessage, IState> defaultCreateState = null)
+        public IRule Return(IEnumerable<KeyValuePair<HttpStatusCode, IStateFactory>> createStateByStatusCode, Func<HttpResponseMessage, ApplicationContext, IState> defaultCreateState = null)
         {
             Check.IsNotNull(createStateByStatusCode, "createStateByStatusCode");
 
@@ -62,7 +62,7 @@ namespace Restbucks.NewClient.RulesEngine
                 this.condition = condition;
             }
 
-            public bool IsApplicable(HttpResponseMessage response)
+            public bool IsApplicable(HttpResponseMessage response, ApplicationContext context)
             {
                 return condition(response);
             }
@@ -76,7 +76,7 @@ namespace Restbucks.NewClient.RulesEngine
 
     public interface IReturnState
     {
-        IRule ReturnState(Func<HttpResponseMessage, IState> createState);
-        IRule Return(IEnumerable<KeyValuePair<HttpStatusCode, IStateFactory>> createStateByStatusCode, Func<HttpResponseMessage, IState> defaultCreateState = null);
+        IRule ReturnState(Func<HttpResponseMessage, ApplicationContext, IState> createState);
+        IRule Return(IEnumerable<KeyValuePair<HttpStatusCode, IStateFactory>> createStateByStatusCode, Func<HttpResponseMessage, ApplicationContext, IState> defaultCreateState = null);
     }
 }
