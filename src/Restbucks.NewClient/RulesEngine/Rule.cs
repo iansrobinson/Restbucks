@@ -20,11 +20,11 @@ namespace Restbucks.NewClient.RulesEngine
             this.stateFactory = stateFactory;
         }
 
-        public Result Evaluate(HttpResponseMessage previousResponse)
+        public Result Evaluate(HttpResponseMessage previousResponse, ApplicationContext context)
         {
             if (condition.IsApplicable(previousResponse))
             {
-                var newResponse = actionInvoker.Invoke(previousResponse);
+                var newResponse = actionInvoker.Invoke(previousResponse, context);
                 return new Result(true, stateFactory.Create(newResponse));
             }
 

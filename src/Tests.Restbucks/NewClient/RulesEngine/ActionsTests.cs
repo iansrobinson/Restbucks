@@ -19,10 +19,10 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var action = MockRepository.GenerateMock<IAction>();
             action.Expect(a => a.Execute(response, context, client));
 
-            var actions = new Actions(client, context);
+            var actions = new Actions(client);
             var invoker = actions.Do(action);
 
-            invoker.Invoke(response);
+            invoker.Invoke(response, context);
 
             action.VerifyAllExpectations();
         }
@@ -32,24 +32,17 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         {
             var newResponse = new HttpResponseMessage();
             
-            var actions = new Actions(new HttpClient(), new ApplicationContext());
+            var actions = new Actions(new HttpClient());
             var invoker = actions.Do((r, cl, ct) => newResponse);
 
-            Assert.AreEqual(newResponse, invoker.Invoke(new HttpResponseMessage()));
+            Assert.AreEqual(newResponse, invoker.Invoke(new HttpResponseMessage(), new ApplicationContext()));
         }
 
         [Test]
         [ExpectedException(ExpectedException = typeof(ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: client")]
         public void ThrowsExceptionIfHttpClientIsNull()
         {
-            new Actions(null, new ApplicationContext());
-        }
-
-        [Test]
-        [ExpectedException(ExpectedException = typeof(ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: context")]
-        public void ThrowsExceptionIfContextIsNull()
-        {
-            new Actions(new HttpClient(), null);
+            new Actions(null);
         }
     }
 }
