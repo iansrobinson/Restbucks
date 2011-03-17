@@ -21,7 +21,7 @@ namespace Restbucks.NewClient.RulesEngine
                                   Method = HttpMethod.Get
                               };
 
-            return clientCapabilities.HttpClient.Send(request);
+            return clientCapabilities.GetHttpClient().Send(request);
         }
     }
 }

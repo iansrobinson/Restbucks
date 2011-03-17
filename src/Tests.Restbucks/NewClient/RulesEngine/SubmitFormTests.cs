@@ -75,9 +75,9 @@ namespace Tests.Restbucks.NewClient.RulesEngine
                 this.client = client;
             }
 
-            public HttpClient HttpClient
+            public HttpClient GetHttpClient()
             {
-                get { return client; }
+                return client;
             }
         }
     }

@@ -23,7 +23,7 @@ namespace Restbucks.NewClient.RulesEngine
                                   Content = formDataStrategy.CreateFormData(previousResponse, context)
                               };
 
-            return clientCapabilities.HttpClient.Send(request);
+            return clientCapabilities.GetHttpClient().Send(request);
         }
     }
 }
