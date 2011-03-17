@@ -7,10 +7,10 @@ namespace Restbucks.NewClient
 {
     public class ApplicationContextFormDataStrategy : IFormDataStrategy
     {
-        private readonly EntityBodyKey key;
+        private readonly IKey key;
         private readonly MediaTypeHeaderValue contentType;
 
-        public ApplicationContextFormDataStrategy(EntityBodyKey key, MediaTypeHeaderValue contentType)
+        public ApplicationContextFormDataStrategy(IKey key, MediaTypeHeaderValue contentType)
         {
             this.key = key;
             this.contentType = contentType;

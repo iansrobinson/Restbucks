@@ -1,17 +1,16 @@
 ﻿using System.Net.Http;
 using System.Net.Http.Headers;
 using Microsoft.Net.Http;
-using Restbucks.MediaType;
 using Restbucks.NewClient.RulesEngine;
 
 namespace Restbucks.NewClient
 {
     public class PrepopulatedFormDataStrategy : IFormDataStrategy
     {
-        private readonly Shop entityBody;
+        private readonly object entityBody;
         private readonly MediaTypeHeaderValue contentType;
 
-        public PrepopulatedFormDataStrategy(Shop entityBody, MediaTypeHeaderValue contentType)
+        public PrepopulatedFormDataStrategy(object entityBody, MediaTypeHeaderValue contentType)
         {
             this.entityBody = entityBody;
             this.contentType = contentType;
