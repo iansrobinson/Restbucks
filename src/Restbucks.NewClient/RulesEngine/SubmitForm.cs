@@ -16,13 +16,11 @@ namespace Restbucks.NewClient.RulesEngine
             var formInfo = formStrategy.GetFormInfo(previousResponse);
             var formDataStrategy = formStrategy.GetFormDataStrategy(previousResponse);
 
-            var content = formDataStrategy.CreateFormData(previousResponse, context);
-            
             var request = new HttpRequestMessage
                               {
                                   RequestUri = formInfo.ResourceUri,
                                   Method = formInfo.Method,
-                                  Content = content
+                                  Content = formDataStrategy.CreateFormData(previousResponse, context)
                               };
 
             return clientCapabilities.HttpClient.Send(request);
