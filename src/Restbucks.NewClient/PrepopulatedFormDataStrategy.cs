@@ -19,7 +19,7 @@ namespace Restbucks.NewClient
 
         public HttpContent CreateFormData(HttpResponseMessage previousResponse, ApplicationContext context, IClientCapabilities clientCapabilities)
         {
-            var content = entityBody.ToContent(RestbucksFormatter.Instance);
+            var content = entityBody.ToContent(clientCapabilities.GetContentFormatter(contentType));
             content.Headers.ContentType = contentType;
 
             return content;

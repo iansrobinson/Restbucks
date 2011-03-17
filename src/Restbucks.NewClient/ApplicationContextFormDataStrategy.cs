@@ -1,7 +1,6 @@
 ﻿using System.Net.Http;
 using System.Net.Http.Headers;
 using Microsoft.Net.Http;
-using Restbucks.MediaType;
 using Restbucks.NewClient.RulesEngine;
 
 namespace Restbucks.NewClient
@@ -19,7 +18,7 @@ namespace Restbucks.NewClient
 
         public HttpContent CreateFormData(HttpResponseMessage previousResponse, ApplicationContext context, IClientCapabilities clientCapabilities)
         {
-            var content = context.Get<Shop>(key).ToContent(RestbucksFormatter.Instance);
+            var content = context.Get<object>(key).ToContent(clientCapabilities.GetContentFormatter(contentType));
             content.Headers.ContentType = contentType;
 
             return content;
