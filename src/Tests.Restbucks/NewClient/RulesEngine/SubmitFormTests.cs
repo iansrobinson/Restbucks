@@ -6,6 +6,7 @@ using Restbucks.MediaType;
 using Restbucks.NewClient.RulesEngine;
 using Rhino.Mocks;
 using Tests.Restbucks.Client.Helpers;
+using Tests.Restbucks.NewClient.Util;
 
 namespace Tests.Restbucks.NewClient.RulesEngine
 {
@@ -60,7 +61,8 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         private static IFormDataStrategy CreateDummyFormDataStrategy()
         {
             var dummyFormDataStrategy = MockRepository.GenerateStub<IFormDataStrategy>();
-            dummyFormDataStrategy.Stub(s => s.CreateFormData(PreviousResponse, Context)).Return(new StringContent(string.Empty));
+            dummyFormDataStrategy.Stub(s => s.CreateFormData(PreviousResponse, Context)).Return(
+                DummyResponse.CreateResponse().Content);
             return dummyFormDataStrategy;
         }
 

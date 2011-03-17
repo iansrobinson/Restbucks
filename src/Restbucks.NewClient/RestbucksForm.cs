@@ -101,7 +101,7 @@ namespace Restbucks.NewClient
                 return new ApplicationContextFormDataStrategy(new EntityBodyKey(form.Id, contentType, form.Schema), contentType);
             }
 
-            return new PrepopulatedFormDataStrategy(form, contentType);
+            return new PrepopulatedFormDataStrategy(form.Instance, contentType);
         }
     }
 }
