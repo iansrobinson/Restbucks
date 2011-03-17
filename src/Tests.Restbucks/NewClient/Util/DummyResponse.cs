@@ -10,20 +10,29 @@ namespace Tests.Restbucks.NewClient.Util
     public static class DummyResponse
     {
         private static readonly Uri LinkUri = new Uri("request-for-quote", UriKind.Relative);
-        private static readonly Uri FormUri = new Uri("orders", UriKind.Relative);
+        private static readonly Uri EmptyFormUri = new Uri("quotes", UriKind.Relative);
+        private static readonly Uri PrepopulatedFormUri = new Uri("order/1234", UriKind.Relative);
               
         public static readonly Uri BaseUri = new Uri("http://localhost/virtual-directory/");
         public static readonly Uri LinkAbsoluteUri = new Uri(BaseUri, LinkUri);
-        public static readonly Uri FormAbsoluteUri = new Uri(BaseUri, FormUri);
+        public static readonly Uri EmptyFormAbsoluteUri = new Uri(BaseUri, EmptyFormUri);
+        public static readonly Uri PrepopulatedFormAbsoluteUri = new Uri(BaseUri, PrepopulatedFormUri);
         
         public static readonly Link Link = new Link(
             LinkUri,
             RestbucksMediaType.Value,
             new UriLinkRelation(new Uri("http://relations.restbucks.com/rfq")));
 
-        public static readonly Form Form = new Form(
+        public static readonly Form EmptyForm = new Form(
+            "request-for-quote",
+            EmptyFormUri,
+            "post",
+            RestbucksMediaType.Value,
+            new Uri("http://schemas/shop"));
+
+        public static readonly Form PrepopulatedForm = new Form(
             "order-form",
-            new Uri("orders", UriKind.Relative),
+            PrepopulatedFormUri,
             "post",
             RestbucksMediaType.Value,
             new Uri("http://schemas/shop"));
@@ -32,7 +41,8 @@ namespace Tests.Restbucks.NewClient.Util
         {
             var entityBody = new ShopBuilder(BaseUri)
                 .AddLink(Link)
-                .AddForm(Form)
+                .AddForm(EmptyForm)
+                .AddForm(PrepopulatedForm)
                 .Build();
 
             var content = entityBody.ToContent(RestbucksMediaTypeFormatter.Instance);

@@ -26,7 +26,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         [Test]
         public void ShouldReturnTrueIfFormExists()
         {
-            Assert.IsTrue(Response.ContainsForm(RestbucksForm.WithId("order-form")));
+            Assert.IsTrue(Response.ContainsForm(RestbucksForm.WithId("request-for-quote")));
         }
 
         [Test]

@@ -15,22 +15,6 @@ namespace Restbucks.NewClient
             return new RestbucksForm(id);
         }
 
-        public static IFormDataStrategy CreateDataStrategy(Form form)
-        {
-            var contentType = new MediaTypeHeaderValue(form.MediaType);
-                
-            if (form.Instance == null)
-            {
-                if (form.Schema == null)
-                {
-                    throw new InvalidOperationException(string.Format("Unable to create a data strategy for empty form with null schema attribute. Id: '{0}'.", form.Id));
-                }
-                return new ApplicationContextFormDataStrategy(new EntityBodyKey(form.Id, contentType, form.Schema), contentType);
-            }
-
-            return new PrepopulatedFormDataStrategy(form, contentType);
-        }
-
         private readonly string id;
 
         private RestbucksForm(string id)
@@ -61,22 +45,23 @@ namespace Restbucks.NewClient
         {
             var entityBody = GetEntityBody(response);
             var form = GetForm(id, entityBody);
-            formInfo = GetFormInfo(entityBody, form);
+            var dataStrategy = CreateDataStrategy(form);
+
+            formInfo = GetFormInfo(entityBody.BaseUri, form, dataStrategy);
 
             return formInfo != null;
         }
 
-        private static FormInfo GetFormInfo(Shop entityBody, Form form)
+        private static FormInfo GetFormInfo(Uri baseUri, Form form, IFormDataStrategy dataStrategy)
         {
             if (form == null)
             {
                 return null;
             }
             
-            var resourceUri = form.Resource.IsAbsoluteUri ? form.Resource : new Uri(entityBody.BaseUri, form.Resource);
-            var formDataStrategy = CreateDataStrategy(form);
-
-            return new FormInfo(resourceUri, new HttpMethod(form.Method), new MediaTypeHeaderValue(form.MediaType), formDataStrategy);
+            var resourceUri = form.Resource.IsAbsoluteUri ? form.Resource : new Uri(baseUri, form.Resource);
+            
+            return new FormInfo(resourceUri, new HttpMethod(form.Method), new MediaTypeHeaderValue(form.MediaType), dataStrategy);
         }
 
         private static Form GetForm(string id, Shop entityBody)
@@ -89,6 +74,27 @@ namespace Restbucks.NewClient
         private static Shop GetEntityBody(HttpResponseMessage response)
         {
             return response.Content.ReadAsObject<Shop>(RestbucksFormatter.Instance);
+        }
+
+        private static IFormDataStrategy CreateDataStrategy(Form form)
+        {
+            if (form == null)
+            {
+                return null;
+            }
+
+            var contentType = new MediaTypeHeaderValue(form.MediaType);
+
+            if (form.Instance == null)
+            {
+                if (form.Schema == null)
+                {
+                    throw new InvalidOperationException(string.Format("Unable to create a data strategy for empty form with null schema attribute. Id: '{0}'.", form.Id));
+                }
+                return new ApplicationContextFormDataStrategy(new EntityBodyKey(form.Id, contentType, form.Schema), contentType);
+            }
+
+            return new PrepopulatedFormDataStrategy(form, contentType);
         }
     }
 }

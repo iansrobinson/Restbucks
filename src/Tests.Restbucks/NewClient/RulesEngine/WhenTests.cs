@@ -141,7 +141,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var dummyState = MockRepository.GenerateStub<IState>();
 
             var rule = When.IsTrue(r => r.ContainsLink(RestbucksLink.WithRel(new StringLinkRelation("http://relations.restbucks.com/rfq")))
-                                        && r.ContainsForm(RestbucksForm.WithId("order-form")))
+                                        && r.ContainsForm(RestbucksForm.WithId("request-for-quote")))
                 .ExecuteAction(dummyActionInvoker)
                 .ReturnState((r, c) => dummyState);
 
