@@ -35,6 +35,13 @@ namespace Restbucks.NewClient
             return formInfo;
         }
 
+        public IFormDataStrategy GetFormDataStrategy(HttpResponseMessage response)
+        {
+            var entityBody = GetEntityBody(response);
+            var form = GetForm(id, entityBody);
+            return CreateDataStrategy(form);
+        }
+
         public bool FormExists(HttpResponseMessage response)
         {
             FormInfo formInfo;
@@ -61,7 +68,7 @@ namespace Restbucks.NewClient
             
             var resourceUri = form.Resource.IsAbsoluteUri ? form.Resource : new Uri(baseUri, form.Resource);
             
-            return new FormInfo(resourceUri, new HttpMethod(form.Method), new MediaTypeHeaderValue(form.MediaType), dataStrategy);
+            return new FormInfo(resourceUri, new HttpMethod(form.Method), new MediaTypeHeaderValue(form.MediaType));
         }
 
         private static Form GetForm(string id, Shop entityBody)

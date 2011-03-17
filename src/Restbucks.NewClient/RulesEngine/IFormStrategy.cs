@@ -5,6 +5,7 @@ namespace Restbucks.NewClient.RulesEngine
     public interface IFormStrategy
     {
         FormInfo GetFormInfo(HttpResponseMessage response);
+        IFormDataStrategy GetFormDataStrategy(HttpResponseMessage response);
         bool FormExists(HttpResponseMessage response);
     }
 }

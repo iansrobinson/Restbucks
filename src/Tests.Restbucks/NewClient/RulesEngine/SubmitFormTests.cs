@@ -18,14 +18,14 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         private static readonly MediaTypeHeaderValue ContentType = new MediaTypeHeaderValue(RestbucksMediaType.Value);
         private static readonly ApplicationContext Context = new ApplicationContext();
         private static readonly IFormDataStrategy DummyFormDataStrategy = CreateDummyFormDataStrategy();
+        private static readonly FormInfo DummyFormInfo = new FormInfo(ResourceUri, HttpMethod, ContentType);
 
         [Test]
         public void ShouldSubmitFormWithCorrectControlData()
         {
-            var formInfo = new FormInfo(ResourceUri, HttpMethod, ContentType, DummyFormDataStrategy);
-
             var dummyFormStrategy = MockRepository.GenerateStub<IFormStrategy>();
-            dummyFormStrategy.Expect(f => f.GetFormInfo(PreviousResponse)).Return(formInfo);
+            dummyFormStrategy.Expect(f => f.GetFormInfo(PreviousResponse)).Return(DummyFormInfo);
+            dummyFormStrategy.Expect(f => f.GetFormDataStrategy(PreviousResponse)).Return(DummyFormDataStrategy);
 
             var mockEndpoint = new MockEndpoint(new HttpResponseMessage());
             var client = new HttpClient {Channel = mockEndpoint};
@@ -44,10 +44,9 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var mockFormDataStrategy = MockRepository.GenerateMock<IFormDataStrategy>();
             mockFormDataStrategy.Expect(s => s.CreateFormData(PreviousResponse, Context)).Return(new StringContent(string.Empty));
 
-            var formInfo = new FormInfo(ResourceUri, HttpMethod, ContentType, mockFormDataStrategy);
-
             var dummyFormStrategy = MockRepository.GenerateStub<IFormStrategy>();
-            dummyFormStrategy.Expect(f => f.GetFormInfo(PreviousResponse)).Return(formInfo);
+            dummyFormStrategy.Expect(f => f.GetFormInfo(PreviousResponse)).Return(DummyFormInfo);
+            dummyFormStrategy.Expect(f => f.GetFormDataStrategy(PreviousResponse)).Return(mockFormDataStrategy);
 
             var dummyEndpoint = new MockEndpoint(new HttpResponseMessage());
             var client = new HttpClient {Channel = dummyEndpoint};
