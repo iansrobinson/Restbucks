@@ -1,9 +1,8 @@
 ﻿using System.Net.Http;
 using System.Net.Http.Headers;
 using Microsoft.Net.Http;
-using Restbucks.NewClient.RulesEngine;
 
-namespace Restbucks.NewClient
+namespace Restbucks.NewClient.RulesEngine
 {
     public class ApplicationContextFormDataStrategy : IFormDataStrategy
     {

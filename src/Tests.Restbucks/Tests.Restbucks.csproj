@@ -111,14 +111,14 @@
     <Compile Include="MediaType\ShopTests.cs" />
     <Compile Include="MediaType\StringLinkRelationTests.cs" />
     <Compile Include="MediaType\UriLinkRelationTests.cs" />
-    <Compile Include="NewClient\ApplicationContextFormDataStrategyTests.cs" />
-    <Compile Include="NewClient\PrepopulatedFormDataStrategyTests.cs" />
     <Compile Include="NewClient\RestbucksFormTests.cs" />
     <Compile Include="NewClient\RestbucksLinkTests.cs" />
     <Compile Include="NewClient\RulesEngine\ActionsTests.cs" />
+    <Compile Include="NewClient\RulesEngine\ApplicationContextFormDataStrategyTests.cs" />
     <Compile Include="NewClient\RulesEngine\ApplicationContextTests.cs" />
     <Compile Include="NewClient\RulesEngine\HttpResponseMessageTests.cs" />
     <Compile Include="NewClient\RulesEngine\HttpResponseMessageExtensionsTests.cs" />
+    <Compile Include="NewClient\RulesEngine\PrepopulatedFormDataStrategyTests.cs" />
     <Compile Include="NewClient\RulesEngine\RulesTests.cs" />
     <Compile Include="NewClient\RulesEngine\RuleTests.cs" />
     <Compile Include="NewClient\RulesEngine\StateFactoryCollectionTests.cs" />

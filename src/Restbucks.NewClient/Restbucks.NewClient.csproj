@@ -67,14 +67,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplicationContextFormDataStrategy.cs" />
-    <Compile Include="PrepopulatedFormDataStrategy.cs" />
     <Compile Include="RestbucksForm.cs" />
     <Compile Include="RestbucksLink.cs" />
     <Compile Include="RestbucksFormatter.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="RulesEngine\Actions.cs" />
+    <Compile Include="RulesEngine\ApplicationContextFormDataStrategy.cs" />
     <Compile Include="RulesEngine\ClickLink.cs" />
     <Compile Include="RulesEngine\ControlNotFoundException.cs" />
     <Compile Include="RulesEngine\EntityBodyKey.cs" />
@@ -98,6 +97,7 @@
     <Compile Include="RulesEngine\IStateFactory.cs" />
     <Compile Include="RulesEngine\LinkInfo.cs" />
     <Compile Include="RulesEngine\On.cs" />
+    <Compile Include="RulesEngine\PrepopulatedFormDataStrategy.cs" />
     <Compile Include="RulesEngine\Result.cs" />
     <Compile Include="RulesEngine\Rule.cs" />
     <Compile Include="RulesEngine\Rules.cs" />
