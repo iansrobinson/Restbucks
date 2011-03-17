@@ -10,7 +10,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
     public class ActionsTests
     {
         private static readonly HttpResponseMessage Response = new HttpResponseMessage();
-        private static readonly HttpClient Client = new HttpClient();
+        private static readonly IClientCapabilities Client = new ClientCapabilities();
         private static readonly ApplicationContext Context = new ApplicationContext();
         
         [Test]
@@ -31,7 +31,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         public void ShouldReturnInvokerThatInvokesSuppliedFunction()
         {
             var expectedResponse = new HttpResponseMessage();
-            
+
             var actions = new Actions(Client);
             var invoker = actions.Do((r, cl, ct) => expectedResponse);
 
@@ -39,10 +39,18 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         }
 
         [Test]
-        [ExpectedException(ExpectedException = typeof(ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: client")]
-        public void ThrowsExceptionIfHttpClientIsNull()
+        [ExpectedException(ExpectedException = typeof(ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: clientCapabilities")]
+        public void ThrowsExceptionIfClientCapabilitiesIsNull()
         {
             new Actions(null);
+        }
+
+        private class ClientCapabilities : IClientCapabilities
+        {
+            public HttpClient HttpClient
+            {
+                get { return new HttpClient(); }
+            }
         }
     }
 }

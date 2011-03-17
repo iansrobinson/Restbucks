@@ -11,7 +11,7 @@ namespace Restbucks.NewClient.RulesEngine
             this.linkStrategy = linkStrategy;
         }
 
-        public HttpResponseMessage Execute(HttpResponseMessage previousResponse, ApplicationContext context, HttpClient client)
+        public HttpResponseMessage Execute(HttpResponseMessage previousResponse, ApplicationContext context, IClientCapabilities clientCapabilities)
         {
             var linkInfo = linkStrategy.GetLinkInfo(previousResponse);
 
@@ -21,7 +21,7 @@ namespace Restbucks.NewClient.RulesEngine
                                   Method = HttpMethod.Get
                               };
 
-            return client.Send(request);
+            return clientCapabilities.HttpClient.Send(request);
         }
     }
 }

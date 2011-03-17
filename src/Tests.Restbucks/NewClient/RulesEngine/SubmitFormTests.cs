@@ -31,7 +31,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var client = new HttpClient {Channel = mockEndpoint};
 
             var submitForm = new SubmitForm(dummyFormStrategy);
-            submitForm.Execute(PreviousResponse, Context, client);
+            submitForm.Execute(PreviousResponse, Context, new ClientCapabilities(client));
 
             Assert.AreEqual(ResourceUri, mockEndpoint.ReceivedRequest.RequestUri);
             Assert.AreEqual(HttpMethod, mockEndpoint.ReceivedRequest.Method);
@@ -53,7 +53,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var client = new HttpClient {Channel = dummyEndpoint};
 
             var submitForm = new SubmitForm(dummyFormStrategy);
-            submitForm.Execute(PreviousResponse, Context, client);
+            submitForm.Execute(PreviousResponse, Context, new ClientCapabilities(client));
 
             mockFormDataStrategy.VerifyAllExpectations();
         }
@@ -63,6 +63,21 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var dummyFormDataStrategy = MockRepository.GenerateStub<IFormDataStrategy>();
             dummyFormDataStrategy.Stub(s => s.CreateFormData(PreviousResponse, Context)).Return(new StringContent(string.Empty));
             return dummyFormDataStrategy;
+        }
+
+        private class ClientCapabilities : IClientCapabilities
+        {
+            private readonly HttpClient client;
+
+            public ClientCapabilities(HttpClient client)
+            {
+                this.client = client;
+            }
+
+            public HttpClient HttpClient
+            {
+                get { return client; }
+            }
         }
     }
 }

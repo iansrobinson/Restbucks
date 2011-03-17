@@ -6,12 +6,12 @@ namespace Restbucks.NewClient.RulesEngine
 {
     public class Actions
     {
-        private readonly HttpClient client;
+        private readonly IClientCapabilities clientCapabilities;
 
-        public Actions(HttpClient client)
+        public Actions(IClientCapabilities clientCapabilities)
         {
-            Check.IsNotNull(client, "client");
-            this.client = client;
+            Check.IsNotNull(clientCapabilities, "clientCapabilities");
+            this.clientCapabilities = clientCapabilities;
         }
 
         public IActionInvoker ClickLink(ILinkStrategy linkStrategy)
@@ -26,45 +26,45 @@ namespace Restbucks.NewClient.RulesEngine
 
         public IActionInvoker Do(IAction action)
         {
-            return new ActionObjectInvoker(action, client);
+            return new ActionObjectInvoker(action, clientCapabilities);
         }
 
-        public IActionInvoker Do(Func<HttpResponseMessage, ApplicationContext, HttpClient, HttpResponseMessage> action)
+        public IActionInvoker Do(Func<HttpResponseMessage, ApplicationContext, IClientCapabilities, HttpResponseMessage> action)
         {
-            return new ActionFunctionInvoker(action, client);
+            return new ActionFunctionInvoker(action, clientCapabilities);
         }
 
         private class ActionObjectInvoker : IActionInvoker
         {
             private readonly IAction action;
-            private readonly HttpClient client;
+            private readonly IClientCapabilities clientCapabilities;
 
-            public ActionObjectInvoker(IAction action, HttpClient client)
+            public ActionObjectInvoker(IAction action, IClientCapabilities clientCapabilitiesCapabilities)
             {
                 this.action = action;
-                this.client = client;
+                clientCapabilities = clientCapabilitiesCapabilities;
             }
 
             public HttpResponseMessage Invoke(HttpResponseMessage previousResponse, ApplicationContext context)
             {
-                return action.Execute(previousResponse, context, client);
+                return action.Execute(previousResponse, context, clientCapabilities);
             }
         }
 
         private class ActionFunctionInvoker : IActionInvoker
         {
-            private readonly Func<HttpResponseMessage, ApplicationContext, HttpClient, HttpResponseMessage> action;
-            private readonly HttpClient client;
+            private readonly Func<HttpResponseMessage, ApplicationContext, IClientCapabilities, HttpResponseMessage> action;
+            private readonly IClientCapabilities clientCapabilities;
 
-            public ActionFunctionInvoker(Func<HttpResponseMessage, ApplicationContext, HttpClient, HttpResponseMessage> action, HttpClient client)
+            public ActionFunctionInvoker(Func<HttpResponseMessage, ApplicationContext, IClientCapabilities, HttpResponseMessage> action, IClientCapabilities clientCapabilities)
             {
                 this.action = action;
-                this.client = client;
+                this.clientCapabilities = clientCapabilities;
             }
 
             public HttpResponseMessage Invoke(HttpResponseMessage previousResponse, ApplicationContext context)
             {
-                return action(previousResponse, context, client);
+                return action(previousResponse, context, clientCapabilities);
             }
         }
     }
