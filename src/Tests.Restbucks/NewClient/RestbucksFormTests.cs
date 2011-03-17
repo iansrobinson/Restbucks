@@ -1,6 +1,10 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Net.Http.Headers;
+using Microsoft.Net.Http;
 using NUnit.Framework;
+using Restbucks.Client.Formatters;
+using Restbucks.MediaType;
 using Restbucks.NewClient;
 using Restbucks.NewClient.RulesEngine;
 using Tests.Restbucks.NewClient.Util;
@@ -51,37 +55,39 @@ namespace Tests.Restbucks.NewClient
             Assert.IsFalse(form.FormExists(DummyResponse.CreateResponse()));
         }
 
+        [Test]
+        public void ShouldReturnPrepopulatedFormDataStrategyIfFormIsPrepopulated()
+        {
+            var form = RestbucksForm.WithId("order-form");
+            var dataStrategy = form.GetFormDataStrategy(DummyResponse.CreateResponse());
 
-//        [Test]
-//        public void ShouldReturnPrepopulatedFormDataStrategyIfFormDataIsNotNull()
-//        {
-//            var form = new Form("order-form", new Uri("http://localhost/orders"), "post", RestbucksMediaType.Value, new ShopBuilder(null).Build());
-//            var dataStrategy = RestbucksForm.CreateDataStrategy(form);
-//
-//            Assert.IsInstanceOf(typeof(PrepopulatedFormDataStrategy), dataStrategy);
-//            Assert.AreEqual(form, dataStrategy.GetPrivateFieldValue<Form>("form"));
-//            Assert.AreEqual(new MediaTypeHeaderValue(form.MediaType), dataStrategy.GetPrivateFieldValue<MediaTypeHeaderValue>("contentType"));
-//        }
-//
-//        [Test]
-//        public void ShouldReturnApplicationContextFormDataStrategyIfFormDataIsNull()
-//        {
-//            var form = new Form("order-form", new Uri("http://localhost/orders"), "post", RestbucksMediaType.Value, new Uri("http://schemas/shop"));
-//            var dataStrategy = RestbucksForm.CreateDataStrategy(form);
-//
-//            var expectedKey = new EntityBodyKey(form.Id, new MediaTypeHeaderValue(form.MediaType), form.Schema);
-//
-//            Assert.IsInstanceOf(typeof(ApplicationContextFormDataStrategy), dataStrategy);
-//            Assert.AreEqual(expectedKey, dataStrategy.GetPrivateFieldValue<EntityBodyKey>("key"));
-//            Assert.AreEqual(new MediaTypeHeaderValue(form.MediaType), dataStrategy.GetPrivateFieldValue<MediaTypeHeaderValue>("contentType"));
-//        }
-//
-//        [Test]
-//        [ExpectedException(ExpectedException = typeof(InvalidOperationException), ExpectedMessage = "Unable to create a data strategy for empty form with null schema attribute. Id: 'order-form'.")]
-//        public void ThrowsExceptionWhenGettingDataStrategyForFormWithNullFormDataButNoSchema()
-//        {
-//            var form = new Form("order-form", new Uri("http://localhost/orders"), "post", RestbucksMediaType.Value, null as Shop);
-//            RestbucksForm.CreateDataStrategy(form);
-//        }
+            Assert.IsInstanceOf(typeof (PrepopulatedFormDataStrategy), dataStrategy);
+        }
+
+        [Test]
+        public void ShouldReturnApplicationContextFormDataStrategyIfFormDataIsNull()
+        {
+            var form = RestbucksForm.WithId("request-for-quote");
+            var dataStrategy = form.GetFormDataStrategy(DummyResponse.CreateResponse());
+
+            Assert.IsInstanceOf(typeof(ApplicationContextFormDataStrategy), dataStrategy);
+        }
+
+        [Test]
+        [ExpectedException(ExpectedException = typeof(InvalidOperationException), ExpectedMessage = "Unable to create a data strategy for empty form with null schema attribute. Id: 'invalid-form'.")]
+        public void ThrowsExceptionWhenGettingDataStrategyForFormWithNullFormDataButNoSchema()
+        {
+            var entityBody = new ShopBuilder(new Uri("http://localhost"))
+                .AddForm(new Form("invalid-form", new Uri("http://localhost/orders"), "post", RestbucksMediaType.Value, null as Shop))
+                .Build();
+
+            var content = entityBody.ToContent(RestbucksMediaTypeFormatter.Instance);
+            content.Headers.ContentType = new MediaTypeHeaderValue(RestbucksMediaType.Value);
+
+            var response = new HttpResponseMessage { Content = content };
+
+            var form = RestbucksForm.WithId("invalid-form");
+            form.GetFormDataStrategy(response);
+        }
     }
 }
