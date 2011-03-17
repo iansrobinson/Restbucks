@@ -14,6 +14,7 @@ namespace Tests.Restbucks.NewClient.Util
         private static readonly Uri PrepopulatedFormUri = new Uri("order/1234", UriKind.Relative);
               
         public static readonly Uri BaseUri = new Uri("http://localhost/virtual-directory/");
+        public static readonly Uri RestbucksBaseUri = new Uri("http://restbucks.com/");
         public static readonly Uri LinkAbsoluteUri = new Uri(BaseUri, LinkUri);
         public static readonly Uri EmptyFormAbsoluteUri = new Uri(BaseUri, EmptyFormUri);
         public static readonly Uri PrepopulatedFormAbsoluteUri = new Uri(BaseUri, PrepopulatedFormUri);
@@ -35,7 +36,7 @@ namespace Tests.Restbucks.NewClient.Util
             PrepopulatedFormUri,
             "post",
             RestbucksMediaType.Value,
-            new Uri("http://schemas/shop"));
+            new ShopBuilder(RestbucksBaseUri).Build());
         
         public static HttpResponseMessage CreateResponse()
         {

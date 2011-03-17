@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using Microsoft.Net.Http;
 using NUnit.Framework;
 using Restbucks.MediaType;
 using Restbucks.NewClient;

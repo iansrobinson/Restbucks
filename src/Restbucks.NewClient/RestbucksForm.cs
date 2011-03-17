@@ -47,12 +47,12 @@ namespace Restbucks.NewClient
             var form = GetForm(id, entityBody);
             var dataStrategy = CreateDataStrategy(form);
 
-            formInfo = GetFormInfo(entityBody.BaseUri, form, dataStrategy);
+            formInfo = CreateFormInfo(entityBody.BaseUri, form, dataStrategy);
 
             return formInfo != null;
         }
 
-        private static FormInfo GetFormInfo(Uri baseUri, Form form, IFormDataStrategy dataStrategy)
+        private static FormInfo CreateFormInfo(Uri baseUri, Form form, IFormDataStrategy dataStrategy)
         {
             if (form == null)
             {
