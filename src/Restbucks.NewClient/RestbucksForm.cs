@@ -59,22 +59,36 @@ namespace Restbucks.NewClient
 
         private bool TryGetFormInfo(HttpResponseMessage response, out FormInfo formInfo)
         {
-            var entityBody = response.Content.ReadAsObject<Shop>(RestbucksFormatter.Instance);
-            var form = (from f in entityBody.Forms
-                        where f.Id.Equals(id)
-                        select f).FirstOrDefault();
+            var entityBody = GetEntityBody(response);
+            var form = GetForm(id, entityBody);
+            formInfo = GetFormInfo(entityBody, form);
 
+            return formInfo != null;
+        }
+
+        private static FormInfo GetFormInfo(Shop entityBody, Form form)
+        {
             if (form == null)
             {
-                formInfo = null;
-                return false;
+                return null;
             }
-
+            
             var resourceUri = form.Resource.IsAbsoluteUri ? form.Resource : new Uri(entityBody.BaseUri, form.Resource);
             var formDataStrategy = CreateDataStrategy(form);
 
-            formInfo = new FormInfo(resourceUri, new HttpMethod(form.Method), new MediaTypeHeaderValue(form.MediaType), formDataStrategy);
-            return true;
+            return new FormInfo(resourceUri, new HttpMethod(form.Method), new MediaTypeHeaderValue(form.MediaType), formDataStrategy);
+        }
+
+        private static Form GetForm(string id, Shop entityBody)
+        {
+            return (from f in entityBody.Forms
+                    where f.Id.Equals(id)
+                    select f).FirstOrDefault();
+        }
+
+        private static Shop GetEntityBody(HttpResponseMessage response)
+        {
+            return response.Content.ReadAsObject<Shop>(RestbucksFormatter.Instance);
         }
     }
 }
