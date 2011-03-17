@@ -20,7 +20,7 @@ namespace Restbucks.NewClient.RulesEngine
                               {
                                   RequestUri = formInfo.ResourceUri,
                                   Method = formInfo.Method,
-                                  Content = formDataStrategy.CreateFormData(previousResponse, context)
+                                  Content = formDataStrategy.CreateFormData(previousResponse, context, clientCapabilities)
                               };
 
             return clientCapabilities.GetHttpClient().Send(request);

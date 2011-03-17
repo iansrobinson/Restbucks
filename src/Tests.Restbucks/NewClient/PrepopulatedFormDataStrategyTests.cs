@@ -17,7 +17,7 @@ namespace Tests.Restbucks.NewClient
         public void ShouldCreateContentBasedOnSuppliedForm()
         {
             var dataStrategy = new PrepopulatedFormDataStrategy(EntityBody, ContentType);
-            var content = dataStrategy.CreateFormData(null, null);
+            var content = dataStrategy.CreateFormData(null, null, null);
 
             Assert.AreEqual(EntityBody.BaseUri, content.ReadAsObject<Shop>(RestbucksFormatter.Instance).BaseUri);
         }
@@ -26,7 +26,7 @@ namespace Tests.Restbucks.NewClient
         public void ShouldAddContentTypeHeaderToContent()
         {
             var dataStrategy = new PrepopulatedFormDataStrategy(EntityBody, ContentType);
-            var content = dataStrategy.CreateFormData(null, null);
+            var content = dataStrategy.CreateFormData(null, null, null);
 
             Assert.AreEqual(ContentType, content.Headers.ContentType);
         }

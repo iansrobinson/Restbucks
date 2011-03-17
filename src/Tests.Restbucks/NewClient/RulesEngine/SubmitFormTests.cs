@@ -42,18 +42,19 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         [Test]
         public void ShouldUseFormDataStrategyToCreateFormData()
         {
+            var dummyEndpoint = new MockEndpoint(new HttpResponseMessage());
+            var client = new HttpClient {Channel = dummyEndpoint};
+            var clientCapabilities = new ClientCapabilities(client);
+
             var mockFormDataStrategy = MockRepository.GenerateMock<IFormDataStrategy>();
-            mockFormDataStrategy.Expect(s => s.CreateFormData(PreviousResponse, Context)).Return(new StringContent(string.Empty));
+            mockFormDataStrategy.Expect(s => s.CreateFormData(PreviousResponse, Context, clientCapabilities)).Return(new StringContent(string.Empty));
 
             var dummyFormStrategy = MockRepository.GenerateStub<IFormStrategy>();
             dummyFormStrategy.Expect(f => f.GetFormInfo(PreviousResponse)).Return(DummyFormInfo);
             dummyFormStrategy.Expect(f => f.GetFormDataStrategy(PreviousResponse)).Return(mockFormDataStrategy);
 
-            var dummyEndpoint = new MockEndpoint(new HttpResponseMessage());
-            var client = new HttpClient {Channel = dummyEndpoint};
-
-            var submitForm = new SubmitForm(dummyFormStrategy);
-            submitForm.Execute(PreviousResponse, Context, new ClientCapabilities(client));
+            var submitForm = new SubmitForm(dummyFormStrategy);           
+            submitForm.Execute(PreviousResponse, Context, clientCapabilities);
 
             mockFormDataStrategy.VerifyAllExpectations();
         }
@@ -61,8 +62,8 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         private static IFormDataStrategy CreateDummyFormDataStrategy()
         {
             var dummyFormDataStrategy = MockRepository.GenerateStub<IFormDataStrategy>();
-            dummyFormDataStrategy.Stub(s => s.CreateFormData(PreviousResponse, Context)).Return(
-                DummyResponse.CreateResponse().Content);
+            dummyFormDataStrategy.Stub(s => s.CreateFormData(null, null, null)).IgnoreArguments()
+                .Return(DummyResponse.CreateResponse().Content);
             return dummyFormDataStrategy;
         }
 

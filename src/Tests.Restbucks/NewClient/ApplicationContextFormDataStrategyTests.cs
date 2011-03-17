@@ -22,7 +22,7 @@ namespace Tests.Restbucks.NewClient
         public void ShouldRetrieveFormDataFromApplicationContextBasedOnKey()
         {
             var strategy = new ApplicationContextFormDataStrategy(Key, ContentType);
-            var content = strategy.CreateFormData(new HttpResponseMessage(), Context);
+            var content = strategy.CreateFormData(new HttpResponseMessage(), Context, null);
 
             Assert.AreEqual(EntityBody.BaseUri, content.ReadAsObject<Shop>(RestbucksFormatter.Instance).BaseUri);
         }
@@ -31,7 +31,7 @@ namespace Tests.Restbucks.NewClient
         public void ShouldAddContentTypeHeaderToContent()
         {
             var strategy = new ApplicationContextFormDataStrategy(Key, ContentType);
-            var content = strategy.CreateFormData(new HttpResponseMessage(), Context);
+            var content = strategy.CreateFormData(new HttpResponseMessage(), Context, null);
 
             Assert.AreEqual(ContentType, content.Headers.ContentType);
         }

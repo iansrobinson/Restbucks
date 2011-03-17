@@ -17,7 +17,7 @@ namespace Restbucks.NewClient
             this.contentType = contentType;
         }
 
-        public HttpContent CreateFormData(HttpResponseMessage previousResponse, ApplicationContext context)
+        public HttpContent CreateFormData(HttpResponseMessage previousResponse, ApplicationContext context, IClientCapabilities clientCapabilities)
         {
             var content = context.Get<Shop>(key).ToContent(RestbucksFormatter.Instance);
             content.Headers.ContentType = contentType;
