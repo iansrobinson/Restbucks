@@ -8,19 +8,29 @@ namespace Restbucks.NewClient.RulesEngine
     {
         public static On Status(HttpStatusCode statusCode)
         {
-            return new On(statusCode);
+            return new On(new StatusCodeBasedCondition(statusCode));
         }
 
-        private readonly HttpStatusCode statusCode;
-
-        private On(HttpStatusCode statusCode)
+        public static On Response(Func<HttpResponseMessage, bool> responseCondition)
         {
-            this.statusCode = statusCode;
+            return new On(new ResponseBasedCondition(responseCondition));
+        }
+
+        public static On Response(Func<HttpResponseMessage, ApplicationContext, bool> responseCondition)
+        {
+            return new On(new ResponseAndContextBasedCondition(responseCondition));
+        }
+
+        private readonly ICondition condition;
+
+        public On(ICondition condition)
+        {
+            this.condition = condition;
         }
 
         public StateCreationRule Do(Func<HttpResponseMessage, ApplicationContext, IState> createState)
         {
-            return new StateCreationRule(new StatusCodeBasedCondition(statusCode), new StateFactory(createState));
+            return new StateCreationRule(condition, new StateFactory(createState));
         }
 
         private class StatusCodeBasedCondition : ICondition
@@ -35,6 +45,36 @@ namespace Restbucks.NewClient.RulesEngine
             public bool IsApplicable(HttpResponseMessage response, ApplicationContext context)
             {
                 return response.StatusCode.Equals(statusCode);
+            }
+        }
+
+        private class ResponseBasedCondition : ICondition
+        {
+            private readonly Func<HttpResponseMessage, bool> condition;
+
+            public ResponseBasedCondition(Func<HttpResponseMessage, bool> condition)
+            {
+                this.condition = condition;
+            }
+
+            public bool IsApplicable(HttpResponseMessage response, ApplicationContext context)
+            {
+                return condition(response);
+            }
+        }
+
+        private class ResponseAndContextBasedCondition : ICondition
+        {
+            private readonly Func<HttpResponseMessage, ApplicationContext, bool> condition;
+
+            public ResponseAndContextBasedCondition(Func<HttpResponseMessage, ApplicationContext, bool> condition)
+            {
+                this.condition = condition;
+            }
+
+            public bool IsApplicable(HttpResponseMessage response, ApplicationContext context)
+            {
+                return condition(response, context);
             }
         }
     }

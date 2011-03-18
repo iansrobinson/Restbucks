@@ -89,7 +89,6 @@
     <Compile Include="Client\Helpers\MockEndpointHttpClientProvider.cs" />
     <Compile Include="Client\Helpers\StubHttpClientProvider.cs" />
     <Compile Include="Client\HttpClientTests.cs" />
-    <Compile Include="Client\Http\HttpStatusCodeExtensionMethodsTests.cs" />
     <Compile Include="Client\Keys\EntityBodyKeyTests.cs" />
     <Compile Include="Client\Keys\KeyEqualityComparerTests.cs" />
     <Compile Include="Client\ResponseHandlers\RequestForQuoteFormResponseHandlerTests.cs" />
@@ -118,6 +117,7 @@
     <Compile Include="NewClient\RulesEngine\ApplicationContextTests.cs" />
     <Compile Include="NewClient\RulesEngine\HttpResponseMessageTests.cs" />
     <Compile Include="NewClient\RulesEngine\HttpResponseMessageExtensionsTests.cs" />
+    <Compile Include="NewClient\RulesEngine\HttpStatusCodeExtensionMethodsTests.cs" />
     <Compile Include="NewClient\RulesEngine\PrepopulatedFormDataStrategyTests.cs" />
     <Compile Include="NewClient\RulesEngine\RulesTests.cs" />
     <Compile Include="NewClient\RulesEngine\RuleTests.cs" />
@@ -182,6 +182,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Client\Http\" />
     <Folder Include="Client\States\Helpers\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

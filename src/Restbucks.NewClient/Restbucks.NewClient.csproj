@@ -78,6 +78,7 @@
     <Compile Include="RulesEngine\ControlNotFoundException.cs" />
     <Compile Include="RulesEngine\EntityBodyKey.cs" />
     <Compile Include="RulesEngine\HttpResponseMessageExtensions.cs" />
+    <Compile Include="RulesEngine\HttpStatusCodeExtensionMethods.cs" />
     <Compile Include="RulesEngine\IAction.cs" />
     <Compile Include="RulesEngine\IActionInvoker.cs" />
     <Compile Include="RulesEngine\IApplicationContextBuilder.cs" />

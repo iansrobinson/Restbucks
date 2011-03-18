@@ -1,8 +1,8 @@
 ﻿using System.Net;
 using NUnit.Framework;
-using Restbucks.Client.Http;
+using Restbucks.NewClient.RulesEngine;
 
-namespace Tests.Restbucks.Client.Http
+namespace Tests.Restbucks.NewClient.RulesEngine
 {
     [TestFixture]
     public class HttpStatusCodeExtensionMethodsTests

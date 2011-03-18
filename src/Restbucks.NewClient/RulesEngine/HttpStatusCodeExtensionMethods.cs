@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace Restbucks.Client.Http
+namespace Restbucks.NewClient.RulesEngine
 {
     public static class HttpStatusCodeExtensionMethods
     {

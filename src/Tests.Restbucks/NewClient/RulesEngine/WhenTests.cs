@@ -26,8 +26,13 @@ namespace Tests.Restbucks.NewClient.RulesEngine
                 .ExecuteAction(mockActionInvoker)
                 .Return(new[]
                             {
-                                On.Status(HttpStatusCode.OK).Do((r,c) => null),
-                                On.Status(HttpStatusCode.Accepted).Do((r,c) => null)
+                                On.Status(HttpStatusCode.OK).Do((r, c) => null),
+                                On.Status(HttpStatusCode.Accepted).Do((r, c) => null),
+                                On.Response(r => r.StatusCode.Is3XX()).Do((r, c) => null),
+                                On.Response((r, c) =>
+                                            r.StatusCode.Is4XX()
+                                            && c.ContainsKey(new StringKey("abort")))
+                                    .Do((r, c) => null)
                             },
                         (r, c) => null);
 
@@ -48,8 +53,8 @@ namespace Tests.Restbucks.NewClient.RulesEngine
                 .ExecuteAction(dummyActionInvoker)
                 .Return(new[]
                             {
-                                On.Status(HttpStatusCode.OK).Do((r,c) => null),
-                                On.Status(HttpStatusCode.Accepted).Do((r,c) => dummyState)
+                                On.Status(HttpStatusCode.OK).Do((r, c) => null),
+                                On.Status(HttpStatusCode.Accepted).Do((r, c) => dummyState)
                             },
                         (r, c) => null);
 
@@ -71,8 +76,8 @@ namespace Tests.Restbucks.NewClient.RulesEngine
                 .ExecuteAction(dummyActionInvoker)
                 .Return(new[]
                             {
-                                On.Status(HttpStatusCode.OK).Do((r,c) => null),
-                                On.Status(HttpStatusCode.Accepted).Do((r,c) => null)
+                                On.Status(HttpStatusCode.OK).Do((r, c) => null),
+                                On.Status(HttpStatusCode.Accepted).Do((r, c) => null)
                             },
                         (r, c) => dummyState);
 
@@ -92,8 +97,8 @@ namespace Tests.Restbucks.NewClient.RulesEngine
                 .ExecuteAction(dummyActionInvoker)
                 .Return(new[]
                             {
-                                On.Status(HttpStatusCode.OK).Do((r,c) => null),
-                                On.Status(HttpStatusCode.Accepted).Do((r,c) => null)
+                                On.Status(HttpStatusCode.OK).Do((r, c) => null),
+                                On.Status(HttpStatusCode.Accepted).Do((r, c) => null)
                             });
 
             var result = rule.Evaluate(PreviousResponse, Context);
@@ -109,7 +114,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var dummyActionInvoker = MockRepository.GenerateStub<IActionInvoker>();
             When.IsTrue(r => true)
                 .ExecuteAction(dummyActionInvoker)
-                .Return(null);         
+                .Return(null);
         }
 
         [Test]
@@ -118,12 +123,12 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var dummyActionInvoker = MockRepository.GenerateStub<IActionInvoker>();
             var rule = When.IsTrue(r => true)
                 .ExecuteAction(dummyActionInvoker)
-                .Return(new StateCreationRule[] { });
+                .Return(new StateCreationRule[] {});
 
             var result = rule.Evaluate(PreviousResponse, Context);
 
             Assert.IsTrue(result.IsSuccessful);
-            Assert.IsInstanceOf(typeof(UnsuccessfulState), result.State);
+            Assert.IsInstanceOf(typeof (UnsuccessfulState), result.State);
         }
 
         [Test]
@@ -148,7 +153,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         public void ShouldAllowComplexConditions()
         {
             var previousResponse = DummyResponse.CreateResponse();
-            
+
             var dummyActionInvoker = MockRepository.GenerateStub<IActionInvoker>();
             dummyActionInvoker.Expect(a => a.Invoke(previousResponse, Context)).Return(new HttpResponseMessage {StatusCode = HttpStatusCode.Accepted});
 
