@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
 using NUnit.Framework;
 using Restbucks.NewClient.RulesEngine;
@@ -13,37 +12,49 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         private static readonly HttpResponseMessage Response = new HttpResponseMessage {StatusCode = HttpStatusCode.Accepted};
         private static readonly ApplicationContext Context = new ApplicationContext();
         private static readonly IState DummyState = MockRepository.GenerateStub<IState>();
-        private static readonly IStateFactory DummyWorker = MockRepository.GenerateStub<IStateFactory>();
-        
+        private static readonly ICondition DummyTrueCondition = CreateDummyCondition(true);
+        private static readonly ICondition DummyFalseCondition = CreateDummyCondition(false);
+        private static readonly IStateFactory DummyStateFactory = MockRepository.GenerateStub<IStateFactory>();
+
         [Test]
-        public void ShouldInvokeCorrectWorkerBasedOnHttpStatusCode()
+        public void ShouldInvokeCorrectFactoryBasedOnCondition()
         {
-            var mockWorker = MockRepository.GenerateMock<IStateFactory>();   
-            mockWorker.Expect(w => w.Create(Response, Context)).Return(DummyState);
+            var mockFactory = MockRepository.GenerateMock<IStateFactory>();
+            mockFactory.Expect(w => w.Create(Response, Context)).Return(DummyState);
 
-            var factory = new StateFactoryCollection(new Dictionary<HttpStatusCode, IStateFactory> {{HttpStatusCode.Accepted, mockWorker}});
-            factory.Create(Response, Context);
+            var factoryCollection = new StateFactoryCollection(new[] { new StateCreationRule(DummyTrueCondition, mockFactory) });
+            factoryCollection.CreateState(Response, Context);
 
-            mockWorker.VerifyAllExpectations();
+            mockFactory.VerifyAllExpectations();
         }
 
         [Test]
-        public void ShouldInvokeDefaultWorkerIfStatusCodeIsNotRecognized()
+        public void ShouldInvokeDefaultFactoryIfNoCOnditionIsSatisfied()
         {
-            var mockDefaultWorker = MockRepository.GenerateMock<IStateFactory>();
-            mockDefaultWorker.Expect(w => w.Create(Response, Context)).Return(DummyState);
+            var mockDefaultFactory = MockRepository.GenerateMock<IStateFactory>();
+            mockDefaultFactory.Expect(w => w.Create(Response, Context)).Return(DummyState);
 
-            var factory = new StateFactoryCollection(new Dictionary<HttpStatusCode, IStateFactory> { { HttpStatusCode.OK, DummyWorker } }, mockDefaultWorker);
-            factory.Create(Response, Context);
+            var factoryCollection = new StateFactoryCollection(new[] { new StateCreationRule(DummyFalseCondition, DummyStateFactory) }, mockDefaultFactory);
+            factoryCollection.CreateState(Response, Context);
 
-            mockDefaultWorker.VerifyAllExpectations();
+            mockDefaultFactory.VerifyAllExpectations();
         }
 
         [Test]
-        public void ShouldReturnUnsuccesfulStateIfStatusCodeIsNotRecognizedAndDefaultWorkerIsNotSupplied()
+        public void ShouldReturnUnsuccesfulStateIfNoConditionIsSatisfiedAndDefaultFactoryIsNotSupplied()
         {
-            var factory = new StateFactoryCollection(new Dictionary<HttpStatusCode, IStateFactory> { { HttpStatusCode.OK, DummyWorker } });
-            Assert.IsInstanceOf(typeof(UnsuccessfulState), factory.Create(Response, Context));
+            var dummyCondition = MockRepository.GenerateStub<ICondition>();
+            dummyCondition.Expect(c => c.IsApplicable(Response, Context)).Return(false);
+
+            var factoryCollection = new StateFactoryCollection(new[] { new StateCreationRule(DummyFalseCondition, DummyStateFactory) });
+            Assert.IsInstanceOf(typeof (UnsuccessfulState), factoryCollection.CreateState(Response, Context));
+        }
+
+        private static ICondition CreateDummyCondition(bool evaluatesTo)
+        {
+            var dummyCondition = MockRepository.GenerateStub<ICondition>();
+            dummyCondition.Expect(c => c.IsApplicable(Response, Context)).Return(evaluatesTo);
+            return dummyCondition;
         }
     }
 }
