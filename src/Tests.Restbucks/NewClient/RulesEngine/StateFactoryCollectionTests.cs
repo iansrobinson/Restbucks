@@ -23,7 +23,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             mockFactory.Expect(w => w.Create(Response, Context)).Return(DummyState);
 
             var factoryCollection = new StateFactoryCollection(new[] { new StateCreationRule(DummyTrueCondition, mockFactory) });
-            factoryCollection.CreateState(Response, Context);
+            factoryCollection.Create(Response, Context);
 
             mockFactory.VerifyAllExpectations();
         }
@@ -35,7 +35,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             mockDefaultFactory.Expect(w => w.Create(Response, Context)).Return(DummyState);
 
             var factoryCollection = new StateFactoryCollection(new[] { new StateCreationRule(DummyFalseCondition, DummyStateFactory) }, mockDefaultFactory);
-            factoryCollection.CreateState(Response, Context);
+            factoryCollection.Create(Response, Context);
 
             mockDefaultFactory.VerifyAllExpectations();
         }
@@ -47,7 +47,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             dummyCondition.Expect(c => c.IsApplicable(Response, Context)).Return(false);
 
             var factoryCollection = new StateFactoryCollection(new[] { new StateCreationRule(DummyFalseCondition, DummyStateFactory) });
-            Assert.IsInstanceOf(typeof (UnsuccessfulState), factoryCollection.CreateState(Response, Context));
+            Assert.IsInstanceOf(typeof (UnsuccessfulState), factoryCollection.Create(Response, Context));
         }
 
         private static ICondition CreateDummyCondition(bool evaluatesTo)

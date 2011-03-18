@@ -103,13 +103,27 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         }
 
         [Test]
-        [ExpectedException(ExpectedException = typeof (ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: createStateByStatusCode")]
-        public void ShouldReturnRuleThatCreatesUnsuccessfulStateIfNoStatusCodeMatchersSupplied()
+        [ExpectedException(ExpectedException = typeof (ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: stateCreationRules")]
+        public void ShouldThrowExceptionIfStateCreationRulesAreNull()
         {
             var dummyActionInvoker = MockRepository.GenerateStub<IActionInvoker>();
             When.IsTrue(r => true)
                 .ExecuteAction(dummyActionInvoker)
-                .Return(null);
+                .Return(null);         
+        }
+
+        [Test]
+        public void ShouldReturnRuleThatCreatesUnsuccessfulStateIfNoStatusCodeMatchersSupplied()
+        {
+            var dummyActionInvoker = MockRepository.GenerateStub<IActionInvoker>();
+            var rule = When.IsTrue(r => true)
+                .ExecuteAction(dummyActionInvoker)
+                .Return(new StateCreationRule[] { });
+
+            var result = rule.Evaluate(PreviousResponse, Context);
+
+            Assert.IsTrue(result.IsSuccessful);
+            Assert.IsInstanceOf(typeof(UnsuccessfulState), result.State);
         }
 
         [Test]

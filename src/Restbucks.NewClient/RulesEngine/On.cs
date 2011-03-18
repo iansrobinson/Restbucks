@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 
@@ -19,9 +18,24 @@ namespace Restbucks.NewClient.RulesEngine
             this.statusCode = statusCode;
         }
 
-        public KeyValuePair<HttpStatusCode, IStateFactory> Do(Func<HttpResponseMessage, ApplicationContext, IState> createState)
+        public StateCreationRule Do(Func<HttpResponseMessage, ApplicationContext, IState> createState)
         {
-            return new KeyValuePair<HttpStatusCode, IStateFactory>(statusCode, new StateFactory(createState));
+            return new StateCreationRule(new StatusCodeBasedCondition(statusCode), new StateFactory(createState));
+        }
+
+        private class StatusCodeBasedCondition : ICondition
+        {
+            private readonly HttpStatusCode statusCode;
+
+            public StatusCodeBasedCondition(HttpStatusCode statusCode)
+            {
+                this.statusCode = statusCode;
+            }
+
+            public bool IsApplicable(HttpResponseMessage response, ApplicationContext context)
+            {
+                return response.StatusCode.Equals(statusCode);
+            }
         }
     }
 }
