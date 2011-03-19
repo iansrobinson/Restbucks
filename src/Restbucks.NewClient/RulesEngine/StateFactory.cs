@@ -12,7 +12,7 @@ namespace Restbucks.NewClient.RulesEngine
             this.createState = createState;
         }
 
-        public IState Create(HttpResponseMessage response, ApplicationContext context)
+        public IState Create(HttpResponseMessage response, ApplicationContext context, Actions actions)
         {
             return createState(response, context);
         }

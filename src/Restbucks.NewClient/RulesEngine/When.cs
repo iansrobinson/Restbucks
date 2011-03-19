@@ -9,6 +9,7 @@ namespace Restbucks.NewClient.RulesEngine
     {
         private readonly ICondition condition;
         private IActionInvoker actionInvoker;
+        private Func<Actions, IActionInvoker> createActionInvoker;
 
         public static IExecuteAction IsTrue<T>() where T : ICondition, new()
         {
@@ -31,21 +32,42 @@ namespace Restbucks.NewClient.RulesEngine
             return this;
         }
 
+        public IReturnState ExecuteAction(Func<Actions, IActionInvoker> createActionInvoker)
+        {
+            this.createActionInvoker = createActionInvoker;
+            return this;
+        }
+
         public IRule ReturnState(Func<HttpResponseMessage, ApplicationContext, IState> createState)
         {
-            return new Rule(condition, actionInvoker, new StateFactory(createState));
+            if (actionInvoker != null)
+            {
+                return new Rule(condition, actionInvoker, new StateFactory(createState));
+            }
+
+            return new Rule(condition, createActionInvoker, new StateFactory(createState));
         }
 
         public IRule Return(IEnumerable<StateCreationRule> stateCreationRules, Func<HttpResponseMessage, ApplicationContext, IState> defaultCreateState = null)
         {
             Check.IsNotNull(stateCreationRules, "stateCreationRules");
 
-            if (defaultCreateState == null)
+            if (actionInvoker != null)
             {
-                return new Rule(condition, actionInvoker, new StateFactoryCollection(stateCreationRules));
+                if (defaultCreateState == null)
+                {
+                    return new Rule(condition, actionInvoker, new StateFactoryCollection(stateCreationRules));
+                }
+
+                return new Rule(condition, actionInvoker, new StateFactoryCollection(stateCreationRules, new StateFactory(defaultCreateState)));
             }
 
-            return new Rule(condition, actionInvoker, new StateFactoryCollection(stateCreationRules, new StateFactory(defaultCreateState)));
+            if (defaultCreateState == null)
+            {
+                return new Rule(condition, createActionInvoker, new StateFactoryCollection(stateCreationRules));
+            }
+
+            return new Rule(condition, createActionInvoker, new StateFactoryCollection(stateCreationRules, new StateFactory(defaultCreateState)));
         }
 
         private class ResponseBasedCondition : ICondition
@@ -67,6 +89,7 @@ namespace Restbucks.NewClient.RulesEngine
     public interface IExecuteAction
     {
         IReturnState ExecuteAction(IActionInvoker actionInvoker);
+        IReturnState ExecuteAction(Func<Actions, IActionInvoker> createActionInvoker);
     }
 
     public interface IReturnState

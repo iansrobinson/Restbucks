@@ -19,13 +19,13 @@ namespace Restbucks.NewClient.RulesEngine
             this.defaultFactory = defaultFactory;
         }
 
-        public IState Create(HttpResponseMessage response, ApplicationContext context)
+        public IState Create(HttpResponseMessage response, ApplicationContext context, Actions actions)
         {
-            foreach (var result in rules.Select(rule => rule.Evaluate(response, context)).Where(result => result.IsSuccessful))
+            foreach (var result in rules.Select(rule => rule.Evaluate(response, context, actions)).Where(result => result.IsSuccessful))
             {
                 return result.State;
             }
-            return defaultFactory.Create(response, context);
+            return defaultFactory.Create(response, context, actions);
         }
 
         private class UnsuccessfulStateFactory : IStateFactory
@@ -36,7 +36,7 @@ namespace Restbucks.NewClient.RulesEngine
             {
             }
 
-            public IState Create(HttpResponseMessage response, ApplicationContext context)
+            public IState Create(HttpResponseMessage response, ApplicationContext context, Actions actions)
             {
                 return UnsuccessfulState.Instance;
             }

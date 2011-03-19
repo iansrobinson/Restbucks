@@ -13,9 +13,9 @@ namespace Restbucks.NewClient.RulesEngine
             this.stateFactory = stateFactory;
         }
 
-        public Result Evaluate(HttpResponseMessage newResponse, ApplicationContext context)
+        public Result Evaluate(HttpResponseMessage newResponse, ApplicationContext context, Actions actions)
         {
-            return condition.IsApplicable(newResponse, context) ? new Result(true, stateFactory.Create(newResponse, context)) : Result.Unsuccessful;
+            return condition.IsApplicable(newResponse, context) ? new Result(true, stateFactory.Create(newResponse, context, actions)) : Result.Unsuccessful;
         }
     }
 }

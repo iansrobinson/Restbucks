@@ -8,40 +8,42 @@ namespace Restbucks.NewClient.States
     {
         private readonly HttpResponseMessage previousResponse;
         private readonly ApplicationContext context;
+        private readonly Actions actions;
 
-        public Started(HttpResponseMessage previousResponse, ApplicationContext context)
+        public Started(HttpResponseMessage previousResponse, ApplicationContext context, Actions actions)
         {
             this.previousResponse = previousResponse;
             this.context = context;
+            this.actions = actions;
         }
 
-        public IState NextState(Actions actions)
+        public IState NextState()
         {
             var rules = new Rules(
                 When
                     .IsTrue(response => response.ContainsForm(Forms.RequestForQuote))
-                    .ExecuteAction(actions.SubmitForm(Forms.RequestForQuote))
+                    .ExecuteAction(a => a.SubmitForm(Forms.RequestForQuote))
                     .Return(
                         new[]
                             {
                                 On.Status(HttpStatusCode.Created)
                                     .Do((response, ctx)
-                                        => new QuoteRequested(response, ctx))
+                                        => new QuoteRequested(response, ctx, actions))
                             }
                     ),
                 When
                     .IsTrue(response => response.ContainsLink(Links.Rfq))
-                    .ExecuteAction(actions.ClickLink(Links.Rfq))
+                    .ExecuteAction(a => a.ClickLink(Links.Rfq))
                     .Return(
                         new[]
                             {
                                 On.Status(HttpStatusCode.OK)
                                     .Do((response, ctx)
-                                        => new Started(response, ctx))
+                                        => new Started(response, ctx, actions))
                             })
                 );
 
-            return rules.Evaluate(previousResponse, context);
+            return rules.Evaluate(previousResponse, context, actions);
         }
 
         public bool IsTerminalState

@@ -7,20 +7,22 @@ namespace Restbucks.NewClient.States
     public class Uninitialized : IState
     {
         private readonly ApplicationContext context;
+        private readonly Actions actions;
 
-        public Uninitialized(ApplicationContext context)
+        public Uninitialized(ApplicationContext context, Actions actions)
         {
             this.context = context;
+            this.actions = actions;
         }
 
-        public IState NextState(Actions actions)
+        public IState NextState()
         {
             var rules = new Rules(
                 When.IsTrue(response => true)
-                    .ExecuteAction(actions.Do(GetHomePage.Instance))
-                    .ReturnState((response, ctx) => new Started(response, ctx)));
+                    .ExecuteAction(a => a.Do(GetHomePage.Instance))
+                    .ReturnState((response, ctx) => new Started(response, ctx, actions)));
 
-            return rules.Evaluate(null, context);
+            return rules.Evaluate(null, context, actions);
         }
 
         public bool IsTerminalState

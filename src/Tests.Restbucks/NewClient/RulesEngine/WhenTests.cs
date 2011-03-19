@@ -15,6 +15,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
     {
         private static readonly HttpResponseMessage PreviousResponse = new HttpResponseMessage();
         private static readonly ApplicationContext Context = new ApplicationContext();
+        private static readonly Actions Actions = null;
 
         [Test]
         public void ShouldReturnRuleWhoseActionExecutesIfConditionIsTrue()
@@ -36,7 +37,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
                             },
                         (r, c) => null);
 
-            rule.Evaluate(PreviousResponse, Context);
+            rule.Evaluate(PreviousResponse, Context, Actions);
 
             mockActionInvoker.VerifyAllExpectations();
         }
@@ -58,7 +59,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
                             },
                         (r, c) => null);
 
-            var result = rule.Evaluate(PreviousResponse, Context);
+            var result = rule.Evaluate(PreviousResponse, Context, Actions);
 
             Assert.IsTrue(result.IsSuccessful);
             Assert.AreEqual(dummyState, result.State);
@@ -81,7 +82,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
                             },
                         (r, c) => dummyState);
 
-            var result = rule.Evaluate(PreviousResponse, Context);
+            var result = rule.Evaluate(PreviousResponse, Context, Actions);
 
             Assert.IsTrue(result.IsSuccessful);
             Assert.AreEqual(dummyState, result.State);
@@ -101,7 +102,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
                                 On.Status(HttpStatusCode.Accepted).Do((r, c) => null)
                             });
 
-            var result = rule.Evaluate(PreviousResponse, Context);
+            var result = rule.Evaluate(PreviousResponse, Context, Actions);
 
             Assert.IsTrue(result.IsSuccessful);
             Assert.IsInstanceOf(typeof (UnsuccessfulState), result.State);
@@ -125,7 +126,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
                 .ExecuteAction(dummyActionInvoker)
                 .Return(new StateCreationRule[] {});
 
-            var result = rule.Evaluate(PreviousResponse, Context);
+            var result = rule.Evaluate(PreviousResponse, Context, Actions);
 
             Assert.IsTrue(result.IsSuccessful);
             Assert.IsInstanceOf(typeof (UnsuccessfulState), result.State);
@@ -143,7 +144,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
                 .ExecuteAction(dummyActionInvoker)
                 .ReturnState((r, c) => dummyState);
 
-            var result = rule.Evaluate(PreviousResponse, Context);
+            var result = rule.Evaluate(PreviousResponse, Context, Actions);
 
             Assert.IsTrue(result.IsSuccessful);
             Assert.AreEqual(dummyState, result.State);
@@ -164,7 +165,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
                 .ExecuteAction(dummyActionInvoker)
                 .ReturnState((r, c) => dummyState);
 
-            var result = rule.Evaluate(previousResponse, Context);
+            var result = rule.Evaluate(previousResponse, Context, Actions);
 
             Assert.IsTrue(result.IsSuccessful);
             Assert.AreEqual(dummyState, result.State);
