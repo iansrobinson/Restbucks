@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net.Http;
+﻿using System.Net.Http;
 using Restbucks.RestToolkit.Utils;
 
 namespace Restbucks.NewClient.RulesEngine
@@ -8,20 +7,20 @@ namespace Restbucks.NewClient.RulesEngine
     {
         private readonly ICondition condition;
         private IActionInvoker actionInvoker;
-        private readonly Func<Actions, IActionInvoker> createActionInvoker;
+        private readonly CreateActionInvoker createActionInvoker;
         private readonly IStateFactory stateFactory;
 
-        public Rule(ICondition condition, Func<Actions, IActionInvoker> createActionInvoker, IStateFactory stateFactory)
+        public Rule(ICondition condition, CreateActionInvoker createActionInvoker, IStateFactory stateFactory)
         {
             Check.IsNotNull(condition, "condition");
             Check.IsNotNull(createActionInvoker, "createActionInvoker");
             Check.IsNotNull(stateFactory, "stateFactory");
-            
+
             this.condition = condition;
             this.createActionInvoker = createActionInvoker;
             this.stateFactory = stateFactory;
         }
-        
+
         public Rule(ICondition condition, IActionInvoker actionInvoker, IStateFactory stateFactory)
         {
             Check.IsNotNull(condition, "condition");

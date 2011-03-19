@@ -1,13 +1,12 @@
-﻿using System;
-using System.Net.Http;
+﻿using System.Net.Http;
 
 namespace Restbucks.NewClient.RulesEngine
 {
     public class StateFactory : IStateFactory
     {
-        private readonly Func<HttpResponseMessage, ApplicationContext, Actions, IState> createState;
+        private readonly CreateState createState;
 
-        public StateFactory(Func<HttpResponseMessage, ApplicationContext, Actions, IState> createState)
+        public StateFactory(CreateState createState)
         {
             this.createState = createState;
         }

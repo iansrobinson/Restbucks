@@ -78,6 +78,7 @@
     <Compile Include="RulesEngine\ApplicationContextFormDataStrategy.cs" />
     <Compile Include="RulesEngine\ClickLink.cs" />
     <Compile Include="RulesEngine\ControlNotFoundException.cs" />
+    <Compile Include="RulesEngine\Delegates.cs" />
     <Compile Include="RulesEngine\EntityBodyKey.cs" />
     <Compile Include="RulesEngine\HttpResponseMessageExtensions.cs" />
     <Compile Include="RulesEngine\HttpStatusCodeExtensionMethods.cs" />

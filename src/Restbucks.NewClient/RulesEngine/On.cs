@@ -28,7 +28,7 @@ namespace Restbucks.NewClient.RulesEngine
             this.condition = condition;
         }
 
-        public StateCreationRule Do(Func<HttpResponseMessage, ApplicationContext, Actions, IState> createState)
+        public StateCreationRule Do(CreateState createState)
         {
             return new StateCreationRule(condition, new StateFactory(createState));
         }

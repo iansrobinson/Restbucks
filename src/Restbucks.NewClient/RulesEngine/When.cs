@@ -9,7 +9,7 @@ namespace Restbucks.NewClient.RulesEngine
     {
         private readonly ICondition condition;
         private IActionInvoker actionInvoker;
-        private Func<Actions, IActionInvoker> createActionInvoker;
+        private CreateActionInvoker createActionInvoker;
 
         public static IExecuteAction IsTrue<T>() where T : ICondition, new()
         {
@@ -32,13 +32,13 @@ namespace Restbucks.NewClient.RulesEngine
             return this;
         }
 
-        public IReturnState ExecuteAction(Func<Actions, IActionInvoker> createActionInvoker)
+        public IReturnState ExecuteAction(CreateActionInvoker createActionInvoker)
         {
             this.createActionInvoker = createActionInvoker;
             return this;
         }
 
-        public IRule ReturnState(Func<HttpResponseMessage, ApplicationContext, Actions, IState> createState)
+        public IRule ReturnState(CreateState createState)
         {
             if (actionInvoker != null)
             {
@@ -48,7 +48,7 @@ namespace Restbucks.NewClient.RulesEngine
             return new Rule(condition, createActionInvoker, new StateFactory(createState));
         }
 
-        public IRule Return(IEnumerable<StateCreationRule> stateCreationRules, Func<HttpResponseMessage, ApplicationContext, Actions, IState> defaultCreateState = null)
+        public IRule Return(IEnumerable<StateCreationRule> stateCreationRules, CreateState defaultCreateState = null)
         {
             Check.IsNotNull(stateCreationRules, "stateCreationRules");
 
@@ -89,12 +89,12 @@ namespace Restbucks.NewClient.RulesEngine
     public interface IExecuteAction
     {
         IReturnState ExecuteAction(IActionInvoker actionInvoker);
-        IReturnState ExecuteAction(Func<Actions, IActionInvoker> createActionInvoker);
+        IReturnState ExecuteAction(CreateActionInvoker createActionInvoker);
     }
 
     public interface IReturnState
     {
-        IRule ReturnState(Func<HttpResponseMessage, ApplicationContext, Actions, IState> createState);
-        IRule Return(IEnumerable<StateCreationRule> stateCreationRules, Func<HttpResponseMessage, ApplicationContext, Actions, IState> defaultCreateState = null);
+        IRule ReturnState(CreateState createState);
+        IRule Return(IEnumerable<StateCreationRule> stateCreationRules, CreateState defaultCreateState = null);
     }
 }
