@@ -39,6 +39,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\log4net\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Http.Extensions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\http\Microsoft.Http.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Net.Http, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\http\Microsoft.Net.Http.dll</HintPath>
@@ -60,13 +64,13 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Restbucks.Client\Restbucks.Client.csproj">
-      <Project>{4FF3C7CB-505C-47EA-AD0B-F3063B6F8B03}</Project>
-      <Name>Restbucks.Client</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Restbucks.MediaType\Restbucks.MediaType.csproj">
       <Project>{2E73DA2F-07A0-42B8-B73D-029DAB550889}</Project>
       <Name>Restbucks.MediaType</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Restbucks.NewClient\Restbucks.NewClient.csproj">
+      <Project>{6C975D85-C264-4987-A176-7ECCC51235AA}</Project>
+      <Name>Restbucks.NewClient</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

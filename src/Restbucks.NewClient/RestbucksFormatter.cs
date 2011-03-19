@@ -69,7 +69,7 @@ namespace Restbucks.NewClient
             }
             catch (XmlException ex)
             {
-                throw new InvalidFormatException("Incorrectly formatted entity body. Request must be formatted according to application/restbucks+xml.", ex);
+                throw new InvalidFormatException(string.Format("Incorrectly formatted entity body. Request must be formatted according to {0}.", RestbucksMediaType.Value), ex);
             }
             catch (Exception ex)
             {

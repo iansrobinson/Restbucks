@@ -13,10 +13,10 @@ namespace Restbucks.NewClient.RulesEngine
             this.rules = rules;
         }
 
-        public IState Evaluate(HttpResponseMessage response, ApplicationContext context)
+        public IState Evaluate(HttpResponseMessage previousResponse, ApplicationContext context)
         {
             return (from rule in rules
-                    select rule.Evaluate(response, context)
+                    select rule.Evaluate(previousResponse, context)
                     into result
                     where result.IsSuccessful
                     select result.State).FirstOrDefault();

@@ -48,7 +48,7 @@ namespace Tests.Restbucks.Quoting.Service.Processors
         }
 
         [Test]
-        [ExpectedException(ExpectedException = typeof (InvalidFormatException), ExpectedMessage = "Incorrectly formatted entity body. Request must be formatted according to application/restbucks+xml.")]
+        [ExpectedException(ExpectedException = typeof (InvalidFormatException), ExpectedMessage = "Incorrectly formatted entity body. Request must be formatted according to application/vnd.restbucks+xml.")]
         public void ShouldThrowExceptionWhenStreamContainsNonXmlData()
         {
             const string xml = @"non-xml-data";
