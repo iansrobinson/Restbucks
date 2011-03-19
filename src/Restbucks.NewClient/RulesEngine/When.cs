@@ -38,7 +38,7 @@ namespace Restbucks.NewClient.RulesEngine
             return this;
         }
 
-        public IRule ReturnState(Func<HttpResponseMessage, ApplicationContext, IState> createState)
+        public IRule ReturnState(Func<HttpResponseMessage, ApplicationContext, Actions, IState> createState)
         {
             if (actionInvoker != null)
             {
@@ -48,7 +48,7 @@ namespace Restbucks.NewClient.RulesEngine
             return new Rule(condition, createActionInvoker, new StateFactory(createState));
         }
 
-        public IRule Return(IEnumerable<StateCreationRule> stateCreationRules, Func<HttpResponseMessage, ApplicationContext, IState> defaultCreateState = null)
+        public IRule Return(IEnumerable<StateCreationRule> stateCreationRules, Func<HttpResponseMessage, ApplicationContext, Actions, IState> defaultCreateState = null)
         {
             Check.IsNotNull(stateCreationRules, "stateCreationRules");
 
@@ -94,7 +94,7 @@ namespace Restbucks.NewClient.RulesEngine
 
     public interface IReturnState
     {
-        IRule ReturnState(Func<HttpResponseMessage, ApplicationContext, IState> createState);
-        IRule Return(IEnumerable<StateCreationRule> stateCreationRules, Func<HttpResponseMessage, ApplicationContext, IState> defaultCreateState = null);
+        IRule ReturnState(Func<HttpResponseMessage, ApplicationContext, Actions, IState> createState);
+        IRule Return(IEnumerable<StateCreationRule> stateCreationRules, Func<HttpResponseMessage, ApplicationContext, Actions, IState> defaultCreateState = null);
     }
 }

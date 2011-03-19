@@ -27,15 +27,15 @@ namespace Tests.Restbucks.NewClient.RulesEngine
                 .ExecuteAction(mockActionInvoker)
                 .Return(new[]
                             {
-                                On.Status(HttpStatusCode.OK).Do((r, c) => null),
-                                On.Status(HttpStatusCode.Accepted).Do((r, c) => null),
-                                On.Response(r => r.StatusCode.Is3XX()).Do((r, c) => null),
+                                On.Status(HttpStatusCode.OK).Do((r, c, a) => null),
+                                On.Status(HttpStatusCode.Accepted).Do((r, c, a) => null),
+                                On.Response(r => r.StatusCode.Is3XX()).Do((r, c, a) => null),
                                 On.Response((r, c) =>
                                             r.StatusCode.Is4XX()
                                             && c.ContainsKey(new StringKey("abort")))
-                                    .Do((r, c) => null)
+                                    .Do((r, c, a) => null)
                             },
-                        (r, c) => null);
+                        (r, c, a) => null);
 
             rule.Evaluate(PreviousResponse, Context, Actions);
 
@@ -54,10 +54,10 @@ namespace Tests.Restbucks.NewClient.RulesEngine
                 .ExecuteAction(dummyActionInvoker)
                 .Return(new[]
                             {
-                                On.Status(HttpStatusCode.OK).Do((r, c) => null),
-                                On.Status(HttpStatusCode.Accepted).Do((r, c) => dummyState)
+                                On.Status(HttpStatusCode.OK).Do((r, c, a) => null),
+                                On.Status(HttpStatusCode.Accepted).Do((r, c, a) => dummyState)
                             },
-                        (r, c) => null);
+                        (r, c, a) => null);
 
             var result = rule.Evaluate(PreviousResponse, Context, Actions);
 
@@ -77,10 +77,10 @@ namespace Tests.Restbucks.NewClient.RulesEngine
                 .ExecuteAction(dummyActionInvoker)
                 .Return(new[]
                             {
-                                On.Status(HttpStatusCode.OK).Do((r, c) => null),
-                                On.Status(HttpStatusCode.Accepted).Do((r, c) => null)
+                                On.Status(HttpStatusCode.OK).Do((r, c, a) => null),
+                                On.Status(HttpStatusCode.Accepted).Do((r, c, a) => null)
                             },
-                        (r, c) => dummyState);
+                        (r, c, a) => dummyState);
 
             var result = rule.Evaluate(PreviousResponse, Context, Actions);
 
@@ -98,8 +98,8 @@ namespace Tests.Restbucks.NewClient.RulesEngine
                 .ExecuteAction(dummyActionInvoker)
                 .Return(new[]
                             {
-                                On.Status(HttpStatusCode.OK).Do((r, c) => null),
-                                On.Status(HttpStatusCode.Accepted).Do((r, c) => null)
+                                On.Status(HttpStatusCode.OK).Do((r, c, a) => null),
+                                On.Status(HttpStatusCode.Accepted).Do((r, c, a) => null)
                             });
 
             var result = rule.Evaluate(PreviousResponse, Context, Actions);
@@ -142,7 +142,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
 
             var rule = When.IsTrue(r => true)
                 .ExecuteAction(dummyActionInvoker)
-                .ReturnState((r, c) => dummyState);
+                .ReturnState((r, c, a) => dummyState);
 
             var result = rule.Evaluate(PreviousResponse, Context, Actions);
 
@@ -163,7 +163,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var rule = When.IsTrue(r => r.ContainsLink(RestbucksLink.WithRel(new StringLinkRelation("http://relations.restbucks.com/rfq")))
                                         && r.ContainsForm(RestbucksForm.WithId("request-for-quote")))
                 .ExecuteAction(dummyActionInvoker)
-                .ReturnState((r, c) => dummyState);
+                .ReturnState((r, c, a) => dummyState);
 
             var result = rule.Evaluate(previousResponse, Context, Actions);
 

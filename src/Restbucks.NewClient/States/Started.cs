@@ -27,8 +27,8 @@ namespace Restbucks.NewClient.States
                         new[]
                             {
                                 On.Status(HttpStatusCode.Created)
-                                    .Do((response, ctx)
-                                        => new QuoteRequested(response, ctx, actions))
+                                    .Do((response, ctx, actns)
+                                        => new QuoteRequested(response, ctx, actns))
                             }
                     ),
                 When
@@ -38,8 +38,8 @@ namespace Restbucks.NewClient.States
                         new[]
                             {
                                 On.Status(HttpStatusCode.OK)
-                                    .Do((response, ctx)
-                                        => new Started(response, ctx, actions))
+                                    .Do((response, ctx, actns)
+                                        => new Started(response, ctx, actns))
                             })
                 );
 
