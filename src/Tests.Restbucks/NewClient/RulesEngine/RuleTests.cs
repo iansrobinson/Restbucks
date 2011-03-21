@@ -81,7 +81,11 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         [ExpectedException(ExpectedException = typeof (ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: actionInvoker")]
         public void ThrowsExceptionIfActionInvokerIsNull()
         {
+<<<<<<< .mine
+            new Rule(MockRepository.GenerateStub<ICondition>(), null, MockRepository.GenerateStub<IStateFactory>());
+=======
             new Rule(DummyTrueCondition, null, MockRepository.GenerateStub<IStateFactory>());
+>>>>>>> .r477
         }
 
         [Test]
