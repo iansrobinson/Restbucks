@@ -15,7 +15,7 @@ namespace Restbucks.NewClient.RulesEngine
             return new When(new T());
         }
 
-        public static IExecuteAction IsTrue(Func<HttpResponseMessage, bool> condition)
+        public static IExecuteAction IsTrue(Condition condition)
         {
             return new When(new ResponseBasedCondition(condition));
         }
@@ -50,9 +50,9 @@ namespace Restbucks.NewClient.RulesEngine
 
         private class ResponseBasedCondition : ICondition
         {
-            private readonly Func<HttpResponseMessage, bool> condition;
+            private readonly Condition condition;
 
-            public ResponseBasedCondition(Func<HttpResponseMessage, bool> condition)
+            public ResponseBasedCondition(Condition condition)
             {
                 this.condition = condition;
             }

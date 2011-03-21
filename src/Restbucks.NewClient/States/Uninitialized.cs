@@ -18,7 +18,7 @@ namespace Restbucks.NewClient.States
             var rules = new Rules(
                 When.IsTrue(response => true)
                     .ExecuteAction(actions.Do(GetHomePage.Instance))
-                    .ReturnState((response, ctx, actns) => new Started(response, ctx)));
+                    .ReturnState((response, ctx) => new Started(response, ctx)));
 
             return rules.Evaluate(null, context, actions);
         }

@@ -17,7 +17,6 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         private static readonly ICondition DummyFalseCondition = CreateDummyCondition(false);
         private static readonly IActionInvoker DummyActionInvoker = CreateDummyActionInvoker();
         private static readonly IStateFactory DummyStateFactory = CreateDummyStateFactory();
-        private static readonly Actions Actions = null;
         
         [Test]
         public void ShouldExecuteActionIfConditionIsApplicable()
@@ -26,7 +25,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             mockAction.Expect(a => a.Invoke(PreviousResponse, Context)).Return(NewResponse);
 
             var rule = new Rule(DummyTrueCondition, mockAction, DummyStateFactory);
-            rule.Evaluate(PreviousResponse, Context, Actions);
+            rule.Evaluate(PreviousResponse, Context);
 
             mockAction.VerifyAllExpectations();
         }
@@ -35,7 +34,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         public void ShouldCreateNewStateIfActionIsSuccessful()
         {
             var rule = new Rule(DummyTrueCondition, DummyActionInvoker, DummyStateFactory);
-            var result = rule.Evaluate(PreviousResponse, Context, Actions);
+            var result = rule.Evaluate(PreviousResponse, Context);
 
             Assert.AreEqual(NewState, result.State);
         }
@@ -44,7 +43,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         public void ShouldReturnSuccessfulResultIfConditionIsApplicable()
         {
             var rule = new Rule(DummyTrueCondition, DummyActionInvoker, DummyStateFactory);
-            var result = rule.Evaluate(PreviousResponse, Context, Actions);
+            var result = rule.Evaluate(PreviousResponse, Context);
 
             Assert.IsTrue(result.IsSuccessful);
         }
@@ -56,7 +55,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             mockAction.AssertWasNotCalled(a => a.Invoke(PreviousResponse, Context));
 
             var rule = new Rule(DummyFalseCondition, mockAction, DummyStateFactory);
-            rule.Evaluate(PreviousResponse, Context, Actions);
+            rule.Evaluate(PreviousResponse, Context);
 
             mockAction.VerifyAllExpectations();
         }
@@ -65,7 +64,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         public void ShouldReturnUnsuccessfulResultIfConditionIsNotApplicable()
         {
             var rule = new Rule(DummyFalseCondition, DummyActionInvoker, DummyStateFactory);
-            var result = rule.Evaluate(PreviousResponse, Context, Actions);
+            var result = rule.Evaluate(PreviousResponse, Context);
 
             Assert.IsFalse(result.IsSuccessful);
             Assert.IsNull(result.State);
@@ -109,7 +108,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         private static IStateFactory CreateDummyStateFactory()
         {
             var dummyStateFactory = MockRepository.GenerateStub<IStateFactory>();
-            dummyStateFactory.Expect(f => f.Create(NewResponse, Context, Actions)).IgnoreArguments().Return(NewState);
+            dummyStateFactory.Expect(f => f.Create(NewResponse, Context)).IgnoreArguments().Return(NewState);
             return dummyStateFactory;
         }
     }

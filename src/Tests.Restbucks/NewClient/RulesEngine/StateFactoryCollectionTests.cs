@@ -15,16 +15,15 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         private static readonly ICondition DummyTrueCondition = CreateDummyCondition(true);
         private static readonly ICondition DummyFalseCondition = CreateDummyCondition(false);
         private static readonly IStateFactory DummyStateFactory = MockRepository.GenerateStub<IStateFactory>();
-        private static readonly Actions Actions = null;
 
         [Test]
         public void ShouldInvokeCorrectFactoryBasedOnCondition()
         {
             var mockFactory = MockRepository.GenerateMock<IStateFactory>();
-            mockFactory.Expect(w => w.Create(Response, Context, Actions)).Return(DummyState);
+            mockFactory.Expect(w => w.Create(Response, Context)).Return(DummyState);
 
             var factoryCollection = new StateFactoryCollection(new[] { new StateCreationRule(DummyTrueCondition, mockFactory) });
-            factoryCollection.Create(Response, Context, Actions);
+            factoryCollection.Create(Response, Context);
 
             mockFactory.VerifyAllExpectations();
         }
@@ -33,10 +32,10 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         public void ShouldInvokeDefaultFactoryIfNoCOnditionIsSatisfied()
         {
             var mockDefaultFactory = MockRepository.GenerateMock<IStateFactory>();
-            mockDefaultFactory.Expect(w => w.Create(Response, Context, Actions)).Return(DummyState);
+            mockDefaultFactory.Expect(w => w.Create(Response, Context)).Return(DummyState);
 
             var factoryCollection = new StateFactoryCollection(new[] { new StateCreationRule(DummyFalseCondition, DummyStateFactory) }, mockDefaultFactory);
-            factoryCollection.Create(Response, Context, Actions);
+            factoryCollection.Create(Response, Context);
 
             mockDefaultFactory.VerifyAllExpectations();
         }
@@ -48,7 +47,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             dummyCondition.Expect(c => c.IsApplicable(Response, Context)).Return(false);
 
             var factoryCollection = new StateFactoryCollection(new[] { new StateCreationRule(DummyFalseCondition, DummyStateFactory) });
-            Assert.IsInstanceOf(typeof (UnsuccessfulState), factoryCollection.Create(Response, Context, Actions));
+            Assert.IsInstanceOf(typeof (UnsuccessfulState), factoryCollection.Create(Response, Context));
         }
 
         private static ICondition CreateDummyCondition(bool evaluatesTo)

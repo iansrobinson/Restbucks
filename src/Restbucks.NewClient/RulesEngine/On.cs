@@ -11,9 +11,9 @@ namespace Restbucks.NewClient.RulesEngine
             return new On(new StatusCodeBasedCondition(statusCode));
         }
 
-        public static On Response(Func<HttpResponseMessage, bool> responseCondition)
+        public static On Response(Condition condition)
         {
-            return new On(new ResponseBasedCondition(responseCondition));
+            return new On(new ResponseBasedCondition(condition));
         }
 
         public static On Response(Func<HttpResponseMessage, ApplicationContext, bool> responseCondition)
@@ -50,9 +50,9 @@ namespace Restbucks.NewClient.RulesEngine
 
         private class ResponseBasedCondition : ICondition
         {
-            private readonly Func<HttpResponseMessage, bool> condition;
+            private readonly Condition condition;
 
-            public ResponseBasedCondition(Func<HttpResponseMessage, bool> condition)
+            public ResponseBasedCondition(Condition condition)
             {
                 this.condition = condition;
             }

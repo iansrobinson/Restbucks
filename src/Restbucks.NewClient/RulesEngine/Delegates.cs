@@ -2,7 +2,11 @@
 
 namespace Restbucks.NewClient.RulesEngine
 {
-    public delegate IState CreateState(HttpResponseMessage response, ApplicationContext context, Actions actions);
+    public delegate IState CreateState(HttpResponseMessage currentResponse, ApplicationContext context);
 
-    public delegate IActionInvoker CreateActionInvoker(Actions actions);
+    public delegate HttpResponseMessage ExecuteAction(HttpResponseMessage previousResponse, ApplicationContext context, IClientCapabilities clientCapabilities);
+
+    public delegate bool Condition(HttpResponseMessage response);
+
+    public delegate bool ExtendedCondition(HttpResponseMessage response, ApplicationContext context);
 }
