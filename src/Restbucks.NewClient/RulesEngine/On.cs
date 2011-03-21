@@ -1,51 +1,34 @@
-﻿using System;
-using System.Net;
-using System.Net.Http;
+﻿using System.Net;
 
 namespace Restbucks.NewClient.RulesEngine
 {
     public class On
     {
-        private readonly ICondition condition;
+        private readonly IsApplicableToStateInfoDelegate isApplicableDelegate;
 
         public static On Status(HttpStatusCode statusCode)
         {
-            return new On(new Condition((response, context) => response.StatusCode.Equals(statusCode)));
+            return new On((response, context) => response.StatusCode.Equals(statusCode));
         }
 
-        public static On Response(ResponseConditionDelegate responseConditionDelegate)
+        public static On Response(IsApplicableToResponseDelegate isApplicableDelegate)
         {
-            return new On(new Condition((response, context) => responseConditionDelegate(response)));
+            return new On((response, context) => isApplicableDelegate(response));
         }
 
-        public static On Response(StateConditionDelegate stateConditionDelegate)
+        public static On Response(IsApplicableToStateInfoDelegate isApplicableDelegate)
         {
-            return new On(new Condition((response, context) => stateConditionDelegate(response, context)));
+            return new On(isApplicableDelegate);
         }
 
-        public On(ICondition condition)
+        public On(IsApplicableToStateInfoDelegate isApplicableDelegate)
         {
-            this.condition = condition;
+            this.isApplicableDelegate = isApplicableDelegate;
         }
 
-        public StateCreationRule Do(StateDelegate stateDelegate)
+        public StateCreationRule Do(CreateStateDelegate createStateDelegate)
         {
-            return new StateCreationRule(condition, new StateFactory(stateDelegate));
-        }
-
-        private class Condition : ICondition
-        {
-            private readonly Func<HttpResponseMessage, ApplicationStateVariables, bool> condition;
-
-            public Condition(Func<HttpResponseMessage, ApplicationStateVariables, bool> condition)
-            {
-                this.condition = condition;
-            }
-
-            public bool IsApplicable(HttpResponseMessage response, ApplicationStateVariables stateVariables)
-            {
-                return condition(response, stateVariables);
-            }
+            return new StateCreationRule(isApplicableDelegate, new StateFactory(createStateDelegate));
         }
     }
 }

@@ -12,8 +12,8 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         private static readonly HttpResponseMessage Response = new HttpResponseMessage {StatusCode = HttpStatusCode.Accepted};
         private static readonly ApplicationStateVariables StateVariables = new ApplicationStateVariables();
         private static readonly IState DummyState = MockRepository.GenerateStub<IState>();
-        private static readonly ICondition DummyTrueCondition = CreateDummyCondition(true);
-        private static readonly ICondition DummyFalseCondition = CreateDummyCondition(false);
+        private static readonly IsApplicableToStateInfoDelegate DummyTrueCondition = (response, variables) => true;
+        private static readonly IsApplicableToStateInfoDelegate DummyFalseCondition = (response, variables) => false;
         private static readonly IStateFactory DummyStateFactory = MockRepository.GenerateStub<IStateFactory>();
 
         [Test]
@@ -48,13 +48,6 @@ namespace Tests.Restbucks.NewClient.RulesEngine
 
             var factoryCollection = new StateFactoryCollection(new[] { new StateCreationRule(DummyFalseCondition, DummyStateFactory) });
             Assert.IsInstanceOf(typeof (UnsuccessfulState), factoryCollection.Create(Response, StateVariables));
-        }
-
-        private static ICondition CreateDummyCondition(bool evaluatesTo)
-        {
-            var dummyCondition = MockRepository.GenerateStub<ICondition>();
-            dummyCondition.Expect(c => c.IsApplicable(Response, StateVariables)).Return(evaluatesTo);
-            return dummyCondition;
         }
     }
 }

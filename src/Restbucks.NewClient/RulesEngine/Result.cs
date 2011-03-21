@@ -1,6 +1,4 @@
-﻿using System.Net;
-
-namespace Restbucks.NewClient.RulesEngine
+﻿namespace Restbucks.NewClient.RulesEngine
 {
     public class Result
     {

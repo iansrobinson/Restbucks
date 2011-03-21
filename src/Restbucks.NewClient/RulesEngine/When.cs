@@ -1,27 +1,26 @@
 ﻿using System.Collections.Generic;
-using System.Net.Http;
 using Restbucks.RestToolkit.Utils;
 
 namespace Restbucks.NewClient.RulesEngine
 {
     public class When : IExecuteAction, IReturnState
     {
-        private readonly ICondition condition;
+        private readonly IsApplicableToStateInfoDelegate isApplicableDelegate;
         private IActionInvoker actionInvoker;
 
         public static IExecuteAction IsTrue<T>() where T : ICondition, new()
         {
-            return new When(new T());
+            return new When(new T().IsApplicable);
         }
 
-        public static IExecuteAction IsTrue(ResponseConditionDelegate responseConditionDelegate)
+        public static IExecuteAction IsTrue(IsApplicableToResponseDelegate isApplicableToResponseDelegate)
         {
-            return new When(new ResponseBasedCondition(responseConditionDelegate));
+            return new When((response, variables) => isApplicableToResponseDelegate(response));
         }
 
-        private When(ICondition condition)
+        private When(IsApplicableToStateInfoDelegate isApplicableDelegate)
         {
-            this.condition = condition;
+            this.isApplicableDelegate = isApplicableDelegate;
         }
 
         public IReturnState ExecuteAction(IActionInvoker actionInvoker)
@@ -30,36 +29,21 @@ namespace Restbucks.NewClient.RulesEngine
             return this;
         }
 
-        public IRule ReturnState(StateDelegate stateDelegate)
+        public IRule ReturnState(CreateStateDelegate createStateDelegate)
         {
-            return new Rule(condition, actionInvoker, new StateFactory(stateDelegate));
+            return new Rule(isApplicableDelegate, actionInvoker, new StateFactory(createStateDelegate));
         }
 
-        public IRule Return(IEnumerable<StateCreationRule> stateCreationRules, StateDelegate defaultStateDelegate = null)
+        public IRule Return(IEnumerable<StateCreationRule> stateCreationRules, CreateStateDelegate defaultCreateStateDelegate = null)
         {
             Check.IsNotNull(stateCreationRules, "stateCreationRules");
 
-            if (defaultStateDelegate == null)
+            if (defaultCreateStateDelegate == null)
             {
-                return new Rule(condition, actionInvoker, new StateFactoryCollection(stateCreationRules));
+                return new Rule(isApplicableDelegate, actionInvoker, new StateFactoryCollection(stateCreationRules));
             }
 
-            return new Rule(condition, actionInvoker, new StateFactoryCollection(stateCreationRules, new StateFactory(defaultStateDelegate)));
-        }
-
-        private class ResponseBasedCondition : ICondition
-        {
-            private readonly ResponseConditionDelegate responseConditionDelegate;
-
-            public ResponseBasedCondition(ResponseConditionDelegate responseConditionDelegate)
-            {
-                this.responseConditionDelegate = responseConditionDelegate;
-            }
-
-            public bool IsApplicable(HttpResponseMessage response, ApplicationStateVariables stateVariables)
-            {
-                return responseConditionDelegate(response);
-            }
+            return new Rule(isApplicableDelegate, actionInvoker, new StateFactoryCollection(stateCreationRules, new StateFactory(defaultCreateStateDelegate)));
         }
     }
 
@@ -70,7 +54,7 @@ namespace Restbucks.NewClient.RulesEngine
 
     public interface IReturnState
     {
-        IRule ReturnState(StateDelegate stateDelegate);
-        IRule Return(IEnumerable<StateCreationRule> stateCreationRules, StateDelegate defaultStateDelegate = null);
+        IRule ReturnState(CreateStateDelegate createStateDelegate);
+        IRule Return(IEnumerable<StateCreationRule> stateCreationRules, CreateStateDelegate defaultCreateStateDelegate = null);
     }
 }
