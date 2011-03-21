@@ -8,16 +8,14 @@ namespace Restbucks.NewClient.States
     {
         private readonly HttpResponseMessage previousResponse;
         private readonly ApplicationContext context;
-        private readonly Actions actions;
 
-        public QuoteRequested(HttpResponseMessage previousResponse, ApplicationContext context, Actions actions)
+        public QuoteRequested(HttpResponseMessage previousResponse, ApplicationContext context)
         {
             this.previousResponse = previousResponse;
             this.context = context;
-            this.actions = actions;
         }
 
-        public IState NextState()
+        public IState NextState(Actions actions)
         {
             throw new NotImplementedException();
         }

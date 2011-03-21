@@ -47,14 +47,14 @@ namespace Restbucks.Client.ConsoleHost
                 new KeyValuePair<IKey, object>(new EntityBodyKey("request-for-quote", new MediaTypeHeaderValue(RestbucksMediaType.Value), new Uri("http://schemas.restbucks.com/shop")), items));
             var actions = new Actions(ClientCapabilities.Instance);
 
-            var state = new Uninitialized(context, actions);
+            var state = new Uninitialized(context);
             Console.WriteLine(state.GetType().Name);
-            var nextState = state.NextState();
+            var nextState = state.NextState(actions);
             Console.WriteLine(nextState.GetType().Name);
 
             while (!nextState.IsTerminalState)
             {
-                nextState = nextState.NextState();
+                nextState = nextState.NextState(actions);
                 Console.WriteLine(nextState.GetType().Name);
             }
 

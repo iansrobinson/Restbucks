@@ -2,7 +2,7 @@
 {
     public interface IState
     {
-        IState NextState();
+        IState NextState(Actions actions);
         bool IsTerminalState { get; }
     }
 }
