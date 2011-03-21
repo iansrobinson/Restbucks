@@ -13,8 +13,8 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         private static readonly ApplicationStateVariables StateVariables = new ApplicationStateVariables();
         private static readonly HttpResponseMessage NewResponse = new HttpResponseMessage();
         private static readonly IState NewState = MockRepository.GenerateStub<IState>();
-        private static readonly IsApplicableToStateInfoDelegate DummyTrueCondition = (response, variables) => true;
-        private static readonly IsApplicableToStateInfoDelegate DummyFalseCondition = (response, variables) => false;
+        private static readonly ICondition DummyTrueCondition = CreateDummyCondition(true);
+        private static readonly ICondition DummyFalseCondition = CreateDummyCondition(false);
         private static readonly IActionInvoker DummyActionInvoker = CreateDummyActionInvoker();
         private static readonly IStateFactory DummyStateFactory = CreateDummyStateFactory();
         
@@ -81,18 +81,21 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         [ExpectedException(ExpectedException = typeof (ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: actionInvoker")]
         public void ThrowsExceptionIfActionInvokerIsNull()
         {
-<<<<<<< .mine
-            new Rule(MockRepository.GenerateStub<ICondition>(), null, MockRepository.GenerateStub<IStateFactory>());
-=======
-            new Rule(DummyTrueCondition, null, MockRepository.GenerateStub<IStateFactory>());
->>>>>>> .r477
+            new Rule(MockRepository.GenerateStub<ICondition>(), null as IActionInvoker, MockRepository.GenerateStub<IStateFactory>());
         }
 
         [Test]
         [ExpectedException(ExpectedException = typeof(ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: stateFactory")]
         public void ThrowsExceptionIfStateFactoryIsNull()
         {
-            new Rule(DummyTrueCondition, MockRepository.GenerateStub<IActionInvoker>(), null);
+            new Rule(MockRepository.GenerateStub<ICondition>(), MockRepository.GenerateStub<IActionInvoker>(), null);
+        }
+
+        private static ICondition CreateDummyCondition(bool evaluatesTo)
+        {
+            var dummyCondition = MockRepository.GenerateStub<ICondition>();
+            dummyCondition.Expect(c => c.IsApplicable(PreviousResponse, StateVariables)).Return(evaluatesTo);
+            return dummyCondition;
         }
 
         private static IActionInvoker CreateDummyActionInvoker()

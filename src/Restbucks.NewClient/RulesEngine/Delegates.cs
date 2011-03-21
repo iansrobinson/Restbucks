@@ -2,11 +2,11 @@
 
 namespace Restbucks.NewClient.RulesEngine
 {
-    public delegate IState CreateStateDelegate(HttpResponseMessage currentResponse, ApplicationStateVariables stateVariables);
+    public delegate IState StateDelegate(HttpResponseMessage currentResponse, ApplicationStateVariables stateVariables);
 
-    public delegate HttpResponseMessage ExecuteActionDelegate(HttpResponseMessage previousResponse, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities);
+    public delegate HttpResponseMessage ActionDelegate(HttpResponseMessage previousResponse, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities);
 
-    public delegate bool IsApplicableToResponseDelegate(HttpResponseMessage response);
+    public delegate bool ResponseConditionDelegate(HttpResponseMessage response);
 
-    public delegate bool IsApplicableToStateInfoDelegate(HttpResponseMessage response, ApplicationStateVariables stateVariables);
+    public delegate bool StateConditionDelegate(HttpResponseMessage response, ApplicationStateVariables stateVariables);
 }

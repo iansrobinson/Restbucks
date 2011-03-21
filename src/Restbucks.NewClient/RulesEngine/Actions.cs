@@ -29,9 +29,9 @@ namespace Restbucks.NewClient.RulesEngine
             return new ActionInvoker(action.Execute, clientCapabilities);
         }
 
-        public IActionInvoker Do(ExecuteActionDelegate executeActionDelegate)
+        public IActionInvoker Do(ActionDelegate actionDelegate)
         {
-            return new ActionInvoker((response, variables, capabilities) => executeActionDelegate(response, variables, capabilities), clientCapabilities);
+            return new ActionInvoker((response, context, capabilities) => actionDelegate(response, context, capabilities), clientCapabilities);
         }
 
         private class ActionInvoker : IActionInvoker

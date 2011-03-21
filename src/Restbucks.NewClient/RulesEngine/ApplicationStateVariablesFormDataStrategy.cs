@@ -15,7 +15,7 @@ namespace Restbucks.NewClient.RulesEngine
             this.contentType = contentType;
         }
 
-        public HttpContent CreateFormData(HttpResponseMessage response, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities)
+        public HttpContent CreateFormData(HttpResponseMessage previousResponse, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities)
         {
             var content = stateVariables.Get<object>(key).ToContent(clientCapabilities.GetContentFormatter(contentType));
             content.Headers.ContentType = contentType;

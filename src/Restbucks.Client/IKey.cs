@@ -2,6 +2,6 @@
 {
     public interface IKey
     {
-        string Value { get;  }
+        string Value { get; }
     }
 }

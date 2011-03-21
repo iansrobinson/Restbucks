@@ -36,7 +36,7 @@ namespace Restbucks.NewClient.States
             {
             }
 
-            public HttpResponseMessage Execute(HttpResponseMessage response, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities)
+            public HttpResponseMessage Execute(HttpResponseMessage previousResponse, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities)
             {
                 return clientCapabilities.GetHttpClient().Get(stateVariables.Get<Uri>(new StringKey("home-page-uri")));
             }

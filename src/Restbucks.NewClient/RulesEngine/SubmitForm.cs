@@ -11,16 +11,16 @@ namespace Restbucks.NewClient.RulesEngine
             this.formStrategy = formStrategy;
         }
 
-        public HttpResponseMessage Execute(HttpResponseMessage response, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities)
+        public HttpResponseMessage Execute(HttpResponseMessage previousResponse, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities)
         {
-            var formInfo = formStrategy.GetFormInfo(response);
-            var formDataStrategy = formStrategy.GetFormDataStrategy(response);
+            var formInfo = formStrategy.GetFormInfo(previousResponse);
+            var formDataStrategy = formStrategy.GetFormDataStrategy(previousResponse);
 
             var request = new HttpRequestMessage
                               {
                                   RequestUri = formInfo.ResourceUri,
                                   Method = formInfo.Method,
-                                  Content = formDataStrategy.CreateFormData(response, stateVariables, clientCapabilities)
+                                  Content = formDataStrategy.CreateFormData(previousResponse, stateVariables, clientCapabilities)
                               };
 
             return clientCapabilities.GetHttpClient().Send(request);

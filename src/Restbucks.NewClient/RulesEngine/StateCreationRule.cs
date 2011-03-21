@@ -4,18 +4,18 @@ namespace Restbucks.NewClient.RulesEngine
 {
     public class StateCreationRule : IRule
     {
-        private readonly IsApplicableToStateInfoDelegate isApplicableTo;
+        private readonly ICondition condition;
         private readonly IStateFactory stateFactory;
 
-        public StateCreationRule(IsApplicableToStateInfoDelegate isApplicableTo, IStateFactory stateFactory)
+        public StateCreationRule(ICondition condition, IStateFactory stateFactory)
         {
-            this.isApplicableTo = isApplicableTo;
+            this.condition = condition;
             this.stateFactory = stateFactory;
         }
 
         public Result Evaluate(HttpResponseMessage newResponse, ApplicationStateVariables stateVariables)
         {
-            return isApplicableTo(newResponse, stateVariables) ? new Result(true, stateFactory.Create(newResponse, stateVariables)) : Result.Unsuccessful;
+            return condition.IsApplicable(newResponse, stateVariables) ? new Result(true, stateFactory.Create(newResponse, stateVariables)) : Result.Unsuccessful;
         }
     }
 }

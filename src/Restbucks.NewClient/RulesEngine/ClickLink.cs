@@ -11,9 +11,9 @@ namespace Restbucks.NewClient.RulesEngine
             this.linkStrategy = linkStrategy;
         }
 
-        public HttpResponseMessage Execute(HttpResponseMessage response, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities)
+        public HttpResponseMessage Execute(HttpResponseMessage previousResponse, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities)
         {
-            var linkInfo = linkStrategy.GetLinkInfo(response);
+            var linkInfo = linkStrategy.GetLinkInfo(previousResponse);
 
             var request = new HttpRequestMessage
                               {
