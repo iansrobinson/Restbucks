@@ -20,7 +20,7 @@ namespace Restbucks.NewClient.States
                     .ExecuteAction(actions.Do(GetHomePage.Instance))
                     .ReturnState((response, ctx) => new Started(response, ctx)));
 
-            return rules.Evaluate(null, context, actions);
+            return rules.Evaluate(null, context);
         }
 
         public bool IsTerminalState

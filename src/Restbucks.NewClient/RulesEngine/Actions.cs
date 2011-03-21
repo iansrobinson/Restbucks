@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using Restbucks.RestToolkit.Utils;
 
 namespace Restbucks.NewClient.RulesEngine
@@ -25,20 +26,20 @@ namespace Restbucks.NewClient.RulesEngine
 
         public IActionInvoker Do(IAction action)
         {
-            return new ActionObjectInvoker(action, clientCapabilities);
+            return new ActionInvoker(action.Execute, clientCapabilities);
         }
 
-        public IActionInvoker Do(ExecuteAction executeAction)
+        public IActionInvoker Do(ActionDelegate actionDelegate)
         {
-            return new ActionFunctionInvoker(executeAction, clientCapabilities);
+            return new ActionInvoker((response, context, capabilities) => actionDelegate(response, context, capabilities), clientCapabilities);
         }
 
-        private class ActionObjectInvoker : IActionInvoker
+        private class ActionInvoker : IActionInvoker
         {
-            private readonly IAction action;
+            private readonly Func<HttpResponseMessage, ApplicationContext, IClientCapabilities, HttpResponseMessage> action;
             private readonly IClientCapabilities clientCapabilities;
 
-            public ActionObjectInvoker(IAction action, IClientCapabilities clientCapabilities)
+            public ActionInvoker(Func<HttpResponseMessage, ApplicationContext, IClientCapabilities, HttpResponseMessage> action, IClientCapabilities clientCapabilities)
             {
                 this.action = action;
                 this.clientCapabilities = clientCapabilities;
@@ -46,24 +47,7 @@ namespace Restbucks.NewClient.RulesEngine
 
             public HttpResponseMessage Invoke(HttpResponseMessage previousResponse, ApplicationContext context)
             {
-                return action.Execute(previousResponse, context, clientCapabilities);
-            }
-        }
-
-        private class ActionFunctionInvoker : IActionInvoker
-        {
-            private readonly ExecuteAction executeAction;
-            private readonly IClientCapabilities clientCapabilities;
-
-            public ActionFunctionInvoker(ExecuteAction executeAction, IClientCapabilities clientCapabilities)
-            {
-                this.executeAction = executeAction;
-                this.clientCapabilities = clientCapabilities;
-            }
-
-            public HttpResponseMessage Invoke(HttpResponseMessage previousResponse, ApplicationContext context)
-            {
-                return executeAction(previousResponse, context, clientCapabilities);
+                return action(previousResponse, context, clientCapabilities);
             }
         }
     }

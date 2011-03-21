@@ -10,7 +10,6 @@ namespace Tests.Restbucks.NewClient.RulesEngine
     {
         private static readonly HttpResponseMessage Response = new HttpResponseMessage();
         private static readonly ApplicationContext Context = new ApplicationContext();
-        private static readonly Actions Actions = null;
 
         [Test]
         public void ShouldCallEachRuleInOrderItWasAddedToRules()
@@ -30,7 +29,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             mocks.ReplayAll();
 
             var rules = new Rules(mockRule1, mockRule2, mockRule3);
-            rules.Evaluate(Response, Context, Actions);
+            rules.Evaluate(Response, Context);
 
             mocks.VerifyAll();
         }
@@ -46,7 +45,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             mockRule2.Expect(r => r.Evaluate(Response, Context)).Return(new Result(true, MockRepository.GenerateStub<IState>()));
 
             var rules = new Rules(mockRule1, mockRule2, mockRule3);
-            rules.Evaluate(Response, Context, Actions);
+            rules.Evaluate(Response, Context);
 
             mockRule1.VerifyAllExpectations();
             mockRule2.VerifyAllExpectations();

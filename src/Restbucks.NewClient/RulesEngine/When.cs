@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net.Http;
 using Restbucks.RestToolkit.Utils;
 
@@ -15,9 +14,9 @@ namespace Restbucks.NewClient.RulesEngine
             return new When(new T());
         }
 
-        public static IExecuteAction IsTrue(Condition condition)
+        public static IExecuteAction IsTrue(ResponseConditionDelegate responseConditionDelegate)
         {
-            return new When(new ResponseBasedCondition(condition));
+            return new When(new ResponseBasedCondition(responseConditionDelegate));
         }
 
         private When(ICondition condition)
@@ -31,46 +30,47 @@ namespace Restbucks.NewClient.RulesEngine
             return this;
         }
 
-        public IRule ReturnState(CreateState createState)
+        public IRule ReturnState(StateDelegate stateDelegate)
         {
-            return new Rule(condition, actionInvoker, new StateFactory(createState));
+            return new Rule(condition, actionInvoker, new StateFactory(stateDelegate));
         }
 
-        public IRule Return(IEnumerable<StateCreationRule> stateCreationRules, CreateState defaultCreateState = null)
+        public IRule Return(IEnumerable<StateCreationRule> stateCreationRules, StateDelegate defaultStateDelegate = null)
         {
             Check.IsNotNull(stateCreationRules, "stateCreationRules");
 
-            if (defaultCreateState == null)
+            if (defaultStateDelegate == null)
             {
                 return new Rule(condition, actionInvoker, new StateFactoryCollection(stateCreationRules));
             }
 
-            return new Rule(condition, actionInvoker, new StateFactoryCollection(stateCreationRules, new StateFactory(defaultCreateState)));
+            return new Rule(condition, actionInvoker, new StateFactoryCollection(stateCreationRules, new StateFactory(defaultStateDelegate)));
         }
 
         private class ResponseBasedCondition : ICondition
         {
-            private readonly Condition condition;
+            private readonly ResponseConditionDelegate responseConditionDelegate;
 
-            public ResponseBasedCondition(Condition condition)
+            public ResponseBasedCondition(ResponseConditionDelegate responseConditionDelegate)
             {
-                this.condition = condition;
+                this.responseConditionDelegate = responseConditionDelegate;
             }
 
             public bool IsApplicable(HttpResponseMessage response, ApplicationContext context)
             {
-                return condition(response);
+                return responseConditionDelegate(response);
             }
         }
     }
 
     public interface IExecuteAction
     {
-        IReturnState ExecuteAction(IActionInvoker actionInvoker);    }
+        IReturnState ExecuteAction(IActionInvoker actionInvoker);
+    }
 
     public interface IReturnState
     {
-        IRule ReturnState(CreateState createState);
-        IRule Return(IEnumerable<StateCreationRule> stateCreationRules, CreateState defaultCreateState = null);
+        IRule ReturnState(StateDelegate stateDelegate);
+        IRule Return(IEnumerable<StateCreationRule> stateCreationRules, StateDelegate defaultStateDelegate = null);
     }
 }

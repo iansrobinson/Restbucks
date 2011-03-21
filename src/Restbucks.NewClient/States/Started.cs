@@ -41,7 +41,7 @@ namespace Restbucks.NewClient.States
                             })
                 );
 
-            return rules.Evaluate(previousResponse, context, actions);
+            return rules.Evaluate(previousResponse, context);
         }
 
         public bool IsTerminalState

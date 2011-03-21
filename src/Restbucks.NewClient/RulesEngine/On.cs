@@ -6,68 +6,38 @@ namespace Restbucks.NewClient.RulesEngine
 {
     public class On
     {
+        private readonly ICondition condition;
+
         public static On Status(HttpStatusCode statusCode)
         {
-            return new On(new StatusCodeBasedCondition(statusCode));
+            return new On(new Condition((response, context) => response.StatusCode.Equals(statusCode)));
         }
 
-        public static On Response(Condition condition)
+        public static On Response(ResponseConditionDelegate responseConditionDelegate)
         {
-            return new On(new ResponseBasedCondition(condition));
+            return new On(new Condition((response, context) => responseConditionDelegate(response)));
         }
 
-        public static On Response(Func<HttpResponseMessage, ApplicationContext, bool> responseCondition)
+        public static On Response(StateConditionDelegate stateConditionDelegate)
         {
-            return new On(new ResponseAndContextBasedCondition(responseCondition));
+            return new On(new Condition((response, context) => stateConditionDelegate(response, context)));
         }
-
-        private readonly ICondition condition;
 
         public On(ICondition condition)
         {
             this.condition = condition;
         }
 
-        public StateCreationRule Do(CreateState createState)
+        public StateCreationRule Do(StateDelegate stateDelegate)
         {
-            return new StateCreationRule(condition, new StateFactory(createState));
+            return new StateCreationRule(condition, new StateFactory(stateDelegate));
         }
 
-        private class StatusCodeBasedCondition : ICondition
-        {
-            private readonly HttpStatusCode statusCode;
-
-            public StatusCodeBasedCondition(HttpStatusCode statusCode)
-            {
-                this.statusCode = statusCode;
-            }
-
-            public bool IsApplicable(HttpResponseMessage response, ApplicationContext context)
-            {
-                return response.StatusCode.Equals(statusCode);
-            }
-        }
-
-        private class ResponseBasedCondition : ICondition
-        {
-            private readonly Condition condition;
-
-            public ResponseBasedCondition(Condition condition)
-            {
-                this.condition = condition;
-            }
-
-            public bool IsApplicable(HttpResponseMessage response, ApplicationContext context)
-            {
-                return condition(response);
-            }
-        }
-
-        private class ResponseAndContextBasedCondition : ICondition
+        private class Condition : ICondition
         {
             private readonly Func<HttpResponseMessage, ApplicationContext, bool> condition;
 
-            public ResponseAndContextBasedCondition(Func<HttpResponseMessage, ApplicationContext, bool> condition)
+            public Condition(Func<HttpResponseMessage, ApplicationContext, bool> condition)
             {
                 this.condition = condition;
             }
