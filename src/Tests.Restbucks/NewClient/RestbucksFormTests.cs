@@ -70,7 +70,7 @@ namespace Tests.Restbucks.NewClient
             var form = RestbucksForm.WithId("request-for-quote");
             var dataStrategy = form.GetFormDataStrategy(DummyResponse.CreateResponse());
 
-            Assert.IsInstanceOf(typeof(ApplicationContextFormDataStrategy), dataStrategy);
+            Assert.IsInstanceOf(typeof(ApplicationStateVariablesFormDataStrategy), dataStrategy);
         }
 
         [Test]

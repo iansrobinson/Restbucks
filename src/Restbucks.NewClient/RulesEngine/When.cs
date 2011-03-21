@@ -56,7 +56,7 @@ namespace Restbucks.NewClient.RulesEngine
                 this.responseConditionDelegate = responseConditionDelegate;
             }
 
-            public bool IsApplicable(HttpResponseMessage response, ApplicationContext context)
+            public bool IsApplicable(HttpResponseMessage response, ApplicationStateVariables stateVariables)
             {
                 return responseConditionDelegate(response);
             }

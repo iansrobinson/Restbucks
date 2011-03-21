@@ -4,6 +4,6 @@ namespace Restbucks.NewClient.RulesEngine
 {
     public interface IStateFactory
     {
-        IState Create(HttpResponseMessage response, ApplicationContext context);
+        IState Create(HttpResponseMessage response, ApplicationStateVariables stateVariables);
     }
 }

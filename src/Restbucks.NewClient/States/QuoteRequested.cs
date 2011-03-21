@@ -7,12 +7,12 @@ namespace Restbucks.NewClient.States
     public class QuoteRequested : IState
     {
         private readonly HttpResponseMessage previousResponse;
-        private readonly ApplicationContext context;
+        private readonly ApplicationStateVariables stateVariables;
 
-        public QuoteRequested(HttpResponseMessage previousResponse, ApplicationContext context)
+        public QuoteRequested(HttpResponseMessage previousResponse, ApplicationStateVariables stateVariables)
         {
             this.previousResponse = previousResponse;
-            this.context = context;
+            this.stateVariables = stateVariables;
         }
 
         public IState NextState(Actions actions)

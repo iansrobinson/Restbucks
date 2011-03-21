@@ -4,20 +4,20 @@ using Microsoft.Net.Http;
 
 namespace Restbucks.NewClient.RulesEngine
 {
-    public class PrepopulatedFormDataStrategy : IFormDataStrategy
+    public class ApplicationStateVariablesFormDataStrategy : IFormDataStrategy
     {
-        private readonly object entityBody;
+        private readonly IKey key;
         private readonly MediaTypeHeaderValue contentType;
 
-        public PrepopulatedFormDataStrategy(object entityBody, MediaTypeHeaderValue contentType)
+        public ApplicationStateVariablesFormDataStrategy(IKey key, MediaTypeHeaderValue contentType)
         {
-            this.entityBody = entityBody;
+            this.key = key;
             this.contentType = contentType;
         }
 
         public HttpContent CreateFormData(HttpResponseMessage previousResponse, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities)
         {
-            var content = entityBody.ToContent(clientCapabilities.GetContentFormatter(contentType));
+            var content = stateVariables.Get<object>(key).ToContent(clientCapabilities.GetContentFormatter(contentType));
             content.Headers.ContentType = contentType;
 
             return content;

@@ -75,7 +75,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="RulesEngine\Actions.cs" />
-    <Compile Include="RulesEngine\ApplicationContextFormDataStrategy.cs" />
+    <Compile Include="RulesEngine\ApplicationStateVariables.cs" />
+    <Compile Include="RulesEngine\ApplicationStateVariablesFormDataStrategy.cs" />
     <Compile Include="RulesEngine\ClickLink.cs" />
     <Compile Include="RulesEngine\ControlNotFoundException.cs" />
     <Compile Include="RulesEngine\Delegates.cs" />
@@ -84,7 +85,7 @@
     <Compile Include="RulesEngine\HttpStatusCodeExtensionMethods.cs" />
     <Compile Include="RulesEngine\IAction.cs" />
     <Compile Include="RulesEngine\IActionInvoker.cs" />
-    <Compile Include="RulesEngine\IApplicationContextBuilder.cs" />
+    <Compile Include="RulesEngine\IApplicationStateVariablesBuilder.cs" />
     <Compile Include="RulesEngine\IClientCapabilities.cs" />
     <Compile Include="RulesEngine\IFormDataStrategy.cs" />
     <Compile Include="RulesEngine\IFormStrategy.cs" />
@@ -92,7 +93,6 @@
     <Compile Include="RulesEngine\FormatterNotFoundException.cs" />
     <Compile Include="RulesEngine\FormInfo.cs" />
     <Compile Include="RulesEngine\ICondition.cs" />
-    <Compile Include="RulesEngine\ApplicationContext.cs" />
     <Compile Include="RulesEngine\IKey.cs" />
     <Compile Include="RulesEngine\ILinkStrategy.cs" />
     <Compile Include="RulesEngine\IRule.cs" />

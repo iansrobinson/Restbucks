@@ -7,12 +7,12 @@ namespace Restbucks.NewClient.States
     public class Started : IState
     {
         private readonly HttpResponseMessage previousResponse;
-        private readonly ApplicationContext context;
+        private readonly ApplicationStateVariables stateVariables;
 
-        public Started(HttpResponseMessage previousResponse, ApplicationContext context)
+        public Started(HttpResponseMessage previousResponse, ApplicationStateVariables stateVariables)
         {
             this.previousResponse = previousResponse;
-            this.context = context;
+            this.stateVariables = stateVariables;
         }
 
         public IState NextState(Actions actions)
@@ -25,8 +25,8 @@ namespace Restbucks.NewClient.States
                         new[]
                             {
                                 On.Status(HttpStatusCode.Created)
-                                    .Do((response, ctx)
-                                        => new QuoteRequested(response, ctx))
+                                    .Do((response, vars)
+                                        => new QuoteRequested(response, vars))
                             }
                     ),
                 When
@@ -36,12 +36,12 @@ namespace Restbucks.NewClient.States
                         new[]
                             {
                                 On.Status(HttpStatusCode.OK)
-                                    .Do((response, ctx)
-                                        => new Started(response, ctx))
+                                    .Do((response, vars)
+                                        => new Started(response, vars))
                             })
                 );
 
-            return rules.Evaluate(previousResponse, context);
+            return rules.Evaluate(previousResponse, stateVariables);
         }
 
         public bool IsTerminalState

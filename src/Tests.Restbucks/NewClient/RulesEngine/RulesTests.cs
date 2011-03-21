@@ -9,7 +9,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
     public class RulesTests
     {
         private static readonly HttpResponseMessage Response = new HttpResponseMessage();
-        private static readonly ApplicationContext Context = new ApplicationContext();
+        private static readonly ApplicationStateVariables StateVariables = new ApplicationStateVariables();
 
         [Test]
         public void ShouldCallEachRuleInOrderItWasAddedToRules()
@@ -22,14 +22,14 @@ namespace Tests.Restbucks.NewClient.RulesEngine
 
             using (mocks.Ordered())
             {
-                Expect.Call(mockRule1.Evaluate(Response, Context)).Return(Result.Unsuccessful);
-                Expect.Call(mockRule2.Evaluate(Response, Context)).Return(Result.Unsuccessful);
-                Expect.Call(mockRule3.Evaluate(Response, Context)).Return(new Result(true, MockRepository.GenerateStub<IState>()));
+                Expect.Call(mockRule1.Evaluate(Response, StateVariables)).Return(Result.Unsuccessful);
+                Expect.Call(mockRule2.Evaluate(Response, StateVariables)).Return(Result.Unsuccessful);
+                Expect.Call(mockRule3.Evaluate(Response, StateVariables)).Return(new Result(true, MockRepository.GenerateStub<IState>()));
             }
             mocks.ReplayAll();
 
             var rules = new Rules(mockRule1, mockRule2, mockRule3);
-            rules.Evaluate(Response, Context);
+            rules.Evaluate(Response, StateVariables);
 
             mocks.VerifyAll();
         }
@@ -41,15 +41,15 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var mockRule2 = MockRepository.GenerateMock<IRule>();
             var mockRule3 = MockRepository.GenerateMock<IRule>();
 
-            mockRule1.Expect(r => r.Evaluate(Response, Context)).Return(Result.Unsuccessful);
-            mockRule2.Expect(r => r.Evaluate(Response, Context)).Return(new Result(true, MockRepository.GenerateStub<IState>()));
+            mockRule1.Expect(r => r.Evaluate(Response, StateVariables)).Return(Result.Unsuccessful);
+            mockRule2.Expect(r => r.Evaluate(Response, StateVariables)).Return(new Result(true, MockRepository.GenerateStub<IState>()));
 
             var rules = new Rules(mockRule1, mockRule2, mockRule3);
-            rules.Evaluate(Response, Context);
+            rules.Evaluate(Response, StateVariables);
 
             mockRule1.VerifyAllExpectations();
             mockRule2.VerifyAllExpectations();
-            mockRule3.AssertWasNotCalled(r => r.Evaluate(Response, Context));
+            mockRule3.AssertWasNotCalled(r => r.Evaluate(Response, StateVariables));
         }
     }
 }

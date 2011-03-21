@@ -36,18 +36,18 @@ namespace Restbucks.NewClient.RulesEngine
 
         private class ActionInvoker : IActionInvoker
         {
-            private readonly Func<HttpResponseMessage, ApplicationContext, IClientCapabilities, HttpResponseMessage> action;
+            private readonly Func<HttpResponseMessage, ApplicationStateVariables, IClientCapabilities, HttpResponseMessage> action;
             private readonly IClientCapabilities clientCapabilities;
 
-            public ActionInvoker(Func<HttpResponseMessage, ApplicationContext, IClientCapabilities, HttpResponseMessage> action, IClientCapabilities clientCapabilities)
+            public ActionInvoker(Func<HttpResponseMessage, ApplicationStateVariables, IClientCapabilities, HttpResponseMessage> action, IClientCapabilities clientCapabilities)
             {
                 this.action = action;
                 this.clientCapabilities = clientCapabilities;
             }
 
-            public HttpResponseMessage Invoke(HttpResponseMessage previousResponse, ApplicationContext context)
+            public HttpResponseMessage Invoke(HttpResponseMessage previousResponse, ApplicationStateVariables stateVariables)
             {
-                return action(previousResponse, context, clientCapabilities);
+                return action(previousResponse, stateVariables, clientCapabilities);
             }
         }
     }

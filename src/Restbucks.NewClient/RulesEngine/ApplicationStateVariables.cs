@@ -4,11 +4,11 @@ using System.Linq;
 
 namespace Restbucks.NewClient.RulesEngine
 {
-    public class ApplicationContext
+    public class ApplicationStateVariables
     {
         private readonly IDictionary<IKey, object> values;
 
-        public ApplicationContext(params KeyValuePair<IKey, object>[] values)
+        public ApplicationStateVariables(params KeyValuePair<IKey, object>[] values)
         {
             this.values = new Dictionary<IKey, object>(values.Length);
             values.ToList().ForEach(kv => this.values.Add(kv));
@@ -24,34 +24,34 @@ namespace Restbucks.NewClient.RulesEngine
             return values.ContainsKey(key);
         }
 
-        public IApplicationContextBuilder GetNewContextBuilder()
+        public IApplicationStateVariablesBuilder GetNewStateVariablesBuilder()
         {
-            return new ApplicationContextBuilder(values.ToArray());
+            return new ApplicationStateVariablesBuilder(values.ToArray());
         }
 
-        private class ApplicationContextBuilder : IApplicationContextBuilder
+        private class ApplicationStateVariablesBuilder : IApplicationStateVariablesBuilder
         {
             private readonly IDictionary<IKey, object> values;
 
-            public ApplicationContextBuilder(params KeyValuePair<IKey, object>[] values)
+            public ApplicationStateVariablesBuilder(params KeyValuePair<IKey, object>[] values)
             {
                 this.values = new Dictionary<IKey, object>(values.Length);
                 values.ToList().ForEach(kv => this.values.Add(kv));
             }
 
-            public IApplicationContextBuilder Add(IKey key, object value)
+            public IApplicationStateVariablesBuilder Add(IKey key, object value)
             {
                 values.Add(key, value);
                 return this;
             }
 
-            public IApplicationContextBuilder Remove(IKey key)
+            public IApplicationStateVariablesBuilder Remove(IKey key)
             {
                 values.Remove(key);
                 return this;
             }
 
-            public IApplicationContextBuilder Update(IKey key, object value)
+            public IApplicationStateVariablesBuilder Update(IKey key, object value)
             {
                 if (values.ContainsKey(key))
                 {
@@ -68,9 +68,9 @@ namespace Restbucks.NewClient.RulesEngine
                 return this;
             }
 
-            public ApplicationContext Build()
+            public ApplicationStateVariables Build()
             {
-                return new ApplicationContext(values.ToArray());
+                return new ApplicationStateVariables(values.ToArray());
             }
         }
     }

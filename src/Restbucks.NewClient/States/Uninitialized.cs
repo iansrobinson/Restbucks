@@ -6,11 +6,11 @@ namespace Restbucks.NewClient.States
 {
     public class Uninitialized : IState
     {
-        private readonly ApplicationContext context;
+        private readonly ApplicationStateVariables stateVariables;
 
-        public Uninitialized(ApplicationContext context)
+        public Uninitialized(ApplicationStateVariables stateVariables)
         {
-            this.context = context;
+            this.stateVariables = stateVariables;
         }
 
         public IState NextState(Actions actions)
@@ -18,9 +18,9 @@ namespace Restbucks.NewClient.States
             var rules = new Rules(
                 When.IsTrue(response => true)
                     .ExecuteAction(actions.Do(GetHomePage.Instance))
-                    .ReturnState((response, ctx) => new Started(response, ctx)));
+                    .ReturnState((response, vars) => new Started(response, vars)));
 
-            return rules.Evaluate(null, context);
+            return rules.Evaluate(null, stateVariables);
         }
 
         public bool IsTerminalState
@@ -36,9 +36,9 @@ namespace Restbucks.NewClient.States
             {
             }
 
-            public HttpResponseMessage Execute(HttpResponseMessage previousResponse, ApplicationContext context, IClientCapabilities clientCapabilities)
+            public HttpResponseMessage Execute(HttpResponseMessage previousResponse, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities)
             {
-                return clientCapabilities.GetHttpClient().Get(context.Get<Uri>(new StringKey("home-page-uri")));
+                return clientCapabilities.GetHttpClient().Get(stateVariables.Get<Uri>(new StringKey("home-page-uri")));
             }
         }
     }

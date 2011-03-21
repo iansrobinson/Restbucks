@@ -19,7 +19,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         private static readonly Uri ResourceUri = new Uri("http://localhost/rfq");
         private static readonly HttpMethod HttpMethod = HttpMethod.Post;
         private static readonly MediaTypeHeaderValue ContentType = new MediaTypeHeaderValue(RestbucksMediaType.Value);
-        private static readonly ApplicationContext Context = new ApplicationContext();
+        private static readonly ApplicationStateVariables StateVariables = new ApplicationStateVariables();
         private static readonly IFormDataStrategy DummyFormDataStrategy = CreateDummyFormDataStrategy();
         private static readonly FormInfo DummyFormInfo = new FormInfo(ResourceUri, HttpMethod, ContentType);
 
@@ -34,7 +34,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var client = new HttpClient {Channel = mockEndpoint};
 
             var submitForm = new SubmitForm(dummyFormStrategy);
-            submitForm.Execute(PreviousResponse, Context, new ClientCapabilities(client));
+            submitForm.Execute(PreviousResponse, StateVariables, new ClientCapabilities(client));
 
             Assert.AreEqual(ResourceUri, mockEndpoint.ReceivedRequest.RequestUri);
             Assert.AreEqual(HttpMethod, mockEndpoint.ReceivedRequest.Method);
@@ -49,14 +49,14 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var clientCapabilities = new ClientCapabilities(client);
 
             var mockFormDataStrategy = MockRepository.GenerateMock<IFormDataStrategy>();
-            mockFormDataStrategy.Expect(s => s.CreateFormData(PreviousResponse, Context, clientCapabilities)).Return(new StringContent(string.Empty));
+            mockFormDataStrategy.Expect(s => s.CreateFormData(PreviousResponse, StateVariables, clientCapabilities)).Return(new StringContent(string.Empty));
 
             var dummyFormStrategy = MockRepository.GenerateStub<IFormStrategy>();
             dummyFormStrategy.Expect(f => f.GetFormInfo(PreviousResponse)).Return(DummyFormInfo);
             dummyFormStrategy.Expect(f => f.GetFormDataStrategy(PreviousResponse)).Return(mockFormDataStrategy);
 
             var submitForm = new SubmitForm(dummyFormStrategy);           
-            submitForm.Execute(PreviousResponse, Context, clientCapabilities);
+            submitForm.Execute(PreviousResponse, StateVariables, clientCapabilities);
 
             mockFormDataStrategy.VerifyAllExpectations();
         }

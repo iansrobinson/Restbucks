@@ -97,7 +97,7 @@ namespace Restbucks.NewClient
                 {
                     throw new InvalidOperationException(string.Format("Unable to create a data strategy for empty form with null schema attribute. Id: '{0}'.", form.Id));
                 }
-                return new ApplicationContextFormDataStrategy(new EntityBodyKey(form.Id, contentType, form.Schema), contentType);
+                return new ApplicationStateVariablesFormDataStrategy(new EntityBodyKey(form.Id, contentType, form.Schema), contentType);
             }
 
             return new PrepopulatedFormDataStrategy(form.Instance, contentType);

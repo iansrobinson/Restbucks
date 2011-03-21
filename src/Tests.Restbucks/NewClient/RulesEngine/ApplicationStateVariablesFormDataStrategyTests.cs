@@ -12,19 +12,19 @@ using Rhino.Mocks;
 namespace Tests.Restbucks.NewClient.RulesEngine
 {
     [TestFixture]
-    public class ApplicationContextFormDataStrategyTests
+    public class ApplicationStateVariablesFormDataStrategyTests
     {
         private static readonly Shop EntityBody = new ShopBuilder(new Uri("http://localhost/restbucks/")).Build();
         private static readonly MediaTypeHeaderValue ContentType = new MediaTypeHeaderValue(RestbucksMediaType.Value);
         private static readonly EntityBodyKey Key = new EntityBodyKey("order-form", ContentType, new Uri("http://schemas/shop"));
-        private static readonly ApplicationContext Context = new ApplicationContext(new KeyValuePair<IKey, object>(Key, EntityBody));
+        private static readonly ApplicationStateVariables StateVariables = new ApplicationStateVariables(new KeyValuePair<IKey, object>(Key, EntityBody));
         private static readonly IClientCapabilities ClientCapabilities = CreateClientCapabilities();
 
         [Test]
         public void ShouldRetrieveFormDataFromApplicationContextBasedOnKey()
         {
-            var strategy = new ApplicationContextFormDataStrategy(Key, ContentType);
-            var content = strategy.CreateFormData(new HttpResponseMessage(), Context, ClientCapabilities);
+            var strategy = new ApplicationStateVariablesFormDataStrategy(Key, ContentType);
+            var content = strategy.CreateFormData(new HttpResponseMessage(), StateVariables, ClientCapabilities);
 
             Assert.AreEqual(EntityBody.BaseUri, content.ReadAsObject<Shop>(RestbucksFormatter.Instance).BaseUri);
         }
@@ -32,8 +32,8 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         [Test]
         public void ShouldAddContentTypeHeaderToContent()
         {
-            var strategy = new ApplicationContextFormDataStrategy(Key, ContentType);
-            var content = strategy.CreateFormData(new HttpResponseMessage(), Context, ClientCapabilities);
+            var strategy = new ApplicationStateVariablesFormDataStrategy(Key, ContentType);
+            var content = strategy.CreateFormData(new HttpResponseMessage(), StateVariables, ClientCapabilities);
 
             Assert.AreEqual(ContentType, content.Headers.ContentType);
         }

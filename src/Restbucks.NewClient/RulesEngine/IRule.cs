@@ -4,6 +4,6 @@ namespace Restbucks.NewClient.RulesEngine
 {
     public interface IRule
     {
-        Result Evaluate(HttpResponseMessage response, ApplicationContext context);
+        Result Evaluate(HttpResponseMessage response, ApplicationStateVariables stateVariables);
     }
 }

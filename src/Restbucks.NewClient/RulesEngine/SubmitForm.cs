@@ -11,7 +11,7 @@ namespace Restbucks.NewClient.RulesEngine
             this.formStrategy = formStrategy;
         }
 
-        public HttpResponseMessage Execute(HttpResponseMessage previousResponse, ApplicationContext context, IClientCapabilities clientCapabilities)
+        public HttpResponseMessage Execute(HttpResponseMessage previousResponse, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities)
         {
             var formInfo = formStrategy.GetFormInfo(previousResponse);
             var formDataStrategy = formStrategy.GetFormDataStrategy(previousResponse);
@@ -20,7 +20,7 @@ namespace Restbucks.NewClient.RulesEngine
                               {
                                   RequestUri = formInfo.ResourceUri,
                                   Method = formInfo.Method,
-                                  Content = formDataStrategy.CreateFormData(previousResponse, context, clientCapabilities)
+                                  Content = formDataStrategy.CreateFormData(previousResponse, stateVariables, clientCapabilities)
                               };
 
             return clientCapabilities.GetHttpClient().Send(request);

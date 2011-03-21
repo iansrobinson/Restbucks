@@ -14,18 +14,18 @@ namespace Tests.Restbucks.NewClient.RulesEngine
     {
         private static readonly HttpResponseMessage Response = new HttpResponseMessage();
         private static readonly IClientCapabilities Client = new ClientCapabilities();
-        private static readonly ApplicationContext Context = new ApplicationContext();
+        private static readonly ApplicationStateVariables StateVariables = new ApplicationStateVariables();
 
         [Test]
         public void ShouldReturnInvokerThatInvokesSuppliedAction()
         {
             var mockAction = MockRepository.GenerateMock<IAction>();
-            mockAction.Expect(a => a.Execute(Response, Context, Client));
+            mockAction.Expect(a => a.Execute(Response, StateVariables, Client));
 
             var actions = new Actions(Client);
             var invoker = actions.Do(mockAction);
 
-            invoker.Invoke(Response, Context);
+            invoker.Invoke(Response, StateVariables);
 
             mockAction.VerifyAllExpectations();
         }
@@ -38,7 +38,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var actions = new Actions(Client);
             var invoker = actions.Do((r, cl, ct) => expectedResponse);
 
-            Assert.AreEqual(expectedResponse, invoker.Invoke(Response, Context));
+            Assert.AreEqual(expectedResponse, invoker.Invoke(Response, StateVariables));
         }
 
         [Test]

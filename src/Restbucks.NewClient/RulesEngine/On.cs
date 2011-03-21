@@ -35,16 +35,16 @@ namespace Restbucks.NewClient.RulesEngine
 
         private class Condition : ICondition
         {
-            private readonly Func<HttpResponseMessage, ApplicationContext, bool> condition;
+            private readonly Func<HttpResponseMessage, ApplicationStateVariables, bool> condition;
 
-            public Condition(Func<HttpResponseMessage, ApplicationContext, bool> condition)
+            public Condition(Func<HttpResponseMessage, ApplicationStateVariables, bool> condition)
             {
                 this.condition = condition;
             }
 
-            public bool IsApplicable(HttpResponseMessage response, ApplicationContext context)
+            public bool IsApplicable(HttpResponseMessage response, ApplicationStateVariables stateVariables)
             {
-                return condition(response, context);
+                return condition(response, stateVariables);
             }
         }
     }
