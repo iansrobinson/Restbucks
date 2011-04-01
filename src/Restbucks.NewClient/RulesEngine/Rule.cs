@@ -20,12 +20,12 @@ namespace Restbucks.NewClient.RulesEngine
             this.stateFactory = stateFactory;
         }
 
-        public Result Evaluate(HttpResponseMessage previousResponse, ApplicationStateVariables stateVariables)
+        public Result Evaluate(HttpResponseMessage previousResponse, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities)
         {
             if (condition.IsApplicable(previousResponse, stateVariables))
             {
-                var newResponse = actionInvoker.Invoke(previousResponse, stateVariables);
-                return new Result(true, stateFactory.Create(newResponse, stateVariables));
+                var newResponse = actionInvoker.Invoke(previousResponse, stateVariables, clientCapabilities);
+                return new Result(true, stateFactory.Create(newResponse, stateVariables, clientCapabilities));
             }
 
             return Result.Unsuccessful;

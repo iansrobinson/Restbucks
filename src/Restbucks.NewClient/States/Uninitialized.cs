@@ -13,14 +13,14 @@ namespace Restbucks.NewClient.States
             this.stateVariables = stateVariables;
         }
 
-        public IState NextState(Actions actions)
+        public IState NextState(IClientCapabilities clientCapabilities)
         {
             var rules = new Rules(
                 When.IsTrue(response => true)
-                    .ExecuteAction(actions.Do(GetHomePage.Instance))
+                    .Invoke(actions => actions.Do(GetHomePage.Instance))
                     .ReturnState((response, vars) => new Started(response, vars)));
 
-            return rules.Evaluate(null, stateVariables);
+            return rules.Evaluate(null, stateVariables, clientCapabilities);
         }
 
         public bool IsTerminalState

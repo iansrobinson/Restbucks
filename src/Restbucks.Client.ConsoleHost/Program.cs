@@ -21,16 +21,15 @@ namespace Restbucks.Client.ConsoleHost
             var context = new ApplicationStateVariables(
                 new KeyValuePair<IKey, object>(new StringKey("home-page-uri"), new Uri("http://" + Environment.MachineName + "/restbucks/shop/")),
                 new KeyValuePair<IKey, object>(new EntityBodyKey("request-for-quote", new MediaTypeHeaderValue(RestbucksMediaType.Value), new Uri("http://schemas.restbucks.com/shop")), items));
-            var actions = new Actions(ClientCapabilities.Instance);
-
+            
             var state = new Uninitialized(context);
             Console.WriteLine(state.GetType().Name);
-            var nextState = state.NextState(actions);
+            var nextState = state.NextState(ClientCapabilities.Instance);
             Console.WriteLine(nextState.GetType().Name);
 
             while (!nextState.IsTerminalState)
             {
-                nextState = nextState.NextState(actions);
+                nextState = nextState.NextState(ClientCapabilities.Instance);
                 Console.WriteLine(nextState.GetType().Name);
             }
 

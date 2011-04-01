@@ -11,7 +11,7 @@ namespace Restbucks.NewClient.RulesEngine
             this.stateDelegate = stateDelegate;
         }
 
-        public IState Create(HttpResponseMessage response, ApplicationStateVariables stateVariables)
+        public IState Create(HttpResponseMessage response, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities)
         {
             return stateDelegate(response, stateVariables);
         }

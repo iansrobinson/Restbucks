@@ -24,9 +24,9 @@ namespace Restbucks.NewClient.RulesEngine
             this.condition = condition;
         }
 
-        public IReturnState ExecuteAction(IActionInvoker actionInvoker)
+        public IReturnState Invoke(CreateActionDelegate createActionDelegate)
         {
-            this.actionInvoker = actionInvoker;
+            actionInvoker = new ActionInvoker(createActionDelegate);
             return this;
         }
 
@@ -61,11 +61,27 @@ namespace Restbucks.NewClient.RulesEngine
                 return responseConditionDelegate(response);
             }
         }
+
+        private class ActionInvoker : IActionInvoker
+        {
+            private readonly CreateActionDelegate createActionDelegate;
+
+            public ActionInvoker(CreateActionDelegate createActionDelegate)
+            {
+                this.createActionDelegate = createActionDelegate;
+            }
+
+            public HttpResponseMessage Invoke(HttpResponseMessage previousResponse, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities)
+            {
+                var action = createActionDelegate(new Actions(clientCapabilities));
+                return action.Execute(previousResponse, stateVariables, clientCapabilities);
+            }
+        }
     }
 
     public interface IExecuteAction
     {
-        IReturnState ExecuteAction(IActionInvoker actionInvoker);
+        IReturnState Invoke(CreateActionDelegate createActionDelegate);
     }
 
     public interface IReturnState

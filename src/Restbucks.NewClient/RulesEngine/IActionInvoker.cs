@@ -4,6 +4,6 @@ namespace Restbucks.NewClient.RulesEngine
 {
     public interface IActionInvoker
     {
-        HttpResponseMessage Invoke(HttpResponseMessage previousResponse, ApplicationStateVariables stateVariables);
+        HttpResponseMessage Invoke(HttpResponseMessage previousResponse, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities);
     }
 }

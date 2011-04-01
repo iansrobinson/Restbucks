@@ -15,7 +15,7 @@ namespace Restbucks.NewClient.States
             this.stateVariables = stateVariables;
         }
 
-        public IState NextState(Actions actions)
+        public IState NextState(IClientCapabilities clientCapabilities)
         {
             throw new NotImplementedException();
         }

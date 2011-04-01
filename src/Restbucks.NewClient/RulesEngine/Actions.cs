@@ -14,24 +14,39 @@ namespace Restbucks.NewClient.RulesEngine
             this.clientCapabilities = clientCapabilities;
         }
 
-        public IActionInvoker ClickLink(ILinkStrategy linkStrategy)
+        public IAction ClickLink(ILinkStrategy linkStrategy)
         {
-            return Do(new ClickLink(linkStrategy));
+            return new ClickLink(linkStrategy);
         }
 
-        public IActionInvoker SubmitForm(IFormStrategy formStrategy)
+        public IAction SubmitForm(IFormStrategy formStrategy)
         {
-            return Do(new SubmitForm(formStrategy));
+            return new SubmitForm(formStrategy);
         }
 
-        public IActionInvoker Do(IAction action)
+        public IAction Do(IAction action)
         {
-            return new ActionInvoker(action.Execute, clientCapabilities);
+            return action;
         }
 
-        public IActionInvoker Do(ActionDelegate actionDelegate)
+        public IAction Do(ActionDelegate actionDelegate)
         {
-            return new ActionInvoker((response, context, capabilities) => actionDelegate(response, context, capabilities), clientCapabilities);
+            return new Action(actionDelegate);
+        }
+
+        private class Action : IAction
+        {
+            private readonly ActionDelegate actionDelegate;
+
+            public Action(ActionDelegate actionDelegate)
+            {
+                this.actionDelegate = actionDelegate;
+            }
+
+            public HttpResponseMessage Execute(HttpResponseMessage previousResponse, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities)
+            {
+                return actionDelegate(previousResponse, stateVariables, clientCapabilities);
+            }
         }
 
         private class ActionInvoker : IActionInvoker
@@ -45,7 +60,7 @@ namespace Restbucks.NewClient.RulesEngine
                 this.clientCapabilities = clientCapabilities;
             }
 
-            public HttpResponseMessage Invoke(HttpResponseMessage previousResponse, ApplicationStateVariables stateVariables)
+            public HttpResponseMessage Invoke(HttpResponseMessage previousResponse, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities1)
             {
                 return action(previousResponse, stateVariables, clientCapabilities);
             }

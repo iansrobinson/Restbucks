@@ -17,15 +17,16 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         private static readonly ICondition DummyFalseCondition = CreateDummyCondition(false);
         private static readonly IActionInvoker DummyActionInvoker = CreateDummyActionInvoker();
         private static readonly IStateFactory DummyStateFactory = CreateDummyStateFactory();
+        private static readonly IClientCapabilities DummyClientCapabilities = MockRepository.GenerateStub<IClientCapabilities>();
         
         [Test]
         public void ShouldExecuteActionIfConditionIsApplicable()
         {
             var mockAction = MockRepository.GenerateMock<IActionInvoker>();
-            mockAction.Expect(a => a.Invoke(PreviousResponse, StateVariables)).Return(NewResponse);
+            mockAction.Expect(a => a.Invoke(PreviousResponse, StateVariables, DummyClientCapabilities)).Return(NewResponse);
 
             var rule = new Rule(DummyTrueCondition, mockAction, DummyStateFactory);
-            rule.Evaluate(PreviousResponse, StateVariables);
+            rule.Evaluate(PreviousResponse, StateVariables, DummyClientCapabilities);
 
             mockAction.VerifyAllExpectations();
         }
@@ -34,7 +35,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         public void ShouldCreateNewStateIfActionIsSuccessful()
         {
             var rule = new Rule(DummyTrueCondition, DummyActionInvoker, DummyStateFactory);
-            var result = rule.Evaluate(PreviousResponse, StateVariables);
+            var result = rule.Evaluate(PreviousResponse, StateVariables, DummyClientCapabilities);
 
             Assert.AreEqual(NewState, result.State);
         }
@@ -43,7 +44,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         public void ShouldReturnSuccessfulResultIfConditionIsApplicable()
         {
             var rule = new Rule(DummyTrueCondition, DummyActionInvoker, DummyStateFactory);
-            var result = rule.Evaluate(PreviousResponse, StateVariables);
+            var result = rule.Evaluate(PreviousResponse, StateVariables, DummyClientCapabilities);
 
             Assert.IsTrue(result.IsSuccessful);
         }
@@ -52,10 +53,10 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         public void ShouldNotExecuteActionIfConditionIsNotApplicable()
         {
             var mockAction = MockRepository.GenerateMock<IActionInvoker>();
-            mockAction.AssertWasNotCalled(a => a.Invoke(PreviousResponse, StateVariables));
+            mockAction.AssertWasNotCalled(a => a.Invoke(PreviousResponse, StateVariables, DummyClientCapabilities));
 
             var rule = new Rule(DummyFalseCondition, mockAction, DummyStateFactory);
-            rule.Evaluate(PreviousResponse, StateVariables);
+            rule.Evaluate(PreviousResponse, StateVariables, DummyClientCapabilities);
 
             mockAction.VerifyAllExpectations();
         }
@@ -64,7 +65,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         public void ShouldReturnUnsuccessfulResultIfConditionIsNotApplicable()
         {
             var rule = new Rule(DummyFalseCondition, DummyActionInvoker, DummyStateFactory);
-            var result = rule.Evaluate(PreviousResponse, StateVariables);
+            var result = rule.Evaluate(PreviousResponse, StateVariables, DummyClientCapabilities);
 
             Assert.IsFalse(result.IsSuccessful);
             Assert.IsNull(result.State);
@@ -101,14 +102,14 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         private static IActionInvoker CreateDummyActionInvoker()
         {
             var dummyAction = MockRepository.GenerateStub<IActionInvoker>();
-            dummyAction.Expect(a => a.Invoke(PreviousResponse, StateVariables)).Return(NewResponse);
+            dummyAction.Expect(a => a.Invoke(PreviousResponse, StateVariables, DummyClientCapabilities)).Return(NewResponse);
             return dummyAction;
         }
 
         private static IStateFactory CreateDummyStateFactory()
         {
             var dummyStateFactory = MockRepository.GenerateStub<IStateFactory>();
-            dummyStateFactory.Expect(f => f.Create(NewResponse, StateVariables)).IgnoreArguments().Return(NewState);
+            dummyStateFactory.Expect(f => f.Create(NewResponse, StateVariables, DummyClientCapabilities)).IgnoreArguments().Return(NewState);
             return dummyStateFactory;
         }
     }

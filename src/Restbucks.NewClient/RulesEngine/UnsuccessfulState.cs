@@ -10,7 +10,7 @@ namespace Restbucks.NewClient.RulesEngine
         {
         }
 
-        public IState NextState(Actions actions)
+        public IState NextState(IClientCapabilities clientCapabilities)
         {
             throw new NotImplementedException();
         }

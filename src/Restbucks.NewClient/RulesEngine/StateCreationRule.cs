@@ -13,9 +13,9 @@ namespace Restbucks.NewClient.RulesEngine
             this.stateFactory = stateFactory;
         }
 
-        public Result Evaluate(HttpResponseMessage newResponse, ApplicationStateVariables stateVariables)
+        public Result Evaluate(HttpResponseMessage newResponse, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities)
         {
-            return condition.IsApplicable(newResponse, stateVariables) ? new Result(true, stateFactory.Create(newResponse, stateVariables)) : Result.Unsuccessful;
+            return condition.IsApplicable(newResponse, stateVariables) ? new Result(true, stateFactory.Create(newResponse, stateVariables, clientCapabilities)) : Result.Unsuccessful;
         }
     }
 }

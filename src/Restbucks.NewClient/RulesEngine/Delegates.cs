@@ -9,4 +9,6 @@ namespace Restbucks.NewClient.RulesEngine
     public delegate bool ResponseConditionDelegate(HttpResponseMessage response);
 
     public delegate bool StateConditionDelegate(HttpResponseMessage response, ApplicationStateVariables stateVariables);
+
+    public delegate IAction CreateActionDelegate(Actions actions);
 }

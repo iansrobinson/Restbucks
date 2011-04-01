@@ -13,32 +13,32 @@ namespace Tests.Restbucks.NewClient.RulesEngine
     public class ActionsTests
     {
         private static readonly HttpResponseMessage Response = new HttpResponseMessage();
-        private static readonly IClientCapabilities Client = new ClientCapabilities();
         private static readonly ApplicationStateVariables StateVariables = new ApplicationStateVariables();
+        private static readonly IClientCapabilities DummyClientCapabilities = MockRepository.GenerateStub<IClientCapabilities>();
 
         [Test]
-        public void ShouldReturnInvokerThatInvokesSuppliedAction()
+        public void ShouldReturnSuppliedAction()
         {
             var mockAction = MockRepository.GenerateMock<IAction>();
-            mockAction.Expect(a => a.Execute(Response, StateVariables, Client));
+            mockAction.Expect(a => a.Execute(Response, StateVariables, DummyClientCapabilities));
 
-            var actions = new Actions(Client);
-            var invoker = actions.Do(mockAction);
+            var actions = new Actions(DummyClientCapabilities);
+            var action = actions.Do(mockAction);
 
-            invoker.Invoke(Response, StateVariables);
+            action.Execute(Response, StateVariables, DummyClientCapabilities);
 
             mockAction.VerifyAllExpectations();
         }
 
         [Test]
-        public void ShouldReturnInvokerThatInvokesSuppliedFunction()
+        public void ShouldReturnActionThatInvokesSuppliedFunction()
         {
             var expectedResponse = new HttpResponseMessage();
 
-            var actions = new Actions(Client);
-            var invoker = actions.Do((r, cl, ct) => expectedResponse);
+            var actions = new Actions(DummyClientCapabilities);
+            var action = actions.Do((r, cl, ct) => expectedResponse);
 
-            Assert.AreEqual(expectedResponse, invoker.Invoke(Response, StateVariables));
+            Assert.AreEqual(expectedResponse, action.Execute(Response, StateVariables, DummyClientCapabilities));
         }
 
         [Test]

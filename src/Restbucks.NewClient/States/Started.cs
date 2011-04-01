@@ -15,12 +15,12 @@ namespace Restbucks.NewClient.States
             this.stateVariables = stateVariables;
         }
 
-        public IState NextState(Actions actions)
+        public IState NextState(IClientCapabilities clientCapabilities)
         {
             var rules = new Rules(
                 When
                     .IsTrue(response => response.ContainsForm(Forms.RequestForQuote))
-                    .ExecuteAction(actions.SubmitForm(Forms.RequestForQuote))
+                    .Invoke(actions => actions.SubmitForm(Forms.RequestForQuote))
                     .Return(
                         new[]
                             {
@@ -31,7 +31,7 @@ namespace Restbucks.NewClient.States
                     ),
                 When
                     .IsTrue(response => response.ContainsLink(Links.Rfq))
-                    .ExecuteAction(actions.ClickLink(Links.Rfq))
+                    .Invoke(actions => actions.ClickLink(Links.Rfq))
                     .Return(
                         new[]
                             {
@@ -41,7 +41,7 @@ namespace Restbucks.NewClient.States
                             })
                 );
 
-            return rules.Evaluate(previousResponse, stateVariables);
+            return rules.Evaluate(previousResponse, stateVariables, clientCapabilities);
         }
 
         public bool IsTerminalState

@@ -15,15 +15,16 @@ namespace Tests.Restbucks.NewClient.RulesEngine
     {
         private static readonly HttpResponseMessage PreviousResponse = new HttpResponseMessage();
         private static readonly ApplicationStateVariables StateVariables = new ApplicationStateVariables();
+        private static readonly IClientCapabilities DummyClientCapabilities = MockRepository.GenerateStub<IClientCapabilities>();
 
         [Test]
         public void ShouldReturnRuleWhoseActionExecutesIfConditionIsTrue()
         {
-            var mockActionInvoker = MockRepository.GenerateMock<IActionInvoker>();
-            mockActionInvoker.Expect(a => a.Invoke(PreviousResponse, StateVariables)).Return(new HttpResponseMessage());
+            var mockAction = MockRepository.GenerateMock<IAction>();
+            mockAction.Expect(a => a.Execute(PreviousResponse, StateVariables, DummyClientCapabilities)).Return(new HttpResponseMessage());
 
             var rule = When.IsTrue(r => true)
-                .ExecuteAction(mockActionInvoker)
+                .Invoke(actions => actions.Do(mockAction))
                 .Return(new[]
                             {
                                 On.Status(HttpStatusCode.OK).Do((r, c) => null),
@@ -36,21 +37,21 @@ namespace Tests.Restbucks.NewClient.RulesEngine
                             },
                         (r, c) => null);
 
-            rule.Evaluate(PreviousResponse, StateVariables);
+            rule.Evaluate(PreviousResponse, StateVariables, DummyClientCapabilities);
 
-            mockActionInvoker.VerifyAllExpectations();
+            mockAction.VerifyAllExpectations();
         }
 
         [Test]
         public void ShouldReturnRuleThatCreatesStateBasedOnResponseStatusCode()
         {
-            var dummyActionInvoker = MockRepository.GenerateStub<IActionInvoker>();
-            dummyActionInvoker.Expect(a => a.Invoke(PreviousResponse, StateVariables)).Return(new HttpResponseMessage {StatusCode = HttpStatusCode.Accepted});
+            var dummyAction = MockRepository.GenerateStub<IAction>();
+            dummyAction.Expect(a => a.Execute(PreviousResponse, StateVariables, DummyClientCapabilities)).Return(new HttpResponseMessage { StatusCode = HttpStatusCode.Accepted });
 
             var dummyState = MockRepository.GenerateStub<IState>();
 
             var rule = When.IsTrue(r => true)
-                .ExecuteAction(dummyActionInvoker)
+                .Invoke(actions => actions.Do(dummyAction))
                 .Return(new[]
                             {
                                 On.Status(HttpStatusCode.OK).Do((r, c) => null),
@@ -58,7 +59,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
                             },
                         (r, c) => null);
 
-            var result = rule.Evaluate(PreviousResponse, StateVariables);
+            var result = rule.Evaluate(PreviousResponse, StateVariables, DummyClientCapabilities);
 
             Assert.IsTrue(result.IsSuccessful);
             Assert.AreEqual(dummyState, result.State);
@@ -67,13 +68,13 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         [Test]
         public void ShouldReturnRuleThatCreatesDefaultStateIfResponseStatusCodeDoesNotMatch()
         {
-            var dummyActionInvoker = MockRepository.GenerateStub<IActionInvoker>();
-            dummyActionInvoker.Expect(a => a.Invoke(PreviousResponse, StateVariables)).Return(new HttpResponseMessage {StatusCode = HttpStatusCode.Unauthorized});
+            var dummyAction = MockRepository.GenerateStub<IAction>();
+            dummyAction.Expect(a => a.Execute(PreviousResponse, StateVariables, DummyClientCapabilities)).Return(new HttpResponseMessage { StatusCode = HttpStatusCode.Unauthorized });
 
             var dummyState = MockRepository.GenerateStub<IState>();
 
             var rule = When.IsTrue(r => true)
-                .ExecuteAction(dummyActionInvoker)
+                .Invoke(actions => actions.Do(dummyAction))
                 .Return(new[]
                             {
                                 On.Status(HttpStatusCode.OK).Do((r, c) => null),
@@ -81,7 +82,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
                             },
                         (r, c) => dummyState);
 
-            var result = rule.Evaluate(PreviousResponse, StateVariables);
+            var result = rule.Evaluate(PreviousResponse, StateVariables, DummyClientCapabilities);
 
             Assert.IsTrue(result.IsSuccessful);
             Assert.AreEqual(dummyState, result.State);
@@ -90,18 +91,18 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         [Test]
         public void ShouldReturnRuleThatCreatesUnsuccessfulStateIfResponseStatusCodeDoesNotMatchAndNoDefaultSupplied()
         {
-            var dummyActionInvoker = MockRepository.GenerateStub<IActionInvoker>();
-            dummyActionInvoker.Expect(a => a.Invoke(PreviousResponse, StateVariables)).Return(new HttpResponseMessage {StatusCode = HttpStatusCode.Unauthorized});
+            var dummyAction = MockRepository.GenerateStub<IAction>();
+            dummyAction.Expect(a => a.Execute(PreviousResponse, StateVariables, DummyClientCapabilities)).Return(new HttpResponseMessage { StatusCode = HttpStatusCode.Unauthorized });
 
             var rule = When.IsTrue(r => true)
-                .ExecuteAction(dummyActionInvoker)
+                .Invoke(actions => actions.Do(dummyAction))
                 .Return(new[]
                             {
                                 On.Status(HttpStatusCode.OK).Do((r, c) => null),
                                 On.Status(HttpStatusCode.Accepted).Do((r, c) => null)
                             });
 
-            var result = rule.Evaluate(PreviousResponse, StateVariables);
+            var result = rule.Evaluate(PreviousResponse, StateVariables, DummyClientCapabilities);
 
             Assert.IsTrue(result.IsSuccessful);
             Assert.IsInstanceOf(typeof (UnsuccessfulState), result.State);
@@ -111,21 +112,21 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         [ExpectedException(ExpectedException = typeof (ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: stateCreationRules")]
         public void ShouldThrowExceptionIfStateCreationRulesAreNull()
         {
-            var dummyActionInvoker = MockRepository.GenerateStub<IActionInvoker>();
+            var dummyAction = MockRepository.GenerateStub<IAction>(); 
             When.IsTrue(r => true)
-                .ExecuteAction(dummyActionInvoker)
+                .Invoke(actions => actions.Do(dummyAction))
                 .Return(null);
         }
 
         [Test]
         public void ShouldReturnRuleThatCreatesUnsuccessfulStateIfNoStatusCodeMatchersSupplied()
         {
-            var dummyActionInvoker = MockRepository.GenerateStub<IActionInvoker>();
+            var dummyAction = MockRepository.GenerateStub<IAction>();
             var rule = When.IsTrue(r => true)
-                .ExecuteAction(dummyActionInvoker)
+                .Invoke(actions => actions.Do(dummyAction))
                 .Return(new StateCreationRule[] {});
 
-            var result = rule.Evaluate(PreviousResponse, StateVariables);
+            var result = rule.Evaluate(PreviousResponse, StateVariables, DummyClientCapabilities);
 
             Assert.IsTrue(result.IsSuccessful);
             Assert.IsInstanceOf(typeof (UnsuccessfulState), result.State);
@@ -134,16 +135,16 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         [Test]
         public void ShouldReturnRuleThatCreatesStateIrrespectiveOfStatusCode()
         {
-            var dummyActionInvoker = MockRepository.GenerateStub<IActionInvoker>();
-            dummyActionInvoker.Expect(a => a.Invoke(PreviousResponse, StateVariables)).Return(new HttpResponseMessage {StatusCode = HttpStatusCode.Accepted});
+            var dummyAction = MockRepository.GenerateStub<IAction>();
+            dummyAction.Expect(a => a.Execute(PreviousResponse, StateVariables, DummyClientCapabilities)).Return(new HttpResponseMessage { StatusCode = HttpStatusCode.Accepted });
 
             var dummyState = MockRepository.GenerateStub<IState>();
 
             var rule = When.IsTrue(r => true)
-                .ExecuteAction(dummyActionInvoker)
+                .Invoke(actions => actions.Do(dummyAction))
                 .ReturnState((r, c) => dummyState);
 
-            var result = rule.Evaluate(PreviousResponse, StateVariables);
+            var result = rule.Evaluate(PreviousResponse, StateVariables, DummyClientCapabilities);
 
             Assert.IsTrue(result.IsSuccessful);
             Assert.AreEqual(dummyState, result.State);
@@ -154,17 +155,17 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         {
             var previousResponse = DummyResponse.CreateResponse();
 
-            var dummyActionInvoker = MockRepository.GenerateStub<IActionInvoker>();
-            dummyActionInvoker.Expect(a => a.Invoke(previousResponse, StateVariables)).Return(new HttpResponseMessage {StatusCode = HttpStatusCode.Accepted});
+            var dummyAction = MockRepository.GenerateStub<IAction>();
+            dummyAction.Expect(a => a.Execute(PreviousResponse, StateVariables, DummyClientCapabilities)).Return(new HttpResponseMessage { StatusCode = HttpStatusCode.Accepted });
 
             var dummyState = MockRepository.GenerateStub<IState>();
 
             var rule = When.IsTrue(r => r.ContainsLink(RestbucksLink.WithRel(new StringLinkRelation("http://relations.restbucks.com/rfq")))
                                         && r.ContainsForm(RestbucksForm.WithId("request-for-quote")))
-                .ExecuteAction(dummyActionInvoker)
+                .Invoke(actions => actions.Do(dummyAction))
                 .ReturnState((r, c) => dummyState);
 
-            var result = rule.Evaluate(previousResponse, StateVariables);
+            var result = rule.Evaluate(previousResponse, StateVariables, DummyClientCapabilities);
 
             Assert.IsTrue(result.IsSuccessful);
             Assert.AreEqual(dummyState, result.State);
