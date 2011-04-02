@@ -7,16 +7,16 @@ namespace Restbucks.NewClient.RulesEngine
     public class StateFactoryCollection : IStateFactory
     {
         private readonly IEnumerable<StateCreationRule> rules;
-        private readonly IStateFactory defaultFactory;
+        private readonly CreateStateDelegate createDefaultState;
 
-        public StateFactoryCollection(IEnumerable<StateCreationRule> rules) : this(rules, UnsuccessfulStateFactory.Instance)
+        public StateFactoryCollection(IEnumerable<StateCreationRule> rules) : this(rules, UnsuccessfulStateFactory.Instance.Create)
         {
         }
 
-        public StateFactoryCollection(IEnumerable<StateCreationRule> rules, IStateFactory defaultFactory)
+        public StateFactoryCollection(IEnumerable<StateCreationRule> rules, CreateStateDelegate createDefaultState)
         {
             this.rules = rules;
-            this.defaultFactory = defaultFactory;
+            this.createDefaultState = createDefaultState;
         }
 
         public IState Create(HttpResponseMessage response, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities)
@@ -25,7 +25,7 @@ namespace Restbucks.NewClient.RulesEngine
             {
                 return result.State;
             }
-            return defaultFactory.Create(response, stateVariables, clientCapabilities);
+            return createDefaultState(response, stateVariables, clientCapabilities);
         }
 
         private class UnsuccessfulStateFactory : IStateFactory

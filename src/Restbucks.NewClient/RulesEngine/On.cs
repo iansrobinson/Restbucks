@@ -28,9 +28,9 @@ namespace Restbucks.NewClient.RulesEngine
             this.condition = condition;
         }
 
-        public StateCreationRule Do(StateDelegate stateDelegate)
+        public StateCreationRule Do(CreateNextStateDelegate createNextStateDelegate)
         {
-            return new StateCreationRule(condition, new StateFactory(stateDelegate));
+            return new StateCreationRule(condition, new StateFactory(createNextStateDelegate));
         }
 
         private class Condition : ICondition

@@ -7,17 +7,17 @@ namespace Restbucks.NewClient.RulesEngine
     {
         private readonly ICondition condition;
         private readonly IActionInvoker actionInvoker;
-        private readonly IStateFactory stateFactory;
+        private readonly CreateStateDelegate createState;
 
-        public Rule(ICondition condition, IActionInvoker actionInvoker, IStateFactory stateFactory)
+        public Rule(ICondition condition, IActionInvoker actionInvoker, CreateStateDelegate createState)
         {
             Check.IsNotNull(condition, "condition");
             Check.IsNotNull(actionInvoker, "actionInvoker");
-            Check.IsNotNull(stateFactory, "stateFactory");
-
+            Check.IsNotNull(createState, "createState");
+            
             this.condition = condition;
             this.actionInvoker = actionInvoker;
-            this.stateFactory = stateFactory;
+            this.createState = createState;
         }
 
         public Result Evaluate(HttpResponseMessage previousResponse, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities)
@@ -25,7 +25,7 @@ namespace Restbucks.NewClient.RulesEngine
             if (condition.IsApplicable(previousResponse, stateVariables))
             {
                 var newResponse = actionInvoker.Invoke(previousResponse, stateVariables, clientCapabilities);
-                return new Result(true, stateFactory.Create(newResponse, stateVariables, clientCapabilities));
+                return new Result(true, createState(newResponse, stateVariables, clientCapabilities));
             }
 
             return Result.Unsuccessful;

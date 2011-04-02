@@ -4,16 +4,16 @@ namespace Restbucks.NewClient.RulesEngine
 {
     public class StateFactory : IStateFactory
     {
-        private readonly StateDelegate stateDelegate;
+        private readonly CreateNextStateDelegate createNextStateDelegate;
 
-        public StateFactory(StateDelegate stateDelegate)
+        public StateFactory(CreateNextStateDelegate createNextStateDelegate)
         {
-            this.stateDelegate = stateDelegate;
+            this.createNextStateDelegate = createNextStateDelegate;
         }
 
         public IState Create(HttpResponseMessage response, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities)
         {
-            return stateDelegate(response, stateVariables);
+            return createNextStateDelegate(response, stateVariables);
         }
     }
 }

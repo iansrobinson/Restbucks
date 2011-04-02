@@ -18,14 +18,14 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         private static readonly IActionInvoker DummyActionInvoker = CreateDummyActionInvoker();
         private static readonly IStateFactory DummyStateFactory = CreateDummyStateFactory();
         private static readonly IClientCapabilities DummyClientCapabilities = MockRepository.GenerateStub<IClientCapabilities>();
-        
+
         [Test]
         public void ShouldExecuteActionIfConditionIsApplicable()
         {
             var mockAction = MockRepository.GenerateMock<IActionInvoker>();
             mockAction.Expect(a => a.Invoke(PreviousResponse, StateVariables, DummyClientCapabilities)).Return(NewResponse);
 
-            var rule = new Rule(DummyTrueCondition, mockAction, DummyStateFactory);
+            var rule = new Rule(DummyTrueCondition, mockAction, DummyStateFactory.Create);
             rule.Evaluate(PreviousResponse, StateVariables, DummyClientCapabilities);
 
             mockAction.VerifyAllExpectations();
@@ -34,7 +34,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         [Test]
         public void ShouldCreateNewStateIfActionIsSuccessful()
         {
-            var rule = new Rule(DummyTrueCondition, DummyActionInvoker, DummyStateFactory);
+            var rule = new Rule(DummyTrueCondition, DummyActionInvoker, DummyStateFactory.Create);
             var result = rule.Evaluate(PreviousResponse, StateVariables, DummyClientCapabilities);
 
             Assert.AreEqual(NewState, result.State);
@@ -43,7 +43,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         [Test]
         public void ShouldReturnSuccessfulResultIfConditionIsApplicable()
         {
-            var rule = new Rule(DummyTrueCondition, DummyActionInvoker, DummyStateFactory);
+            var rule = new Rule(DummyTrueCondition, DummyActionInvoker, DummyStateFactory.Create);
             var result = rule.Evaluate(PreviousResponse, StateVariables, DummyClientCapabilities);
 
             Assert.IsTrue(result.IsSuccessful);
@@ -55,7 +55,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var mockAction = MockRepository.GenerateMock<IActionInvoker>();
             mockAction.AssertWasNotCalled(a => a.Invoke(PreviousResponse, StateVariables, DummyClientCapabilities));
 
-            var rule = new Rule(DummyFalseCondition, mockAction, DummyStateFactory);
+            var rule = new Rule(DummyFalseCondition, mockAction, DummyStateFactory.Create);
             rule.Evaluate(PreviousResponse, StateVariables, DummyClientCapabilities);
 
             mockAction.VerifyAllExpectations();
@@ -64,7 +64,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         [Test]
         public void ShouldReturnUnsuccessfulResultIfConditionIsNotApplicable()
         {
-            var rule = new Rule(DummyFalseCondition, DummyActionInvoker, DummyStateFactory);
+            var rule = new Rule(DummyFalseCondition, DummyActionInvoker, DummyStateFactory.Create);
             var result = rule.Evaluate(PreviousResponse, StateVariables, DummyClientCapabilities);
 
             Assert.IsFalse(result.IsSuccessful);
@@ -75,19 +75,19 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         [ExpectedException(ExpectedException = typeof (ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: condition")]
         public void ThrowsExceptionIfConditionIsNull()
         {
-            new Rule(null, MockRepository.GenerateStub<IActionInvoker>(), MockRepository.GenerateStub<IStateFactory>());
+            new Rule(null, MockRepository.GenerateStub<IActionInvoker>(), MockRepository.GenerateStub<IStateFactory>().Create);
         }
 
         [Test]
         [ExpectedException(ExpectedException = typeof (ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: actionInvoker")]
         public void ThrowsExceptionIfActionInvokerIsNull()
         {
-            new Rule(MockRepository.GenerateStub<ICondition>(), null as IActionInvoker, MockRepository.GenerateStub<IStateFactory>());
+            new Rule(MockRepository.GenerateStub<ICondition>(), null, MockRepository.GenerateStub<IStateFactory>().Create);
         }
 
         [Test]
-        [ExpectedException(ExpectedException = typeof(ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: stateFactory")]
-        public void ThrowsExceptionIfStateFactoryIsNull()
+        [ExpectedException(ExpectedException = typeof(ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: createState")]
+        public void ThrowsExceptionIfCreateStateDelegateIsNull()
         {
             new Rule(MockRepository.GenerateStub<ICondition>(), MockRepository.GenerateStub<IActionInvoker>(), null);
         }

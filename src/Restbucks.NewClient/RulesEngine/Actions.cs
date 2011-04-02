@@ -29,23 +29,23 @@ namespace Restbucks.NewClient.RulesEngine
             return action;
         }
 
-        public IAction Do(ActionDelegate actionDelegate)
+        public IAction Do(IssueRequestDelegate issueRequestDelegate)
         {
-            return new Action(actionDelegate);
+            return new Action(issueRequestDelegate);
         }
 
         private class Action : IAction
         {
-            private readonly ActionDelegate actionDelegate;
+            private readonly IssueRequestDelegate issueRequestDelegate;
 
-            public Action(ActionDelegate actionDelegate)
+            public Action(IssueRequestDelegate issueRequestDelegate)
             {
-                this.actionDelegate = actionDelegate;
+                this.issueRequestDelegate = issueRequestDelegate;
             }
 
             public HttpResponseMessage Execute(HttpResponseMessage previousResponse, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities)
             {
-                return actionDelegate(previousResponse, stateVariables, clientCapabilities);
+                return issueRequestDelegate(previousResponse, stateVariables, clientCapabilities);
             }
         }
 

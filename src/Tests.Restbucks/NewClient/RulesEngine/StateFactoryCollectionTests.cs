@@ -35,7 +35,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var mockDefaultFactory = MockRepository.GenerateMock<IStateFactory>();
             mockDefaultFactory.Expect(w => w.Create(Response, StateVariables, DummyClientCapabilities)).Return(DummyState);
 
-            var factoryCollection = new StateFactoryCollection(new[] { new StateCreationRule(DummyFalseCondition, DummyStateFactory) }, mockDefaultFactory);
+            var factoryCollection = new StateFactoryCollection(new[] { new StateCreationRule(DummyFalseCondition, DummyStateFactory) }, mockDefaultFactory.Create);
             factoryCollection.Create(Response, StateVariables, DummyClientCapabilities);
 
             mockDefaultFactory.VerifyAllExpectations();

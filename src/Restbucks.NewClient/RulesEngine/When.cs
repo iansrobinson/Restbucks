@@ -30,21 +30,22 @@ namespace Restbucks.NewClient.RulesEngine
             return this;
         }
 
-        public IRule ReturnState(StateDelegate stateDelegate)
+        public IRule ReturnState(CreateNextStateDelegate createNextStateDelegate)
         {
-            return new Rule(condition, actionInvoker, new StateFactory(stateDelegate));
+            return new Rule(condition, actionInvoker, (r, v, c) => createNextStateDelegate(r, v));
         }
 
-        public IRule Return(IEnumerable<StateCreationRule> stateCreationRules, StateDelegate defaultStateDelegate = null)
+        public IRule Return(IEnumerable<StateCreationRule> stateCreationRules, CreateNextStateDelegate defaultCreateNextStateDelegate = null)
         {
             Check.IsNotNull(stateCreationRules, "stateCreationRules");
 
-            if (defaultStateDelegate == null)
+            if (defaultCreateNextStateDelegate == null)
             {
-                return new Rule(condition, actionInvoker, new StateFactoryCollection(stateCreationRules));
+                return new Rule(condition, actionInvoker, new StateFactoryCollection(stateCreationRules).Create);
             }
 
-            return new Rule(condition, actionInvoker, new StateFactoryCollection(stateCreationRules, new StateFactory(defaultStateDelegate)));
+            var stateFactoryCollection = new StateFactoryCollection(stateCreationRules, (r, v, c) => defaultCreateNextStateDelegate(r, v));
+            return new Rule(condition, actionInvoker, stateFactoryCollection.Create);
         }
 
         private class ResponseBasedCondition : ICondition
@@ -86,7 +87,7 @@ namespace Restbucks.NewClient.RulesEngine
 
     public interface IReturnState
     {
-        IRule ReturnState(StateDelegate stateDelegate);
-        IRule Return(IEnumerable<StateCreationRule> stateCreationRules, StateDelegate defaultStateDelegate = null);
+        IRule ReturnState(CreateNextStateDelegate createNextStateDelegate);
+        IRule Return(IEnumerable<StateCreationRule> stateCreationRules, CreateNextStateDelegate defaultCreateNextStateDelegate = null);
     }
 }

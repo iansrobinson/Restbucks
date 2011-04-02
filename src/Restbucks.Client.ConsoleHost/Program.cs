@@ -18,11 +18,11 @@ namespace Restbucks.Client.ConsoleHost
             XmlConfigurator.Configure();
 
             var items = new ShopBuilder(null).AddItem(new Item("coffee", new Amount("g", 125))).Build();
-            var context = new ApplicationStateVariables(
+            var variables = new ApplicationStateVariables(
                 new KeyValuePair<IKey, object>(new StringKey("home-page-uri"), new Uri("http://" + Environment.MachineName + "/restbucks/shop/")),
                 new KeyValuePair<IKey, object>(new EntityBodyKey("request-for-quote", new MediaTypeHeaderValue(RestbucksMediaType.Value), new Uri("http://schemas.restbucks.com/shop")), items));
             
-            var state = new Uninitialized(context);
+            var state = new Uninitialized(variables);
             Console.WriteLine(state.GetType().Name);
             var nextState = state.NextState(ClientCapabilities.Instance);
             Console.WriteLine(nextState.GetType().Name);
