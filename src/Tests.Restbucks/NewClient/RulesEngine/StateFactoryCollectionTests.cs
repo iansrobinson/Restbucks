@@ -23,7 +23,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var mockFactory = MockRepository.GenerateMock<IStateFactory>();
             mockFactory.Expect(w => w.Create(Response, StateVariables, DummyClientCapabilities)).Return(DummyState);
 
-            var factoryCollection = new StateFactoryCollection(new[] { new StateCreationRule(DummyTrueCondition, mockFactory) });
+            var factoryCollection = new StateFactoryCollection(new[] { new StateCreationRule(DummyTrueCondition, mockFactory.Create) });
             factoryCollection.Create(Response, StateVariables, DummyClientCapabilities);
 
             mockFactory.VerifyAllExpectations();
@@ -35,7 +35,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var mockDefaultFactory = MockRepository.GenerateMock<IStateFactory>();
             mockDefaultFactory.Expect(w => w.Create(Response, StateVariables, DummyClientCapabilities)).Return(DummyState);
 
-            var factoryCollection = new StateFactoryCollection(new[] { new StateCreationRule(DummyFalseCondition, DummyStateFactory) }, mockDefaultFactory.Create);
+            var factoryCollection = new StateFactoryCollection(new[] { new StateCreationRule(DummyFalseCondition, DummyStateFactory.Create) }, mockDefaultFactory.Create);
             factoryCollection.Create(Response, StateVariables, DummyClientCapabilities);
 
             mockDefaultFactory.VerifyAllExpectations();
@@ -47,7 +47,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             var dummyCondition = MockRepository.GenerateStub<ICondition>();
             dummyCondition.Expect(c => c.IsApplicable(Response, StateVariables)).Return(false);
 
-            var factoryCollection = new StateFactoryCollection(new[] { new StateCreationRule(DummyFalseCondition, DummyStateFactory) });
+            var factoryCollection = new StateFactoryCollection(new[] { new StateCreationRule(DummyFalseCondition, DummyStateFactory.Create) });
             Assert.IsInstanceOf(typeof (UnsuccessfulState), factoryCollection.Create(Response, StateVariables, DummyClientCapabilities));
         }
 

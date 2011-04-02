@@ -105,7 +105,6 @@
     <Compile Include="RulesEngine\Rule.cs" />
     <Compile Include="RulesEngine\Rules.cs" />
     <Compile Include="RulesEngine\StateCreationRule.cs" />
-    <Compile Include="RulesEngine\StateFactory.cs" />
     <Compile Include="RulesEngine\StateFactoryCollection.cs" />
     <Compile Include="RulesEngine\StringKey.cs" />
     <Compile Include="RulesEngine\SubmitForm.cs" />

@@ -30,7 +30,7 @@ namespace Restbucks.NewClient.RulesEngine
 
         public StateCreationRule Do(CreateNextStateDelegate createNextStateDelegate)
         {
-            return new StateCreationRule(condition, new StateFactory(createNextStateDelegate));
+            return new StateCreationRule(condition, (r, v, c) => createNextStateDelegate(r, v));
         }
 
         private class Condition : ICondition
