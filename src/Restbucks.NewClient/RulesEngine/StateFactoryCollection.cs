@@ -4,12 +4,14 @@ using System.Net.Http;
 
 namespace Restbucks.NewClient.RulesEngine
 {
-    public class StateFactoryCollection : IStateFactory
+    public class StateFactoryCollection
     {
         private readonly IEnumerable<StateCreationRule> rules;
         private readonly CreateStateDelegate createDefaultState;
 
-        public StateFactoryCollection(IEnumerable<StateCreationRule> rules) : this(rules, UnsuccessfulStateFactory.Instance.Create)
+        private static readonly CreateStateDelegate CreateUnsuccessfulState = (r, v, c) => UnsuccessfulState.Instance;
+
+        public StateFactoryCollection(IEnumerable<StateCreationRule> rules) : this(rules, CreateUnsuccessfulState)
         {
         }
 
@@ -26,20 +28,6 @@ namespace Restbucks.NewClient.RulesEngine
                 return result.State;
             }
             return createDefaultState(response, stateVariables, clientCapabilities);
-        }
-
-        private class UnsuccessfulStateFactory : IStateFactory
-        {
-            public static readonly IStateFactory Instance = new UnsuccessfulStateFactory();
-
-            private UnsuccessfulStateFactory()
-            {
-            }
-
-            public IState Create(HttpResponseMessage response, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities)
-            {
-                return UnsuccessfulState.Instance;
-            }
         }
     }
 }

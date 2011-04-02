@@ -97,7 +97,6 @@
     <Compile Include="RulesEngine\ILinkStrategy.cs" />
     <Compile Include="RulesEngine\IRule.cs" />
     <Compile Include="RulesEngine\IState.cs" />
-    <Compile Include="RulesEngine\IStateFactory.cs" />
     <Compile Include="RulesEngine\LinkInfo.cs" />
     <Compile Include="RulesEngine\On.cs" />
     <Compile Include="RulesEngine\PrepopulatedFormDataStrategy.cs" />
