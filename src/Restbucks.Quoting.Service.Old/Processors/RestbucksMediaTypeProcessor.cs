@@ -25,8 +25,7 @@ namespace Restbucks.Quoting.Service.Old.Processors
                                                                                NamespaceHandling.OmitDuplicates
                                                                        };
 
-        public RestbucksMediaTypeProcessor(HttpOperationDescription operation, MediaTypeProcessorMode mode)
-            : base(operation, mode)
+        public RestbucksMediaTypeProcessor(HttpOperationDescription operation, MediaTypeProcessorMode mode) : base(operation, mode)
         {
         }
 
