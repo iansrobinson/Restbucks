@@ -10,6 +10,7 @@ using Microsoft.ApplicationServer.Http;
 using Microsoft.ApplicationServer.Http.Dispatcher;
 using Restbucks.MediaType;
 using Restbucks.Quoting.Service.Adapters;
+using Restbucks.Quoting.Service.Hypermedia;
 using Restbucks.RestToolkit.Hypermedia;
 
 namespace Restbucks.Quoting.Service.Resources

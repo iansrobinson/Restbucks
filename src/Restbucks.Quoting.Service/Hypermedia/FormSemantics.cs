@@ -1,4 +1,4 @@
-﻿namespace Restbucks.Quoting.Service
+﻿namespace Restbucks.Quoting.Service.Hypermedia
 {
     public static class FormSemantics
     {

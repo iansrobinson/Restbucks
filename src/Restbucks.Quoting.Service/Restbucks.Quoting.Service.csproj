@@ -107,11 +107,11 @@
     <Compile Include="Adapters\LineItemToItem.cs" />
     <Compile Include="Adapters\MoneyToCost.cs" />
     <Compile Include="Adapters\QuantityToAmount.cs" />
-    <Compile Include="FormSemantics.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="LinkRelations.cs" />
+    <Compile Include="Hypermedia\FormSemantics.cs" />
+    <Compile Include="Hypermedia\LinkRelations.cs" />
     <Compile Include="Processors\FormsIntegrityResponseHandler.cs" />
     <Compile Include="Processors\FormsIntegrityUtility.cs" />
     <Compile Include="Processors\IGenerateSignature.cs" />

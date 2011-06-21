@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Restbucks.MediaType;
 using Restbucks.MediaType.Formatters;
 using Restbucks.Quoting.Service;
+using Restbucks.Quoting.Service.Hypermedia;
 
 namespace Tests.Restbucks.MediaType.Formatters
 {

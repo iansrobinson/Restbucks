@@ -4,6 +4,7 @@ using System.Net.Http;
 using NUnit.Framework;
 using Restbucks.MediaType;
 using Restbucks.Quoting.Service;
+using Restbucks.Quoting.Service.Hypermedia;
 using Restbucks.Quoting.Service.Resources;
 using Tests.Restbucks.Quoting.Service.Resources.Util;
 

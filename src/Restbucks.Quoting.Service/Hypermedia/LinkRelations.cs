@@ -1,7 +1,7 @@
 ﻿using System;
 using Restbucks.MediaType;
 
-namespace Restbucks.Quoting.Service
+namespace Restbucks.Quoting.Service.Hypermedia
 {
     public static class LinkRelations
     {
