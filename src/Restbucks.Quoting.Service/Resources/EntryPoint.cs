@@ -5,7 +5,7 @@ using System.ServiceModel;
 using System.ServiceModel.Web;
 using Microsoft.ApplicationServer.Http;
 using Restbucks.MediaType;
-using Restbucks.Quoting.Service.Hypermedia;
+using Restbucks.Quoting.Service.Resources.Hypermedia;
 using Restbucks.RestToolkit.Hypermedia;
 
 namespace Restbucks.Quoting.Service.Resources

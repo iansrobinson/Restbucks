@@ -5,9 +5,8 @@ using System.Xml;
 using NUnit.Framework;
 using Restbucks.MediaType;
 using Restbucks.Quoting.Service.Configuration;
-using Restbucks.Quoting.Service.MessageHandlers.FormsIntegrity;
 
-namespace Tests.Restbucks.Quoting.Service.MessageHandlers.FormsIntegrity
+namespace Tests.Restbucks.Quoting.Service.Configuration
 {
     [TestFixture]
     public class RestbucksMediaTypeFormatterResponseHandlingTests

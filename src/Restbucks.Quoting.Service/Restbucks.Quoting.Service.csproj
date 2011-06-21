@@ -113,8 +113,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Hypermedia\FormSemantics.cs" />
-    <Compile Include="Hypermedia\LinkRelations.cs" />
     <Compile Include="MessageHandlers\FormsIntegrity\FormsIntegrityResponseHandler.cs" />
     <Compile Include="MessageHandlers\FormsIntegrity\FormsIntegrityUtility.cs" />
     <Compile Include="MessageHandlers\FormsIntegrity\IGenerateSignature.cs" />
@@ -122,6 +120,8 @@
     <Compile Include="MessageHandlers\FormsIntegrity\Signature.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\EntryPoint.cs" />
+    <Compile Include="Resources\Hypermedia\FormSemantics.cs" />
+    <Compile Include="Resources\Hypermedia\LinkRelations.cs" />
     <Compile Include="Resources\OrderForm.cs" />
     <Compile Include="Resources\Quote.cs" />
     <Compile Include="Resources\Quotes.cs" />
