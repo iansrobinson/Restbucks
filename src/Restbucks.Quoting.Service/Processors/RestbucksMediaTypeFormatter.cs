@@ -13,13 +13,13 @@ using Restbucks.MediaType.Formatters;
 
 namespace Restbucks.Quoting.Service.Processors
 {
-    public class RestbucksMediaTypeProcessor : MediaTypeFormatter
+    public class RestbucksMediaTypeFormatter : MediaTypeFormatter
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         private static readonly XmlWriterSettings WriterSettings = new XmlWriterSettings {Indent = true, NamespaceHandling = NamespaceHandling.OmitDuplicates};
 
-        public RestbucksMediaTypeProcessor()
+        public RestbucksMediaTypeFormatter()
         {
             SupportedMediaTypes.Add(new MediaTypeHeaderValue(RestbucksMediaType.Value));
             SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/xml"));

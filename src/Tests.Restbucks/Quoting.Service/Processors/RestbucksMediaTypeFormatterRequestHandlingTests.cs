@@ -8,7 +8,7 @@ using Restbucks.Quoting.Service.Processors;
 namespace Tests.Restbucks.Quoting.Service.Processors
 {
     [TestFixture]
-    public class RestbucksMediaTypeProcessorRequestHandlingTests
+    public class RestbucksMediaTypeFormatterRequestHandlingTests
     {
         [Test]
         public void ShouldReturnNullWhenStreamIsEmpty()
@@ -60,9 +60,9 @@ namespace Tests.Restbucks.Quoting.Service.Processors
             }
         }
 
-        private static RestbucksMediaTypeProcessor CreateRestbucksMediaTypeProcessor()
+        private static RestbucksMediaTypeFormatter CreateRestbucksMediaTypeProcessor()
         {
-            return new RestbucksMediaTypeProcessor();
+            return new RestbucksMediaTypeFormatter();
         }
     }
 }

@@ -49,7 +49,7 @@ namespace Restbucks.Quoting.Service
 
             var configuration = HttpHostConfiguration.Create()
                 .SetResourceFactory(new ResourceFactory(container))
-                .AddFormatters(new RestbucksMediaTypeProcessor())
+                .AddFormatters(new RestbucksMediaTypeFormatter())
                 .AddResponseHandlers(handlers, (endpoint, operation) => operation.DeclaringContract.ContractType.Equals(typeof (OrderForm)));
 
             new ResourceManager(configuration, container, RouteTable.Routes).RegisterResourcesFor(Assembly.GetExecutingAssembly());

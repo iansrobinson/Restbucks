@@ -9,12 +9,12 @@ using Restbucks.Quoting.Service.Processors;
 namespace Tests.Restbucks.Quoting.Service.Processors
 {
     [TestFixture]
-    public class RestbucksMediaTypeProcessorResponseHandlingTests
+    public class RestbucksMediaTypeFormatterResponseHandlingTests
     {
         [Test]
         public void ShouldSupportRestbucksPlusXmlAndApplicationXmlAndTextXmlMediaTypes()
         {
-            var processor = new RestbucksMediaTypeProcessor();
+            var processor = new RestbucksMediaTypeFormatter();
 
             Assert.AreEqual(3, processor.SupportedMediaTypes.Count());
             Assert.AreEqual(RestbucksMediaType.Value, processor.SupportedMediaTypes.First().MediaType);
@@ -30,7 +30,7 @@ namespace Tests.Restbucks.Quoting.Service.Processors
             var shop = new ShopBuilder(new Uri("http://restbucks.com/")).Build();
             var stream = new MemoryStream();
 
-            var processor = new RestbucksMediaTypeProcessor();
+            var processor = new RestbucksMediaTypeFormatter();
             processor.WriteToStream(typeof (Shop), shop, stream, null, null);
 
             stream.Seek(0, SeekOrigin.Begin);

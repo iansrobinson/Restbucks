@@ -136,8 +136,8 @@
     <Compile Include="Quoting.Service\ConfigTests.cs" />
     <Compile Include="Quoting.Service\Processors\FormsIntegrityResponseHandlerTests.cs" />
     <Compile Include="Quoting.Service\Processors\FormsIntegrityUtilityTests.cs" />
-    <Compile Include="Quoting.Service\Processors\RestbucksMediaTypeProcessorRequestHandlingTests.cs" />
-    <Compile Include="Quoting.Service\Processors\RestbucksMediaTypeProcessorResponseHandlingTests.cs" />
+    <Compile Include="Quoting.Service\Processors\RestbucksMediaTypeFormatterRequestHandlingTests.cs" />
+    <Compile Include="Quoting.Service\Processors\RestbucksMediaTypeFormatterResponseHandlingTests.cs" />
     <Compile Include="Quoting.Service\Resources\EntryPointTests.cs" />
     <Compile Include="Quoting.Service\Resources\OrderFormTests.cs" />
     <Compile Include="Quoting.Service\Resources\QuoteTests.cs" />

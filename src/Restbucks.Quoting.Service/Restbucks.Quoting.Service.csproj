@@ -116,7 +116,7 @@
     <Compile Include="Processors\FormsIntegrityUtility.cs" />
     <Compile Include="Processors\IGenerateSignature.cs" />
     <Compile Include="Processors\ISignForms.cs" />
-    <Compile Include="Processors\RestbucksMediaTypeProcessor.cs" />
+    <Compile Include="Processors\RestbucksMediaTypeFormatter.cs" />
     <Compile Include="Processors\Signature.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\EntryPoint.cs" />
