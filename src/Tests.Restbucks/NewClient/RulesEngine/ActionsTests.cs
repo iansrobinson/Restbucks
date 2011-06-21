@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using Microsoft.Net.Http;
+using Microsoft.ApplicationServer.Http;
 using NUnit.Framework;
 using Restbucks.NewClient;
 using Restbucks.NewClient.RulesEngine;
@@ -55,7 +55,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
                 return new HttpClient();
             }
 
-            public IContentFormatter GetContentFormatter(MediaTypeHeaderValue contentType)
+            public MediaTypeFormatter GetMediaTypeFormatter(MediaTypeHeaderValue contentType)
             {
                 return RestbucksFormatter.Instance;
             }

@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using Microsoft.ApplicationServer.Http;
+using Microsoft.ApplicationServer.Http.Dispatcher;
 using NUnit.Framework;
 using Restbucks.MediaType;
 using Restbucks.Quoting;
@@ -41,10 +43,12 @@ namespace Tests.Restbucks.Quoting.Service.Resources
                 .Return(quote);
 
             var quotes = new QuotesBuilder().WithQuotationEngine(mockQuoteEngine).Build();
-            var result = quotes.Post(shop, new HttpRequestMessage {RequestUri = new Uri("http://localhost:8080/quotes")}, new HttpResponseMessage());
+            var response = quotes.Post(shop, new HttpRequestMessage<Shop>{ RequestUri = new Uri("http://localhost:8080/quotes") });
 
-            Assert.True(result.HasItems);
-            Assert.True(Matching.LineItemsMatchItems(quote.LineItems, result.Items));
+            var entityBody = response.Content.ReadAsOrDefault();
+
+            Assert.True(entityBody.HasItems);
+            Assert.True(Matching.LineItemsMatchItems(quote.LineItems, entityBody.Items));
 
             mockQuoteEngine.VerifyAllExpectations();
         }
@@ -98,37 +102,38 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         [Test]
         public void ShouldReturn400BadRequestWhenShopIsNull()
         {
-            var quotes = new QuotesBuilder().WithQuotationEngine(DummyQuotationEngine.Instance).Build();
-            var response = new HttpResponseMessage();
-
-            quotes.Post(null, new HttpRequestMessage {RequestUri = new Uri("http://localhost:8080/quotes")}, response);
-
-            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
-            Assert.AreEqual("no-store, no-cache", response.Headers.CacheControl.ToString());
-            Assert.AreEqual("text/plain", response.Content.Headers.ContentType.MediaType);
-            Assert.AreEqual("Bad request: empty or malformed data.", response.Content.ReadAsString());
+            try
+            {
+                var quotes = new QuotesBuilder().WithQuotationEngine(DummyQuotationEngine.Instance).Build();
+                quotes.Post(null, new HttpRequestMessage<Shop> { RequestUri = new Uri("http://localhost:8080/quotes") });
+            }
+            catch (HttpResponseException ex)
+            {
+                var response = ex.Response;
+                
+                Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+                Assert.AreEqual("no-store, no-cache", response.Headers.CacheControl.ToString());
+                Assert.AreEqual("text/plain", response.Content.Headers.ContentType.MediaType);
+                Assert.AreEqual("Bad request: empty or malformed data.", response.Content.ReadAsString());
+            }
         }
 
         private static HttpResponseMessage ExecuteRequestReturnResponse()
         {
             var quotes = new QuotesBuilder().WithQuotationEngine(DummyQuotationEngine.Instance).Build();
 
-            var request = new HttpRequestMessage {RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri<Quotes>(BaseAddress)};
-            var response = new HttpResponseMessage();
-
-            quotes.Post(new ShopBuilder(new Uri("http://localhost")).Build(), request, response);
-
-            return response;
+            var request = new HttpRequestMessage<Shop> {RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri<Quotes>(BaseAddress)};
+            return quotes.Post(new ShopBuilder(new Uri("http://localhost")).Build(), request);
         }
 
         private static Shop ExecuteRequestReturnEntityBody()
         {
             var quotes = new QuotesBuilder().WithQuotationEngine(DummyQuotationEngine.Instance).Build();
 
-            var request = new HttpRequestMessage {RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri<Quotes>(BaseAddress)};
-            var response = new HttpResponseMessage();
+            var request = new HttpRequestMessage<Shop> {RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri<Quotes>(BaseAddress)};
+            var response = quotes.Post(new ShopBuilder(new Uri("http://localhost")).Build(), request);
 
-            return quotes.Post(new ShopBuilder(new Uri("http://localhost")).Build(), request, response);
+            return response.Content.ReadAsOrDefault();
         }
     }
 }

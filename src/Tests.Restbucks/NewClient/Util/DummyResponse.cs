@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using Microsoft.Net.Http;
-using Restbucks.Client.Formatters;
+using Microsoft.ApplicationServer.Http;
 using Restbucks.MediaType;
+using Restbucks.NewClient;
 
 namespace Tests.Restbucks.NewClient.Util
 {
@@ -12,13 +12,13 @@ namespace Tests.Restbucks.NewClient.Util
         private static readonly Uri LinkUri = new Uri("request-for-quote", UriKind.Relative);
         private static readonly Uri EmptyFormUri = new Uri("quotes", UriKind.Relative);
         private static readonly Uri PrepopulatedFormUri = new Uri("order/1234", UriKind.Relative);
-              
+
         public static readonly Uri BaseUri = new Uri("http://localhost/virtual-directory/");
         public static readonly Uri RestbucksBaseUri = new Uri("http://restbucks.com/");
         public static readonly Uri LinkAbsoluteUri = new Uri(BaseUri, LinkUri);
         public static readonly Uri EmptyFormAbsoluteUri = new Uri(BaseUri, EmptyFormUri);
         public static readonly Uri PrepopulatedFormAbsoluteUri = new Uri(BaseUri, PrepopulatedFormUri);
-        
+
         public static readonly Link Link = new Link(
             LinkUri,
             RestbucksMediaType.Value,
@@ -37,7 +37,7 @@ namespace Tests.Restbucks.NewClient.Util
             "post",
             RestbucksMediaType.Value,
             new ShopBuilder(RestbucksBaseUri).Build());
-        
+
         public static HttpResponseMessage CreateResponse()
         {
             var entityBody = new ShopBuilder(BaseUri)
@@ -46,7 +46,7 @@ namespace Tests.Restbucks.NewClient.Util
                 .AddForm(PrepopulatedForm)
                 .Build();
 
-            var content = entityBody.ToContent(RestbucksMediaTypeFormatter.Instance);
+            var content = new ObjectContent<Shop>(entityBody, new[] {RestbucksFormatter.Instance});
             content.Headers.ContentType = new MediaTypeHeaderValue(RestbucksMediaType.Value);
 
             return new HttpResponseMessage {Content = content};

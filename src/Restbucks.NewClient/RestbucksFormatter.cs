@@ -1,49 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Linq;
 using log4net;
-using Microsoft.Net.Http;
+using Microsoft.ApplicationServer.Http;
 using Restbucks.MediaType;
 using Restbucks.MediaType.Assemblers;
 using Restbucks.MediaType.Formatters;
 
 namespace Restbucks.NewClient
 {
-    public class RestbucksFormatter : IContentFormatter
+    public class RestbucksFormatter : MediaTypeFormatter
     {
-        public static readonly IContentFormatter Instance = new RestbucksFormatter();
+        public static readonly MediaTypeFormatter Instance = new RestbucksFormatter();
 
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private static readonly XmlWriterSettings WriterSettings = new XmlWriterSettings {Indent = true, NamespaceHandling = NamespaceHandling.OmitDuplicates};
 
-        private RestbucksFormatter()
+        public RestbucksFormatter()
         {
+            SupportedMediaTypes.Add(new MediaTypeHeaderValue(RestbucksMediaType.Value));
         }
 
-        public void WriteToStream(object instance, Stream stream)
-        {
-            try
-            {
-                var root = new ShopFormatter((Shop) instance).CreateXml();
-
-                using (var writer = XmlWriter.Create(stream, WriterSettings))
-                {
-                    root.WriteTo(writer);
-                    writer.Flush();
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Warn(string.Format("Unexpected error writing {0} to response stream.", RestbucksMediaType.Value), ex);
-                throw;
-            }
-        }
-
-        public object ReadFromStream(Stream stream)
+        public override object OnReadFromStream(Type type, Stream stream, HttpContentHeaders contentHeaders)
         {
             if (stream == null)
             {
@@ -78,9 +60,23 @@ namespace Restbucks.NewClient
             }
         }
 
-        public IEnumerable<MediaTypeHeaderValue> SupportedMediaTypes
+        public override void OnWriteToStream(Type type, object value, Stream stream, HttpContentHeaders contentHeaders, TransportContext context)
         {
-            get { return new[] {new MediaTypeHeaderValue(RestbucksMediaType.Value)}; }
+            try
+            {
+                var root = new ShopFormatter((Shop) value).CreateXml();
+
+                using (var writer = XmlWriter.Create(stream, WriterSettings))
+                {
+                    root.WriteTo(writer);
+                    writer.Flush();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Warn(string.Format("Unexpected error writing {0} to response stream.", RestbucksMediaType.Value), ex);
+                throw;
+            }
         }
     }
 }

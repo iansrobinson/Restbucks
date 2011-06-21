@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.ServiceModel;
 using System.ServiceModel.Web;
+using Microsoft.ApplicationServer.Http;
 using Restbucks.MediaType;
 using Restbucks.RestToolkit.Hypermedia;
 
@@ -20,15 +21,19 @@ namespace Restbucks.Quoting.Service.Resources
         }
 
         [WebGet]
-        public Shop Get(HttpRequestMessage request, HttpResponseMessage response)
+        public HttpResponseMessage<Shop> Get(HttpRequestMessage request)
         {
-            response.Headers.CacheControl = new CacheControlHeaderValue {Public = true, MaxAge = new TimeSpan(24, 0, 0)};
-            return new ShopBuilder(uriFactory.CreateBaseUri<RequestForQuote>(request.RequestUri))
+            var body = new ShopBuilder(uriFactory.CreateBaseUri<RequestForQuote>(request.RequestUri))
                 .AddForm(new Form(FormSemantics.Rfq,
                                   uriFactory.CreateRelativeUri<Quotes>(),
                                   "post", RestbucksMediaType.Value,
                                   new Uri("http://schemas.restbucks.com/shop")))
                 .Build();
+
+            var response = new HttpResponseMessage<Shop>(body);
+            response.Headers.CacheControl = new CacheControlHeaderValue {Public = true, MaxAge = new TimeSpan(24, 0, 0)};
+
+            return response;
         }
     }
 }

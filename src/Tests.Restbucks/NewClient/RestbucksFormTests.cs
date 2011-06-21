@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using Microsoft.Net.Http;
+using Microsoft.ApplicationServer.Http;
 using NUnit.Framework;
-using Restbucks.Client.Formatters;
 using Restbucks.MediaType;
 using Restbucks.NewClient;
 using Restbucks.NewClient.RulesEngine;
@@ -70,21 +69,21 @@ namespace Tests.Restbucks.NewClient
             var form = RestbucksForm.WithId("request-for-quote");
             var dataStrategy = form.GetFormDataStrategy(DummyResponse.CreateResponse());
 
-            Assert.IsInstanceOf(typeof(ApplicationStateVariablesFormDataStrategy), dataStrategy);
+            Assert.IsInstanceOf(typeof (ApplicationStateVariablesFormDataStrategy), dataStrategy);
         }
 
         [Test]
-        [ExpectedException(ExpectedException = typeof(InvalidOperationException), ExpectedMessage = "Unable to create a data strategy for empty form with null schema attribute. Id: 'invalid-form'.")]
+        [ExpectedException(ExpectedException = typeof (InvalidOperationException), ExpectedMessage = "Unable to create a data strategy for empty form with null schema attribute. Id: 'invalid-form'.")]
         public void ThrowsExceptionWhenGettingDataStrategyForFormWithNullFormDataButNoSchema()
         {
             var entityBody = new ShopBuilder(new Uri("http://localhost"))
                 .AddForm(new Form("invalid-form", new Uri("http://localhost/orders"), "post", RestbucksMediaType.Value, null as Shop))
                 .Build();
 
-            var content = entityBody.ToContent(RestbucksMediaTypeFormatter.Instance);
+            var content = new ObjectContent<Shop>(entityBody, new[] {RestbucksFormatter.Instance});
             content.Headers.ContentType = new MediaTypeHeaderValue(RestbucksMediaType.Value);
 
-            var response = new HttpResponseMessage { Content = content };
+            var response = new HttpResponseMessage {Content = content};
 
             var form = RestbucksForm.WithId("invalid-form");
             form.GetFormDataStrategy(response);

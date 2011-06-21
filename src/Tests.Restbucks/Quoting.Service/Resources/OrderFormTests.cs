@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using Microsoft.ApplicationServer.Http.Dispatcher;
 using NUnit.Framework;
 using Restbucks.MediaType;
 using Restbucks.Quoting;
@@ -34,10 +35,12 @@ namespace Tests.Restbucks.Quoting.Service.Resources
 
             mockQuoteEngine.Expect(q => q.GetQuote(id)).Return(quote);
 
-            var request = new HttpRequestMessage { RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri<OrderForm>(BaseAddress, id) };
+            var request = new HttpRequestMessage {RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri<OrderForm>(BaseAddress, id)};
 
             var orderForm = new OrderFormBuilder().WithQuotationEngine(mockQuoteEngine).Build();
-            var entityBody = orderForm.Get(id.ToString("N"), request, new HttpResponseMessage());
+            var response = orderForm.Get(id.ToString("N"), request);
+
+            var entityBody = response.Content.ReadAsOrDefault();
 
             Assert.True(entityBody.HasForms);
             Assert.True(entityBody.Forms.First().Instance.HasItems);
@@ -49,12 +52,15 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         [Test]
         public void ShouldReturn404NotFoundWhenGettingOrderFormThatDoesNotExist()
         {
-            var orderForm = new OrderFormBuilder().WithQuotationEngine(EmptyQuotationEngine.Instance).Build();
-
-            var response = new HttpResponseMessage();
-            orderForm.Get(Guid.NewGuid().ToString("N"), new HttpRequestMessage(), response);
-
-            Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
+            try
+            {
+                var orderForm = new OrderFormBuilder().WithQuotationEngine(EmptyQuotationEngine.Instance).Build();
+                orderForm.Get(Guid.NewGuid().ToString("N"), new HttpRequestMessage());
+            }
+            catch (HttpResponseException ex)
+            {
+                Assert.AreEqual(HttpStatusCode.NotFound, ex.Response.StatusCode);
+            }
         }
 
         [Test]
@@ -141,22 +147,18 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         {
             var orderForm = new OrderFormBuilder().WithQuotationEngine(DummyQuotationEngine.Instance).Build();
 
-            var request = new HttpRequestMessage { RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri<OrderForm>(BaseAddress, DummyQuotationEngine.QuoteId) };
-            var response = new HttpResponseMessage();
-
-            orderForm.Get(DummyQuotationEngine.QuoteId, request, response);
-
-            return response;
+            var request = new HttpRequestMessage {RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri<OrderForm>(BaseAddress, DummyQuotationEngine.QuoteId)};
+            return orderForm.Get(DummyQuotationEngine.QuoteId, request);
         }
 
         private static Shop ExecuteRequestReturnEntityBody()
         {
             var orderForm = new OrderFormBuilder().WithQuotationEngine(DummyQuotationEngine.Instance).Build();
 
-            var request = new HttpRequestMessage { RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri<OrderForm>(BaseAddress, DummyQuotationEngine.QuoteId) };
-            var response = new HttpResponseMessage();
+            var request = new HttpRequestMessage {RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri<OrderForm>(BaseAddress, DummyQuotationEngine.QuoteId)};
+            var response = orderForm.Get(DummyQuotationEngine.QuoteId, request);
 
-            return orderForm.Get(DummyQuotationEngine.QuoteId, request, response);
+            return response.Content.ReadAsOrDefault();
         }
     }
 }

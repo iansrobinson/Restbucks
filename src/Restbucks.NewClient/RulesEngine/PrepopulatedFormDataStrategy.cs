@@ -1,6 +1,6 @@
 ﻿using System.Net.Http;
 using System.Net.Http.Headers;
-using Microsoft.Net.Http;
+using Microsoft.ApplicationServer.Http;
 
 namespace Restbucks.NewClient.RulesEngine
 {
@@ -17,7 +17,7 @@ namespace Restbucks.NewClient.RulesEngine
 
         public HttpContent CreateFormData(HttpResponseMessage previousResponse, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities)
         {
-            var content = entityBody.ToContent(clientCapabilities.GetContentFormatter(contentType));
+            var content = new ObjectContent(typeof (object), entityBody, new [] {clientCapabilities.GetMediaTypeFormatter(contentType)});
             content.Headers.ContentType = contentType;
 
             return content;

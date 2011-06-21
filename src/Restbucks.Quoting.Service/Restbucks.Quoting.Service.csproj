@@ -41,36 +41,40 @@
     <Reference Include="log4net">
       <HintPath>..\..\lib\log4net\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Http.Extensions">
-      <HintPath>..\..\lib\http\Microsoft.Http.Extensions.dll</HintPath>
+    <Reference Include="Microsoft.ApplicationServer.Common">
+      <HintPath>..\..\lib\http.04.04.2011\Microsoft.ApplicationServer.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.ApplicationServer.Http">
+      <HintPath>..\..\lib\http.04.04.2011\Microsoft.ApplicationServer.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationServer.HttpEnhancements">
+      <HintPath>..\..\lib\http.04.04.2011\Microsoft.ApplicationServer.HttpEnhancements.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationServer.HttpEnhancements.Tests">
+      <HintPath>..\..\lib\http.04.04.2011\Microsoft.ApplicationServer.HttpEnhancements.Tests.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationServer.Serialization">
+      <HintPath>..\..\lib\http.04.04.2011\Microsoft.ApplicationServer.Serialization.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationServer.ServiceModel">
+      <HintPath>..\..\lib\http.04.04.2011\Microsoft.ApplicationServer.ServiceModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Net.Http, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\http\Microsoft.Net.Http.dll</HintPath>
+      <HintPath>..\..\lib\http.04.04.2011\Microsoft.Net.Http.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.QueryComposition, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\http\Microsoft.QueryComposition.dll</HintPath>
+      <HintPath>..\..\lib\http.04.04.2011\Microsoft.QueryComposition.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Runtime.Serialization.Json, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\http\Microsoft.Runtime.Serialization.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.ServiceModel.Http, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\http\Microsoft.ServiceModel.Http.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.ServiceModel.Http.Client">
-      <HintPath>..\..\lib\http\Microsoft.ServiceModel.Http.Client.dll</HintPath>
+      <HintPath>..\..\lib\http.04.04.2011\Microsoft.Runtime.Serialization.Json.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ServiceModel.Web.jQuery, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\http\Microsoft.ServiceModel.Web.jQuery.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.ServiceModel.WebHttp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\http\Microsoft.ServiceModel.WebHttp.dll</HintPath>
+      <HintPath>..\..\lib\http.04.04.2011\Microsoft.ServiceModel.Web.jQuery.dll</HintPath>
     </Reference>
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Activation" />
@@ -93,6 +97,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="default.htm" />
     <Content Include="Global.asax" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -102,7 +107,6 @@
     <Compile Include="Adapters\LineItemToItem.cs" />
     <Compile Include="Adapters\MoneyToCost.cs" />
     <Compile Include="Adapters\QuantityToAmount.cs" />
-    <Compile Include="Config.cs" />
     <Compile Include="FormSemantics.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -142,11 +146,11 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>False</AutoAssignPort>
-          <DevelopmentServerPort>8081</DevelopmentServerPort>
-          <DevelopmentServerVPath>/uk</DevelopmentServerVPath>
-          <IISUrl>http://localhost/Restbucks.Quoting.Service</IISUrl>
+          <DevelopmentServerPort>8080</DevelopmentServerPort>
+          <DevelopmentServerVPath>/restbucks</DevelopmentServerVPath>
+          <IISUrl>http://localhost/restbucks</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

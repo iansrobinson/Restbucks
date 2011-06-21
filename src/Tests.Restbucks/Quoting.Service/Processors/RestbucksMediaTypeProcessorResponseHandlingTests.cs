@@ -1,10 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
-using System.ServiceModel.Description;
 using System.Xml;
-using Microsoft.ServiceModel.Http;
 using NUnit.Framework;
 using Restbucks.MediaType;
 using Restbucks.Quoting.Service.Processors;
@@ -17,12 +14,12 @@ namespace Tests.Restbucks.Quoting.Service.Processors
         [Test]
         public void ShouldSupportRestbucksPlusXmlAndApplicationXmlAndTextXmlMediaTypes()
         {
-            var processor = new RestbucksMediaTypeProcessor(new HttpOperationDescription(), MediaTypeProcessorMode.Response);
+            var processor = new RestbucksMediaTypeProcessor();
 
             Assert.AreEqual(3, processor.SupportedMediaTypes.Count());
-            Assert.AreEqual(RestbucksMediaType.Value, processor.SupportedMediaTypes.First());
-            Assert.AreEqual("application/xml", processor.SupportedMediaTypes.Skip(1).First());
-            Assert.AreEqual("text/xml", processor.SupportedMediaTypes.Skip(2).First());
+            Assert.AreEqual(RestbucksMediaType.Value, processor.SupportedMediaTypes.First().MediaType);
+            Assert.AreEqual("application/xml", processor.SupportedMediaTypes.Skip(1).First().MediaType);
+            Assert.AreEqual("text/xml", processor.SupportedMediaTypes.Skip(2).First().MediaType);
         }
 
         [Test]
@@ -33,8 +30,8 @@ namespace Tests.Restbucks.Quoting.Service.Processors
             var shop = new ShopBuilder(new Uri("http://restbucks.com/")).Build();
             var stream = new MemoryStream();
 
-            var processor = new RestbucksMediaTypeProcessor(new HttpOperationDescription(), MediaTypeProcessorMode.Response);
-            processor.WriteToStream(shop, stream, new HttpRequestMessage());
+            var processor = new RestbucksMediaTypeProcessor();
+            processor.WriteToStream(typeof (Shop), shop, stream, null, null);
 
             stream.Seek(0, SeekOrigin.Begin);
 

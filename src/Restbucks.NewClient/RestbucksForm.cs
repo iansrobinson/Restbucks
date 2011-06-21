@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using Microsoft.Net.Http;
 using Restbucks.MediaType;
 using Restbucks.NewClient.RulesEngine;
+using Microsoft.ApplicationServer.Http;
 
 namespace Restbucks.NewClient
 {
@@ -26,7 +26,7 @@ namespace Restbucks.NewClient
         {
             FormInfo formInfo;
             var success = TryGetFormInfo(response, out formInfo);
-            
+
             if (!success)
             {
                 throw new ControlNotFoundException(string.Format("Could not find form with id '{0}'.", id));
@@ -52,7 +52,7 @@ namespace Restbucks.NewClient
         {
             var entityBody = GetEntityBody(response);
             var form = GetForm(id, entityBody);
-            
+
             formInfo = CreateFormInfo(entityBody.BaseUri, form);
 
             return formInfo != null;
@@ -64,9 +64,9 @@ namespace Restbucks.NewClient
             {
                 return null;
             }
-            
+
             var resourceUri = form.Resource.IsAbsoluteUri ? form.Resource : new Uri(baseUri, form.Resource);
-            
+
             return new FormInfo(resourceUri, new HttpMethod(form.Method), new MediaTypeHeaderValue(form.MediaType));
         }
 
@@ -79,7 +79,8 @@ namespace Restbucks.NewClient
 
         private static Shop GetEntityBody(HttpResponseMessage response)
         {
-            return response.Content.ReadAsObject<Shop>(RestbucksFormatter.Instance);
+            
+            return response.Content.ReadAsObject<Shop>(new []{RestbucksFormatter.Instance});
         }
 
         private static IFormDataStrategy CreateDataStrategy(Form form)

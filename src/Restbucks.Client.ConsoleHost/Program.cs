@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using log4net.Config;
-using Microsoft.Net.Http;
+using Microsoft.ApplicationServer.Http;
 using Restbucks.MediaType;
 using Restbucks.NewClient;
 using Restbucks.NewClient.RulesEngine;
@@ -19,9 +19,9 @@ namespace Restbucks.Client.ConsoleHost
 
             var items = new ShopBuilder(null).AddItem(new Item("coffee", new Amount("g", 125))).Build();
             var variables = new ApplicationStateVariables(
-                new KeyValuePair<IKey, object>(new StringKey("home-page-uri"), new Uri("http://" + Environment.MachineName + "/restbucks/shop/")),
+                new KeyValuePair<IKey, object>(new StringKey("home-page-uri"), new Uri("http://" + Environment.MachineName + "/restbucks/shop")),
                 new KeyValuePair<IKey, object>(new EntityBodyKey("request-for-quote", new MediaTypeHeaderValue(RestbucksMediaType.Value), new Uri("http://schemas.restbucks.com/shop")), items));
-            
+
             var state = new Uninitialized(variables);
             Console.WriteLine(state.GetType().Name);
             var nextState = state.NextState(ClientCapabilities.Instance);
@@ -52,7 +52,7 @@ namespace Restbucks.Client.ConsoleHost
                 return client;
             }
 
-            public IContentFormatter GetContentFormatter(MediaTypeHeaderValue contentType)
+            public MediaTypeFormatter GetMediaTypeFormatter(MediaTypeHeaderValue contentType)
             {
                 return RestbucksFormatter.Instance;
             }

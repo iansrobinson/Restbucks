@@ -35,10 +35,10 @@ namespace Restbucks.Quoting.Service.Old
         public override void RegisterResponseProcessorsForOperation(HttpOperationDescription operation, IList<Processor> processors, MediaTypeProcessorMode mode)
         {
             processors.Add(new RestbucksMediaTypeProcessor(operation, mode));
-            if (operation.DeclaringContract.ContractType.Equals(typeof (OrderForm)))
-            {
-                processors.Add(container.Resolve<FormsIntegrityResponseProcessor>());
-            }
+//            if (operation.DeclaringContract.ContractType.Equals(typeof (OrderForm)))
+//            {
+//                processors.Add(container.Resolve<FormsIntegrityResponseProcessor>());
+//            }
         }
 
         protected override string GetUriTemplate(Type resource, string resourceName, string generatedUriTemplate)

@@ -1,5 +1,4 @@
-﻿using Microsoft.Net.Http;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Restbucks.MediaType;
 using Restbucks.NewClient;
 using Tests.Restbucks.NewClient.Util;

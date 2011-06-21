@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using Microsoft.Net.Http;
+using Microsoft.ApplicationServer.Http;
 using NUnit.Framework;
 using Restbucks.MediaType;
 using Restbucks.NewClient;
@@ -55,7 +55,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
             dummyFormStrategy.Expect(f => f.GetFormInfo(PreviousResponse)).Return(DummyFormInfo);
             dummyFormStrategy.Expect(f => f.GetFormDataStrategy(PreviousResponse)).Return(mockFormDataStrategy);
 
-            var submitForm = new SubmitForm(dummyFormStrategy);           
+            var submitForm = new SubmitForm(dummyFormStrategy);
             submitForm.Execute(PreviousResponse, StateVariables, clientCapabilities);
 
             mockFormDataStrategy.VerifyAllExpectations();
@@ -83,7 +83,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
                 return client;
             }
 
-            public IContentFormatter GetContentFormatter(MediaTypeHeaderValue contentType)
+            public MediaTypeFormatter GetMediaTypeFormatter(MediaTypeHeaderValue contentType)
             {
                 return RestbucksFormatter.Instance;
             }

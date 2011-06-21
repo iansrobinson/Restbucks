@@ -4,6 +4,8 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.ServiceModel;
 using System.ServiceModel.Web;
+using Microsoft.ApplicationServer.Http;
+using Microsoft.ApplicationServer.Http.Dispatcher;
 using Restbucks.MediaType;
 using Restbucks.Quoting.Service.Adapters;
 using Restbucks.RestToolkit.Hypermedia;
@@ -24,29 +26,34 @@ namespace Restbucks.Quoting.Service.Resources
         }
 
         [WebInvoke(Method = "POST")]
-        public Shop Post(Shop shop, HttpRequestMessage request, HttpResponseMessage response)
+        public HttpResponseMessage<Shop> Post(Shop shop, HttpRequestMessage<Shop> request)
         {
             if (shop == null)
             {
-                response.StatusCode = HttpStatusCode.BadRequest;
-                response.Headers.CacheControl = new CacheControlHeaderValue {NoCache = true, NoStore = true};
-                response.Content = new StringContent("Bad request: empty or malformed data.");
-                response.Content.Headers.ContentType = new MediaTypeHeaderValue("text/plain");
-                return null;
+                var errorResponse = new HttpResponseMessage {StatusCode = HttpStatusCode.BadRequest};
+
+                errorResponse.Headers.CacheControl = new CacheControlHeaderValue {NoCache = true, NoStore = true};
+                errorResponse.Content = new StringContent("Bad request: empty or malformed data.");
+                errorResponse.Content.Headers.ContentType = new MediaTypeHeaderValue("text/plain");
+
+                throw new HttpResponseException(errorResponse);
             }
 
             var quote = quotationEngine.CreateQuote(new QuotationRequest(shop.Items.Select(i => new QuotationRequestItem(i.Description, new Quantity(i.Amount.Measure, i.Amount.Value)))));
             var baseUri = uriFactory.CreateBaseUri<Quotes>(request.RequestUri);
 
-            response.StatusCode = HttpStatusCode.Created;
-            response.Headers.Location = uriFactory.CreateAbsoluteUri<Quote>(baseUri, quote.Id);
-            response.Headers.CacheControl = new CacheControlHeaderValue {NoCache = true, NoStore = true};
-
-            return new ShopBuilder(baseUri)
+            var body = new ShopBuilder(baseUri)
                 .AddItems(quote.LineItems.Select(li => new LineItemToItem(li).Adapt()))
                 .AddLink(new Link(uriFactory.CreateRelativeUri<Quote>(quote.Id), RestbucksMediaType.Value, LinkRelations.Self))
                 .AddLink(new Link(uriFactory.CreateRelativeUri<OrderForm>(quote.Id), RestbucksMediaType.Value, LinkRelations.OrderForm))
                 .Build();
+
+            var response = new HttpResponseMessage<Shop>(body, HttpStatusCode.Created);
+
+            response.Headers.Location = uriFactory.CreateAbsoluteUri<Quote>(baseUri, quote.Id);
+            response.Headers.CacheControl = new CacheControlHeaderValue {NoCache = true, NoStore = true};
+
+            return response;
         }
     }
 }

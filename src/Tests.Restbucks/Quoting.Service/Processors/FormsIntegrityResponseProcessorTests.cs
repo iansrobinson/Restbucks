@@ -20,10 +20,9 @@ namespace Tests.Restbucks.Quoting.Service.Processors
             var processor = new FormsIntegrityResponseProcessor(formsSigner);
             var response = new HttpResponseMessage {Content = new StringContent("input")};
 
-            processor.Initialize();
-            processor.Execute(new object[] {response});
-
-            Assert.AreEqual("output", response.Content.ReadAsString());
+            var newResponse = processor.OnHandle(response);
+            
+            Assert.AreEqual("output", newResponse.Content.ReadAsString());
         }
 
         [Test]
@@ -34,8 +33,7 @@ namespace Tests.Restbucks.Quoting.Service.Processors
             var processor = new FormsIntegrityResponseProcessor(mockFormsSigner);
             var response = new HttpResponseMessage();
 
-            processor.Initialize();
-            processor.Execute(new object[] {response});
+            processor.OnHandle(response);
 
             mockFormsSigner.AssertWasNotCalled(fs => fs.SignForms(null, null), fs => fs.IgnoreArguments());
         }
@@ -51,11 +49,10 @@ namespace Tests.Restbucks.Quoting.Service.Processors
             response.Content.Headers.ContentType = new MediaTypeHeaderValue(RestbucksMediaType.Value);          
             response.Content.Headers.Expires = dateTime;
 
-            processor.Initialize();
-            processor.Execute(new object[] { response });
+            var newResponse = processor.OnHandle(response);
 
-            Assert.AreEqual(RestbucksMediaType.Value, response.Content.Headers.ContentType.MediaType);
-            Assert.AreEqual(dateTime, response.Content.Headers.Expires.Value);
+            Assert.AreEqual(RestbucksMediaType.Value, newResponse.Content.Headers.ContentType.MediaType);
+            Assert.AreEqual(dateTime, newResponse.Content.Headers.Expires.Value);
         }
 
         private class DummyFormsSigner : ISignForms

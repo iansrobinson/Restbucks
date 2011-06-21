@@ -35,12 +35,14 @@ namespace Tests.Restbucks.Quoting.Service.Resources
 
             mockQuoteEngine.Expect(q => q.GetQuote(id)).Return(expectedQuote);
 
-            var request = new HttpRequestMessage { RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri <Quote>(BaseAddress, id) };
+            var request = new HttpRequestMessage {RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri<Quote>(BaseAddress, id)};
             var quote = new QuoteBuilder().WithQuotationEngine(mockQuoteEngine).Build();
-            var result = quote.Get(id.ToString("N"), request, new HttpResponseMessage());
+            var response = quote.Get(id.ToString("N"), request);
 
-            Assert.True(result.HasItems);
-            Assert.True(Matching.LineItemsMatchItems(expectedQuote.LineItems, result.Items));
+            var body = response.Content.ReadAsOrDefault();
+
+            Assert.True(body.HasItems);
+            Assert.True(Matching.LineItemsMatchItems(expectedQuote.LineItems, body.Items));
 
             mockQuoteEngine.VerifyAllExpectations();
         }
@@ -55,9 +57,8 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         [Test]
         public void ShouldReturn404NotFoundWhenGettingQuoteThatDoesNotExist()
         {
-            var response = new HttpResponseMessage();
             var quote = new QuoteBuilder().WithQuotationEngine(EmptyQuotationEngine.Instance).Build();
-            quote.Get(Guid.NewGuid().ToString("N"), new HttpRequestMessage(), response);
+            var response = quote.Get(Guid.NewGuid().ToString("N"), new HttpRequestMessage());
 
             Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
         }
@@ -100,22 +101,18 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         {
             var quote = new QuoteBuilder().WithQuotationEngine(DummyQuotationEngine.Instance).Build();
 
-            var request = new HttpRequestMessage { RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri<Quote>(BaseAddress, DummyQuotationEngine.QuoteId) };
-            var response = new HttpResponseMessage();
-
-            quote.Get(DummyQuotationEngine.QuoteId, request, response);
-
-            return response;
+            var request = new HttpRequestMessage {RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri<Quote>(BaseAddress, DummyQuotationEngine.QuoteId)};
+            return quote.Get(DummyQuotationEngine.QuoteId, request);
         }
 
         private static Shop ExecuteRequestReturnEntityBody()
         {
             var quote = new QuoteBuilder().WithQuotationEngine(DummyQuotationEngine.Instance).Build();
 
-            var request = new HttpRequestMessage { RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri<Quote>(BaseAddress, DummyQuotationEngine.QuoteId) };
-            var response = new HttpResponseMessage();
+            var request = new HttpRequestMessage {RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri<Quote>(BaseAddress, DummyQuotationEngine.QuoteId)};
+            var response = quote.Get(DummyQuotationEngine.QuoteId, request);
 
-            return quote.Get(DummyQuotationEngine.QuoteId, request, response);
+            return response.Content.ReadAsOrDefault();
         }
     }
 }

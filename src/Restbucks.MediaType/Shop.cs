@@ -12,6 +12,10 @@ namespace Restbucks.MediaType
         private readonly ReadOnlyCollection<Link> links;
         private readonly ReadOnlyCollection<Form> forms;
 
+        private Shop()
+        {
+        }
+
         public Shop(Uri baseUri, IEnumerable<Item> items, IEnumerable<Link> links, IEnumerable<Form> forms)
         {
             this.baseUri = baseUri;

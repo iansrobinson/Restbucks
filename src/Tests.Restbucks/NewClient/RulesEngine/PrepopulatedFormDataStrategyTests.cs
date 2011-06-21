@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net.Http.Headers;
-using Microsoft.Net.Http;
 using NUnit.Framework;
 using Restbucks.MediaType;
 using Restbucks.NewClient;
@@ -37,7 +36,7 @@ namespace Tests.Restbucks.NewClient.RulesEngine
         private static IClientCapabilities CreateClientCapabilities()
         {
             var clientCapabilities = MockRepository.GenerateStub<IClientCapabilities>();
-            clientCapabilities.Expect(c => c.GetContentFormatter(ContentType)).Return(RestbucksFormatter.Instance);
+            clientCapabilities.Expect(c => c.GetMediaTypeFormatter(ContentType)).Return(RestbucksFormatter.Instance);
             return clientCapabilities;
         }
     }

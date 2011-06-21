@@ -6,6 +6,8 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.ServiceModel;
 using System.ServiceModel.Web;
+using Microsoft.ApplicationServer.Http;
+using Microsoft.ApplicationServer.Http.Dispatcher;
 using Restbucks.MediaType;
 using Restbucks.Quoting.Service.Adapters;
 using Restbucks.RestToolkit.Hypermedia;
@@ -30,7 +32,7 @@ namespace Restbucks.Quoting.Service.Resources
         }
 
         [WebGet]
-        public Shop Get(string id, HttpRequestMessage request, HttpResponseMessage response)
+        public HttpResponseMessage<Shop> Get(string id, HttpRequestMessage request)
         {
             Quotation quotation;
             try
@@ -39,18 +41,12 @@ namespace Restbucks.Quoting.Service.Resources
             }
             catch (KeyNotFoundException)
             {
-                response.StatusCode = HttpStatusCode.NotFound;
-                return null;
+                throw new HttpResponseException(HttpStatusCode.NotFound);
             }
 
             var baseUri = uriFactory.CreateBaseUri<OrderForm>(request.RequestUri);
 
-            response.StatusCode = HttpStatusCode.OK;
-            response.Headers.CacheControl = new CacheControlHeaderValue {Public = true};
-            response.Content = new ByteArrayContent(new byte[] {});
-            response.Content.Headers.Expires = quotation.CreatedDateTime.AddDays(7.0);
-
-            return new ShopBuilder(baseUri)
+            var body = new ShopBuilder(baseUri)
                 .AddForm(new Form(FormSemantics.Order,
                                   OrdersUriFactoryWorker.CreateAbsoluteUri(new Uri("http://localhost:8081")),
                                   "post",
@@ -59,6 +55,13 @@ namespace Restbucks.Quoting.Service.Resources
                                       .AddLink(new Link(uriFactory.CreateRelativeUri<Quote>(quotation.Id), RestbucksMediaType.Value, LinkRelations.Self))
                                       .Build()))
                 .Build();
+
+            var response = new HttpResponseMessage<Shop>(body) {StatusCode = HttpStatusCode.OK};
+
+            response.Headers.CacheControl = new CacheControlHeaderValue {Public = true};
+            response.Content.Headers.Expires = quotation.CreatedDateTime.AddDays(7.0);
+
+            return response;
         }
     }
 }

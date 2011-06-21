@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using Microsoft.Net.Http;
 using Restbucks.MediaType;
 using Restbucks.NewClient.RulesEngine;
 
@@ -24,7 +23,7 @@ namespace Restbucks.NewClient
         {
             return WithRel(new UriLinkRelation(rel));
         }
-        
+
         private readonly LinkRelation relation;
 
         private RestbucksLink(LinkRelation relation)
@@ -33,7 +32,7 @@ namespace Restbucks.NewClient
         }
 
         public LinkInfo GetLinkInfo(HttpResponseMessage response)
-        {            
+        {
             LinkInfo linkInfo;
             var success = TryGetLinkInfo(response, out linkInfo);
 
@@ -53,7 +52,7 @@ namespace Restbucks.NewClient
 
         private bool TryGetLinkInfo(HttpResponseMessage response, out LinkInfo linkInfo)
         {
-            var entityBody = response.Content.ReadAsObject<Shop>(RestbucksFormatter.Instance);
+            var entityBody = response.Content.ReadAsObject<Shop>(new[] {RestbucksFormatter.Instance});
             var link = (from l in (entityBody).Links
                         where l.Rels.Contains(relation, LinkRelationEqualityComparer.Instance)
                         select l).FirstOrDefault();

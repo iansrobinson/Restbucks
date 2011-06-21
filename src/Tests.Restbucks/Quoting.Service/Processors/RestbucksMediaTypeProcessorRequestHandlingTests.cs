@@ -1,9 +1,7 @@
 ﻿using System.IO;
-using System.Net.Http;
-using System.ServiceModel.Description;
 using System.Text;
-using Microsoft.ServiceModel.Http;
 using NUnit.Framework;
+using Restbucks.MediaType;
 using Restbucks.MediaType.Assemblers;
 using Restbucks.Quoting.Service.Processors;
 
@@ -22,7 +20,7 @@ namespace Tests.Restbucks.Quoting.Service.Processors
                 stream.Seek(0, SeekOrigin.Begin);
                 var mediaTypeProcessor = CreateRestbucksMediaTypeProcessor();
 
-                Assert.IsNull(mediaTypeProcessor.ReadFromStream(stream, new HttpRequestMessage()));
+                Assert.IsNull(mediaTypeProcessor.ReadFromStream(typeof (Shop), stream, null));
             }
         }
 
@@ -30,7 +28,7 @@ namespace Tests.Restbucks.Quoting.Service.Processors
         public void ShouldReturnNullWhenStreamIsNull()
         {
             var mediaTypeProcessor = CreateRestbucksMediaTypeProcessor();
-            Assert.IsNull(mediaTypeProcessor.ReadFromStream(null, new HttpRequestMessage()));
+            Assert.IsNull(mediaTypeProcessor.ReadFromStream(typeof (Shop), null, null));
         }
 
         [Test]
@@ -43,7 +41,7 @@ namespace Tests.Restbucks.Quoting.Service.Processors
                 stream.Seek(0, SeekOrigin.Begin);
                 var mediaTypeProcessor = CreateRestbucksMediaTypeProcessor();
 
-                Assert.IsNull(mediaTypeProcessor.ReadFromStream(stream, new HttpRequestMessage()));
+                Assert.IsNull(mediaTypeProcessor.ReadFromStream(typeof (Shop), stream, null));
             }
         }
 
@@ -58,13 +56,13 @@ namespace Tests.Restbucks.Quoting.Service.Processors
                 stream.Seek(0, SeekOrigin.Begin);
                 var mediaTypeProcessor = CreateRestbucksMediaTypeProcessor();
 
-                mediaTypeProcessor.ReadFromStream(stream, new HttpRequestMessage());
+                mediaTypeProcessor.ReadFromStream(typeof (Shop), stream, null);
             }
         }
 
         private static RestbucksMediaTypeProcessor CreateRestbucksMediaTypeProcessor()
         {
-            return new RestbucksMediaTypeProcessor(new HttpOperationDescription(), MediaTypeProcessorMode.Response);
+            return new RestbucksMediaTypeProcessor();
         }
     }
 }

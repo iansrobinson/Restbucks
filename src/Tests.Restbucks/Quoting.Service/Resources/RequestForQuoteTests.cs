@@ -106,20 +106,17 @@ namespace Tests.Restbucks.Quoting.Service.Resources
 
         private static Shop ExecuteRequestReturnEntityBody()
         {
-            var request = new HttpRequestMessage { RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri<RequestForQuote>(BaseAddress) };
-            var response = new HttpResponseMessage();
+            var request = new HttpRequestMessage {RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri<RequestForQuote>(BaseAddress)};
             var requestForQuote = new RequestForQuote(DefaultUriFactory.Instance);
-            return requestForQuote.Get(request, response);
+            var response = requestForQuote.Get(request);
+            return response.Content.ReadAsOrDefault();
         }
 
         private static HttpResponseMessage ExecuteRequestReturnResponse()
         {
-            var request = new HttpRequestMessage { RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri<RequestForQuote>(BaseAddress) };
-            var response = new HttpResponseMessage();
+            var request = new HttpRequestMessage {RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri<RequestForQuote>(BaseAddress)};
             var requestForQuote = new RequestForQuote(DefaultUriFactory.Instance);
-            requestForQuote.Get(request, response);
-
-            return response;
+            return requestForQuote.Get(request);
         }
     }
 }

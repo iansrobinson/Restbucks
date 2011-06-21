@@ -73,8 +73,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         public void ResponseShouldBePublicallyCacheableForOneDay()
         {
             var resource = new EntryPoint(DefaultUriFactory.Instance);
-            var response = new HttpResponseMessage();
-            resource.Get(new HttpRequestMessage(HttpMethod.Get, new Uri("http://localhost/shop")), response);
+            var response = resource.Get(new HttpRequestMessage(HttpMethod.Get, new Uri("http://localhost/shop")));
 
             Assert.AreEqual(new TimeSpan(24, 0, 0), response.Headers.CacheControl.MaxAge);
             Assert.IsTrue(response.Headers.CacheControl.Public);
@@ -84,14 +83,17 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         public void BaseUriShouldIncludeVirtualDirectoryIfPresent()
         {
             var resource = new EntryPoint(DefaultUriFactory.Instance);
-            var entityBody = resource.Get(new HttpRequestMessage(HttpMethod.Get, new Uri("http://localhost/virtual-directory/shop")), new HttpResponseMessage());
+            var response = resource.Get(new HttpRequestMessage(HttpMethod.Get, new Uri("http://localhost/virtual-directory/shop")));
+
+            var entityBody = response.Content.ReadAsOrDefault();
 
             Assert.AreEqual(new Uri("http://localhost/virtual-directory/"), entityBody.BaseUri);
         }
 
         private static Shop GetEntryPointEntityBody()
         {
-            return new EntryPoint(DefaultUriFactory.Instance).Get(new HttpRequestMessage(HttpMethod.Get, new Uri("http://localhost/shop")), new HttpResponseMessage());
+            var response = new EntryPoint(DefaultUriFactory.Instance).Get(new HttpRequestMessage(HttpMethod.Get, new Uri("http://localhost/shop")));
+            return response.Content.ReadAsOrDefault();
         }
     }
 }
