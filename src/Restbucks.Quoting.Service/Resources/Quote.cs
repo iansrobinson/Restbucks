@@ -7,7 +7,6 @@ using System.Net.Http.Headers;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using Microsoft.ApplicationServer.Http;
-using Microsoft.ApplicationServer.Http.Dispatcher;
 using Restbucks.MediaType;
 using Restbucks.Quoting.Service.Adapters;
 using Restbucks.Quoting.Service.Hypermedia;

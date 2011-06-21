@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using NUnit.Framework;
 using Restbucks.MediaType;
-using Restbucks.Quoting.Service.Processors;
+using Restbucks.Quoting.Service.MessageHandlers.Processors;
 using Rhino.Mocks;
 
 namespace Tests.Restbucks.Quoting.Service.Processors

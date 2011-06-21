@@ -1,4 +1,4 @@
-﻿namespace Restbucks.Quoting.Service.Processors
+﻿namespace Restbucks.Quoting.Service.MessageHandlers.Processors
 {
     public interface IGenerateSignature
     {

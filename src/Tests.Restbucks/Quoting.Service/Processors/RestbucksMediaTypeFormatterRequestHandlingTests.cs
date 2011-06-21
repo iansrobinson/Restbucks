@@ -3,7 +3,7 @@ using System.Text;
 using NUnit.Framework;
 using Restbucks.MediaType;
 using Restbucks.MediaType.Assemblers;
-using Restbucks.Quoting.Service.Processors;
+using Restbucks.Quoting.Service.MessageHandlers.Processors;
 
 namespace Tests.Restbucks.Quoting.Service.Processors
 {

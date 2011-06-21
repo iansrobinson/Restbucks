@@ -5,7 +5,7 @@ using System.Xml.Linq;
 using Restbucks.MediaType;
 using Restbucks.RestToolkit.Utils;
 
-namespace Restbucks.Quoting.Service.Processors
+namespace Restbucks.Quoting.Service.MessageHandlers.Processors
 {
     public class FormsIntegrityUtility : ISignForms
     {

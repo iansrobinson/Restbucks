@@ -6,7 +6,6 @@ using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using Microsoft.ApplicationServer.Http.Description;
 using NUnit.Framework;
-using Restbucks.Quoting.Service.Processors;
 using Restbucks.Quoting.Service.Resources;
 
 namespace Tests.Restbucks.Quoting.Service
