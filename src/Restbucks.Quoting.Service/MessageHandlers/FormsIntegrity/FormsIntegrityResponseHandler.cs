@@ -3,7 +3,7 @@ using System.Linq;
 using System.Net.Http;
 using Microsoft.ApplicationServer.Http.Dispatcher;
 
-namespace Restbucks.Quoting.Service.MessageHandlers.Processors
+namespace Restbucks.Quoting.Service.MessageHandlers.FormsIntegrity
 {
     public class FormsIntegrityResponseHandler : HttpOperationHandler<HttpResponseMessage, HttpResponseMessage>
     {
