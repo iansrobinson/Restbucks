@@ -149,10 +149,6 @@
     <Compile Include="Util\PrivateField.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Restbucks.Client\Restbucks.Client.csproj">
-      <Project>{4FF3C7CB-505C-47EA-AD0B-F3063B6F8B03}</Project>
-      <Name>Restbucks.Client</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Restbucks.MediaType\Restbucks.MediaType.csproj">
       <Project>{2E73DA2F-07A0-42B8-B73D-029DAB550889}</Project>
       <Name>Restbucks.MediaType</Name>
