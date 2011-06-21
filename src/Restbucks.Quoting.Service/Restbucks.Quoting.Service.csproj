@@ -107,6 +107,9 @@
     <Compile Include="Adapters\LineItemToItem.cs" />
     <Compile Include="Adapters\MoneyToCost.cs" />
     <Compile Include="Adapters\QuantityToAmount.cs" />
+    <Compile Include="Configuration\ResourceFactory.cs" />
+    <Compile Include="Configuration\ResourceManager.cs" />
+    <Compile Include="Configuration\RestbucksMediaTypeFormatter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -116,7 +119,6 @@
     <Compile Include="MessageHandlers\FormsIntegrity\FormsIntegrityUtility.cs" />
     <Compile Include="MessageHandlers\FormsIntegrity\IGenerateSignature.cs" />
     <Compile Include="MessageHandlers\FormsIntegrity\ISignForms.cs" />
-    <Compile Include="MessageHandlers\FormsIntegrity\RestbucksMediaTypeFormatter.cs" />
     <Compile Include="MessageHandlers\FormsIntegrity\Signature.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\EntryPoint.cs" />

@@ -3,6 +3,7 @@ using System.Text;
 using NUnit.Framework;
 using Restbucks.MediaType;
 using Restbucks.MediaType.Assemblers;
+using Restbucks.Quoting.Service.Configuration;
 using Restbucks.Quoting.Service.MessageHandlers.FormsIntegrity;
 
 namespace Tests.Restbucks.Quoting.Service.MessageHandlers.FormsIntegrity

@@ -11,7 +11,7 @@ using Restbucks.MediaType;
 using Restbucks.MediaType.Assemblers;
 using Restbucks.MediaType.Formatters;
 
-namespace Restbucks.Quoting.Service.MessageHandlers.FormsIntegrity
+namespace Restbucks.Quoting.Service.Configuration
 {
     public class RestbucksMediaTypeFormatter : MediaTypeFormatter
     {
