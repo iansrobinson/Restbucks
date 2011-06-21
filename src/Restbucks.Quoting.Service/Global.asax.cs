@@ -14,7 +14,7 @@ using Microsoft.ApplicationServer.Http.Activation;
 using Microsoft.ApplicationServer.Http.Description;
 using Microsoft.ApplicationServer.Http.Dispatcher;
 using Restbucks.Quoting.Implementation;
-using Restbucks.Quoting.Service.MessageHandlers.Processors;
+using Restbucks.Quoting.Service.MessageHandlers.FormsIntegrity;
 using Restbucks.Quoting.Service.Resources;
 using Restbucks.RestToolkit.Hypermedia;
 

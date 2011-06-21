@@ -1,9 +1,9 @@
 ﻿using System.IO;
 using NUnit.Framework;
-using Restbucks.Quoting.Service.MessageHandlers.Processors;
+using Restbucks.Quoting.Service.MessageHandlers.FormsIntegrity;
 using Rhino.Mocks;
 
-namespace Tests.Restbucks.Quoting.Service.Processors
+namespace Tests.Restbucks.Quoting.Service.MessageHandlers.Processors
 {
     [TestFixture]
     public class FormsIntegrityUtilityTests

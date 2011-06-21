@@ -1,4 +1,4 @@
-﻿namespace Restbucks.Quoting.Service.MessageHandlers.Processors
+﻿namespace Restbucks.Quoting.Service.MessageHandlers.FormsIntegrity
 {
     public class Signature : IGenerateSignature
     {

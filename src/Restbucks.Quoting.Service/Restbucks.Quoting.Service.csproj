@@ -112,12 +112,12 @@
     </Compile>
     <Compile Include="Hypermedia\FormSemantics.cs" />
     <Compile Include="Hypermedia\LinkRelations.cs" />
-    <Compile Include="MessageHandlers\Processors\FormsIntegrityResponseHandler.cs" />
-    <Compile Include="MessageHandlers\Processors\FormsIntegrityUtility.cs" />
-    <Compile Include="MessageHandlers\Processors\IGenerateSignature.cs" />
-    <Compile Include="MessageHandlers\Processors\ISignForms.cs" />
-    <Compile Include="MessageHandlers\Processors\RestbucksMediaTypeFormatter.cs" />
-    <Compile Include="MessageHandlers\Processors\Signature.cs" />
+    <Compile Include="MessageHandlers\FormsIntegrity\FormsIntegrityResponseHandler.cs" />
+    <Compile Include="MessageHandlers\FormsIntegrity\FormsIntegrityUtility.cs" />
+    <Compile Include="MessageHandlers\FormsIntegrity\IGenerateSignature.cs" />
+    <Compile Include="MessageHandlers\FormsIntegrity\ISignForms.cs" />
+    <Compile Include="MessageHandlers\FormsIntegrity\RestbucksMediaTypeFormatter.cs" />
+    <Compile Include="MessageHandlers\FormsIntegrity\Signature.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\EntryPoint.cs" />
     <Compile Include="Resources\OrderForm.cs" />

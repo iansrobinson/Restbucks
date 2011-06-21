@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace Restbucks.Quoting.Service.MessageHandlers.Processors
+namespace Restbucks.Quoting.Service.MessageHandlers.FormsIntegrity
 {
     public interface ISignForms
     {
