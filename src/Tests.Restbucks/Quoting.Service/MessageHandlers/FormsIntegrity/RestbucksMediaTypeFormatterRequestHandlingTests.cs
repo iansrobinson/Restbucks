@@ -5,7 +5,7 @@ using Restbucks.MediaType;
 using Restbucks.MediaType.Assemblers;
 using Restbucks.Quoting.Service.MessageHandlers.FormsIntegrity;
 
-namespace Tests.Restbucks.Quoting.Service.MessageHandlers.Processors
+namespace Tests.Restbucks.Quoting.Service.MessageHandlers.FormsIntegrity
 {
     [TestFixture]
     public class RestbucksMediaTypeFormatterRequestHandlingTests

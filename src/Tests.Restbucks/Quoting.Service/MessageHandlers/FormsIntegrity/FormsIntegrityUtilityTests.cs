@@ -3,7 +3,7 @@ using NUnit.Framework;
 using Restbucks.Quoting.Service.MessageHandlers.FormsIntegrity;
 using Rhino.Mocks;
 
-namespace Tests.Restbucks.Quoting.Service.MessageHandlers.Processors
+namespace Tests.Restbucks.Quoting.Service.MessageHandlers.FormsIntegrity
 {
     [TestFixture]
     public class FormsIntegrityUtilityTests
