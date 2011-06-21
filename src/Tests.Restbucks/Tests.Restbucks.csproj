@@ -156,6 +156,10 @@
     <Compile Include="Util\PrivateField.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Restbucks.Client.ConsoleHost\Restbucks.Client.ConsoleHost.csproj">
+      <Project>{A83DC1E3-0E28-4BC0-86C0-862866867928}</Project>
+      <Name>Restbucks.Client.ConsoleHost</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Restbucks.Client\Restbucks.Client.csproj">
       <Project>{6C975D85-C264-4987-A176-7ECCC51235AA}</Project>
       <Name>Restbucks.Client</Name>
@@ -177,7 +181,6 @@
       <Name>Restbucks.RestToolkit</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
