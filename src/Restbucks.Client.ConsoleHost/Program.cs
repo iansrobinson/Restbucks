@@ -4,10 +4,10 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using log4net.Config;
 using Microsoft.ApplicationServer.Http;
-using Restbucks.MediaType;
-using Restbucks.Client;
-using Restbucks.Client.RulesEngine;
+using Restbucks.Client.MediaTypeFormatters;
+using Restbucks.RestToolkit.RulesEngine;
 using Restbucks.Client.States;
+using Restbucks.MediaType;
 
 namespace Restbucks.Client.ConsoleHost
 {

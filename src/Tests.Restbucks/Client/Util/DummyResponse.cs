@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Microsoft.ApplicationServer.Http;
+using Restbucks.Client.MediaTypeFormatters;
 using Restbucks.MediaType;
 using Restbucks.Client;
 

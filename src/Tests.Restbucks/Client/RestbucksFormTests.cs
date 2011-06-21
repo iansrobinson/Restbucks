@@ -3,9 +3,11 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using Microsoft.ApplicationServer.Http;
 using NUnit.Framework;
+using Restbucks.Client.Hypermedia.Strategies;
+using Restbucks.Client.MediaTypeFormatters;
 using Restbucks.MediaType;
 using Restbucks.Client;
-using Restbucks.Client.RulesEngine;
+using Restbucks.RestToolkit.RulesEngine;
 using Tests.Restbucks.Client.Util;
 
 namespace Tests.Restbucks.Client

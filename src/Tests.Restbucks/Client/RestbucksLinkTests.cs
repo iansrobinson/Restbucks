@@ -1,7 +1,8 @@
 ﻿using System;
 using NUnit.Framework;
 using Restbucks.Client;
-using Restbucks.Client.RulesEngine;
+using Restbucks.Client.Hypermedia.Strategies;
+using Restbucks.RestToolkit.RulesEngine;
 using Tests.Restbucks.Client.Util;
 
 namespace Tests.Restbucks.Client

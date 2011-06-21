@@ -77,49 +77,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Forms.cs" />
-    <Compile Include="HttpContentExtensions.cs" />
-    <Compile Include="Links.cs" />
-    <Compile Include="RestbucksForm.cs" />
-    <Compile Include="RestbucksLink.cs" />
-    <Compile Include="RestbucksFormatter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="RulesEngine\Actions.cs" />
-    <Compile Include="RulesEngine\ApplicationStateVariables.cs" />
-    <Compile Include="RulesEngine\ApplicationStateVariablesFormDataStrategy.cs" />
-    <Compile Include="RulesEngine\ClickLink.cs" />
-    <Compile Include="RulesEngine\ControlNotFoundException.cs" />
-    <Compile Include="RulesEngine\Delegates.cs" />
-    <Compile Include="RulesEngine\EntityBodyKey.cs" />
-    <Compile Include="RulesEngine\HttpResponseMessageExtensions.cs" />
-    <Compile Include="RulesEngine\HttpStatusCodeExtensionMethods.cs" />
-    <Compile Include="RulesEngine\IAction.cs" />
-    <Compile Include="RulesEngine\IActionInvoker.cs" />
-    <Compile Include="RulesEngine\IApplicationStateVariablesBuilder.cs" />
-    <Compile Include="RulesEngine\IClientCapabilities.cs" />
-    <Compile Include="RulesEngine\IFormDataStrategy.cs" />
-    <Compile Include="RulesEngine\IFormStrategy.cs" />
+    <Compile Include="Hacks\HttpContentExtensions.cs" />
+    <Compile Include="Hypermedia\Forms.cs" />
+    <Compile Include="Hypermedia\Links.cs" />
+    <Compile Include="Hypermedia\Strategies\RestbucksForm.cs" />
+    <Compile Include="Hypermedia\Strategies\RestbucksLink.cs" />
+    <Compile Include="MediaTypeFormatters\RestbucksFormatter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RulesEngine\FormatterNotFoundException.cs" />
-    <Compile Include="RulesEngine\FormInfo.cs" />
-    <Compile Include="RulesEngine\ICondition.cs" />
-    <Compile Include="RulesEngine\IKey.cs" />
-    <Compile Include="RulesEngine\ILinkStrategy.cs" />
-    <Compile Include="RulesEngine\IRule.cs" />
-    <Compile Include="RulesEngine\IState.cs" />
-    <Compile Include="RulesEngine\LinkInfo.cs" />
-    <Compile Include="RulesEngine\On.cs" />
-    <Compile Include="RulesEngine\PrepopulatedFormDataStrategy.cs" />
-    <Compile Include="RulesEngine\Result.cs" />
-    <Compile Include="RulesEngine\Rule.cs" />
-    <Compile Include="RulesEngine\Rules.cs" />
-    <Compile Include="RulesEngine\StateCreationRule.cs" />
-    <Compile Include="RulesEngine\StateFactoryCollection.cs" />
-    <Compile Include="RulesEngine\StringKey.cs" />
-    <Compile Include="RulesEngine\SubmitForm.cs" />
-    <Compile Include="RulesEngine\UnsuccessfulState.cs" />
-    <Compile Include="RulesEngine\When.cs" />
     <Compile Include="States\QuoteRequested.cs" />
     <Compile Include="States\Started.cs" />
     <Compile Include="States\Uninitialized.cs" />
