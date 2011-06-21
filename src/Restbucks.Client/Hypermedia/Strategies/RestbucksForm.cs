@@ -3,7 +3,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Restbucks.Client.Hacks;
-using Restbucks.Client.MediaTypeFormatters;
 using Restbucks.RestToolkit.RulesEngine;
 using Restbucks.MediaType;
 
@@ -80,7 +79,7 @@ namespace Restbucks.Client.Hypermedia.Strategies
 
         private static Shop GetEntityBody(HttpResponseMessage response)
         {
-            return response.Content.ReadAsObject<Shop>(new[] {RestbucksFormatter.Instance});
+            return response.Content.ReadAsObject<Shop>(new[] {RestbucksMediaTypeFormatter.Instance});
         }
 
         private static IFormDataStrategy CreateDataStrategy(Form form)

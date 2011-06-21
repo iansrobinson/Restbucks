@@ -3,7 +3,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Restbucks.Client.Hacks;
-using Restbucks.Client.MediaTypeFormatters;
 using Restbucks.RestToolkit.RulesEngine;
 using Restbucks.MediaType;
 
@@ -54,7 +53,7 @@ namespace Restbucks.Client.Hypermedia.Strategies
 
         private bool TryGetLinkInfo(HttpResponseMessage response, out LinkInfo linkInfo)
         {
-            var entityBody = response.Content.ReadAsObject<Shop>(new[] {RestbucksFormatter.Instance});
+            var entityBody = response.Content.ReadAsObject<Shop>(new[] {RestbucksMediaTypeFormatter.Instance});
             var link = (from l in (entityBody).Links
                         where l.Rels.Contains(relation, LinkRelationEqualityComparer.Instance)
                         select l).FirstOrDefault();

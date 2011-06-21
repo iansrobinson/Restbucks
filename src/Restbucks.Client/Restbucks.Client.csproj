@@ -88,7 +88,6 @@
     <Compile Include="Hypermedia\Links.cs" />
     <Compile Include="Hypermedia\Strategies\RestbucksForm.cs" />
     <Compile Include="Hypermedia\Strategies\RestbucksLink.cs" />
-    <Compile Include="MediaTypeFormatters\RestbucksFormatter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="States\QuoteRequested.cs" />
     <Compile Include="States\Started.cs" />

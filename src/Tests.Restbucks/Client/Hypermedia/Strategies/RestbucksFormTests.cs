@@ -4,7 +4,6 @@ using System.Net.Http.Headers;
 using Microsoft.ApplicationServer.Http;
 using NUnit.Framework;
 using Restbucks.Client.Hypermedia.Strategies;
-using Restbucks.Client.MediaTypeFormatters;
 using Restbucks.MediaType;
 using Restbucks.RestToolkit.RulesEngine;
 using Tests.Restbucks.Client.Util;
@@ -81,7 +80,7 @@ namespace Tests.Restbucks.Client.Hypermedia.Strategies
                 .AddForm(new Form("invalid-form", new Uri("http://localhost/orders"), "post", RestbucksMediaType.Value, null as Shop))
                 .Build();
 
-            var content = new ObjectContent<Shop>(entityBody, new[] {RestbucksFormatter.Instance});
+            var content = new ObjectContent<Shop>(entityBody, new[] { RestbucksMediaTypeFormatter.Instance });
             content.Headers.ContentType = new MediaTypeHeaderValue(RestbucksMediaType.Value);
 
             var response = new HttpResponseMessage {Content = content};

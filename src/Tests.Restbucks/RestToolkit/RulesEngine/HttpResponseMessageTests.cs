@@ -1,8 +1,6 @@
 ﻿using NUnit.Framework;
 using Restbucks.Client.Hacks;
-using Restbucks.Client.MediaTypeFormatters;
 using Restbucks.MediaType;
-using Restbucks.Client;
 using Tests.Restbucks.Client.Util;
 
 namespace Tests.Restbucks.RestToolkit.RulesEngine
@@ -15,8 +13,8 @@ namespace Tests.Restbucks.RestToolkit.RulesEngine
         {
             var response = DummyResponse.CreateResponse();
 
-            var entityBody1 = response.Content.ReadAsObject<Shop>(RestbucksFormatter.Instance);
-            var entityBody2 = response.Content.ReadAsObject<Shop>(RestbucksFormatter.Instance);
+            var entityBody1 = response.Content.ReadAsObject<Shop>(RestbucksMediaTypeFormatter.Instance);
+            var entityBody2 = response.Content.ReadAsObject<Shop>(RestbucksMediaTypeFormatter.Instance);
 
             Assert.AreEqual(DummyResponse.BaseUri, entityBody1.BaseUri);
             Assert.AreEqual(DummyResponse.BaseUri, entityBody2.BaseUri);

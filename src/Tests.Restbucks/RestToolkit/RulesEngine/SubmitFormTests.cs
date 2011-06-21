@@ -3,9 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using Microsoft.ApplicationServer.Http;
 using NUnit.Framework;
-using Restbucks.Client.MediaTypeFormatters;
 using Restbucks.MediaType;
-using Restbucks.Client;
 using Restbucks.RestToolkit.RulesEngine;
 using Rhino.Mocks;
 using Tests.Restbucks.Client.Util;
@@ -85,7 +83,7 @@ namespace Tests.Restbucks.RestToolkit.RulesEngine
 
             public MediaTypeFormatter GetMediaTypeFormatter(MediaTypeHeaderValue contentType)
             {
-                return RestbucksFormatter.Instance;
+                return RestbucksMediaTypeFormatter.Instance;
             }
         }
     }

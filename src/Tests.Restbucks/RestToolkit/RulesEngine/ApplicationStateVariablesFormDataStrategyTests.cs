@@ -4,9 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using NUnit.Framework;
 using Restbucks.Client.Hacks;
-using Restbucks.Client.MediaTypeFormatters;
 using Restbucks.MediaType;
-using Restbucks.Client;
 using Restbucks.RestToolkit.RulesEngine;
 using Rhino.Mocks;
 
@@ -27,7 +25,7 @@ namespace Tests.Restbucks.RestToolkit.RulesEngine
             var strategy = new ApplicationStateVariablesFormDataStrategy(Key, ContentType);
             var content = strategy.CreateFormData(new HttpResponseMessage(), StateVariables, ClientCapabilities);
 
-            Assert.AreEqual(EntityBody.BaseUri, content.ReadAsObject<Shop>(RestbucksFormatter.Instance).BaseUri);
+            Assert.AreEqual(EntityBody.BaseUri, content.ReadAsObject<Shop>(RestbucksMediaTypeFormatter.Instance).BaseUri);
         }
 
         [Test]
@@ -42,7 +40,7 @@ namespace Tests.Restbucks.RestToolkit.RulesEngine
         private static IClientCapabilities CreateClientCapabilities()
         {
             var clientCapabilities = MockRepository.GenerateStub<IClientCapabilities>();
-            clientCapabilities.Expect(c => c.GetMediaTypeFormatter(ContentType)).Return(RestbucksFormatter.Instance);
+            clientCapabilities.Expect(c => c.GetMediaTypeFormatter(ContentType)).Return(RestbucksMediaTypeFormatter.Instance);
             return clientCapabilities;
         }
     }

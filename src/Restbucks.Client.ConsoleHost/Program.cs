@@ -4,10 +4,9 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using log4net.Config;
 using Microsoft.ApplicationServer.Http;
-using Restbucks.Client.MediaTypeFormatters;
-using Restbucks.RestToolkit.RulesEngine;
 using Restbucks.Client.States;
 using Restbucks.MediaType;
+using Restbucks.RestToolkit.RulesEngine;
 
 namespace Restbucks.Client.ConsoleHost
 {
@@ -54,7 +53,7 @@ namespace Restbucks.Client.ConsoleHost
 
             public MediaTypeFormatter GetMediaTypeFormatter(MediaTypeHeaderValue contentType)
             {
-                return RestbucksFormatter.Instance;
+                return RestbucksMediaTypeFormatter.Instance;
             }
         }
     }

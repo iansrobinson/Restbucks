@@ -2,9 +2,7 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Microsoft.ApplicationServer.Http;
-using Restbucks.Client.MediaTypeFormatters;
 using Restbucks.MediaType;
-using Restbucks.Client;
 
 namespace Tests.Restbucks.Client.Util
 {
@@ -47,7 +45,7 @@ namespace Tests.Restbucks.Client.Util
                 .AddForm(PrepopulatedForm)
                 .Build();
 
-            var content = new ObjectContent<Shop>(entityBody, new[] {RestbucksFormatter.Instance});
+            var content = new ObjectContent<Shop>(entityBody, new[] { RestbucksMediaTypeFormatter.Instance });
             content.Headers.ContentType = new MediaTypeHeaderValue(RestbucksMediaType.Value);
 
             return new HttpResponseMessage {Content = content};
