@@ -14,7 +14,7 @@ namespace Tests.Restbucks.Quoting.Service.Configuration
         [Test]
         public void ShouldSupportRestbucksPlusXmlAndApplicationXmlAndTextXmlMediaTypes()
         {
-            var processor = new RestbucksMediaTypeFormatter();
+            var processor = RestbucksMediaTypeFormatter.Instance;
 
             Assert.AreEqual(3, processor.SupportedMediaTypes.Count());
             Assert.AreEqual(RestbucksMediaType.Value, processor.SupportedMediaTypes.First().MediaType);
@@ -30,7 +30,7 @@ namespace Tests.Restbucks.Quoting.Service.Configuration
             var shop = new ShopBuilder(new Uri("http://restbucks.com/")).Build();
             var stream = new MemoryStream();
 
-            var processor = new RestbucksMediaTypeFormatter();
+            var processor = RestbucksMediaTypeFormatter.Instance;
             processor.WriteToStream(typeof (Shop), shop, stream, null, null);
 
             stream.Seek(0, SeekOrigin.Begin);

@@ -18,7 +18,7 @@ namespace Tests.Restbucks.Quoting.Service.Configuration
             using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(xml)))
             {
                 stream.Seek(0, SeekOrigin.Begin);
-                var mediaTypeProcessor = CreateRestbucksMediaTypeProcessor();
+                var mediaTypeProcessor = RestbucksMediaTypeFormatter.Instance;
 
                 Assert.IsNull(mediaTypeProcessor.ReadFromStream(typeof (Shop), stream, null));
             }
@@ -27,7 +27,7 @@ namespace Tests.Restbucks.Quoting.Service.Configuration
         [Test]
         public void ShouldReturnNullWhenStreamIsNull()
         {
-            var mediaTypeProcessor = CreateRestbucksMediaTypeProcessor();
+            var mediaTypeProcessor = RestbucksMediaTypeFormatter.Instance;
             Assert.IsNull(mediaTypeProcessor.ReadFromStream(typeof (Shop), null, null));
         }
 
@@ -39,7 +39,7 @@ namespace Tests.Restbucks.Quoting.Service.Configuration
             using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(xml)))
             {
                 stream.Seek(0, SeekOrigin.Begin);
-                var mediaTypeProcessor = CreateRestbucksMediaTypeProcessor();
+                var mediaTypeProcessor = RestbucksMediaTypeFormatter.Instance;
 
                 Assert.IsNull(mediaTypeProcessor.ReadFromStream(typeof (Shop), stream, null));
             }
@@ -54,15 +54,10 @@ namespace Tests.Restbucks.Quoting.Service.Configuration
             using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(xml)))
             {
                 stream.Seek(0, SeekOrigin.Begin);
-                var mediaTypeProcessor = CreateRestbucksMediaTypeProcessor();
+                var mediaTypeProcessor = RestbucksMediaTypeFormatter.Instance;
 
                 mediaTypeProcessor.ReadFromStream(typeof (Shop), stream, null);
             }
-        }
-
-        private static RestbucksMediaTypeFormatter CreateRestbucksMediaTypeProcessor()
-        {
-            return new RestbucksMediaTypeFormatter();
         }
     }
 }

@@ -15,11 +15,12 @@ namespace Restbucks.Quoting.Service.Configuration
 {
     public class RestbucksMediaTypeFormatter : MediaTypeFormatter
     {
+        public static MediaTypeFormatter Instance = new RestbucksMediaTypeFormatter();
+        
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
         private static readonly XmlWriterSettings WriterSettings = new XmlWriterSettings {Indent = true, NamespaceHandling = NamespaceHandling.OmitDuplicates};
 
-        public RestbucksMediaTypeFormatter()
+        private RestbucksMediaTypeFormatter()
         {
             SupportedMediaTypes.Add(new MediaTypeHeaderValue(RestbucksMediaType.Value));
             SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/xml"));
