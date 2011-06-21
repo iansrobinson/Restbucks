@@ -91,20 +91,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Client\ApplicationContextTests.cs" />
-    <Compile Include="Client\Helpers\MockEndpoint.cs" />
-    <Compile Include="Client\Helpers\MockEndpointHttpClientProvider.cs" />
-    <Compile Include="Client\Helpers\StubHttpClientProvider.cs" />
-    <Compile Include="Client\HttpClientTests.cs" />
-    <Compile Include="Client\Keys\EntityBodyKeyTests.cs" />
-    <Compile Include="Client\Keys\KeyEqualityComparerTests.cs" />
-    <Compile Include="Client\ResponseHandlers\RequestForQuoteFormResponseHandlerTests.cs" />
-    <Compile Include="Client\ResponseHandlers\UninitializedResponseHandlerTests.cs" />
-    <Compile Include="Client\RulesEngine\ElseTests.cs" />
-    <Compile Include="Client\RulesEngine\RulesTests.cs" />
-    <Compile Include="Client\RulesEngine\RuleTests.cs" />
-    <Compile Include="Client\RulesEngine\WhenTests.cs" />
-    <Compile Include="Client\States\StartedStateTests.cs" />
     <Compile Include="MediaType\Assemblers\LinksAssemblerTests.cs" />
     <Compile Include="MediaType\Assemblers\ShopAssemblerTests.cs" />
     <Compile Include="MediaType\Assemblers\XNullElementsExtensionsTests.cs" />
@@ -188,10 +174,7 @@
       <Name>Restbucks.RestToolkit</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Client\Http\" />
-    <Folder Include="Client\States\Helpers\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
