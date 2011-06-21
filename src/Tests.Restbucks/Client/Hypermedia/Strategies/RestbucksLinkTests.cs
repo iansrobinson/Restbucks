@@ -1,11 +1,10 @@
 ﻿using System;
 using NUnit.Framework;
-using Restbucks.Client;
 using Restbucks.Client.Hypermedia.Strategies;
 using Restbucks.RestToolkit.RulesEngine;
 using Tests.Restbucks.Client.Util;
 
-namespace Tests.Restbucks.Client
+namespace Tests.Restbucks.Client.Hypermedia.Strategies
 {
     [TestFixture]
     public class RestbucksLinkTests
@@ -20,7 +19,7 @@ namespace Tests.Restbucks.Client
         }
 
         [Test]
-        [ExpectedException(ExpectedException = typeof(ControlNotFoundException), ExpectedMessage = "Could not find link with link relation 'http://relations.restbucks.com/xyz'.")]
+        [ExpectedException(ExpectedException = typeof (ControlNotFoundException), ExpectedMessage = "Could not find link with link relation 'http://relations.restbucks.com/xyz'.")]
         public void ThrowsExceptionIfLinkCannotBeFound()
         {
             var link = RestbucksLink.WithRel("http://relations.restbucks.com/xyz");

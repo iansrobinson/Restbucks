@@ -91,8 +91,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Client\RestbucksFormTests.cs" />
-    <Compile Include="Client\RestbucksLinkTests.cs" />
+    <Compile Include="Client\Hypermedia\Strategies\RestbucksFormTests.cs" />
+    <Compile Include="Client\Hypermedia\Strategies\RestbucksLinkTests.cs" />
     <Compile Include="Client\Util\DummyResponse.cs" />
     <Compile Include="Client\Util\MockEndpoint.cs" />
     <Compile Include="MediaType\Assemblers\LinksAssemblerTests.cs" />

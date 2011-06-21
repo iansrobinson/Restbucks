@@ -6,11 +6,10 @@ using NUnit.Framework;
 using Restbucks.Client.Hypermedia.Strategies;
 using Restbucks.Client.MediaTypeFormatters;
 using Restbucks.MediaType;
-using Restbucks.Client;
 using Restbucks.RestToolkit.RulesEngine;
 using Tests.Restbucks.Client.Util;
 
-namespace Tests.Restbucks.Client
+namespace Tests.Restbucks.Client.Hypermedia.Strategies
 {
     [TestFixture]
     public class RestbucksFormTests
