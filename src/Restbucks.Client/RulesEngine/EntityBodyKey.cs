@@ -2,7 +2,7 @@
 using System.Net.Http.Headers;
 using Restbucks.RestToolkit.Utils;
 
-namespace Restbucks.NewClient.RulesEngine
+namespace Restbucks.Client.RulesEngine
 {
     public class EntityBodyKey : IKey
     {

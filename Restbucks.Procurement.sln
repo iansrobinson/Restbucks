@@ -30,7 +30,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restbucks.RestToolkit", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restbucks.Client.ConsoleHost", "src\Restbucks.Client.ConsoleHost\Restbucks.Client.ConsoleHost.csproj", "{A83DC1E3-0E28-4BC0-86C0-862866867928}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restbucks.NewClient", "src\Restbucks.Client\Restbucks.NewClient.csproj", "{6C975D85-C264-4987-A176-7ECCC51235AA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restbucks.Client", "src\Restbucks.Client\Restbucks.Client.csproj", "{6C975D85-C264-4987-A176-7ECCC51235AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

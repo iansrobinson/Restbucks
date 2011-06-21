@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 using Restbucks.MediaType;
-using Restbucks.NewClient;
+using Restbucks.Client;
 using Tests.Restbucks.NewClient.Util;
 
 namespace Tests.Restbucks.NewClient.RulesEngine

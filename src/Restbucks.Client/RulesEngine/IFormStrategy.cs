@@ -1,6 +1,6 @@
 using System.Net.Http;
 
-namespace Restbucks.NewClient.RulesEngine
+namespace Restbucks.Client.RulesEngine
 {
     public interface IFormStrategy
     {

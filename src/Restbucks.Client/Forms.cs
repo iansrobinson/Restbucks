@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Restbucks.NewClient.RulesEngine;
+using Restbucks.Client.RulesEngine;
 
-namespace Restbucks.NewClient
+namespace Restbucks.Client
 {
     public static class Forms
     {

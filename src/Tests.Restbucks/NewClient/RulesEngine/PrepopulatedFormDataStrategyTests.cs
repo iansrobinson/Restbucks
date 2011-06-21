@@ -2,8 +2,8 @@
 using System.Net.Http.Headers;
 using NUnit.Framework;
 using Restbucks.MediaType;
-using Restbucks.NewClient;
-using Restbucks.NewClient.RulesEngine;
+using Restbucks.Client;
+using Restbucks.Client.RulesEngine;
 using Rhino.Mocks;
 
 namespace Tests.Restbucks.NewClient.RulesEngine

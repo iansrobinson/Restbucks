@@ -87,9 +87,9 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Restbucks.Client\Restbucks.NewClient.csproj">
+    <ProjectReference Include="..\Restbucks.Client\Restbucks.Client.csproj">
       <Project>{6C975D85-C264-4987-A176-7ECCC51235AA}</Project>
-      <Name>Restbucks.NewClient</Name>
+      <Name>Restbucks.Client</Name>
     </ProjectReference>
     <ProjectReference Include="..\Restbucks.MediaType\Restbucks.MediaType.csproj">
       <Project>{2E73DA2F-07A0-42B8-B73D-029DAB550889}</Project>

@@ -1,8 +1,8 @@
 ﻿using System;
+using Restbucks.Client.RulesEngine;
 using Restbucks.MediaType;
-using Restbucks.NewClient.RulesEngine;
 
-namespace Restbucks.NewClient
+namespace Restbucks.Client
 {
     public static class Links
     {

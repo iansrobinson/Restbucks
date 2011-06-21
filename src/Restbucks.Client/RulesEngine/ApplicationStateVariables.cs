@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Restbucks.NewClient.RulesEngine
+namespace Restbucks.Client.RulesEngine
 {
     public class ApplicationStateVariables
     {

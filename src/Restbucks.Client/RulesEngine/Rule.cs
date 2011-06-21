@@ -1,7 +1,7 @@
 ﻿using System.Net.Http;
 using Restbucks.RestToolkit.Utils;
 
-namespace Restbucks.NewClient.RulesEngine
+namespace Restbucks.Client.RulesEngine
 {
     public class Rule : IRule
     {

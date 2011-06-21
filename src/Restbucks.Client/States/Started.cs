@@ -1,8 +1,8 @@
 ﻿using System.Net;
 using System.Net.Http;
-using Restbucks.NewClient.RulesEngine;
+using Restbucks.Client.RulesEngine;
 
-namespace Restbucks.NewClient.States
+namespace Restbucks.Client.States
 {
     public class Started : IState
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http.Headers;
 using NUnit.Framework;
 using Restbucks.MediaType;
-using Restbucks.NewClient.RulesEngine;
+using Restbucks.Client.RulesEngine;
 
 namespace Tests.Restbucks.NewClient.RulesEngine
 {

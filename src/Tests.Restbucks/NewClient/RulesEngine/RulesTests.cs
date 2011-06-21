@@ -1,6 +1,6 @@
 ﻿using System.Net.Http;
 using NUnit.Framework;
-using Restbucks.NewClient.RulesEngine;
+using Restbucks.Client.RulesEngine;
 using Rhino.Mocks;
 
 namespace Tests.Restbucks.NewClient.RulesEngine

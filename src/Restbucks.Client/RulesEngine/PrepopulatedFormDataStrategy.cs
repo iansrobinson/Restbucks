@@ -2,7 +2,7 @@
 using System.Net.Http.Headers;
 using Microsoft.ApplicationServer.Http;
 
-namespace Restbucks.NewClient.RulesEngine
+namespace Restbucks.Client.RulesEngine
 {
     public class PrepopulatedFormDataStrategy : IFormDataStrategy
     {

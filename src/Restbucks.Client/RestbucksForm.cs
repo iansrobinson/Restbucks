@@ -2,11 +2,10 @@
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using Restbucks.Client.RulesEngine;
 using Restbucks.MediaType;
-using Restbucks.NewClient.RulesEngine;
-using Microsoft.ApplicationServer.Http;
 
-namespace Restbucks.NewClient
+namespace Restbucks.Client
 {
     public class RestbucksForm : IFormStrategy
     {
@@ -79,8 +78,7 @@ namespace Restbucks.NewClient
 
         private static Shop GetEntityBody(HttpResponseMessage response)
         {
-            
-            return response.Content.ReadAsObject<Shop>(new []{RestbucksFormatter.Instance});
+            return response.Content.ReadAsObject<Shop>(new[] {RestbucksFormatter.Instance});
         }
 
         private static IFormDataStrategy CreateDataStrategy(Form form)

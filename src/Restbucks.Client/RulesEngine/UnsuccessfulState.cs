@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Restbucks.NewClient.RulesEngine
+namespace Restbucks.Client.RulesEngine
 {
     public class UnsuccessfulState : IState
     {

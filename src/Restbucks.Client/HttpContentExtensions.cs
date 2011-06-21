@@ -3,7 +3,7 @@ using System.Linq;
 using System.Net.Http;
 using Microsoft.ApplicationServer.Http;
 
-namespace Restbucks.NewClient
+namespace Restbucks.Client
 {
     public static class HttpContentExtensions
     {

@@ -8,8 +8,8 @@
     <ProjectGuid>{6C975D85-C264-4987-A176-7ECCC51235AA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Restbucks.NewClient</RootNamespace>
-    <AssemblyName>Restbucks.NewClient</AssemblyName>
+    <RootNamespace>Restbucks.Client</RootNamespace>
+    <AssemblyName>Restbucks.Client</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using Microsoft.ApplicationServer.Http;
 using Restbucks.MediaType;
-using Restbucks.NewClient;
+using Restbucks.Client;
 
 namespace Tests.Restbucks.NewClient.Util
 {

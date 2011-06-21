@@ -11,7 +11,7 @@ using Restbucks.MediaType;
 using Restbucks.MediaType.Assemblers;
 using Restbucks.MediaType.Formatters;
 
-namespace Restbucks.NewClient
+namespace Restbucks.Client
 {
     public class RestbucksFormatter : MediaTypeFormatter
     {

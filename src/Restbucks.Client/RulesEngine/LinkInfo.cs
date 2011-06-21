@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Http.Headers;
 
-namespace Restbucks.NewClient.RulesEngine
+namespace Restbucks.Client.RulesEngine
 {
     public class LinkInfo
     {

@@ -4,7 +4,7 @@ using System.Net.Http;
 using Restbucks.MediaType;
 using Microsoft.ApplicationServer.Http;
 
-namespace Restbucks.NewClient.RulesEngine
+namespace Restbucks.Client.RulesEngine
 {
     public class Rules
     {

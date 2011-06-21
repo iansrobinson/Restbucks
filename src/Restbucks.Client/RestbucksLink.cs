@@ -2,10 +2,10 @@
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using Restbucks.Client.RulesEngine;
 using Restbucks.MediaType;
-using Restbucks.NewClient.RulesEngine;
 
-namespace Restbucks.NewClient
+namespace Restbucks.Client
 {
     public class RestbucksLink : ILinkStrategy
     {

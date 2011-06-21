@@ -1,7 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
-using Restbucks.NewClient;
-using Restbucks.NewClient.RulesEngine;
+using Restbucks.Client;
+using Restbucks.Client.RulesEngine;
 using Tests.Restbucks.NewClient.Util;
 
 namespace Tests.Restbucks.NewClient
