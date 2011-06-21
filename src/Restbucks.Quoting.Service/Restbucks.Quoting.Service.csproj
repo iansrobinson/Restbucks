@@ -152,8 +152,8 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
-          <AutoAssignPort>False</AutoAssignPort>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>8080</DevelopmentServerPort>
           <DevelopmentServerVPath>/restbucks</DevelopmentServerVPath>
           <IISUrl>http://localhost/restbucks</IISUrl>

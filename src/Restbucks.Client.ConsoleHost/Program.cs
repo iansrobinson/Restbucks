@@ -18,7 +18,7 @@ namespace Restbucks.Client.ConsoleHost
 
             var items = new ShopBuilder(null).AddItem(new Item("coffee", new Amount("g", 125))).Build();
             var variables = new ApplicationStateVariables(
-                new KeyValuePair<IKey, object>(new StringKey("home-page-uri"), new Uri("http://" + Environment.MachineName + "/restbucks/shop")),
+                new KeyValuePair<IKey, object>(new StringKey("home-page-uri"), new Uri("http://localhost:8080/restbucks/shop")),
                 new KeyValuePair<IKey, object>(new EntityBodyKey("request-for-quote", new MediaTypeHeaderValue(RestbucksMediaType.Value), new Uri("http://schemas.restbucks.com/shop")), items));
 
             var state = new Uninitialized(variables);
