@@ -9,6 +9,7 @@ using log4net;
 using log4net.Config;
 using Microsoft.ApplicationServer.Http.Description;
 using Microsoft.ApplicationServer.Http.Dispatcher;
+using Restbucks.MediaType;
 using Restbucks.Quoting.Implementation;
 using Restbucks.Quoting.Service.Configuration;
 using Restbucks.Quoting.Service.MessageHandlers.FormsIntegrity;

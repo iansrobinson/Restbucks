@@ -110,13 +110,13 @@
     <Compile Include="MediaType\LinkRelationEqualityComparerTests.cs" />
     <Compile Include="MediaType\LinkRelationTests.cs" />
     <Compile Include="MediaType\LinkTests.cs" />
+    <Compile Include="MediaType\RestbucksMediaTypeFormatterRequestHandlingTests.cs" />
+    <Compile Include="MediaType\RestbucksMediaTypeFormatterResponseHandlingTests.cs" />
     <Compile Include="MediaType\ShopTests.cs" />
     <Compile Include="MediaType\StringLinkRelationTests.cs" />
     <Compile Include="MediaType\UriLinkRelationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Quoting.Service\ConfigTests.cs" />
-    <Compile Include="Quoting.Service\Configuration\RestbucksMediaTypeFormatterRequestHandlingTests.cs" />
-    <Compile Include="Quoting.Service\Configuration\RestbucksMediaTypeFormatterResponseHandlingTests.cs" />
     <Compile Include="Quoting.Service\MessageHandlers\FormsIntegrity\FormsIntegrityResponseHandlerTests.cs" />
     <Compile Include="Quoting.Service\MessageHandlers\FormsIntegrity\FormsIntegrityUtilityTests.cs" />
     <Compile Include="Quoting.Service\Resources\EntryPointTests.cs" />

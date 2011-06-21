@@ -7,11 +7,10 @@ using System.Xml;
 using System.Xml.Linq;
 using log4net;
 using Microsoft.ApplicationServer.Http;
-using Restbucks.MediaType;
 using Restbucks.MediaType.Assemblers;
 using Restbucks.MediaType.Formatters;
 
-namespace Restbucks.Quoting.Service.Configuration
+namespace Restbucks.MediaType
 {
     public class RestbucksMediaTypeFormatter : MediaTypeFormatter
     {

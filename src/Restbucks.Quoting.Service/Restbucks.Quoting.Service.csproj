@@ -115,7 +115,6 @@
     <Compile Include="Adapters\QuantityToAmount.cs" />
     <Compile Include="Configuration\ResourceFactory.cs" />
     <Compile Include="Configuration\ResourceManager.cs" />
-    <Compile Include="Configuration\RestbucksMediaTypeFormatter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

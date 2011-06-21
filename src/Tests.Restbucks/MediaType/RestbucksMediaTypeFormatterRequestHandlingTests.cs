@@ -3,9 +3,8 @@ using System.Text;
 using NUnit.Framework;
 using Restbucks.MediaType;
 using Restbucks.MediaType.Assemblers;
-using Restbucks.Quoting.Service.Configuration;
 
-namespace Tests.Restbucks.Quoting.Service.Configuration
+namespace Tests.Restbucks.MediaType
 {
     [TestFixture]
     public class RestbucksMediaTypeFormatterRequestHandlingTests
