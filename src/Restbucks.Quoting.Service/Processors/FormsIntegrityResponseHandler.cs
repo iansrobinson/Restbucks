@@ -5,11 +5,11 @@ using Microsoft.ApplicationServer.Http.Dispatcher;
 
 namespace Restbucks.Quoting.Service.Processors
 {
-    public class FormsIntegrityResponseProcessor : HttpOperationHandler<HttpResponseMessage, HttpResponseMessage>
+    public class FormsIntegrityResponseHandler : HttpOperationHandler<HttpResponseMessage, HttpResponseMessage>
     {
         private readonly ISignForms formsSigner;
 
-        public FormsIntegrityResponseProcessor(ISignForms formsSigner) : base("ResponseMessage")
+        public FormsIntegrityResponseHandler(ISignForms formsSigner) : base("ResponseMessage")
         {
             this.formsSigner = formsSigner;
         }

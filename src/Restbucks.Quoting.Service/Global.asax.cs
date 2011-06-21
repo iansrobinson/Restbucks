@@ -45,7 +45,7 @@ namespace Restbucks.Quoting.Service
             container.Register(Component.For(typeof (UriFactory)).Instance(uriFactory).LifeStyle.Singleton);
 
             var formsIntegrityUtility = new FormsIntegrityUtility(Signature.Instance, OrderForm.SignedFormPlaceholder);          
-            Action<Collection<HttpOperationHandler>> handlers = c => c.Add(new FormsIntegrityResponseProcessor(formsIntegrityUtility));
+            Action<Collection<HttpOperationHandler>> handlers = c => c.Add(new FormsIntegrityResponseHandler(formsIntegrityUtility));
 
             var configuration = HttpHostConfiguration.Create()
                 .SetResourceFactory(new ResourceFactory(container))

@@ -10,18 +10,18 @@ using Rhino.Mocks;
 namespace Tests.Restbucks.Quoting.Service.Processors
 {
     [TestFixture]
-    public class FormsIntegrityResponseProcessorTests
+    public class FormsIntegrityResponseHandlerTests
     {
         [Test]
         public void UsesSuppliedFormsSigner()
         {
             ISignForms formsSigner = new DummyFormsSigner("output");
 
-            var processor = new FormsIntegrityResponseProcessor(formsSigner);
+            var processor = new FormsIntegrityResponseHandler(formsSigner);
             var response = new HttpResponseMessage {Content = new StringContent("input")};
 
             var newResponse = processor.OnHandle(response);
-            
+
             Assert.AreEqual("output", newResponse.Content.ReadAsString());
         }
 
@@ -30,7 +30,7 @@ namespace Tests.Restbucks.Quoting.Service.Processors
         {
             var mockFormsSigner = MockRepository.GenerateMock<ISignForms>();
 
-            var processor = new FormsIntegrityResponseProcessor(mockFormsSigner);
+            var processor = new FormsIntegrityResponseHandler(mockFormsSigner);
             var response = new HttpResponseMessage();
 
             processor.OnHandle(response);
@@ -42,11 +42,11 @@ namespace Tests.Restbucks.Quoting.Service.Processors
         public void ShouldRetainExistingContentResponseHeaders()
         {
             var dateTime = new DateTimeOffset(new DateTime(2011, 1, 10));
-            
-            var processor = new FormsIntegrityResponseProcessor(new DummyFormsSigner(string.Empty));
 
-            var response = new HttpResponseMessage { Content = new StringContent("input") };
-            response.Content.Headers.ContentType = new MediaTypeHeaderValue(RestbucksMediaType.Value);          
+            var processor = new FormsIntegrityResponseHandler(new DummyFormsSigner(string.Empty));
+
+            var response = new HttpResponseMessage {Content = new StringContent("input")};
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue(RestbucksMediaType.Value);
             response.Content.Headers.Expires = dateTime;
 
             var newResponse = processor.OnHandle(response);

@@ -112,7 +112,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="LinkRelations.cs" />
-    <Compile Include="Processors\FormsIntegrityResponseProcessor.cs" />
+    <Compile Include="Processors\FormsIntegrityResponseHandler.cs" />
     <Compile Include="Processors\FormsIntegrityUtility.cs" />
     <Compile Include="Processors\IGenerateSignature.cs" />
     <Compile Include="Processors\ISignForms.cs" />
