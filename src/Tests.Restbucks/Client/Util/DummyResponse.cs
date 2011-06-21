@@ -5,7 +5,7 @@ using Microsoft.ApplicationServer.Http;
 using Restbucks.MediaType;
 using Restbucks.Client;
 
-namespace Tests.Restbucks.NewClient.Util
+namespace Tests.Restbucks.Client.Util
 {
     public static class DummyResponse
     {

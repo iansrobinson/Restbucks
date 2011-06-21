@@ -5,7 +5,7 @@ using NUnit.Framework;
 using Restbucks.MediaType;
 using Restbucks.Client.RulesEngine;
 
-namespace Tests.Restbucks.NewClient.RulesEngine
+namespace Tests.Restbucks.Client.RulesEngine
 {
     [TestFixture]
     public class ApplicationStateVariablesTests

@@ -91,6 +91,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Client\RestbucksFormTests.cs" />
+    <Compile Include="Client\RestbucksLinkTests.cs" />
+    <Compile Include="Client\RulesEngine\ActionsTests.cs" />
+    <Compile Include="Client\RulesEngine\ApplicationStateVariablesFormDataStrategyTests.cs" />
+    <Compile Include="Client\RulesEngine\ApplicationStateVariablesTests.cs" />
+    <Compile Include="Client\RulesEngine\HttpResponseMessageExtensionsTests.cs" />
+    <Compile Include="Client\RulesEngine\HttpResponseMessageTests.cs" />
+    <Compile Include="Client\RulesEngine\HttpStatusCodeExtensionMethodsTests.cs" />
+    <Compile Include="Client\RulesEngine\PrepopulatedFormDataStrategyTests.cs" />
+    <Compile Include="Client\RulesEngine\RulesTests.cs" />
+    <Compile Include="Client\RulesEngine\RuleTests.cs" />
+    <Compile Include="Client\RulesEngine\StateFactoryCollectionTests.cs" />
+    <Compile Include="Client\RulesEngine\SubmitFormTests.cs" />
+    <Compile Include="Client\RulesEngine\WhenTests.cs" />
+    <Compile Include="Client\Util\DummyResponse.cs" />
+    <Compile Include="Client\Util\MockEndpoint.cs" />
     <Compile Include="MediaType\Assemblers\LinksAssemblerTests.cs" />
     <Compile Include="MediaType\Assemblers\ShopAssemblerTests.cs" />
     <Compile Include="MediaType\Assemblers\XNullElementsExtensionsTests.cs" />
@@ -103,22 +119,6 @@
     <Compile Include="MediaType\ShopTests.cs" />
     <Compile Include="MediaType\StringLinkRelationTests.cs" />
     <Compile Include="MediaType\UriLinkRelationTests.cs" />
-    <Compile Include="NewClient\RestbucksFormTests.cs" />
-    <Compile Include="NewClient\RestbucksLinkTests.cs" />
-    <Compile Include="NewClient\RulesEngine\ActionsTests.cs" />
-    <Compile Include="NewClient\RulesEngine\ApplicationStateVariablesFormDataStrategyTests.cs" />
-    <Compile Include="NewClient\RulesEngine\ApplicationStateVariablesTests.cs" />
-    <Compile Include="NewClient\RulesEngine\HttpResponseMessageTests.cs" />
-    <Compile Include="NewClient\RulesEngine\HttpResponseMessageExtensionsTests.cs" />
-    <Compile Include="NewClient\RulesEngine\HttpStatusCodeExtensionMethodsTests.cs" />
-    <Compile Include="NewClient\RulesEngine\PrepopulatedFormDataStrategyTests.cs" />
-    <Compile Include="NewClient\RulesEngine\RulesTests.cs" />
-    <Compile Include="NewClient\RulesEngine\RuleTests.cs" />
-    <Compile Include="NewClient\RulesEngine\StateFactoryCollectionTests.cs" />
-    <Compile Include="NewClient\RulesEngine\SubmitFormTests.cs" />
-    <Compile Include="NewClient\RulesEngine\WhenTests.cs" />
-    <Compile Include="NewClient\Util\DummyResponse.cs" />
-    <Compile Include="NewClient\Util\MockEndpoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Quoting.Service\ConfigTests.cs" />
     <Compile Include="Quoting.Service\Configuration\RestbucksMediaTypeFormatterRequestHandlingTests.cs" />

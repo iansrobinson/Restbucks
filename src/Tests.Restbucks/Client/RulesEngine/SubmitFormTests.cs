@@ -7,9 +7,9 @@ using Restbucks.MediaType;
 using Restbucks.Client;
 using Restbucks.Client.RulesEngine;
 using Rhino.Mocks;
-using Tests.Restbucks.NewClient.Util;
+using Tests.Restbucks.Client.Util;
 
-namespace Tests.Restbucks.NewClient.RulesEngine
+namespace Tests.Restbucks.Client.RulesEngine
 {
     [TestFixture]
     public class SubmitFormTests

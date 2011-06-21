@@ -2,9 +2,9 @@
 using NUnit.Framework;
 using Restbucks.Client;
 using Restbucks.Client.RulesEngine;
-using Tests.Restbucks.NewClient.Util;
+using Tests.Restbucks.Client.Util;
 
-namespace Tests.Restbucks.NewClient
+namespace Tests.Restbucks.Client
 {
     [TestFixture]
     public class RestbucksLinkTests

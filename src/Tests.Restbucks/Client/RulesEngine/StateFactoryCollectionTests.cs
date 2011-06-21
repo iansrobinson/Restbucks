@@ -4,7 +4,7 @@ using NUnit.Framework;
 using Restbucks.Client.RulesEngine;
 using Rhino.Mocks;
 
-namespace Tests.Restbucks.NewClient.RulesEngine
+namespace Tests.Restbucks.Client.RulesEngine
 {
     [TestFixture]
     public class StateFactoryCollectionTests

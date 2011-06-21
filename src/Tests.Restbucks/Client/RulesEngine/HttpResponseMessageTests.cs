@@ -1,9 +1,9 @@
 ﻿using NUnit.Framework;
 using Restbucks.MediaType;
 using Restbucks.Client;
-using Tests.Restbucks.NewClient.Util;
+using Tests.Restbucks.Client.Util;
 
-namespace Tests.Restbucks.NewClient.RulesEngine
+namespace Tests.Restbucks.Client.RulesEngine
 {
     [TestFixture]
     public class HttpResponseMessageTests

@@ -41,22 +41,28 @@
     <Reference Include="log4net">
       <HintPath>..\..\lib\log4net\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.ApplicationServer.Common">
+    <Reference Include="Microsoft.ApplicationServer.Common, Version=0.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\http.04.04.2011\Microsoft.ApplicationServer.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.ApplicationServer.Http">
+    <Reference Include="Microsoft.ApplicationServer.Http, Version=0.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\http.04.04.2011\Microsoft.ApplicationServer.Http.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.ApplicationServer.HttpEnhancements">
+    <Reference Include="Microsoft.ApplicationServer.HttpEnhancements, Version=0.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\http.04.04.2011\Microsoft.ApplicationServer.HttpEnhancements.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.ApplicationServer.HttpEnhancements.Tests">
+    <Reference Include="Microsoft.ApplicationServer.HttpEnhancements.Tests, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\http.04.04.2011\Microsoft.ApplicationServer.HttpEnhancements.Tests.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.ApplicationServer.Serialization">
+    <Reference Include="Microsoft.ApplicationServer.Serialization, Version=0.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\http.04.04.2011\Microsoft.ApplicationServer.Serialization.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.ApplicationServer.ServiceModel">
+    <Reference Include="Microsoft.ApplicationServer.ServiceModel, Version=0.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\http.04.04.2011\Microsoft.ApplicationServer.ServiceModel.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
