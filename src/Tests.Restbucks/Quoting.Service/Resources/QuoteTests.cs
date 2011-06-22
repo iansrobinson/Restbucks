@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using Microsoft.ApplicationServer.Http.Dispatcher;
 using NUnit.Framework;
 using Restbucks.MediaType;
 using Restbucks.Quoting;
@@ -58,9 +59,14 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         public void ShouldReturn404NotFoundWhenGettingQuoteThatDoesNotExist()
         {
             var quote = new QuoteBuilder().WithQuotationEngine(EmptyQuotationEngine.Instance).Build();
-            var response = quote.Get(Guid.NewGuid().ToString("N"), new HttpRequestMessage());
-
-            Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
+            try
+            {
+                quote.Get(Guid.NewGuid().ToString("N"), new HttpRequestMessage());
+            }
+            catch (HttpResponseException ex)
+            {
+                 Assert.AreEqual(HttpStatusCode.NotFound, ex.Response.StatusCode);;
+            }
         }
 
         [Test]
