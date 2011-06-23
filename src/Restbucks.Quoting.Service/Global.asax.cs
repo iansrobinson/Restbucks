@@ -12,6 +12,7 @@ using Microsoft.ApplicationServer.Http.Dispatcher;
 using Restbucks.MediaType;
 using Restbucks.Quoting.Implementation;
 using Restbucks.Quoting.Service.Configuration;
+using Restbucks.RestToolkit.Configuration;
 using Restbucks.Quoting.Service.MessageHandlers.FormsIntegrity;
 using Restbucks.Quoting.Service.Resources;
 using Restbucks.RestToolkit.Hypermedia;

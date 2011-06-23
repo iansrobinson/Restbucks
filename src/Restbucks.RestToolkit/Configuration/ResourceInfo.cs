@@ -1,7 +1,7 @@
 ﻿using System;
 using Restbucks.RestToolkit.Hypermedia;
 
-namespace Restbucks.Quoting.Service.Configuration
+namespace Restbucks.RestToolkit.Configuration
 {
     public class ResourceInfo
     {

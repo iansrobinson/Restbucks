@@ -114,11 +114,6 @@
     <Compile Include="Adapters\MoneyToCost.cs" />
     <Compile Include="Adapters\QuantityToAmount.cs" />
     <Compile Include="Configuration\ResourceFactory.cs" />
-    <Compile Include="Configuration\ResourceInfo.cs" />
-    <Compile Include="Configuration\ResourceManager.cs" />
-    <Compile Include="Configuration\ResourceCollection.cs" />
-    <Compile Include="Configuration\ResourceRegistration.cs" />
-    <Compile Include="Configuration\RouteCollectionExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -150,6 +145,7 @@
       <Name>Restbucks.RestToolkit</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
   <ProjectExtensions>

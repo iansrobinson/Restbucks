@@ -77,7 +77,9 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Activation" />
     <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -85,6 +87,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\ResourceCollection.cs" />
+    <Compile Include="Configuration\ResourceInfo.cs" />
+    <Compile Include="Configuration\RouteCollectionExtensions.cs" />
     <Compile Include="Hypermedia\IUriTemplate.cs" />
     <Compile Include="Hypermedia\UriFactory.cs" />
     <Compile Include="Hypermedia\UriFactoryWorker.cs" />
@@ -129,6 +134,7 @@
     <Compile Include="Utils\CheckString.cs" />
     <Compile Include="Utils\XmlTransform.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

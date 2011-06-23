@@ -4,7 +4,7 @@ using System.Reflection;
 using System.ServiceModel;
 using Restbucks.RestToolkit.Hypermedia;
 
-namespace Restbucks.Quoting.Service.Configuration
+namespace Restbucks.RestToolkit.Configuration
 {
     public class ResourceCollection
     {
@@ -18,9 +18,10 @@ namespace Restbucks.Quoting.Service.Configuration
         public void ForEach(Action<ResourceInfo> handleResourceType)
         {
             var results = from t in assembly.GetTypes()
-                        where t.GetCustomAttributes(typeof (UriTemplateAttribute), false).Length > 0
-                              && t.GetCustomAttributes(typeof (ServiceContractAttribute), false).Length > 0
-                        select new ResourceInfo(t, ((UriTemplateAttribute) t.GetCustomAttributes(typeof (ServiceContractAttribute), false).First()).UriFactoryWorker);
+                          where t.GetCustomAttributes(typeof (UriTemplateAttribute), false).Length > 0
+                                && t.GetCustomAttributes(typeof (ServiceContractAttribute), false).Length > 0
+                          let uriTemplateAttribute = (UriTemplateAttribute) t.GetCustomAttributes(typeof (UriTemplateAttribute), false).First()
+                          select new ResourceInfo(t, uriTemplateAttribute.UriFactoryWorker);
 
             results.ToList().ForEach(handleResourceType);
         }

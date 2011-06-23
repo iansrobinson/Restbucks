@@ -4,7 +4,7 @@ using System.Web.Routing;
 using Microsoft.ApplicationServer.Http.Activation;
 using Microsoft.ApplicationServer.Http.Description;
 
-namespace Restbucks.Quoting.Service.Configuration
+namespace Restbucks.RestToolkit.Configuration
 {
     public static class RouteCollectionExtensions
     {
