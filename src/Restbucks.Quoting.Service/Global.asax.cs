@@ -35,13 +35,6 @@ namespace Restbucks.Quoting.Service
 
             Log.Debug("Starting Restbucks.Quoting.Service...");
 
-            var uriFactory = new UriFactory();
-
-            container.Register(Component.For(typeof (IQuotationEngine)).ImplementedBy(typeof (QuotationEngine)).LifeStyle.Singleton);
-            container.Register(Component.For(typeof (IDateTimeProvider)).ImplementedBy(typeof (DateTimeProvider)).LifeStyle.Singleton);
-            container.Register(Component.For(typeof (IGuidProvider)).ImplementedBy(typeof (GuidProvider)).LifeStyle.Singleton);
-            container.Register(Component.For(typeof (UriFactory)).Instance(uriFactory).LifeStyle.Singleton);
-
             var formsIntegrityUtility = new FormsIntegrityUtility(Signature.Instance, OrderForm.SignedFormPlaceholder);
             Action<Collection<HttpOperationHandler>> handlers = c => c.Add(new FormsIntegrityResponseHandler(formsIntegrityUtility));
 
@@ -50,7 +43,20 @@ namespace Restbucks.Quoting.Service
                 .AddFormatters(RestbucksMediaTypeFormatter.Instance)
                 .AddResponseHandlers(handlers, (endpoint, operation) => operation.DeclaringContract.ContractType.Equals(typeof (OrderForm)));
 
-            new ResourceManager(configuration, container, RouteTable.Routes).RegisterResourcesFor(Assembly.GetExecutingAssembly());
+            var uriFactory = new UriFactory();
+            var resources = new ResourceCollection(Assembly.GetExecutingAssembly());
+            resources.ForEach(r =>
+                                  {
+                                      container.Register(Component.For(r.Type).LifeStyle.Transient);
+                                      uriFactory.Register(r.Type);
+                                      RouteTable.Routes.MapServiceRoute(r.Type, r.UriTemplate.RoutePrefix, configuration);
+                                      Log.DebugFormat("Registered resource. Type: [{0}]. Prefix: [{1}]. UriTemplate: [{2}].", r.Type.Name, r.UriTemplate.RoutePrefix, r.UriTemplate.UriTemplateValue);
+                                  });
+
+            container.Register(Component.For(typeof (IQuotationEngine)).ImplementedBy(typeof (QuotationEngine)).LifeStyle.Singleton);
+            container.Register(Component.For(typeof (IDateTimeProvider)).ImplementedBy(typeof (DateTimeProvider)).LifeStyle.Singleton);
+            container.Register(Component.For(typeof (IGuidProvider)).ImplementedBy(typeof (GuidProvider)).LifeStyle.Singleton);
+            container.Register(Component.For(typeof (UriFactory)).Instance(uriFactory).LifeStyle.Singleton);
         }
 
         protected void Application_End(object sender, EventArgs e)

@@ -10,11 +10,23 @@ namespace Tests.Restbucks.RestToolkit.Hypermedia
     public class UriFactoryTests
     {
         [Test]
-        public void UriFactoryExample()
+        public void ShouldAllowRegistrationByPassingGenericParameterToRegisterMethod()
         {
             var uriFactory = new UriFactory();
             uriFactory.Register<Quote>();
             uriFactory.Register<OrderForm>();
+
+            Assert.AreEqual(new Uri("http://restbucks.com/quote/1234"), uriFactory.CreateAbsoluteUri<Quote>(new Uri("http://restbucks.com"), 1234));
+            Assert.AreEqual(new Uri("order-form/1234", UriKind.Relative), uriFactory.CreateRelativeUri<OrderForm>(1234));
+            Assert.AreEqual(new Uri("http://restbucks.com/"), uriFactory.CreateBaseUri<Quote>(new Uri("http://restbucks.com/quote/1234")));
+        }
+
+        [Test]
+        public void ShouldAllowRegistrationByPassingTypeToRegisterMethod()
+        {
+            var uriFactory = new UriFactory();
+            uriFactory.Register(typeof(Quote));
+            uriFactory.Register(typeof(OrderForm));
 
             Assert.AreEqual(new Uri("http://restbucks.com/quote/1234"), uriFactory.CreateAbsoluteUri<Quote>(new Uri("http://restbucks.com"), 1234));
             Assert.AreEqual(new Uri("order-form/1234", UriKind.Relative), uriFactory.CreateRelativeUri<OrderForm>(1234));

@@ -15,14 +15,19 @@ namespace Restbucks.RestToolkit.Hypermedia
 
         public void Register<T>() where T : class
         {
-            var attributes = typeof(T).GetCustomAttributes(typeof(UriTemplateAttribute), false);
+            Register(typeof(T));
+        }
+
+        public void Register(Type type)
+        {
+            var attributes = type.GetCustomAttributes(typeof(UriTemplateAttribute), false);
             if (attributes.Length == 0)
             {
                 throw new UriTemplateMissingException();
             }
-            var worker =  ((UriTemplateAttribute)attributes[0]).UriFactoryWorker;
+            var worker = ((UriTemplateAttribute)attributes[0]).UriFactoryWorker;
 
-            workers.Add(typeof(T), worker);
+            workers.Add(type, worker);
         }
 
         public string GetRoutePrefix<T>() where T :class

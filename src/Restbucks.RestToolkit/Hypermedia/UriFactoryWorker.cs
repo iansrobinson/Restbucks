@@ -3,7 +3,7 @@ using Restbucks.RestToolkit.Utils;
 
 namespace Restbucks.RestToolkit.Hypermedia
 {
-    public class UriFactoryWorker
+    public class UriFactoryWorker : IUriTemplate
     {
         private readonly string routePrefix;
         private readonly UriTemplate uriTemplate;

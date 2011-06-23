@@ -85,6 +85,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Hypermedia\IUriTemplate.cs" />
     <Compile Include="Hypermedia\UriFactory.cs" />
     <Compile Include="Hypermedia\UriFactoryWorker.cs" />
     <Compile Include="Hypermedia\UriTemplateAttribute.cs" />
