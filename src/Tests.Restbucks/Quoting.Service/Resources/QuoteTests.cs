@@ -62,6 +62,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
             try
             {
                 quote.Get(Guid.NewGuid().ToString("N"), new HttpRequestMessage());
+                Assert.Fail();
             }
             catch (HttpResponseException ex)
             {
