@@ -130,9 +130,6 @@
     <Compile Include="Quoting.Service\Resources\Util\DummyQuotationEngine.cs" />
     <Compile Include="Quoting.Service\Resources\Util\EmptyQuotationEngine.cs" />
     <Compile Include="Quoting.Service\Resources\Util\Matching.cs" />
-    <Compile Include="Quoting.Service\Resources\Util\OrderFormBuilder.cs" />
-    <Compile Include="Quoting.Service\Resources\Util\QuoteBuilder.cs" />
-    <Compile Include="Quoting.Service\Resources\Util\QuotesBuilder.cs" />
     <Compile Include="Quoting.Service\Resources\Util\Result.cs" />
     <Compile Include="Quoting\Implementation\QuotationEngineTests.cs" />
     <Compile Include="Quoting\Implementation\Util\DummyDateTimeProvider.cs" />

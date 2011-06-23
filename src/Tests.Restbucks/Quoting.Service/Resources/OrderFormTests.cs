@@ -37,7 +37,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
 
             var request = new HttpRequestMessage {RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri<OrderForm>(BaseAddress, id)};
 
-            var orderForm = new OrderFormBuilder().WithQuotationEngine(mockQuoteEngine).Build();
+            var orderForm = new OrderForm(DefaultUriFactory.Instance, mockQuoteEngine);
             var response = orderForm.Get(id.ToString("N"), request);
 
             var entityBody = response.Content.ReadAsOrDefault();
@@ -54,7 +54,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         {
             try
             {
-                var orderForm = new OrderFormBuilder().WithQuotationEngine(EmptyQuotationEngine.Instance).Build();
+                var orderForm = new OrderForm(DefaultUriFactory.Instance, EmptyQuotationEngine.Instance);
                 orderForm.Get(Guid.NewGuid().ToString("N"), new HttpRequestMessage());
             }
             catch (HttpResponseException ex)
@@ -145,16 +145,16 @@ namespace Tests.Restbucks.Quoting.Service.Resources
 
         private static HttpResponseMessage ExecuteRequestReturnResponse()
         {
-            var orderForm = new OrderFormBuilder().WithQuotationEngine(DummyQuotationEngine.Instance).Build();
-
+            var orderForm = new OrderForm(DefaultUriFactory.Instance, DummyQuotationEngine.Instance);
+           
             var request = new HttpRequestMessage {RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri<OrderForm>(BaseAddress, DummyQuotationEngine.QuoteId)};
             return orderForm.Get(DummyQuotationEngine.QuoteId, request);
         }
 
         private static Shop ExecuteRequestReturnEntityBody()
         {
-            var orderForm = new OrderFormBuilder().WithQuotationEngine(DummyQuotationEngine.Instance).Build();
-
+            var orderForm = new OrderForm(DefaultUriFactory.Instance, DummyQuotationEngine.Instance);
+           
             var request = new HttpRequestMessage {RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri<OrderForm>(BaseAddress, DummyQuotationEngine.QuoteId)};
             var response = orderForm.Get(DummyQuotationEngine.QuoteId, request);
 

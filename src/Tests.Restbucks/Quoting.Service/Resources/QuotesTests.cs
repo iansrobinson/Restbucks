@@ -42,7 +42,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
                 .Constraints(Is.Matching<QuotationRequest>(qr => Matching.QuoteRequestItemsMatchItems(qr.Items, shop.Items)))
                 .Return(quote);
 
-            var quotes = new QuotesBuilder().WithQuotationEngine(mockQuoteEngine).Build();
+            var quotes = new Quotes(DefaultUriFactory.Instance, mockQuoteEngine);
             var response = quotes.Post(shop, new HttpRequestMessage<Shop>{ RequestUri = new Uri("http://localhost:8080/quotes") });
 
             var entityBody = response.Content.ReadAsOrDefault();
@@ -104,7 +104,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         {
             try
             {
-                var quotes = new QuotesBuilder().WithQuotationEngine(DummyQuotationEngine.Instance).Build();
+                var quotes = new Quotes(DefaultUriFactory.Instance, DummyQuotationEngine.Instance);
                 quotes.Post(null, new HttpRequestMessage<Shop> { RequestUri = new Uri("http://localhost:8080/quotes") });
             }
             catch (HttpResponseException ex)
@@ -120,15 +120,15 @@ namespace Tests.Restbucks.Quoting.Service.Resources
 
         private static HttpResponseMessage ExecuteRequestReturnResponse()
         {
-            var quotes = new QuotesBuilder().WithQuotationEngine(DummyQuotationEngine.Instance).Build();
-
+            var quotes = new Quotes(DefaultUriFactory.Instance, DummyQuotationEngine.Instance);
+            
             var request = new HttpRequestMessage<Shop> {RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri<Quotes>(BaseAddress)};
             return quotes.Post(new ShopBuilder(new Uri("http://localhost")).Build(), request);
         }
 
         private static Shop ExecuteRequestReturnEntityBody()
         {
-            var quotes = new QuotesBuilder().WithQuotationEngine(DummyQuotationEngine.Instance).Build();
+            var quotes = new Quotes(DefaultUriFactory.Instance, DummyQuotationEngine.Instance);
 
             var request = new HttpRequestMessage<Shop> {RequestUri = DefaultUriFactory.Instance.CreateAbsoluteUri<Quotes>(BaseAddress)};
             var response = quotes.Post(new ShopBuilder(new Uri("http://localhost")).Build(), request);
