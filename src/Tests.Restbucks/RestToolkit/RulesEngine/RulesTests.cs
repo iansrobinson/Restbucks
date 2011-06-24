@@ -1,17 +1,13 @@
-﻿using System.Net.Http;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Restbucks.RestToolkit.RulesEngine;
 using Rhino.Mocks;
+using Tests.Restbucks.RestToolkit.RulesEngine.Util;
 
 namespace Tests.Restbucks.RestToolkit.RulesEngine
 {
     [TestFixture]
     public class RulesTests
     {
-        private static readonly HttpResponseMessage Response = new HttpResponseMessage();
-        private static readonly ApplicationStateVariables StateVariables = new ApplicationStateVariables();
-        private static readonly IClientCapabilities DummyClientCapabilities = MockRepository.GenerateStub<IClientCapabilities>();
-
         [Test]
         public void ShouldCallEachRuleInOrderItWasAddedToRules()
         {
@@ -23,14 +19,14 @@ namespace Tests.Restbucks.RestToolkit.RulesEngine
 
             using (mocks.Ordered())
             {
-                Expect.Call(mockRule1.Evaluate(Response, StateVariables, DummyClientCapabilities)).Return(Result.Unsuccessful);
-                Expect.Call(mockRule2.Evaluate(Response, StateVariables, DummyClientCapabilities)).Return(Result.Unsuccessful);
-                Expect.Call(mockRule3.Evaluate(Response, StateVariables, DummyClientCapabilities)).Return(new Result(true, MockRepository.GenerateStub<IState>()));
+                Expect.Call(mockRule1.Evaluate(Dummy.PreviousResponse, Dummy.StateVariables, Dummy.ClientCapabilities)).Return(Result.Unsuccessful);
+                Expect.Call(mockRule2.Evaluate(Dummy.PreviousResponse, Dummy.StateVariables, Dummy.ClientCapabilities)).Return(Result.Unsuccessful);
+                Expect.Call(mockRule3.Evaluate(Dummy.PreviousResponse, Dummy.StateVariables, Dummy.ClientCapabilities)).Return(new Result(true, MockRepository.GenerateStub<IState>()));
             }
             mocks.ReplayAll();
 
             var rules = new Rules(mockRule1, mockRule2, mockRule3);
-            rules.Evaluate(Response, StateVariables, DummyClientCapabilities);
+            rules.Evaluate(Dummy.PreviousResponse, Dummy.StateVariables, Dummy.ClientCapabilities);
 
             mocks.VerifyAll();
         }
@@ -42,15 +38,15 @@ namespace Tests.Restbucks.RestToolkit.RulesEngine
             var mockRule2 = MockRepository.GenerateMock<IRule>();
             var mockRule3 = MockRepository.GenerateMock<IRule>();
 
-            mockRule1.Expect(r => r.Evaluate(Response, StateVariables, DummyClientCapabilities)).Return(Result.Unsuccessful);
-            mockRule2.Expect(r => r.Evaluate(Response, StateVariables, DummyClientCapabilities)).Return(new Result(true, MockRepository.GenerateStub<IState>()));
+            mockRule1.Expect(r => r.Evaluate(Dummy.PreviousResponse, Dummy.StateVariables, Dummy.ClientCapabilities)).Return(Result.Unsuccessful);
+            mockRule2.Expect(r => r.Evaluate(Dummy.PreviousResponse, Dummy.StateVariables, Dummy.ClientCapabilities)).Return(new Result(true, MockRepository.GenerateStub<IState>()));
 
             var rules = new Rules(mockRule1, mockRule2, mockRule3);
-            rules.Evaluate(Response, StateVariables, DummyClientCapabilities);
+            rules.Evaluate(Dummy.PreviousResponse, Dummy.StateVariables, Dummy.ClientCapabilities);
 
             mockRule1.VerifyAllExpectations();
             mockRule2.VerifyAllExpectations();
-            mockRule3.AssertWasNotCalled(r => r.Evaluate(Response, StateVariables, DummyClientCapabilities));
+            mockRule3.AssertWasNotCalled(r => r.Evaluate(Dummy.PreviousResponse, Dummy.StateVariables, Dummy.ClientCapabilities));
         }
     }
 }

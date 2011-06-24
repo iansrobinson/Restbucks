@@ -147,6 +147,7 @@
     <Compile Include="RestToolkit\RulesEngine\RuleTests.cs" />
     <Compile Include="RestToolkit\RulesEngine\StateFactoryCollectionTests.cs" />
     <Compile Include="RestToolkit\RulesEngine\SubmitFormTests.cs" />
+    <Compile Include="RestToolkit\RulesEngine\Util\Dummy.cs" />
     <Compile Include="RestToolkit\RulesEngine\WhenTests.cs" />
     <Compile Include="RestToolkit\Utils\CheckStringTests.cs" />
     <Compile Include="RestToolkit\Utils\XmlTransformTests.cs" />

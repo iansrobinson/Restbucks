@@ -1,6 +1,5 @@
 ﻿using System.Net.Http;
 using NUnit.Framework;
-using Restbucks.Client;
 using Restbucks.Client.Hypermedia.Strategies;
 using Restbucks.RestToolkit.RulesEngine;
 using Tests.Restbucks.Client.Util;
@@ -11,7 +10,7 @@ namespace Tests.Restbucks.RestToolkit.RulesEngine
     public class HttpResponseMessageExtensionsTests
     {
         private static readonly HttpResponseMessage Response = DummyResponse.CreateResponse();
-        
+
         [Test]
         public void ShouldReturnTrueIfLinkExists()
         {
