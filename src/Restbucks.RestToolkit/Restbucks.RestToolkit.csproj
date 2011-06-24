@@ -110,11 +110,12 @@
     <Compile Include="RulesEngine\IApplicationStateVariablesBuilder.cs" />
     <Compile Include="RulesEngine\IClientCapabilities.cs" />
     <Compile Include="RulesEngine\ICondition.cs" />
+    <Compile Include="RulesEngine\ICreateNextState.cs" />
     <Compile Include="RulesEngine\IFormDataStrategy.cs" />
     <Compile Include="RulesEngine\IFormStrategy.cs" />
-    <Compile Include="RulesEngine\IGenerateNextRequest.cs" />
     <Compile Include="RulesEngine\IKey.cs" />
     <Compile Include="RulesEngine\ILinkStrategy.cs" />
+    <Compile Include="RulesEngine\IRequestAction.cs" />
     <Compile Include="RulesEngine\IRule.cs" />
     <Compile Include="RulesEngine\IState.cs" />
     <Compile Include="RulesEngine\LinkInfo.cs" />

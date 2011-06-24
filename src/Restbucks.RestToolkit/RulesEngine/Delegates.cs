@@ -6,11 +6,11 @@ namespace Restbucks.RestToolkit.RulesEngine
 
     public delegate IState CreateStateDelegate(HttpResponseMessage currentResponse, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities);
 
-    public delegate HttpResponseMessage IssueRequestDelegate(HttpResponseMessage previousResponse, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities);
+    public delegate HttpResponseMessage GenerateNextRequestDelegate(HttpResponseMessage previousResponse, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities);
 
     public delegate bool ResponseConditionDelegate(HttpResponseMessage response);
 
     public delegate bool StateConditionDelegate(HttpResponseMessage response, ApplicationStateVariables stateVariables);
 
-    public delegate IGenerateNextRequest CreateActionDelegate(Actions actions);
+    public delegate IRequestAction CreateRequestActionDelegate(Actions actions);
 }

@@ -13,19 +13,15 @@ namespace Tests.Restbucks.RestToolkit.RulesEngine
         private static readonly ApplicationStateVariables StateVariables = new ApplicationStateVariables();
         private static readonly HttpResponseMessage NewResponse = new HttpResponseMessage();
         private static readonly IState NewState = MockRepository.GenerateStub<IState>();
-        private static readonly ICondition DummyTrueCondition = CreateDummyCondition(true);
-        private static readonly ICondition DummyFalseCondition = CreateDummyCondition(false);
-        private static readonly IGenerateNextRequest DummyGenerateNextRequest = CreateDummyGenerateNextRequest();
-        private static readonly CreateStateDelegate DummyCreateStateDelegate = (r, v, c) => NewState;
         private static readonly IClientCapabilities DummyClientCapabilities = MockRepository.GenerateStub<IClientCapabilities>();
 
         [Test]
         public void ShouldExecuteActionIfConditionIsApplicable()
         {
-            var mockGenerateNextRequest = MockRepository.GenerateMock<IGenerateNextRequest>();
+            var mockGenerateNextRequest = MockRepository.GenerateMock<IRequestAction>();
             mockGenerateNextRequest.Expect(a => a.Execute(PreviousResponse, StateVariables, DummyClientCapabilities)).Return(NewResponse);
 
-            var rule = new Rule(DummyTrueCondition, mockGenerateNextRequest, DummyCreateStateDelegate);
+            var rule = new Rule(CreateDummyCondition(true), mockGenerateNextRequest, CreateDummyCreateNextState());
             rule.Evaluate(PreviousResponse, StateVariables, DummyClientCapabilities);
 
             mockGenerateNextRequest.VerifyAllExpectations();
@@ -34,7 +30,7 @@ namespace Tests.Restbucks.RestToolkit.RulesEngine
         [Test]
         public void ShouldCreateNewStateIfActionIsSuccessful()
         {
-            var rule = new Rule(DummyTrueCondition, DummyGenerateNextRequest, DummyCreateStateDelegate);
+            var rule = new Rule(CreateDummyCondition(true), CreateDummyGenerateNextRequest(), CreateDummyCreateNextState());
             var result = rule.Evaluate(PreviousResponse, StateVariables, DummyClientCapabilities);
 
             Assert.AreEqual(NewState, result.State);
@@ -43,7 +39,7 @@ namespace Tests.Restbucks.RestToolkit.RulesEngine
         [Test]
         public void ShouldReturnSuccessfulResultIfConditionIsApplicable()
         {
-            var rule = new Rule(DummyTrueCondition, DummyGenerateNextRequest, DummyCreateStateDelegate);
+            var rule = new Rule(CreateDummyCondition(true), CreateDummyGenerateNextRequest(), CreateDummyCreateNextState());
             var result = rule.Evaluate(PreviousResponse, StateVariables, DummyClientCapabilities);
 
             Assert.IsTrue(result.IsSuccessful);
@@ -52,10 +48,10 @@ namespace Tests.Restbucks.RestToolkit.RulesEngine
         [Test]
         public void ShouldNotExecuteActionIfConditionIsNotApplicable()
         {
-            var mockGenerateNextRequest = MockRepository.GenerateMock<IGenerateNextRequest>();
+            var mockGenerateNextRequest = MockRepository.GenerateMock<IRequestAction>();
             mockGenerateNextRequest.AssertWasNotCalled(a => a.Execute(PreviousResponse, StateVariables, DummyClientCapabilities));
 
-            var rule = new Rule(DummyFalseCondition, mockGenerateNextRequest, DummyCreateStateDelegate);
+            var rule = new Rule(CreateDummyCondition(false), mockGenerateNextRequest, CreateDummyCreateNextState());
             rule.Evaluate(PreviousResponse, StateVariables, DummyClientCapabilities);
 
             mockGenerateNextRequest.VerifyAllExpectations();
@@ -64,7 +60,7 @@ namespace Tests.Restbucks.RestToolkit.RulesEngine
         [Test]
         public void ShouldReturnUnsuccessfulResultIfConditionIsNotApplicable()
         {
-            var rule = new Rule(DummyFalseCondition, DummyGenerateNextRequest, DummyCreateStateDelegate);
+            var rule = new Rule(CreateDummyCondition(false), CreateDummyGenerateNextRequest(), CreateDummyCreateNextState());
             var result = rule.Evaluate(PreviousResponse, StateVariables, DummyClientCapabilities);
 
             Assert.IsFalse(result.IsSuccessful);
@@ -75,21 +71,21 @@ namespace Tests.Restbucks.RestToolkit.RulesEngine
         [ExpectedException(ExpectedException = typeof (ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: condition")]
         public void ThrowsExceptionIfConditionIsNull()
         {
-            new Rule(null, MockRepository.GenerateStub<IGenerateNextRequest>(), (r, v, c) => null);
+            new Rule(null, MockRepository.GenerateStub<IRequestAction>(), MockRepository.GenerateStub<ICreateNextState>());
         }
 
         [Test]
-        [ExpectedException(ExpectedException = typeof (ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: actionInvoker")]
+        [ExpectedException(ExpectedException = typeof (ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: requestAction")]
         public void ThrowsExceptionIfActionInvokerIsNull()
         {
-            new Rule(MockRepository.GenerateStub<ICondition>(), null, (r, v, c) => null);
+            new Rule(MockRepository.GenerateStub<ICondition>(), null, MockRepository.GenerateStub<ICreateNextState>());
         }
 
         [Test]
-        [ExpectedException(ExpectedException = typeof(ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: createState")]
+        [ExpectedException(ExpectedException = typeof(ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: createNextState")]
         public void ThrowsExceptionIfCreateStateDelegateIsNull()
         {
-            new Rule(MockRepository.GenerateStub<ICondition>(), MockRepository.GenerateStub<IGenerateNextRequest>(), null);
+            new Rule(MockRepository.GenerateStub<ICondition>(), MockRepository.GenerateStub<IRequestAction>(), null);
         }
 
         private static ICondition CreateDummyCondition(bool evaluatesTo)
@@ -99,11 +95,18 @@ namespace Tests.Restbucks.RestToolkit.RulesEngine
             return dummyCondition;
         }
 
-        private static IGenerateNextRequest CreateDummyGenerateNextRequest()
+        private static IRequestAction CreateDummyGenerateNextRequest()
         {
-            var dummyGenerateNextRequest = MockRepository.GenerateStub<IGenerateNextRequest>();
-            dummyGenerateNextRequest.Expect(a => a.Execute(PreviousResponse, StateVariables, DummyClientCapabilities)).Return(NewResponse);
+            var dummyGenerateNextRequest = MockRepository.GenerateStub<IRequestAction>();
+            dummyGenerateNextRequest.Expect(g => g.Execute(PreviousResponse, StateVariables, DummyClientCapabilities)).Return(NewResponse);
             return dummyGenerateNextRequest;
+        }
+
+        private static ICreateNextState CreateDummyCreateNextState()
+        {
+            var dummyCreateNextState = MockRepository.GenerateStub<ICreateNextState>();
+            dummyCreateNextState.Expect(c => c.Execute(NewResponse, StateVariables, DummyClientCapabilities)).Return(NewState);
+            return dummyCreateNextState;
         }
     }
 }

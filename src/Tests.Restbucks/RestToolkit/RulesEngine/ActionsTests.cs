@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using Microsoft.ApplicationServer.Http;
 using NUnit.Framework;
-using Restbucks.MediaType;
 using Restbucks.RestToolkit.RulesEngine;
 using Rhino.Mocks;
 
@@ -19,7 +16,7 @@ namespace Tests.Restbucks.RestToolkit.RulesEngine
         [Test]
         public void ShouldReturnSuppliedAction()
         {
-            var mockAction = MockRepository.GenerateMock<IGenerateNextRequest>();
+            var mockAction = MockRepository.GenerateMock<IRequestAction>();
             mockAction.Expect(a => a.Execute(Response, StateVariables, DummyClientCapabilities));
 
             var actions = new Actions(DummyClientCapabilities);
@@ -46,19 +43,6 @@ namespace Tests.Restbucks.RestToolkit.RulesEngine
         public void ThrowsExceptionIfClientCapabilitiesIsNull()
         {
             new Actions(null);
-        }
-
-        private class ClientCapabilities : IClientCapabilities
-        {
-            public HttpClient GetHttpClient()
-            {
-                return new HttpClient();
-            }
-
-            public MediaTypeFormatter GetMediaTypeFormatter(MediaTypeHeaderValue contentType)
-            {
-                return RestbucksMediaTypeFormatter.Instance;
-            }
         }
     }
 }

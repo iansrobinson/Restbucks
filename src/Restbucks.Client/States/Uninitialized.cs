@@ -17,7 +17,7 @@ namespace Restbucks.Client.States
         {
             var rules = new Rules(
                 When.IsTrue(response => true)
-                    .Invoke(actions => actions.Do(GetHomePage.Instance))
+                    .Execute(actions => actions.Do(GetHomePage.Instance))
                     .ReturnState((response, vars) => new Started(response, vars)));
 
             return rules.Evaluate(null, stateVariables, clientCapabilities);
@@ -28,9 +28,9 @@ namespace Restbucks.Client.States
             get { return false; }
         }
 
-        private class GetHomePage : IGenerateNextRequest
+        private class GetHomePage : IRequestAction
         {
-            public static readonly IGenerateNextRequest Instance = new GetHomePage();
+            public static readonly IRequestAction Instance = new GetHomePage();
 
             private GetHomePage()
             {

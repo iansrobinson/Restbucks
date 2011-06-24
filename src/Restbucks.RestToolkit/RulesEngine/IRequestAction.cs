@@ -2,7 +2,7 @@
 
 namespace Restbucks.RestToolkit.RulesEngine
 {
-    public interface IGenerateNextRequest
+    public interface IRequestAction
     {
         HttpResponseMessage Execute(HttpResponseMessage previousResponse, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities);
     }

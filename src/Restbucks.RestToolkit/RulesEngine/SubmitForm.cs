@@ -2,7 +2,7 @@
 
 namespace Restbucks.RestToolkit.RulesEngine
 {
-    public class SubmitForm : IGenerateNextRequest
+    public class SubmitForm : IRequestAction
     {
         private readonly IFormStrategy formStrategy;
 

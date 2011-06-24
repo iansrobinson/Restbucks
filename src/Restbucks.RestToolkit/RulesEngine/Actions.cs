@@ -13,38 +13,38 @@ namespace Restbucks.RestToolkit.RulesEngine
             this.clientCapabilities = clientCapabilities;
         }
 
-        public IGenerateNextRequest ClickLink(ILinkStrategy linkStrategy)
+        public IRequestAction ClickLink(ILinkStrategy linkStrategy)
         {
             return new ClickLink(linkStrategy);
         }
 
-        public IGenerateNextRequest SubmitForm(IFormStrategy formStrategy)
+        public IRequestAction SubmitForm(IFormStrategy formStrategy)
         {
             return new SubmitForm(formStrategy);
         }
 
-        public IGenerateNextRequest Do(IGenerateNextRequest generateNextRequest)
+        public IRequestAction Do(IRequestAction requestAction)
         {
-            return generateNextRequest;
+            return requestAction;
         }
 
-        public IGenerateNextRequest Do(IssueRequestDelegate issueRequestDelegate)
+        public IRequestAction Do(GenerateNextRequestDelegate generateNextRequestDelegate)
         {
-            return new GenerateNextRequest(issueRequestDelegate);
+            return new RequestAction(generateNextRequestDelegate);
         }
 
-        private class GenerateNextRequest : IGenerateNextRequest
+        private class RequestAction : IRequestAction
         {
-            private readonly IssueRequestDelegate issueRequestDelegate;
+            private readonly GenerateNextRequestDelegate generateNextRequestDelegate;
 
-            public GenerateNextRequest(IssueRequestDelegate issueRequestDelegate)
+            public RequestAction(GenerateNextRequestDelegate generateNextRequestDelegate)
             {
-                this.issueRequestDelegate = issueRequestDelegate;
+                this.generateNextRequestDelegate = generateNextRequestDelegate;
             }
 
             public HttpResponseMessage Execute(HttpResponseMessage previousResponse, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities)
             {
-                return issueRequestDelegate(previousResponse, stateVariables, clientCapabilities);
+                return generateNextRequestDelegate(previousResponse, stateVariables, clientCapabilities);
             }
         }
     }

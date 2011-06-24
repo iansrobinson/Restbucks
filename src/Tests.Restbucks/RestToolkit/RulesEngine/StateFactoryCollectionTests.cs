@@ -13,15 +13,13 @@ namespace Tests.Restbucks.RestToolkit.RulesEngine
         private static readonly ApplicationStateVariables StateVariables = new ApplicationStateVariables();
         private static readonly IClientCapabilities DummyClientCapabilities = MockRepository.GenerateStub<IClientCapabilities>();
         private static readonly IState DummyState = MockRepository.GenerateStub<IState>();
-        private static readonly ICondition DummyTrueCondition = CreateDummyCondition(true);
-        private static readonly ICondition DummyFalseCondition = CreateDummyCondition(false);
         private static readonly CreateStateDelegate DummyCreateStateDelegate = (r, v, c) => DummyState;
 
         [Test]
         public void ShouldInvokeCorrectDelegateBasedOnCondition()
         {
-            var factoryCollection = new StateFactoryCollection(new[] { new StateCreationRule(DummyTrueCondition, DummyCreateStateDelegate) });
-            var state = factoryCollection.Create(Response, StateVariables, DummyClientCapabilities);
+            var factoryCollection = new StateFactoryCollection(new[] { new StateCreationRule(CreateDummyCondition(true), DummyCreateStateDelegate) });
+            var state = factoryCollection.Execute(Response, StateVariables, DummyClientCapabilities);
 
             Assert.AreEqual(DummyState, state);
         }
@@ -32,8 +30,8 @@ namespace Tests.Restbucks.RestToolkit.RulesEngine
             var defaultState = MockRepository.GenerateStub<IState>();
             CreateStateDelegate createDefaultState = (r, v, c) => defaultState;
 
-            var factoryCollection = new StateFactoryCollection(new[] { new StateCreationRule(DummyFalseCondition, DummyCreateStateDelegate) }, createDefaultState);
-            var state = factoryCollection.Create(Response, StateVariables, DummyClientCapabilities);
+            var factoryCollection = new StateFactoryCollection(new[] { new StateCreationRule(CreateDummyCondition(false), DummyCreateStateDelegate) }, createDefaultState);
+            var state = factoryCollection.Execute(Response, StateVariables, DummyClientCapabilities);
 
             Assert.AreEqual(defaultState, state);
         }
@@ -44,8 +42,8 @@ namespace Tests.Restbucks.RestToolkit.RulesEngine
             var dummyCondition = MockRepository.GenerateStub<ICondition>();
             dummyCondition.Expect(c => c.IsApplicable(Response, StateVariables)).Return(false);
 
-            var factoryCollection = new StateFactoryCollection(new[] { new StateCreationRule(DummyFalseCondition, DummyCreateStateDelegate) });
-            Assert.IsInstanceOf(typeof (UnsuccessfulState), factoryCollection.Create(Response, StateVariables, DummyClientCapabilities));
+            var factoryCollection = new StateFactoryCollection(new[] { new StateCreationRule(CreateDummyCondition(false), DummyCreateStateDelegate) });
+            Assert.IsInstanceOf(typeof (UnsuccessfulState), factoryCollection.Execute(Response, StateVariables, DummyClientCapabilities));
         }
 
         private static ICondition CreateDummyCondition(bool evaluatesTo)

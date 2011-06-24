@@ -4,7 +4,7 @@ using System.Net.Http;
 
 namespace Restbucks.RestToolkit.RulesEngine
 {
-    public class StateFactoryCollection
+    public class StateFactoryCollection : ICreateNextState
     {
         private readonly IEnumerable<StateCreationRule> rules;
         private readonly CreateStateDelegate createDefaultState;
@@ -21,7 +21,7 @@ namespace Restbucks.RestToolkit.RulesEngine
             this.createDefaultState = createDefaultState;
         }
 
-        public IState Create(HttpResponseMessage response, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities)
+        public IState Execute(HttpResponseMessage response, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities)
         {
             foreach (var result in rules.Select(rule => rule.Evaluate(response, stateVariables, clientCapabilities)).Where(result => result.IsSuccessful))
             {

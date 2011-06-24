@@ -21,7 +21,7 @@ namespace Restbucks.Client.States
             var rules = new Rules(
                 When
                     .IsTrue(response => response.ContainsForm(Forms.RequestForQuote))
-                    .Invoke(actions => actions.SubmitForm(Forms.RequestForQuote))
+                    .Execute(actions => actions.SubmitForm(Forms.RequestForQuote))
                     .Return(
                         new[]
                             {
@@ -32,7 +32,7 @@ namespace Restbucks.Client.States
                     ),
                 When
                     .IsTrue(response => response.ContainsLink(Links.Rfq))
-                    .Invoke(actions => actions.ClickLink(Links.Rfq))
+                    .Execute(actions => actions.ClickLink(Links.Rfq))
                     .Return(
                         new[]
                             {

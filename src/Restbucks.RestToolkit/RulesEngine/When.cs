@@ -7,12 +7,7 @@ namespace Restbucks.RestToolkit.RulesEngine
     public class When : IExecuteAction, IReturnState
     {
         private readonly ICondition condition;
-        private IGenerateNextRequest generateNextRequest;
-
-        public static IExecuteAction IsTrue<T>() where T : ICondition, new()
-        {
-            return new When(new T());
-        }
+        private IRequestAction requestAction;
 
         public static IExecuteAction IsTrue(ResponseConditionDelegate responseConditionDelegate)
         {
@@ -24,15 +19,15 @@ namespace Restbucks.RestToolkit.RulesEngine
             this.condition = condition;
         }
 
-        public IReturnState Invoke(CreateActionDelegate createActionDelegate)
+        public IReturnState Execute(CreateRequestActionDelegate createRequestActionDelegate)
         {
-            generateNextRequest = new ActionInvoker(createActionDelegate);
+            requestAction = new RequestAction(createRequestActionDelegate);
             return this;
         }
 
         public IRule ReturnState(CreateNextStateDelegate createNextStateDelegate)
         {
-            return new Rule(condition, generateNextRequest, (r, v, c) => createNextStateDelegate(r, v));
+            return new Rule(condition, requestAction, new CreateNextState(createNextStateDelegate));
         }
 
         public IRule Return(IEnumerable<StateCreationRule> stateCreationRules, CreateNextStateDelegate defaultCreateNextStateDelegate = null)
@@ -41,11 +36,11 @@ namespace Restbucks.RestToolkit.RulesEngine
 
             if (defaultCreateNextStateDelegate == null)
             {
-                return new Rule(condition, generateNextRequest, new StateFactoryCollection(stateCreationRules).Create);
+                return new Rule(condition, requestAction, new StateFactoryCollection(stateCreationRules));
             }
 
             var stateFactoryCollection = new StateFactoryCollection(stateCreationRules, (r, v, c) => defaultCreateNextStateDelegate(r, v));
-            return new Rule(condition, generateNextRequest, stateFactoryCollection.Create);
+            return new Rule(condition, requestAction, stateFactoryCollection);
         }
 
         private class ResponseBasedCondition : ICondition
@@ -63,26 +58,41 @@ namespace Restbucks.RestToolkit.RulesEngine
             }
         }
 
-        private class ActionInvoker : IGenerateNextRequest
+        private class RequestAction : IRequestAction
         {
-            private readonly CreateActionDelegate createActionDelegate;
+            private readonly CreateRequestActionDelegate createRequestActionDelegate;
 
-            public ActionInvoker(CreateActionDelegate createActionDelegate)
+            public RequestAction(CreateRequestActionDelegate createRequestActionDelegate)
             {
-                this.createActionDelegate = createActionDelegate;
+                this.createRequestActionDelegate = createRequestActionDelegate;
             }
 
             public HttpResponseMessage Execute(HttpResponseMessage previousResponse, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities)
             {
-                var action = createActionDelegate(new Actions(clientCapabilities));
-                return action.Execute(previousResponse, stateVariables, clientCapabilities);
+                var generateNextRequest = createRequestActionDelegate(new Actions(clientCapabilities));
+                return generateNextRequest.Execute(previousResponse, stateVariables, clientCapabilities);
+            }
+        }
+
+        private class CreateNextState : ICreateNextState
+        {
+            private readonly CreateNextStateDelegate createNextStateDelegate;
+
+            public CreateNextState(CreateNextStateDelegate createNextStateDelegate)
+            {
+                this.createNextStateDelegate = createNextStateDelegate;
+            }
+
+            public IState Execute(HttpResponseMessage currentResponse, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities)
+            {
+                return createNextStateDelegate(currentResponse, stateVariables);
             }
         }
     }
 
     public interface IExecuteAction
     {
-        IReturnState Invoke(CreateActionDelegate createActionDelegate);
+        IReturnState Execute(CreateRequestActionDelegate createRequestActionDelegate);
     }
 
     public interface IReturnState
