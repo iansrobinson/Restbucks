@@ -2,7 +2,7 @@
 
 namespace Restbucks.RestToolkit.RulesEngine
 {
-    public class ClickLink : IAction
+    public class ClickLink : IGenerateNextRequest
     {
         private readonly ILinkStrategy linkStrategy;
 

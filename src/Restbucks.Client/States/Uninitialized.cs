@@ -28,9 +28,9 @@ namespace Restbucks.Client.States
             get { return false; }
         }
 
-        private class GetHomePage : IAction
+        private class GetHomePage : IGenerateNextRequest
         {
-            public static readonly IAction Instance = new GetHomePage();
+            public static readonly IGenerateNextRequest Instance = new GetHomePage();
 
             private GetHomePage()
             {

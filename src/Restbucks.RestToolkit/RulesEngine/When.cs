@@ -7,7 +7,7 @@ namespace Restbucks.RestToolkit.RulesEngine
     public class When : IExecuteAction, IReturnState
     {
         private readonly ICondition condition;
-        private IActionInvoker actionInvoker;
+        private IGenerateNextRequest generateNextRequest;
 
         public static IExecuteAction IsTrue<T>() where T : ICondition, new()
         {
@@ -26,13 +26,13 @@ namespace Restbucks.RestToolkit.RulesEngine
 
         public IReturnState Invoke(CreateActionDelegate createActionDelegate)
         {
-            actionInvoker = new ActionInvoker(createActionDelegate);
+            generateNextRequest = new ActionInvoker(createActionDelegate);
             return this;
         }
 
         public IRule ReturnState(CreateNextStateDelegate createNextStateDelegate)
         {
-            return new Rule(condition, actionInvoker, (r, v, c) => createNextStateDelegate(r, v));
+            return new Rule(condition, generateNextRequest, (r, v, c) => createNextStateDelegate(r, v));
         }
 
         public IRule Return(IEnumerable<StateCreationRule> stateCreationRules, CreateNextStateDelegate defaultCreateNextStateDelegate = null)
@@ -41,11 +41,11 @@ namespace Restbucks.RestToolkit.RulesEngine
 
             if (defaultCreateNextStateDelegate == null)
             {
-                return new Rule(condition, actionInvoker, new StateFactoryCollection(stateCreationRules).Create);
+                return new Rule(condition, generateNextRequest, new StateFactoryCollection(stateCreationRules).Create);
             }
 
             var stateFactoryCollection = new StateFactoryCollection(stateCreationRules, (r, v, c) => defaultCreateNextStateDelegate(r, v));
-            return new Rule(condition, actionInvoker, stateFactoryCollection.Create);
+            return new Rule(condition, generateNextRequest, stateFactoryCollection.Create);
         }
 
         private class ResponseBasedCondition : ICondition
@@ -63,7 +63,7 @@ namespace Restbucks.RestToolkit.RulesEngine
             }
         }
 
-        private class ActionInvoker : IActionInvoker
+        private class ActionInvoker : IGenerateNextRequest
         {
             private readonly CreateActionDelegate createActionDelegate;
 
@@ -72,7 +72,7 @@ namespace Restbucks.RestToolkit.RulesEngine
                 this.createActionDelegate = createActionDelegate;
             }
 
-            public HttpResponseMessage Invoke(HttpResponseMessage previousResponse, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities)
+            public HttpResponseMessage Execute(HttpResponseMessage previousResponse, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities)
             {
                 var action = createActionDelegate(new Actions(clientCapabilities));
                 return action.Execute(previousResponse, stateVariables, clientCapabilities);

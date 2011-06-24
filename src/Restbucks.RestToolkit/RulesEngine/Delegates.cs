@@ -12,5 +12,5 @@ namespace Restbucks.RestToolkit.RulesEngine
 
     public delegate bool StateConditionDelegate(HttpResponseMessage response, ApplicationStateVariables stateVariables);
 
-    public delegate IAction CreateActionDelegate(Actions actions);
+    public delegate IGenerateNextRequest CreateActionDelegate(Actions actions);
 }

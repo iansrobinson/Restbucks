@@ -6,17 +6,17 @@ namespace Restbucks.RestToolkit.RulesEngine
     public class Rule : IRule
     {
         private readonly ICondition condition;
-        private readonly IActionInvoker actionInvoker;
+        private readonly IGenerateNextRequest generateNextRequest;
         private readonly CreateStateDelegate createState;
 
-        public Rule(ICondition condition, IActionInvoker actionInvoker, CreateStateDelegate createState)
+        public Rule(ICondition condition, IGenerateNextRequest generateNextRequest, CreateStateDelegate createState)
         {
             Check.IsNotNull(condition, "condition");
-            Check.IsNotNull(actionInvoker, "actionInvoker");
+            Check.IsNotNull(generateNextRequest, "actionInvoker");
             Check.IsNotNull(createState, "createState");
             
             this.condition = condition;
-            this.actionInvoker = actionInvoker;
+            this.generateNextRequest = generateNextRequest;
             this.createState = createState;
         }
 
@@ -24,7 +24,7 @@ namespace Restbucks.RestToolkit.RulesEngine
         {
             if (condition.IsApplicable(previousResponse, stateVariables))
             {
-                var newResponse = actionInvoker.Invoke(previousResponse, stateVariables, clientCapabilities);
+                var newResponse = generateNextRequest.Execute(previousResponse, stateVariables, clientCapabilities);
                 return new Result(true, createState(newResponse, stateVariables, clientCapabilities));
             }
 

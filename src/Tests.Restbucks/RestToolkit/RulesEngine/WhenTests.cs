@@ -21,7 +21,7 @@ namespace Tests.Restbucks.RestToolkit.RulesEngine
         [Test]
         public void ShouldReturnRuleWhoseActionExecutesIfConditionIsTrue()
         {
-            var mockAction = MockRepository.GenerateMock<IAction>();
+            var mockAction = MockRepository.GenerateMock<IGenerateNextRequest>();
             mockAction.Expect(a => a.Execute(PreviousResponse, StateVariables, DummyClientCapabilities)).Return(new HttpResponseMessage());
 
             var rule = When.IsTrue(r => true)
@@ -46,7 +46,7 @@ namespace Tests.Restbucks.RestToolkit.RulesEngine
         [Test]
         public void ShouldReturnRuleThatCreatesStateBasedOnResponseStatusCode()
         {
-            var dummyAction = MockRepository.GenerateStub<IAction>();
+            var dummyAction = MockRepository.GenerateStub<IGenerateNextRequest>();
             dummyAction.Expect(a => a.Execute(PreviousResponse, StateVariables, DummyClientCapabilities)).Return(new HttpResponseMessage { StatusCode = HttpStatusCode.Accepted });
 
             var dummyState = MockRepository.GenerateStub<IState>();
@@ -69,7 +69,7 @@ namespace Tests.Restbucks.RestToolkit.RulesEngine
         [Test]
         public void ShouldReturnRuleThatCreatesDefaultStateIfResponseStatusCodeDoesNotMatch()
         {
-            var dummyAction = MockRepository.GenerateStub<IAction>();
+            var dummyAction = MockRepository.GenerateStub<IGenerateNextRequest>();
             dummyAction.Expect(a => a.Execute(PreviousResponse, StateVariables, DummyClientCapabilities)).Return(new HttpResponseMessage { StatusCode = HttpStatusCode.Unauthorized });
 
             var dummyState = MockRepository.GenerateStub<IState>();
@@ -92,7 +92,7 @@ namespace Tests.Restbucks.RestToolkit.RulesEngine
         [Test]
         public void ShouldReturnRuleThatCreatesUnsuccessfulStateIfResponseStatusCodeDoesNotMatchAndNoDefaultSupplied()
         {
-            var dummyAction = MockRepository.GenerateStub<IAction>();
+            var dummyAction = MockRepository.GenerateStub<IGenerateNextRequest>();
             dummyAction.Expect(a => a.Execute(PreviousResponse, StateVariables, DummyClientCapabilities)).Return(new HttpResponseMessage { StatusCode = HttpStatusCode.Unauthorized });
 
             var rule = When.IsTrue(r => true)
@@ -113,7 +113,7 @@ namespace Tests.Restbucks.RestToolkit.RulesEngine
         [ExpectedException(ExpectedException = typeof (ArgumentNullException), ExpectedMessage = "Value cannot be null.\r\nParameter name: stateCreationRules")]
         public void ShouldThrowExceptionIfStateCreationRulesAreNull()
         {
-            var dummyAction = MockRepository.GenerateStub<IAction>(); 
+            var dummyAction = MockRepository.GenerateStub<IGenerateNextRequest>(); 
             When.IsTrue(r => true)
                 .Invoke(actions => actions.Do(dummyAction))
                 .Return(null);
@@ -122,7 +122,7 @@ namespace Tests.Restbucks.RestToolkit.RulesEngine
         [Test]
         public void ShouldReturnRuleThatCreatesUnsuccessfulStateIfNoStatusCodeMatchersSupplied()
         {
-            var dummyAction = MockRepository.GenerateStub<IAction>();
+            var dummyAction = MockRepository.GenerateStub<IGenerateNextRequest>();
             var rule = When.IsTrue(r => true)
                 .Invoke(actions => actions.Do(dummyAction))
                 .Return(new StateCreationRule[] {});
@@ -136,7 +136,7 @@ namespace Tests.Restbucks.RestToolkit.RulesEngine
         [Test]
         public void ShouldReturnRuleThatCreatesStateIrrespectiveOfStatusCode()
         {
-            var dummyAction = MockRepository.GenerateStub<IAction>();
+            var dummyAction = MockRepository.GenerateStub<IGenerateNextRequest>();
             dummyAction.Expect(a => a.Execute(PreviousResponse, StateVariables, DummyClientCapabilities)).Return(new HttpResponseMessage { StatusCode = HttpStatusCode.Accepted });
 
             var dummyState = MockRepository.GenerateStub<IState>();
@@ -156,7 +156,7 @@ namespace Tests.Restbucks.RestToolkit.RulesEngine
         {
             var previousResponse = DummyResponse.CreateResponse();
 
-            var dummyAction = MockRepository.GenerateStub<IAction>();
+            var dummyAction = MockRepository.GenerateStub<IGenerateNextRequest>();
             dummyAction.Expect(a => a.Execute(PreviousResponse, StateVariables, DummyClientCapabilities)).Return(new HttpResponseMessage { StatusCode = HttpStatusCode.Accepted });
 
             var dummyState = MockRepository.GenerateStub<IState>();

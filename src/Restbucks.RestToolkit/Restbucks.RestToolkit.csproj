@@ -107,13 +107,12 @@
     <Compile Include="RulesEngine\FormInfo.cs" />
     <Compile Include="RulesEngine\HttpResponseMessageExtensions.cs" />
     <Compile Include="RulesEngine\HttpStatusCodeExtensionMethods.cs" />
-    <Compile Include="RulesEngine\IAction.cs" />
-    <Compile Include="RulesEngine\IActionInvoker.cs" />
     <Compile Include="RulesEngine\IApplicationStateVariablesBuilder.cs" />
     <Compile Include="RulesEngine\IClientCapabilities.cs" />
     <Compile Include="RulesEngine\ICondition.cs" />
     <Compile Include="RulesEngine\IFormDataStrategy.cs" />
     <Compile Include="RulesEngine\IFormStrategy.cs" />
+    <Compile Include="RulesEngine\IGenerateNextRequest.cs" />
     <Compile Include="RulesEngine\IKey.cs" />
     <Compile Include="RulesEngine\ILinkStrategy.cs" />
     <Compile Include="RulesEngine\IRule.cs" />

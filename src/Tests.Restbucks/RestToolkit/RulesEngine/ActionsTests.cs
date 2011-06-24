@@ -19,7 +19,7 @@ namespace Tests.Restbucks.RestToolkit.RulesEngine
         [Test]
         public void ShouldReturnSuppliedAction()
         {
-            var mockAction = MockRepository.GenerateMock<IAction>();
+            var mockAction = MockRepository.GenerateMock<IGenerateNextRequest>();
             mockAction.Expect(a => a.Execute(Response, StateVariables, DummyClientCapabilities));
 
             var actions = new Actions(DummyClientCapabilities);

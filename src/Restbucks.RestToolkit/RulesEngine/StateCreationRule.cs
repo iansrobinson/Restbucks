@@ -15,7 +15,9 @@ namespace Restbucks.RestToolkit.RulesEngine
 
         public Result Evaluate(HttpResponseMessage newResponse, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities)
         {
-            return condition.IsApplicable(newResponse, stateVariables) ? new Result(true, createState(newResponse, stateVariables, clientCapabilities)) : Result.Unsuccessful;
+            return condition.IsApplicable(newResponse, stateVariables) 
+                ? new Result(true, createState(newResponse, stateVariables, clientCapabilities)) 
+                : Result.Unsuccessful;
         }
     }
 }
