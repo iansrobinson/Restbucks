@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Net;
+using System.Net.Http;
 using System.Reflection;
 using System.Web;
 using System.Web.Routing;
@@ -10,6 +12,7 @@ using log4net.Config;
 using Microsoft.ApplicationServer.Http.Description;
 using Microsoft.ApplicationServer.Http.Dispatcher;
 using Restbucks.MediaType;
+using Restbucks.MediaType.Assemblers;
 using Restbucks.Quoting.Implementation;
 using Restbucks.Quoting.Service.Configuration;
 using Restbucks.RestToolkit.Configuration;
@@ -64,6 +67,19 @@ namespace Restbucks.Quoting.Service
         {
             Log.Debug("Shutting down Restbucks.Quoting.Service...");
             container.Dispose();
+        }
+
+        private class MyErrorHandler : HttpErrorHandler
+        {
+            protected override bool OnHandleError(Exception error)
+            {
+                return error.GetType().Equals(typeof(InvalidFormatException));
+            }
+
+            protected override HttpResponseMessage OnProvideResponse(Exception error)
+            {
+                return new HttpResponseMessage {Content = new StringContent("an error occurred"), StatusCode = HttpStatusCode.BadRequest};
+            }
         }
     }
 }

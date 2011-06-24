@@ -56,6 +56,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
             {
                 var orderForm = new OrderForm(DefaultUriFactory.Instance, EmptyQuotationEngine.Instance);
                 orderForm.Get(Guid.NewGuid().ToString("N"), new HttpRequestMessage());
+                Assert.Fail();
             }
             catch (HttpResponseException ex)
             {

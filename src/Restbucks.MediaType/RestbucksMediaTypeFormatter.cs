@@ -25,7 +25,7 @@ namespace Restbucks.MediaType
             SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/xml"));
             SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/xml"));
         }
-
+   
         public override object OnReadFromStream(Type type, Stream stream, HttpContentHeaders contentHeaders)
         {
             Log.Debug("Reading from stream...");

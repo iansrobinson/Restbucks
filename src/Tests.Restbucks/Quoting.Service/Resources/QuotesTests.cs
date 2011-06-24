@@ -106,6 +106,8 @@ namespace Tests.Restbucks.Quoting.Service.Resources
             {
                 var quotes = new Quotes(DefaultUriFactory.Instance, DummyQuotationEngine.Instance);
                 quotes.Post(null, new HttpRequestMessage<Shop> { RequestUri = new Uri("http://localhost:8080/quotes") });
+                Assert.Fail();
+
             }
             catch (HttpResponseException ex)
             {
