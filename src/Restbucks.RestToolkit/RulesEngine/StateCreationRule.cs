@@ -5,18 +5,18 @@ namespace Restbucks.RestToolkit.RulesEngine
     public class StateCreationRule : IRule
     {
         private readonly ICondition condition;
-        private readonly CreateStateDelegate createState;
+        private readonly ICreateNextState createNextState;
 
-        public StateCreationRule(ICondition condition, CreateStateDelegate createState)
+        public StateCreationRule(ICondition condition, ICreateNextState createNextState)
         {
             this.condition = condition;
-            this.createState = createState;
+            this.createNextState = createNextState;
         }
 
         public Result Evaluate(HttpResponseMessage newResponse, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities)
         {
             return condition.IsApplicable(newResponse, stateVariables) 
-                ? new Result(true, createState(newResponse, stateVariables, clientCapabilities)) 
+                ? new Result(true, createNextState.Execute(newResponse, stateVariables, clientCapabilities)) 
                 : Result.Unsuccessful;
         }
     }

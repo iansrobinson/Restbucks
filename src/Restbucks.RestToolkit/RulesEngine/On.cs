@@ -30,7 +30,7 @@ namespace Restbucks.RestToolkit.RulesEngine
 
         public StateCreationRule Do(CreateNextStateDelegate createNextStateDelegate)
         {
-            return new StateCreationRule(condition, (r, v, c) => createNextStateDelegate(r, v));
+            return new StateCreationRule(condition, new CreateNextState(createNextStateDelegate));
         }
 
         private class Condition : ICondition
@@ -45,6 +45,21 @@ namespace Restbucks.RestToolkit.RulesEngine
             public bool IsApplicable(HttpResponseMessage response, ApplicationStateVariables stateVariables)
             {
                 return condition(response, stateVariables);
+            }
+        }
+
+        private class CreateNextState : ICreateNextState
+        {
+            private readonly CreateNextStateDelegate createNextStateDelegate;
+
+            public CreateNextState(CreateNextStateDelegate createNextStateDelegate)
+            {
+                this.createNextStateDelegate = createNextStateDelegate;
+            }
+
+            public IState Execute(HttpResponseMessage currentResponse, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities)
+            {
+                return createNextStateDelegate(currentResponse, stateVariables);
             }
         }
     }
