@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Net;
-using System.Net.Http;
 using System.Reflection;
 using System.Web;
 using System.Web.Routing;
@@ -12,12 +10,10 @@ using log4net.Config;
 using Microsoft.ApplicationServer.Http.Description;
 using Microsoft.ApplicationServer.Http.Dispatcher;
 using Restbucks.MediaType;
-using Restbucks.MediaType.Assemblers;
 using Restbucks.Quoting.Implementation;
-using Restbucks.Quoting.Service.Configuration;
-using Restbucks.RestToolkit.Configuration;
 using Restbucks.Quoting.Service.MessageHandlers.FormsIntegrity;
 using Restbucks.Quoting.Service.Resources;
+using Restbucks.RestToolkit.Configuration;
 using Restbucks.RestToolkit.Hypermedia;
 
 namespace Restbucks.Quoting.Service
@@ -43,7 +39,20 @@ namespace Restbucks.Quoting.Service
             Action<Collection<HttpOperationHandler>> handlers = c => c.Add(new FormsIntegrityResponseHandler(formsIntegrityUtility));
 
             var configuration = HttpHostConfiguration.Create()
-                .SetResourceFactory(new ResourceFactory(container))
+                .SetResourceFactory(
+                    (type, ctx, message) =>
+                        {
+                            Log.DebugFormat("Getting instance of type [{0}].", type.FullName);
+                            return container.GetService(type);
+                        },
+                    (ctx, service) =>
+                        {
+                            if (service is IDisposable)
+                            {
+                                Log.DebugFormat("Calling Dispose() on instance of type [{0}].", service.GetType().FullName);
+                                ((IDisposable) service).Dispose();
+                            }
+                        })
                 .AddFormatters(RestbucksMediaTypeFormatter.Instance)
                 .AddResponseHandlers(handlers, (endpoint, operation) => operation.DeclaringContract.ContractType.Equals(typeof (OrderForm)));
 
@@ -67,19 +76,6 @@ namespace Restbucks.Quoting.Service
         {
             Log.Debug("Shutting down Restbucks.Quoting.Service...");
             container.Dispose();
-        }
-
-        private class MyErrorHandler : HttpErrorHandler
-        {
-            protected override bool OnHandleError(Exception error)
-            {
-                return error.GetType().Equals(typeof(InvalidFormatException));
-            }
-
-            protected override HttpResponseMessage OnProvideResponse(Exception error)
-            {
-                return new HttpResponseMessage {Content = new StringContent("an error occurred"), StatusCode = HttpStatusCode.BadRequest};
-            }
         }
     }
 }
