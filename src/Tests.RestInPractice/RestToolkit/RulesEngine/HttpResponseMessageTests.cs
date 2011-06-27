@@ -15,8 +15,8 @@ namespace Tests.RestInPractice.RestToolkit.RulesEngine
             var entityBody1 = response.Content.ReadAsObject<ExampleEntityBody>(ExampleMediaType.Instance);
             var entityBody2 = response.Content.ReadAsObject<ExampleEntityBody>(ExampleMediaType.Instance);
 
-            Assert.AreEqual(DummyResponse.EntityId, entityBody1.Id);
-            Assert.AreEqual(DummyResponse.EntityId, entityBody2.Id);
+            Assert.AreEqual(DummyResponse.EntityBody.Id, entityBody1.Id);
+            Assert.AreEqual(DummyResponse.EntityBody.Id, entityBody2.Id);
         }
     }
 }

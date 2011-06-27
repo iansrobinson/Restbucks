@@ -13,15 +13,15 @@ namespace Tests.RestInPractice.RestToolkit.RulesEngine
         [Test]
         public void ShouldReturnSuppliedAction()
         {
-            var mockAction = MockRepository.GenerateMock<IRequestAction>();
-            mockAction.Expect(a => a.Execute(Dummy.PreviousResponse, Dummy.StateVariables, Dummy.ClientCapabilities));
+            var mockRequestAction = MockRepository.GenerateMock<IRequestAction>();
+            mockRequestAction.Expect(a => a.Execute(Dummy.PreviousResponse, Dummy.StateVariables, Dummy.ClientCapabilities));
 
             var actions = new Actions(Dummy.ClientCapabilities);
-            var action = actions.Do(mockAction);
+            var action = actions.Do(mockRequestAction);
 
             action.Execute(Dummy.PreviousResponse, Dummy.StateVariables, Dummy.ClientCapabilities);
 
-            mockAction.VerifyAllExpectations();
+            mockRequestAction.VerifyAllExpectations();
         }
 
         [Test]
