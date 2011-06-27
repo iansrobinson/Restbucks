@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Restbucks.RestToolkit.RulesEngine;
 using Rhino.Mocks;
 using Tests.RestInPractice.RestToolkit.Hacks;
+using Tests.RestInPractice.RestToolkit.RulesEngine.Util;
 using Tests.RestInPractice.RestToolkit.Utils;
 
 namespace Tests.RestInPractice.RestToolkit.RulesEngine

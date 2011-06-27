@@ -4,8 +4,9 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Runtime.Serialization;
 using Microsoft.ApplicationServer.Http;
+using Tests.RestInPractice.RestToolkit.Utils;
 
-namespace Tests.RestInPractice.RestToolkit.Utils
+namespace Tests.RestInPractice.RestToolkit.RulesEngine.Util
 {
     public class DummyMediaType : MediaTypeFormatter
     {

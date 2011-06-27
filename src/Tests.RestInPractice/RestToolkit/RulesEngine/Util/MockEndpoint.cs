@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Threading;
 
-namespace Tests.RestInPractice.RestToolkit.Utils
+namespace Tests.RestInPractice.RestToolkit.RulesEngine.Util
 {
     public class MockEndpoint : HttpClientChannel
     {

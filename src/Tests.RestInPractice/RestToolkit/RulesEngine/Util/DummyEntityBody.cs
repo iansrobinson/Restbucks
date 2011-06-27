@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Tests.RestInPractice.RestToolkit.Utils
+namespace Tests.RestInPractice.RestToolkit.RulesEngine.Util
 {
     [DataContract]
     public class DummyEntityBody

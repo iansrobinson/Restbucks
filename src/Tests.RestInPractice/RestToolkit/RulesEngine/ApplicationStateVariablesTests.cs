@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Restbucks.RestToolkit.RulesEngine;
+using Tests.RestInPractice.RestToolkit.RulesEngine.Util;
 using Tests.RestInPractice.RestToolkit.Utils;
 
 namespace Tests.RestInPractice.RestToolkit.RulesEngine
