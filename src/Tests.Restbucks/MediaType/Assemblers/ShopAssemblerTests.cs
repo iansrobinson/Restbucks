@@ -51,7 +51,7 @@ namespace Tests.Restbucks.MediaType.Assemblers
             var secondLink = shop.Links.Last();
             Assert.AreEqual("rb:order-form", secondLink.Rels.First().DisplayValue);
             Assert.AreEqual("/order-forms/1234", secondLink.Href.ToString());
-            Assert.AreEqual(RestbucksMediaType.ContentType.MediaType, secondLink.MediaType);
+            Assert.AreEqual(RestbucksMediaType.Value, secondLink.MediaType);
         }
 
         [Test]
@@ -126,7 +126,7 @@ namespace Tests.Restbucks.MediaType.Assemblers
             Assert.AreEqual("/quotes", firstForm.Resource.ToString());
             Assert.AreEqual("post", firstForm.Method);
             Assert.AreEqual("request-for-quote", firstForm.Id);
-            Assert.AreEqual(RestbucksMediaType.ContentType.MediaType, firstForm.MediaType);
+            Assert.AreEqual(RestbucksMediaType.Value, firstForm.MediaType);
 
             var secondForm = shop.Forms.Last();
             Assert.IsNull(secondForm.Schema);

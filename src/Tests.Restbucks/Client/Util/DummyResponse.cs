@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using Microsoft.ApplicationServer.Http;
 using Restbucks.MediaType;
 
@@ -19,21 +20,21 @@ namespace Tests.Restbucks.Client.Util
 
         public static readonly Link Link = new Link(
             LinkUri,
-            RestbucksMediaType.ContentType.MediaType,
+            RestbucksMediaType.Value,
             new UriLinkRelation(new Uri("http://relations.restbucks.com/rfq")));
 
         public static readonly Form EmptyForm = new Form(
             "request-for-quote",
             EmptyFormUri,
             "post",
-            RestbucksMediaType.ContentType.MediaType,
+            RestbucksMediaType.Value,
             new Uri("http://schemas/shop"));
 
         public static readonly Form PrepopulatedForm = new Form(
             "order-form",
             PrepopulatedFormUri,
             "post",
-            RestbucksMediaType.ContentType.MediaType,
+            RestbucksMediaType.Value,
             new ShopBuilder(RestbucksBaseUri).Build());
 
         public static HttpResponseMessage CreateResponse()
@@ -45,7 +46,7 @@ namespace Tests.Restbucks.Client.Util
                 .Build();
 
             var content = new ObjectContent<Shop>(entityBody, new[] {RestbucksMediaType.Formatter});
-            content.Headers.ContentType = RestbucksMediaType.ContentType;
+            content.Headers.ContentType = new MediaTypeHeaderValue(RestbucksMediaType.Value);
 
             return new HttpResponseMessage {Content = content};
         }

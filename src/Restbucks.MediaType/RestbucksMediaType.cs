@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net;
 using System.Net.Http.Headers;
+using System.Net.Mime;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Linq;
@@ -14,25 +15,17 @@ namespace Restbucks.MediaType
 {
     public static class RestbucksMediaType
     {
-        private const string Value = "application/vnd.restbucks+xml";
-
-        public static MediaTypeHeaderValue ContentType;
-        public static MediaTypeFormatter Formatter;
-
-        static RestbucksMediaType()
-        {
-            ContentType = new MediaTypeHeaderValue(Value);
-            Formatter = new RestbucksMediaTypeFormatter(ContentType);
-        }
+        public const string Value = "application/vnd.restbucks+xml";
+        public static MediaTypeFormatter Formatter = new RestbucksMediaTypeFormatter();
 
         private class RestbucksMediaTypeFormatter : MediaTypeFormatter
         {
             private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
             private static readonly XmlWriterSettings WriterSettings = new XmlWriterSettings {Indent = true, NamespaceHandling = NamespaceHandling.OmitDuplicates};
 
-            public RestbucksMediaTypeFormatter(MediaTypeHeaderValue contentType)
+            public RestbucksMediaTypeFormatter()
             {
-                SupportedMediaTypes.Add(contentType);
+                SupportedMediaTypes.Add(new MediaTypeHeaderValue(Value));
                 SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/xml"));
                 SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/xml"));
             }

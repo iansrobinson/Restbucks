@@ -133,7 +133,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
         public void FormMediaTypeShouldBeRestbucksMediaType()
         {
             var entityBody = ExecuteRequestReturnEntityBody();
-            Assert.AreEqual(RestbucksMediaType.ContentType.MediaType, entityBody.Forms.First().MediaType);
+            Assert.AreEqual(RestbucksMediaType.Value, entityBody.Forms.First().MediaType);
         }
 
         [Test]

@@ -53,7 +53,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
             var entityBody = GetEntryPointEntityBody();
             var link = entityBody.Links.First();
 
-            Assert.AreEqual(RestbucksMediaType.ContentType.MediaType, link.MediaType);
+            Assert.AreEqual(RestbucksMediaType.Value, link.MediaType);
         }
 
         [Test]

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Xml;
 using NUnit.Framework;
 using Restbucks.MediaType;
@@ -16,7 +17,7 @@ namespace Tests.Restbucks.MediaType
             var processor = RestbucksMediaType.Formatter;
 
             Assert.AreEqual(3, processor.SupportedMediaTypes.Count());
-            Assert.AreEqual(RestbucksMediaType.ContentType, processor.SupportedMediaTypes.First());
+            Assert.AreEqual(RestbucksMediaType.Value, processor.SupportedMediaTypes.First().MediaType);
             Assert.AreEqual("application/xml", processor.SupportedMediaTypes.Skip(1).First().MediaType);
             Assert.AreEqual("text/xml", processor.SupportedMediaTypes.Skip(2).First().MediaType);
         }
