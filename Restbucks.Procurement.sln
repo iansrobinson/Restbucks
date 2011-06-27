@@ -20,7 +20,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restbucks.MediaType", "src\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restbucks.RestToolkit", "src\Restbucks.RestToolkit\Restbucks.RestToolkit.csproj", "{849CB5F7-0DA0-4883-94CE-A408582C891B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.RestInPractice", "Tests.RestInPractice\Tests.RestInPractice.csproj", "{741AF0EF-79E9-4175-9F46-D3D6ABE2D941}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.RestInPractice", "src\Tests.RestInPractice\Tests.RestInPractice.csproj", "{741AF0EF-79E9-4175-9F46-D3D6ABE2D941}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
