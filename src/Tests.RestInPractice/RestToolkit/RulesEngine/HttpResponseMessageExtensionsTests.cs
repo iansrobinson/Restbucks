@@ -1,10 +1,9 @@
 ﻿using System.Net.Http;
 using NUnit.Framework;
-using Restbucks.Client.Hypermedia.Strategies;
 using Restbucks.RestToolkit.RulesEngine;
-using Tests.Restbucks.Client.Util;
+using Tests.RestInPractice.RestToolkit.RulesEngine.Util;
 
-namespace Tests.Restbucks.RestToolkit.RulesEngine
+namespace Tests.RestInPractice.RestToolkit.RulesEngine
 {
     [TestFixture]
     public class HttpResponseMessageExtensionsTests
@@ -14,25 +13,25 @@ namespace Tests.Restbucks.RestToolkit.RulesEngine
         [Test]
         public void ShouldReturnTrueIfLinkExists()
         {
-            Assert.IsTrue(Response.ContainsLink(RestbucksLink.WithRel("http://relations.restbucks.com/rfq")));
+            Assert.IsTrue(Response.ContainsLink(new DummyLinkStrategy(DummyResponse.LinkRel)));
         }
 
         [Test]
         public void ShouldReturnFalseIfLinkDoesNotExist()
         {
-            Assert.IsFalse(Response.ContainsLink(RestbucksLink.WithRel("http://relations.restbucks.com/xyz")));
+            Assert.IsFalse(Response.ContainsLink(new DummyLinkStrategy("does-not-exist")));
         }
 
         [Test]
         public void ShouldReturnTrueIfFormExists()
         {
-            Assert.IsTrue(Response.ContainsForm(RestbucksForm.WithId("request-for-quote")));
+            Assert.IsTrue(Response.ContainsForm(new DummyFormStrategy(DummyResponse.FormId)));
         }
 
         [Test]
         public void ShouldReturnFalseIfFormDoesNotExist()
         {
-            Assert.IsFalse(Response.ContainsForm(RestbucksForm.WithId("xyz")));
+            Assert.IsFalse(Response.ContainsForm(new DummyFormStrategy("does-not-exist")));
         }
     }
 }

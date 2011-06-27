@@ -2,7 +2,7 @@
 using Restbucks.RestToolkit.RulesEngine;
 using Rhino.Mocks;
 
-namespace Tests.Restbucks.RestToolkit.RulesEngine.Util
+namespace Tests.RestInPractice.RestToolkit.RulesEngine.Util
 {
     public static class Dummy
     {

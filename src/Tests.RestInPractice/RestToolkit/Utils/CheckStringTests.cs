@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using Restbucks.RestToolkit.Utils;
 
-namespace Tests.Restbucks.RestToolkit.Utils
+namespace Tests.RestInPractice.RestToolkit.Utils
 {
     [TestFixture]
     public class CheckStringTests

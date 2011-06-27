@@ -1,9 +1,9 @@
 ﻿using NUnit.Framework;
 using Restbucks.RestToolkit.RulesEngine;
 using Rhino.Mocks;
-using Tests.Restbucks.RestToolkit.RulesEngine.Util;
+using Tests.RestInPractice.RestToolkit.RulesEngine.Util;
 
-namespace Tests.Restbucks.RestToolkit.RulesEngine
+namespace Tests.RestInPractice.RestToolkit.RulesEngine
 {
     [TestFixture]
     public class StateFactoryCollectionTests

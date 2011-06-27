@@ -134,57 +134,6 @@
     <Compile Include="Quoting\Implementation\QuotationEngineTests.cs" />
     <Compile Include="Quoting\Implementation\Util\DummyDateTimeProvider.cs" />
     <Compile Include="Quoting\Implementation\Util\DummyGuidProvider.cs" />
-    <Compile Include="RestToolkit\Hypermedia\UriFactoryTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="RestToolkit\Hypermedia\UriFactoryWorkerTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="RestToolkit\RulesEngine\ActionsTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="RestToolkit\RulesEngine\ApplicationStateVariablesFormDataStrategyTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="RestToolkit\RulesEngine\ApplicationStateVariablesTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="RestToolkit\RulesEngine\HttpResponseMessageExtensionsTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="RestToolkit\RulesEngine\HttpResponseMessageTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="RestToolkit\RulesEngine\HttpStatusCodeExtensionMethodsTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="RestToolkit\RulesEngine\PrepopulatedFormDataStrategyTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="RestToolkit\RulesEngine\RulesTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="RestToolkit\RulesEngine\RuleTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="RestToolkit\RulesEngine\StateFactoryCollectionTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="RestToolkit\RulesEngine\SubmitFormTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="RestToolkit\RulesEngine\Util\Dummy.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="RestToolkit\RulesEngine\WhenTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="RestToolkit\Utils\CheckStringTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="RestToolkit\Utils\XmlTransformTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Util\PrivateField.cs" />
   </ItemGroup>
   <ItemGroup>
