@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using Restbucks.Quoting.Service.Resources;
 using Restbucks.RestToolkit.Hypermedia;
 
-namespace Tests.RestInPractice.RestToolkit.Hypermedia
+namespace Tests.Restbucks.RestToolkit.Hypermedia
 {
     [TestFixture]
     public class UriFactoryTests
@@ -36,9 +37,9 @@ namespace Tests.RestInPractice.RestToolkit.Hypermedia
         public void ShouldCreateBaseUriForRegisteredClass()
         {
             var uriFactory = new UriFactory();
-            uriFactory.Register<OrderForm>();
+            uriFactory.Register<MyResource>();
 
-            Assert.AreEqual(new Uri("http://localhost:8080/virtual-directory/"), uriFactory.CreateBaseUri<OrderForm>(new Uri("http://localhost:8080/virtual-directory/order-form/1")));
+            Assert.AreEqual(new Uri("http://localhost:8080/virtual-directory/"), uriFactory.CreateBaseUri<MyResource>(new Uri("http://localhost:8080/virtual-directory/my-resource/1")));
         }
 
         [Test]
@@ -46,16 +47,16 @@ namespace Tests.RestInPractice.RestToolkit.Hypermedia
         public void ThrowsExceptionIfTryingToCreateBaseUriForEntryWithoutRegisteredType()
         {
             var uriFactory = new UriFactory();
-            uriFactory.CreateBaseUri<OrderForm>(new Uri("http://localhost:8080/virtual-directory/order-form/1"));
+            uriFactory.CreateBaseUri<MyResource>(new Uri("http://localhost:8080/virtual-directory/my-resource/1"));
         }
 
         [Test]
         public void ShouldCreateAbsoluteUriForRegisteredClass()
         {
             var uriFactory = new UriFactory();
-            uriFactory.Register<OrderForm>();
+            uriFactory.Register<MyResource>();
 
-            Assert.AreEqual(new Uri("http://localhost:8080/virtual-directory/order-form/1"), uriFactory.CreateAbsoluteUri<OrderForm>(new Uri("http://localhost:8080/virtual-directory/"), "1"));
+            Assert.AreEqual(new Uri("http://localhost:8080/virtual-directory/my-resource/1"), uriFactory.CreateAbsoluteUri<MyResource>(new Uri("http://localhost:8080/virtual-directory/"), "1"));
         }
 
         [Test]
@@ -63,16 +64,16 @@ namespace Tests.RestInPractice.RestToolkit.Hypermedia
         public void ThrowsExceptionIfTryingToCreateAbsoluteUriForEntryWithoutRegisteredType()
         {
             var uriFactory = new UriFactory();
-            uriFactory.CreateAbsoluteUri<OrderForm>(new Uri("http://localhost:8080/virtual-directory/"), "1");
+            uriFactory.CreateAbsoluteUri<MyResource>(new Uri("http://localhost:8080/virtual-directory/"), "1");
         }
 
         [Test]
         public void ShouldCreateRelativeUriForRegisteredClass()
         {
             var uriFactory = new UriFactory();
-            uriFactory.Register<OrderForm>();
+            uriFactory.Register<MyResource>();
 
-            Assert.AreEqual(new Uri("order-form/1", UriKind.Relative), uriFactory.CreateRelativeUri<OrderForm>("1"));
+            Assert.AreEqual(new Uri("my-resource/1", UriKind.Relative), uriFactory.CreateRelativeUri<MyResource>("1"));
         }
 
         [Test]
@@ -80,7 +81,7 @@ namespace Tests.RestInPractice.RestToolkit.Hypermedia
         public void ThrowsExceptionIfTryingToCreateRelativeUriForEntryWithoutRegisteredType()
         {
             var uriFactory = new UriFactory();
-            uriFactory.CreateRelativeUri<OrderForm>("1");
+            uriFactory.CreateRelativeUri<MyResource>("1");
         }
 
         [Test]
@@ -88,8 +89,8 @@ namespace Tests.RestInPractice.RestToolkit.Hypermedia
         public void ThrowsExceptionIfEntryAlreadyExistsForType()
         {
             var uriFactory = new UriFactory();
-            uriFactory.Register<OrderForm>();
-            uriFactory.Register<OrderForm>();
+            uriFactory.Register<MyResource>();
+            uriFactory.Register<MyResource>();
         }
 
         [Test]
@@ -104,9 +105,9 @@ namespace Tests.RestInPractice.RestToolkit.Hypermedia
         public void ShouldReturnRoutePrefixForRegisteredClass()
         {
             var uriFactory = new UriFactory();
-            uriFactory.Register<OrderForm>();
+            uriFactory.Register<MyResource>();
 
-            Assert.AreEqual("order-form", uriFactory.GetRoutePrefix<OrderForm>());
+            Assert.AreEqual("my-resource", uriFactory.GetRoutePrefix<MyResource>());
         }
 
         [Test]
@@ -114,16 +115,16 @@ namespace Tests.RestInPractice.RestToolkit.Hypermedia
         public void ThrowsExceptionIfTryingToGetRoutePrefixForEntryWithoutRegisteredType()
         {
             var uriFactory = new UriFactory();
-            uriFactory.GetRoutePrefix<OrderForm>();
+            uriFactory.GetRoutePrefix<MyResource>();
         }
 
         [Test]
         public void ShouldReturnUriTemplateValueForRegisteredClass()
         {
             var uriFactory = new UriFactory();
-            uriFactory.Register<OrderForm>();
+            uriFactory.Register<MyResource>();
 
-            Assert.AreEqual("{id}", uriFactory.GetUriTemplateValue<OrderForm>());
+            Assert.AreEqual("{id}", uriFactory.GetUriTemplateValue<MyResource>());
         }
 
         [Test]
@@ -131,25 +132,25 @@ namespace Tests.RestInPractice.RestToolkit.Hypermedia
         public void ThrowsExceptionIfTryingToGetUriTemplateValueForEntryWithoutRegisteredType()
         {
             var uriFactory = new UriFactory();
-            uriFactory.GetUriTemplateValue<OrderForm>();
+            uriFactory.GetUriTemplateValue<MyResource>();
         }
 
         [Test]
         public void WhenPassingGuidAsUriTemplateParameterShouldRemoveAllDashes()
         {
             var uriFactory = new UriFactory();
-            uriFactory.Register<OrderForm>();
+            uriFactory.Register<MyResource>();
 
-            Assert.AreEqual(new Uri("order-form/00000000000000000000000000000000", UriKind.Relative), uriFactory.CreateRelativeUri<OrderForm>(Guid.Empty));
+            Assert.AreEqual(new Uri("my-resource/00000000000000000000000000000000", UriKind.Relative), uriFactory.CreateRelativeUri<MyResource>(Guid.Empty));
         }
 
         [Test]
         public void ShouldReturnUriTemplateValueForRegisteredType()
         {
             var uriFactory = new UriFactory();
-            uriFactory.Register<OrderForm>();
+            uriFactory.Register<MyResource>();
 
-            Assert.AreEqual("{id}", uriFactory.GetUriTemplateValueFor(typeof (OrderForm)));
+            Assert.AreEqual("{id}", uriFactory.GetUriTemplateValueFor(typeof (MyResource)));
         }
 
         [Test]
@@ -158,16 +159,11 @@ namespace Tests.RestInPractice.RestToolkit.Hypermedia
         {
             var uriFactory = new UriFactory();
 
-            uriFactory.GetUriTemplateValueFor(typeof (OrderForm));
+            uriFactory.GetUriTemplateValueFor(typeof (MyResource));
         }
 
-        [UriTemplate("order-form", "{id}")]
-        private class OrderForm
-        {
-        }
-
-        [UriTemplate("quote", "{id}")]
-        private class Quote
+        [UriTemplate("my-resource", "{id}")]
+        private class MyResource
         {
         }
     }

@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using Restbucks.RestToolkit.RulesEngine;
 
-namespace Tests.RestInPractice.RestToolkit.RulesEngine
+namespace Tests.Restbucks.RestToolkit.RulesEngine
 {
     [TestFixture]
     public class HttpStatusCodeExtensionMethodsTests

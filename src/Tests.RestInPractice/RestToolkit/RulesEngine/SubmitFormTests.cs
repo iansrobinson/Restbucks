@@ -3,12 +3,12 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using Microsoft.ApplicationServer.Http;
 using NUnit.Framework;
+using Restbucks.MediaType;
 using Restbucks.RestToolkit.RulesEngine;
 using Rhino.Mocks;
-using Tests.RestInPractice.RestToolkit.RulesEngine.Util;
-using Tests.RestInPractice.RestToolkit.Utils;
+using Tests.Restbucks.Client.Util;
 
-namespace Tests.RestInPractice.RestToolkit.RulesEngine
+namespace Tests.Restbucks.RestToolkit.RulesEngine
 {
     [TestFixture]
     public class SubmitFormTests
@@ -16,7 +16,7 @@ namespace Tests.RestInPractice.RestToolkit.RulesEngine
         private static readonly HttpResponseMessage PreviousResponse = new HttpResponseMessage();
         private static readonly Uri ResourceUri = new Uri("http://localhost/rfq");
         private static readonly HttpMethod HttpMethod = HttpMethod.Post;
-        private static readonly MediaTypeHeaderValue ContentType = DummyMediaType.ContentType;
+        private static readonly MediaTypeHeaderValue ContentType = new MediaTypeHeaderValue(RestbucksMediaType.Value);
         private static readonly ApplicationStateVariables StateVariables = new ApplicationStateVariables();
         private static readonly IFormDataStrategy DummyFormDataStrategy = CreateDummyFormDataStrategy();
         private static readonly FormInfo DummyFormInfo = new FormInfo(ResourceUri, HttpMethod, ContentType);
@@ -83,7 +83,7 @@ namespace Tests.RestInPractice.RestToolkit.RulesEngine
 
             public MediaTypeFormatter GetMediaTypeFormatter(MediaTypeHeaderValue contentType)
             {
-                return DummyMediaType.Instance;
+                return RestbucksMediaTypeFormatter.Instance;
             }
         }
     }

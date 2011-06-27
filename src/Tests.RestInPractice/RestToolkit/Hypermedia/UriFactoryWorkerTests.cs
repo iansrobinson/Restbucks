@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using Restbucks.RestToolkit.Hypermedia;
 
-namespace Tests.RestInPractice.RestToolkit.Hypermedia
+namespace Tests.Restbucks.RestToolkit.Hypermedia
 {
     [TestFixture]
     public class UriFactoryWorkerTests

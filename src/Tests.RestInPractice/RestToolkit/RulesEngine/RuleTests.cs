@@ -2,9 +2,9 @@
 using NUnit.Framework;
 using Restbucks.RestToolkit.RulesEngine;
 using Rhino.Mocks;
-using Tests.RestInPractice.RestToolkit.RulesEngine.Util;
+using Tests.Restbucks.RestToolkit.RulesEngine.Util;
 
-namespace Tests.RestInPractice.RestToolkit.RulesEngine
+namespace Tests.Restbucks.RestToolkit.RulesEngine
 {
     [TestFixture]
     public class RuleTests

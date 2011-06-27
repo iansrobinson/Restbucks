@@ -4,7 +4,7 @@ using System.Xml;
 using NUnit.Framework;
 using Restbucks.RestToolkit.Utils;
 
-namespace Tests.RestInPractice.RestToolkit.Utils
+namespace Tests.Restbucks.RestToolkit.Utils
 {
     [TestFixture]
     public class XmlTransformTests

@@ -2,11 +2,14 @@
 using System.Net;
 using System.Net.Http;
 using NUnit.Framework;
+using Restbucks.Client.Hypermedia.Strategies;
+using Restbucks.MediaType;
 using Restbucks.RestToolkit.RulesEngine;
 using Rhino.Mocks;
-using Tests.RestInPractice.RestToolkit.RulesEngine.Util;
+using Tests.Restbucks.Client.Util;
+using Tests.Restbucks.RestToolkit.RulesEngine.Util;
 
-namespace Tests.RestInPractice.RestToolkit.RulesEngine
+namespace Tests.Restbucks.RestToolkit.RulesEngine
 {
     [TestFixture]
     public class WhenTests
@@ -130,7 +133,7 @@ namespace Tests.RestInPractice.RestToolkit.RulesEngine
         public void ShouldReturnRuleThatCreatesStateIrrespectiveOfStatusCode()
         {
             var dummyRequestAction = MockRepository.GenerateStub<IRequestAction>();
-            dummyRequestAction.Expect(a => a.Execute(Dummy.PreviousResponse, Dummy.StateVariables, Dummy.ClientCapabilities)).Return(new HttpResponseMessage {StatusCode = HttpStatusCode.Accepted});
+            dummyRequestAction.Expect(a => a.Execute(Dummy.PreviousResponse, Dummy.StateVariables, Dummy.ClientCapabilities)).Return(new HttpResponseMessage { StatusCode = HttpStatusCode.Accepted });
 
             var dummyState = MockRepository.GenerateStub<IState>();
 
@@ -150,12 +153,12 @@ namespace Tests.RestInPractice.RestToolkit.RulesEngine
             var previousResponse = DummyResponse.CreateResponse();
 
             var dummyRequestAction = MockRepository.GenerateStub<IRequestAction>();
-            dummyRequestAction.Expect(a => a.Execute(Dummy.PreviousResponse, Dummy.StateVariables, Dummy.ClientCapabilities)).Return(new HttpResponseMessage {StatusCode = HttpStatusCode.Accepted});
+            dummyRequestAction.Expect(a => a.Execute(Dummy.PreviousResponse, Dummy.StateVariables, Dummy.ClientCapabilities)).Return(new HttpResponseMessage { StatusCode = HttpStatusCode.Accepted });
 
             var dummyState = MockRepository.GenerateStub<IState>();
 
-            var rule = When.IsTrue(r => r.ContainsLink(new DummyLinkStrategy(DummyResponse.LinkRel))
-                                        && r.ContainsForm(new DummyFormStrategy(DummyResponse.FormId)))
+            var rule = When.IsTrue(r => r.ContainsLink(RestbucksLink.WithRel(new StringLinkRelation("http://relations.restbucks.com/rfq")))
+                                        && r.ContainsForm(RestbucksForm.WithId("request-for-quote")))
                 .Execute(actions => actions.Do(dummyRequestAction))
                 .ReturnState((r, c) => dummyState);
 
