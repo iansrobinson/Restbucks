@@ -2,7 +2,6 @@
 using System.IO;
 using System.Net;
 using System.Net.Http.Headers;
-using System.Net.Mime;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Linq;
