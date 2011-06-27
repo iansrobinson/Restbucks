@@ -1,5 +1,5 @@
 ﻿using Restbucks.Client.Hypermedia.Strategies;
-using Restbucks.RestToolkit.RulesEngine;
+using RestInPractice.RestToolkit.RulesEngine;
 
 namespace Restbucks.Client.Hypermedia
 {

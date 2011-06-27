@@ -3,7 +3,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Restbucks.Client.Hacks;
-using Restbucks.RestToolkit.RulesEngine;
+using RestInPractice.RestToolkit.RulesEngine;
 using Restbucks.MediaType;
 
 namespace Restbucks.Client.Hypermedia.Strategies

@@ -2,7 +2,7 @@
 using System.IO;
 using System.Xml;
 using NUnit.Framework;
-using Restbucks.RestToolkit.Utils;
+using RestInPractice.RestToolkit.Utils;
 
 namespace Tests.RestInPractice.RestToolkit.Utils
 {

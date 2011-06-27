@@ -6,7 +6,7 @@ using log4net.Config;
 using Microsoft.ApplicationServer.Http;
 using Restbucks.Client.States;
 using Restbucks.MediaType;
-using Restbucks.RestToolkit.RulesEngine;
+using RestInPractice.RestToolkit.RulesEngine;
 
 namespace Restbucks.Client.ConsoleHost
 {

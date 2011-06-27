@@ -1,6 +1,6 @@
 ﻿using System.Net;
 using NUnit.Framework;
-using Restbucks.RestToolkit.RulesEngine;
+using RestInPractice.RestToolkit.RulesEngine;
 
 namespace Tests.RestInPractice.RestToolkit.RulesEngine
 {

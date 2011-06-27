@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Net.Http;
-using Restbucks.RestToolkit.RulesEngine;
+using RestInPractice.RestToolkit.RulesEngine;
 
 namespace Restbucks.Client.States
 {

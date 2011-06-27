@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http;
 using Restbucks.Client.Hypermedia;
-using Restbucks.RestToolkit.RulesEngine;
+using RestInPractice.RestToolkit.RulesEngine;
 
 namespace Restbucks.Client.States
 {

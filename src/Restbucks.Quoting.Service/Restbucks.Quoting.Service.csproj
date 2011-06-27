@@ -139,9 +139,9 @@
       <Project>{9F34D109-B46D-442E-AC5A-1923388A6551}</Project>
       <Name>Restbucks.Quoting</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Restbucks.RestToolkit\Restbucks.RestToolkit.csproj">
+    <ProjectReference Include="..\RestInPractice.RestToolkit\RestInPractice.RestToolkit.csproj">
       <Project>{849CB5F7-0DA0-4883-94CE-A408582C891B}</Project>
-      <Name>Restbucks.RestToolkit</Name>
+      <Name>RestInPractice.RestToolkit</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

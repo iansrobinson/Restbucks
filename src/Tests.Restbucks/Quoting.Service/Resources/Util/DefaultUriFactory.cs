@@ -1,5 +1,5 @@
 ﻿using Restbucks.Quoting.Service.Resources;
-using Restbucks.RestToolkit.Hypermedia;
+using RestInPractice.RestToolkit.Hypermedia;
 
 namespace Tests.Restbucks.Quoting.Service.Resources.Util
 {

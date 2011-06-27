@@ -1,6 +1,6 @@
 ﻿using System;
 using Restbucks.Client.Hypermedia.Strategies;
-using Restbucks.RestToolkit.RulesEngine;
+using RestInPractice.RestToolkit.RulesEngine;
 using Restbucks.MediaType;
 
 namespace Restbucks.Client.Hypermedia

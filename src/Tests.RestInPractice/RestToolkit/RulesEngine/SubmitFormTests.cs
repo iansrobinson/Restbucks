@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using Microsoft.ApplicationServer.Http;
 using NUnit.Framework;
-using Restbucks.RestToolkit.RulesEngine;
+using RestInPractice.RestToolkit.RulesEngine;
 using Rhino.Mocks;
 using Tests.RestInPractice.RestToolkit.RulesEngine.Util;
 

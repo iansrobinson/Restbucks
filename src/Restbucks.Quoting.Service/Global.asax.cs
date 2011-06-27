@@ -13,8 +13,8 @@ using Restbucks.MediaType;
 using Restbucks.Quoting.Implementation;
 using Restbucks.Quoting.Service.MessageHandlers.FormsIntegrity;
 using Restbucks.Quoting.Service.Resources;
-using Restbucks.RestToolkit.Configuration;
-using Restbucks.RestToolkit.Hypermedia;
+using RestInPractice.RestToolkit.Configuration;
+using RestInPractice.RestToolkit.Hypermedia;
 
 namespace Restbucks.Quoting.Service
 {

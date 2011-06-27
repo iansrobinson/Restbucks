@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using Restbucks.RestToolkit.RulesEngine;
+using RestInPractice.RestToolkit.RulesEngine;
 using Tests.RestInPractice.RestToolkit.Hacks;
 
 namespace Tests.RestInPractice.RestToolkit.RulesEngine.Util

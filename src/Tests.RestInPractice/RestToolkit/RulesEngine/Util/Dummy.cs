@@ -1,5 +1,5 @@
 ﻿using System.Net.Http;
-using Restbucks.RestToolkit.RulesEngine;
+using RestInPractice.RestToolkit.RulesEngine;
 using Rhino.Mocks;
 
 namespace Tests.RestInPractice.RestToolkit.RulesEngine.Util

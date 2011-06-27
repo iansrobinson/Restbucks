@@ -5,7 +5,7 @@ using Microsoft.ApplicationServer.Http;
 using NUnit.Framework;
 using Restbucks.Client.Hypermedia.Strategies;
 using Restbucks.MediaType;
-using Restbucks.RestToolkit.RulesEngine;
+using RestInPractice.RestToolkit.RulesEngine;
 using Tests.Restbucks.Client.Util;
 
 namespace Tests.Restbucks.Client.Hypermedia.Strategies

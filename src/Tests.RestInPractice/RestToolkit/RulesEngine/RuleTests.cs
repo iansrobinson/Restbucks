@@ -1,6 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
-using Restbucks.RestToolkit.RulesEngine;
+using RestInPractice.RestToolkit.RulesEngine;
 using Rhino.Mocks;
 using Tests.RestInPractice.RestToolkit.RulesEngine.Util;
 

@@ -1,6 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
-using Restbucks.RestToolkit.Hypermedia;
+using RestInPractice.RestToolkit.Hypermedia;
 
 namespace Tests.RestInPractice.RestToolkit.Hypermedia
 {

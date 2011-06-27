@@ -1,5 +1,5 @@
 ﻿using System;
-using Restbucks.RestToolkit.Utils;
+using RestInPractice.RestToolkit.Utils;
 
 namespace Restbucks.MediaType
 {

@@ -18,7 +18,7 @@
 
   <property name="bin.rip.dir" value="${output.dir}\bin.rip"/>
   <property name="reports.rip.dir" value="${output.dir}\reports.rip"/>
-  <property name="binaries.rip.dir" value="${base.dir}\src\Restbucks.RestToolkit\bin\"/>
+  <property name="binaries.rip.dir" value="${base.dir}\src\RestInPractice.RestToolkit\bin\"/>
   <property name="tests.rip.dir" value="${base.dir}\src\Tests.RestInPractice\bin\${configuration}"/>
   <property name="unit.test.assembly.rip" value="Tests.RestInPractice.dll"/>
   <property name="unit.tests.rip.file" value="results.rip.xml"/>
