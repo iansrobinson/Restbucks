@@ -16,12 +16,12 @@
   <property name="project.description" value="Restbucks Procurement Example"/>
   <property name="copyright" value="Copyright (c) ${datetime::get-year(datetime::now())}, iansrobinson.com"/>
 
-  <property name="bin.old.dir" value="${output.dir}\bin.old"/>
-  <property name="reports.old.dir" value="${output.dir}\reports.old"/>
-  <property name="binaries.old.dir" value="${base.dir}\src\Restbucks.Quoting.Service.Old\bin\"/>
-  <property name="tests.old.dir" value="${base.dir}\src\Tests.Restbucks.Old\bin\${configuration}"/>
-  <property name="unit.test.assembly.old" value="Tests.Restbucks.Old.dll"/>
-  <property name="unit.tests.old.file" value="results.old.xml"/>
+  <property name="bin.rip.dir" value="${output.dir}\bin.rip"/>
+  <property name="reports.rip.dir" value="${output.dir}\reports.rip"/>
+  <property name="binaries.rip.dir" value="${base.dir}\src\Restbucks.RestToolkit\bin\"/>
+  <property name="tests.rip.dir" value="${base.dir}\src\Tests.RestInPractice\bin\${configuration}"/>
+  <property name="unit.test.assembly.rip" value="Tests.RestInPractice.dll"/>
+  <property name="unit.tests.rip.file" value="results.rip.xml"/>
 
   <loadtasks>
     <fileset>
@@ -41,8 +41,8 @@
     <mkdir dir="${output.dir}" />
     <mkdir dir="${bin.dir}" />
     <mkdir dir="${reports.dir}" />
-    <mkdir dir="${bin.old.dir}" />
-    <mkdir dir="${reports.old.dir}" />
+    <mkdir dir="${bin.rip.dir}" />
+    <mkdir dir="${reports.rip.dir}" />
   </target>
 
   <target name="build.assemblyinfos" if="${environment::variable-exists('CRUISE_REVISION')}">
@@ -94,16 +94,16 @@
       </fileset>
     </copy>
 
-    <copy todir="${bin.old.dir}">
-      <fileset basedir="${binaries.old.dir}">
+    <copy todir="${bin.rip.dir}">
+      <fileset basedir="${binaries.rip.dir}">
         <include name="**/*.dll" />
         <include name="**/*.exe" />
         <include name="**/*.exe.config" />
       </fileset>
     </copy>
-    <copy todir="${reports.old.dir}">
-      <fileset basedir="${tests.old.dir}">
-        <include name="**/${unit.tests.old.file}" />
+    <copy todir="${reports.rip.dir}">
+      <fileset basedir="${tests.rip.dir}">
+        <include name="**/${unit.tests.rip.file}" />
         <include name="**/*.html" />
       </fileset>
     </copy>
@@ -115,8 +115,8 @@
       commandline="${unit.test.assembly} /xml:${unit.tests.file} /nologo" failonerror="false" resultproperty="unit.tests.result"/>
     
     <exec program="${base.dir}\tools\nunit\bin\net-2.0\nunit-console.exe"
-      workingdir="${tests.old.dir}"
-      commandline="${unit.test.assembly.old} /xml:${unit.tests.old.file} /nologo" failonerror="false" resultproperty="unit.tests.old.result"/>
+      workingdir="${tests.rip.dir}"
+      commandline="${unit.test.assembly.rip} /xml:${unit.tests.rip.file} /nologo" failonerror="false" resultproperty="unit.tests.rip.result"/>
   </target>
 
   <target name="generate.reports"> 
@@ -125,9 +125,9 @@
         <include name="${tests.dir}\${unit.tests.file}" />
       </fileset>
     </nunit2report>
-    <nunit2report todir="${tests.old.dir}">
+    <nunit2report todir="${tests.rip.dir}">
       <fileset>
-        <include name="${tests.old.dir}\${unit.tests.old.file}" />
+        <include name="${tests.rip.dir}\${unit.tests.rip.file}" />
       </fileset>
     </nunit2report>
   </target>
@@ -137,7 +137,7 @@
   </target>
 
   <target name="build" depends="intro, clean, create.output.directories, build.assemblyinfos, build.solution, run.unit.tests, generate.reports, deploy">
-    <fail if="${unit.tests.result != '0' or unit.tests.old.result !='0'}">One or more unit tests failed</fail>
+    <fail if="${unit.tests.result != '0' or unit.tests.rip.result !='0'}">One or more unit tests failed</fail>
   </target>
 
   <target name="run" depends="build, start.application"/>
