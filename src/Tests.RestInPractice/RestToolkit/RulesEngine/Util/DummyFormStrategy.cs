@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using Restbucks.RestToolkit.RulesEngine;
 using Tests.RestInPractice.RestToolkit.Hacks;
-using Tests.RestInPractice.RestToolkit.Utils;
 
 namespace Tests.RestInPractice.RestToolkit.RulesEngine.Util
 {
@@ -19,9 +19,9 @@ namespace Tests.RestInPractice.RestToolkit.RulesEngine.Util
         {
             var entityBody = response.Content.ReadAsObject<DummyEntityBody>(DummyMediaType.Instance);
 
-            if (entityBody.FormId.Equals(formId))
+            if (entityBody.Form.Id.Equals(formId))
             {
-                return new FormInfo(new Uri("http://localhost/resource-uri"), HttpMethod.Post, DummyMediaType.ContentType);
+                return new FormInfo(new Uri(entityBody.Form.Uri), new HttpMethod(entityBody.Form.Method), new MediaTypeHeaderValue(entityBody.Form.ContentType));
             }
             return null;
         }

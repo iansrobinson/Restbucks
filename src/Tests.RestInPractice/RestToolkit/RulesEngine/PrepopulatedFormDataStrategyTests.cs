@@ -1,18 +1,16 @@
-﻿using System;
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
 using NUnit.Framework;
 using Restbucks.RestToolkit.RulesEngine;
 using Rhino.Mocks;
 using Tests.RestInPractice.RestToolkit.Hacks;
 using Tests.RestInPractice.RestToolkit.RulesEngine.Util;
-using Tests.RestInPractice.RestToolkit.Utils;
 
 namespace Tests.RestInPractice.RestToolkit.RulesEngine
 {
     [TestFixture]
     public class PrepopulatedFormDataStrategyTests
     {
-        private static readonly DummyEntityBody EntityBody = new DummyEntityBody(new Uri("http://localhost/base-uri"), "link-rel", "form-id");
+        private static readonly DummyEntityBody EntityBody = new DummyEntityBody {Id = 1, Form = new DummyForm {Id = "form-id", ContentType = "application/xml", Method = "post", Uri = "http://localhost/form"}, Link = new DummyLink {ContentType = "application/xml", Rel = "rel-value", Uri = "http://localhost/1"}};
         private static readonly MediaTypeHeaderValue ContentType = DummyMediaType.ContentType;
         private static readonly IClientCapabilities ClientCapabilities = CreateClientCapabilities();
 
@@ -22,7 +20,7 @@ namespace Tests.RestInPractice.RestToolkit.RulesEngine
             var dataStrategy = new PrepopulatedFormDataStrategy(EntityBody, ContentType);
             var content = dataStrategy.CreateFormData(null, null, ClientCapabilities);
 
-            Assert.AreEqual(EntityBody.BaseUri, content.ReadAsObject<DummyEntityBody>(DummyMediaType.Instance).BaseUri);
+            Assert.AreEqual(EntityBody.Id, content.ReadAsObject<DummyEntityBody>(DummyMediaType.Instance).Id);
         }
 
         [Test]

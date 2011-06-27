@@ -6,18 +6,35 @@ namespace Tests.RestInPractice.RestToolkit.RulesEngine.Util
     [DataContract]
     public class DummyEntityBody
     {
-        public DummyEntityBody(Uri baseUri, string linkRel, string formId)
-        {
-            BaseUri = baseUri;
-            LinkRel = linkRel;
-            FormId = formId;
-        }
-
         [DataMember] 
-        public Uri BaseUri { get; set; }
+        public int Id { get; set; }
         [DataMember]
-        public string LinkRel { get; set; }
+        public DummyLink Link { get; set; }
         [DataMember]
-        public string FormId { get; set; }
+        public DummyForm Form { get; set; }
+    }
+
+    [DataContract]
+    public class DummyLink
+    {
+        [DataMember]
+        public string Rel { get; set; }
+        [DataMember]
+        public string Uri { get; set; }
+        [DataMember]
+        public string ContentType { get; set; }
+    }
+
+    [DataContract]
+    public class DummyForm
+    {
+        [DataMember]
+        public string Id { get; set; }
+        [DataMember]
+        public string Uri { get; set; }
+        [DataMember]
+        public string Method { get; set; }
+        [DataMember]
+        public string ContentType { get; set; }
     }
 }

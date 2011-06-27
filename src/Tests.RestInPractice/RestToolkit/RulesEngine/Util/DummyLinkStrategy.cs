@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using Restbucks.RestToolkit.RulesEngine;
 using Tests.RestInPractice.RestToolkit.Hacks;
-using Tests.RestInPractice.RestToolkit.Utils;
 
 namespace Tests.RestInPractice.RestToolkit.RulesEngine.Util
 {
@@ -18,9 +18,9 @@ namespace Tests.RestInPractice.RestToolkit.RulesEngine.Util
         public LinkInfo GetLinkInfo(HttpResponseMessage response)
         {
             var entityBody = response.Content.ReadAsObject<DummyEntityBody>(DummyMediaType.Instance);
-            if (entityBody.LinkRel.Equals(rel))
+            if (entityBody.Link.Rel.Equals(rel))
             {
-                return new LinkInfo(new Uri("http://localhost/resource-uri"), DummyMediaType.ContentType);
+                return new LinkInfo(new Uri(entityBody.Link.Uri), new MediaTypeHeaderValue(entityBody.Link.ContentType));
             }
             return null;
         }
