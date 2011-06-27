@@ -4,19 +4,18 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Runtime.Serialization;
 using Microsoft.ApplicationServer.Http;
-using Tests.RestInPractice.RestToolkit.Utils;
 
 namespace Tests.RestInPractice.RestToolkit.RulesEngine.Util
 {
-    public class DummyMediaType : MediaTypeFormatter
+    public class ExampleMediaType : MediaTypeFormatter
     {
         private static readonly MediaTypeHeaderValue contentType;
         private static readonly MediaTypeFormatter instance;
 
-        static DummyMediaType()
+        static ExampleMediaType()
         {
             contentType = new MediaTypeHeaderValue("application/vnd.restinpractice+xml");
-            instance = new DummyMediaType();
+            instance = new ExampleMediaType();
         }
 
         public static MediaTypeHeaderValue ContentType
@@ -31,9 +30,9 @@ namespace Tests.RestInPractice.RestToolkit.RulesEngine.Util
 
         private readonly DataContractSerializer serializer;
 
-        public DummyMediaType()
+        public ExampleMediaType()
         {
-            serializer = new DataContractSerializer(typeof (DummyEntityBody));
+            serializer = new DataContractSerializer(typeof (ExampleEntityBody));
             SupportedMediaTypes.Add(contentType);
         }
 

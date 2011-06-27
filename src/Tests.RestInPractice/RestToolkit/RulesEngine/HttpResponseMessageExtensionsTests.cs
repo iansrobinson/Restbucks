@@ -13,25 +13,25 @@ namespace Tests.RestInPractice.RestToolkit.RulesEngine
         [Test]
         public void ShouldReturnTrueIfLinkExists()
         {
-            Assert.IsTrue(Response.ContainsLink(new DummyLinkStrategy(DummyResponse.LinkRel)));
+            Assert.IsTrue(Response.ContainsLink(new LinkStrategy(DummyResponse.LinkRel)));
         }
 
         [Test]
         public void ShouldReturnFalseIfLinkDoesNotExist()
         {
-            Assert.IsFalse(Response.ContainsLink(new DummyLinkStrategy("does-not-exist")));
+            Assert.IsFalse(Response.ContainsLink(new LinkStrategy("does-not-exist")));
         }
 
         [Test]
         public void ShouldReturnTrueIfFormExists()
         {
-            Assert.IsTrue(Response.ContainsForm(new DummyFormStrategy(DummyResponse.FormId)));
+            Assert.IsTrue(Response.ContainsForm(new FormStrategy(DummyResponse.FormId)));
         }
 
         [Test]
         public void ShouldReturnFalseIfFormDoesNotExist()
         {
-            Assert.IsFalse(Response.ContainsForm(new DummyFormStrategy("does-not-exist")));
+            Assert.IsFalse(Response.ContainsForm(new FormStrategy("does-not-exist")));
         }
     }
 }

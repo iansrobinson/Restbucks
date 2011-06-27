@@ -6,18 +6,18 @@ using Tests.RestInPractice.RestToolkit.Hacks;
 
 namespace Tests.RestInPractice.RestToolkit.RulesEngine.Util
 {
-    public class DummyFormStrategy : IFormStrategy
+    public class FormStrategy : IFormStrategy
     {
         private readonly string formId;
 
-        public DummyFormStrategy(string formId)
+        public FormStrategy(string formId)
         {
             this.formId = formId;
         }
 
         public FormInfo GetFormInfo(HttpResponseMessage response)
         {
-            var entityBody = response.Content.ReadAsObject<DummyEntityBody>(DummyMediaType.Instance);
+            var entityBody = response.Content.ReadAsObject<ExampleEntityBody>(ExampleMediaType.Instance);
 
             if (entityBody.Form.Id.Equals(formId))
             {

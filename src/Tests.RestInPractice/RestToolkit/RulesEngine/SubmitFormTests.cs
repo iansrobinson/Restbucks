@@ -16,7 +16,7 @@ namespace Tests.RestInPractice.RestToolkit.RulesEngine
         private static readonly HttpResponseMessage PreviousResponse = new HttpResponseMessage();
         private static readonly Uri ResourceUri = new Uri("http://localhost/rfq");
         private static readonly HttpMethod HttpMethod = HttpMethod.Post;
-        private static readonly MediaTypeHeaderValue ContentType = DummyMediaType.ContentType;
+        private static readonly MediaTypeHeaderValue ContentType = ExampleMediaType.ContentType;
         private static readonly ApplicationStateVariables StateVariables = new ApplicationStateVariables();
         private static readonly IFormDataStrategy DummyFormDataStrategy = CreateDummyFormDataStrategy();
         private static readonly FormInfo DummyFormInfo = new FormInfo(ResourceUri, HttpMethod, ContentType);
@@ -83,7 +83,7 @@ namespace Tests.RestInPractice.RestToolkit.RulesEngine
 
             public MediaTypeFormatter GetMediaTypeFormatter(MediaTypeHeaderValue contentType)
             {
-                return DummyMediaType.Instance;
+                return ExampleMediaType.Instance;
             }
         }
     }

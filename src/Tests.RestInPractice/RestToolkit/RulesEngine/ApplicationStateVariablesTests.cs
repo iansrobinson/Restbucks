@@ -15,27 +15,27 @@ namespace Tests.RestInPractice.RestToolkit.RulesEngine
 
         private static readonly ApplicationStateVariables StateVariables = new ApplicationStateVariables(
             new KeyValuePair<IKey, object>(new StringKey("key"), FirstValue),
-            new KeyValuePair<IKey, object>(new EntityBodyKey("order-form", DummyMediaType.ContentType, new Uri("http://schemas/shop")), SecondValue));
+            new KeyValuePair<IKey, object>(new EntityBodyKey("order-form", ExampleMediaType.ContentType, new Uri("http://schemas/shop")), SecondValue));
 
         [Test]
         public void ShouldReturnDataByKey()
         {
             Assert.AreEqual(FirstValue, StateVariables.Get<ExampleObject>(new StringKey("key")));
-            Assert.AreEqual(SecondValue, StateVariables.Get<ExampleObject>(new EntityBodyKey("order-form", DummyMediaType.ContentType, new Uri("http://schemas/shop"))));
+            Assert.AreEqual(SecondValue, StateVariables.Get<ExampleObject>(new EntityBodyKey("order-form", ExampleMediaType.ContentType, new Uri("http://schemas/shop"))));
         }
 
         [Test]
         public void ShouldReturnTrueIfKeyExists()
         {
             Assert.IsTrue(StateVariables.ContainsKey(new StringKey("key")));
-            Assert.IsTrue(StateVariables.ContainsKey(new EntityBodyKey("order-form", DummyMediaType.ContentType, new Uri("http://schemas/shop"))));
+            Assert.IsTrue(StateVariables.ContainsKey(new EntityBodyKey("order-form", ExampleMediaType.ContentType, new Uri("http://schemas/shop"))));
         }
 
         [Test]
         public void ShouldReturnFalseIfKeyDoesNotExist()
         {
             Assert.IsFalse(StateVariables.ContainsKey(new StringKey("not-a-key")));
-            Assert.IsFalse(StateVariables.ContainsKey(new EntityBodyKey("different-id", DummyMediaType.ContentType, new Uri("http://schemas/shop"))));
+            Assert.IsFalse(StateVariables.ContainsKey(new EntityBodyKey("different-id", ExampleMediaType.ContentType, new Uri("http://schemas/shop"))));
         }
 
         [Test]

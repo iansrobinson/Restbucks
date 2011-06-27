@@ -11,10 +11,10 @@ namespace Tests.RestInPractice.RestToolkit.RulesEngine.Util
 
         public static HttpResponseMessage CreateResponse()
         {
-            var entityBody = new DummyEntityBody {Id = EntityId, Form = new DummyForm {Id = FormId, ContentType = "application/xml", Method = "post", Uri = "http://localhost/form"}, Link = new DummyLink {ContentType = "application/xml", Rel = LinkRel, Uri = "http://localhost/1"}};
+            var entityBody = new ExampleEntityBody {Id = EntityId, Form = new ExampleForm {Id = FormId, ContentType = "application/xml", Method = "post", Uri = "http://localhost/form"}, Link = new ExampleLink {ContentType = "application/xml", Rel = LinkRel, Uri = "http://localhost/1"}};
 
-            var content = new ObjectContent<DummyEntityBody>(entityBody, new[] {DummyMediaType.Instance});
-            content.Headers.ContentType = DummyMediaType.ContentType;
+            var content = new ObjectContent<ExampleEntityBody>(entityBody, new[] {ExampleMediaType.Instance});
+            content.Headers.ContentType = ExampleMediaType.ContentType;
 
             return new HttpResponseMessage {Content = content};
         }

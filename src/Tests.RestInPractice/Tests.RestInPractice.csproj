@@ -95,11 +95,11 @@
     <Compile Include="RestToolkit\RulesEngine\StateFactoryCollectionTests.cs" />
     <Compile Include="RestToolkit\RulesEngine\SubmitFormTests.cs" />
     <Compile Include="RestToolkit\RulesEngine\Util\Dummy.cs" />
-    <Compile Include="RestToolkit\RulesEngine\Util\DummyEntityBody.cs" />
-    <Compile Include="RestToolkit\RulesEngine\Util\DummyFormStrategy.cs" />
-    <Compile Include="RestToolkit\RulesEngine\Util\DummyLinkStrategy.cs" />
-    <Compile Include="RestToolkit\RulesEngine\Util\DummyMediaType.cs" />
     <Compile Include="RestToolkit\RulesEngine\Util\DummyResponse.cs" />
+    <Compile Include="RestToolkit\RulesEngine\Util\ExampleEntityBody.cs" />
+    <Compile Include="RestToolkit\RulesEngine\Util\ExampleMediaType.cs" />
+    <Compile Include="RestToolkit\RulesEngine\Util\FormStrategy.cs" />
+    <Compile Include="RestToolkit\RulesEngine\Util\LinkStrategy.cs" />
     <Compile Include="RestToolkit\RulesEngine\Util\MockEndpoint.cs" />
     <Compile Include="RestToolkit\RulesEngine\WhenTests.cs" />
     <Compile Include="RestToolkit\Utils\CheckStringTests.cs" />
