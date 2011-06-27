@@ -4,17 +4,17 @@ namespace Restbucks.RestToolkit.RulesEngine
 {
     public class SubmitForm : IRequestAction
     {
-        private readonly IFormStrategy formStrategy;
+        private readonly IForm form;
 
-        public SubmitForm(IFormStrategy formStrategy)
+        public SubmitForm(IForm form)
         {
-            this.formStrategy = formStrategy;
+            this.form = form;
         }
 
         public HttpResponseMessage Execute(HttpResponseMessage previousResponse, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities)
         {
-            var formInfo = formStrategy.GetFormInfo(previousResponse);
-            var formDataStrategy = formStrategy.GetFormDataStrategy(previousResponse);
+            var formInfo = form.GetFormInfo(previousResponse);
+            var formDataStrategy = form.GetFormDataStrategy(previousResponse);
 
             var request = new HttpRequestMessage
                               {

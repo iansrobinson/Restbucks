@@ -5,6 +5,6 @@ namespace Restbucks.Client.Hypermedia
 {
     public static class Forms
     {
-        public static readonly IFormStrategy RequestForQuote = RestbucksForm.WithId("request-for-quote");
+        public static readonly IForm RequestForQuote = RestbucksForm.WithId("request-for-quote");
     }
 }

@@ -4,16 +4,16 @@ namespace Restbucks.RestToolkit.RulesEngine
 {
     public class ClickLink : IRequestAction
     {
-        private readonly ILinkStrategy linkStrategy;
+        private readonly ILink link;
 
-        public ClickLink(ILinkStrategy linkStrategy)
+        public ClickLink(ILink link)
         {
-            this.linkStrategy = linkStrategy;
+            this.link = link;
         }
 
         public HttpResponseMessage Execute(HttpResponseMessage previousResponse, ApplicationStateVariables stateVariables, IClientCapabilities clientCapabilities)
         {
-            var linkInfo = linkStrategy.GetLinkInfo(previousResponse);
+            var linkInfo = link.GetLinkInfo(previousResponse);
 
             var request = new HttpRequestMessage
                               {

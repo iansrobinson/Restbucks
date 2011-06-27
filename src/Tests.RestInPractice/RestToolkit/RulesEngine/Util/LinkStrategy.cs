@@ -6,11 +6,11 @@ using Tests.RestInPractice.RestToolkit.Hacks;
 
 namespace Tests.RestInPractice.RestToolkit.RulesEngine.Util
 {
-    public class LinkStrategy : ILinkStrategy
+    public class Link : ILink
     {
         private readonly string rel;
 
-        public LinkStrategy(string rel)
+        public Link(string rel)
         {
             this.rel = rel;
         }

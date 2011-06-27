@@ -154,8 +154,8 @@ namespace Tests.RestInPractice.RestToolkit.RulesEngine
 
             var dummyState = MockRepository.GenerateStub<IState>();
 
-            var rule = When.IsTrue(r => r.ContainsLink(new LinkStrategy(DummyResponse.Link.Rel))
-                                        && r.ContainsForm(new FormStrategy(DummyResponse.Form.Id)))
+            var rule = When.IsTrue(r => r.ContainsLink(new Link(DummyResponse.Link.Rel))
+                                        && r.ContainsForm(new Form(DummyResponse.Form.Id)))
                 .Execute(actions => actions.Do(dummyRequestAction))
                 .ReturnState((r, c) => dummyState);
 

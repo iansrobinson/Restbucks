@@ -23,7 +23,7 @@ namespace Tests.RestInPractice.RestToolkit.RulesEngine
         [Test]
         public void ShouldSubmitFormWithCorrectControlData()
         {
-            var dummyFormStrategy = MockRepository.GenerateStub<IFormStrategy>();
+            var dummyFormStrategy = MockRepository.GenerateStub<IForm>();
             dummyFormStrategy.Expect(f => f.GetFormInfo(PreviousResponse)).Return(DummyFormInfo);
             dummyFormStrategy.Expect(f => f.GetFormDataStrategy(PreviousResponse)).Return(DummyFormDataStrategy);
 
@@ -48,7 +48,7 @@ namespace Tests.RestInPractice.RestToolkit.RulesEngine
             var mockFormDataStrategy = MockRepository.GenerateMock<IFormDataStrategy>();
             mockFormDataStrategy.Expect(s => s.CreateFormData(PreviousResponse, StateVariables, clientCapabilities)).Return(new StringContent(string.Empty));
 
-            var dummyFormStrategy = MockRepository.GenerateStub<IFormStrategy>();
+            var dummyFormStrategy = MockRepository.GenerateStub<IForm>();
             dummyFormStrategy.Expect(f => f.GetFormInfo(PreviousResponse)).Return(DummyFormInfo);
             dummyFormStrategy.Expect(f => f.GetFormDataStrategy(PreviousResponse)).Return(mockFormDataStrategy);
 

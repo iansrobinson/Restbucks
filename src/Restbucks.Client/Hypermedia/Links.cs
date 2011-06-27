@@ -7,6 +7,6 @@ namespace Restbucks.Client.Hypermedia
 {
     public static class Links
     {
-        public static readonly ILinkStrategy Rfq = RestbucksLink.WithRel(new UriLinkRelation(new Uri("http://relations.restbucks.com/rfq")));
+        public static readonly ILink Rfq = RestbucksLink.WithRel(new UriLinkRelation(new Uri("http://relations.restbucks.com/rfq")));
     }
 }

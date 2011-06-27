@@ -8,19 +8,19 @@ using Restbucks.MediaType;
 
 namespace Restbucks.Client.Hypermedia.Strategies
 {
-    public class RestbucksLink : ILinkStrategy
+    public class RestbucksLink : ILink
     {
-        public static ILinkStrategy WithRel(LinkRelation rel)
+        public static ILink WithRel(LinkRelation rel)
         {
             return new RestbucksLink(rel);
         }
 
-        public static ILinkStrategy WithRel(string rel)
+        public static ILink WithRel(string rel)
         {
             return WithRel(new StringLinkRelation(rel));
         }
 
-        public static ILinkStrategy WithRel(Uri rel)
+        public static ILink WithRel(Uri rel)
         {
             return WithRel(new UriLinkRelation(rel));
         }

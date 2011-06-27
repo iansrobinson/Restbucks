@@ -2,7 +2,7 @@
 
 namespace Restbucks.RestToolkit.RulesEngine
 {
-    public interface ILinkStrategy
+    public interface ILink
     {
         LinkInfo GetLinkInfo(HttpResponseMessage response);
         bool LinkExists(HttpResponseMessage response);

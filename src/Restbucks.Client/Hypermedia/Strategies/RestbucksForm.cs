@@ -8,9 +8,9 @@ using Restbucks.MediaType;
 
 namespace Restbucks.Client.Hypermedia.Strategies
 {
-    public class RestbucksForm : IFormStrategy
+    public class RestbucksForm : IForm
     {
-        public static IFormStrategy WithId(string id)
+        public static IForm WithId(string id)
         {
             return new RestbucksForm(id);
         }

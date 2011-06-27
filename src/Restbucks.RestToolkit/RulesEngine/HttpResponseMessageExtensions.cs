@@ -4,12 +4,12 @@ namespace Restbucks.RestToolkit.RulesEngine
 {
     public static class HttpResponseMessageExtensions
     {
-        public static bool ContainsLink(this HttpResponseMessage response, ILinkStrategy strategy)
+        public static bool ContainsLink(this HttpResponseMessage response, ILink strategy)
         {
             return strategy.LinkExists(response);
         }
 
-        public static bool ContainsForm(this HttpResponseMessage response, IFormStrategy strategy)
+        public static bool ContainsForm(this HttpResponseMessage response, IForm strategy)
         {
             return strategy.FormExists(response);
         }

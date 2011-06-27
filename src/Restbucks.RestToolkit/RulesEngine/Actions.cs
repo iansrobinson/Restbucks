@@ -13,14 +13,14 @@ namespace Restbucks.RestToolkit.RulesEngine
             this.clientCapabilities = clientCapabilities;
         }
 
-        public IRequestAction ClickLink(ILinkStrategy linkStrategy)
+        public IRequestAction ClickLink(ILink link)
         {
-            return new ClickLink(linkStrategy);
+            return new ClickLink(link);
         }
 
-        public IRequestAction SubmitForm(IFormStrategy formStrategy)
+        public IRequestAction SubmitForm(IForm form)
         {
-            return new SubmitForm(formStrategy);
+            return new SubmitForm(form);
         }
 
         public IRequestAction Do(IRequestAction requestAction)

@@ -6,11 +6,11 @@ using Tests.RestInPractice.RestToolkit.Hacks;
 
 namespace Tests.RestInPractice.RestToolkit.RulesEngine.Util
 {
-    public class FormStrategy : IFormStrategy
+    public class Form : IForm
     {
         private readonly string formId;
 
-        public FormStrategy(string formId)
+        public Form(string formId)
         {
             this.formId = formId;
         }
