@@ -53,7 +53,7 @@ namespace Restbucks.Client.Hypermedia.Strategies
 
         private bool TryGetLinkInfo(HttpResponseMessage response, out LinkInfo linkInfo)
         {
-            var entityBody = response.Content.ReadAsObject<Shop>(new[] {RestbucksMediaTypeFormatter.Instance});
+            var entityBody = response.Content.ReadAsObject<Shop>(new[] {RestbucksMediaType.Formatter});
             var link = (from l in (entityBody).Links
                         where l.Rels.Contains(relation, LinkRelationEqualityComparer.Instance)
                         select l).FirstOrDefault();

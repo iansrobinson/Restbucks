@@ -27,7 +27,7 @@ namespace Restbucks.Quoting.Service.Resources
             var body = new ShopBuilder(uriFactory.CreateBaseUri<RequestForQuote>(request.RequestUri))
                 .AddForm(new Form(FormSemantics.Rfq,
                                   uriFactory.CreateRelativeUri<Quotes>(),
-                                  "post", RestbucksMediaType.Value,
+                                  "post", RestbucksMediaType.ContentType.MediaType,
                                   new Uri("http://schemas.restbucks.com/shop")))
                 .Build();
 

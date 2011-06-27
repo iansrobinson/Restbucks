@@ -13,10 +13,10 @@ namespace Tests.Restbucks.MediaType
         [Test]
         public void ShouldSupportRestbucksPlusXmlAndApplicationXmlAndTextXmlMediaTypes()
         {
-            var processor = RestbucksMediaTypeFormatter.Instance;
+            var processor = RestbucksMediaType.Formatter;
 
             Assert.AreEqual(3, processor.SupportedMediaTypes.Count());
-            Assert.AreEqual(RestbucksMediaType.Value, processor.SupportedMediaTypes.First().MediaType);
+            Assert.AreEqual(RestbucksMediaType.ContentType, processor.SupportedMediaTypes.First());
             Assert.AreEqual("application/xml", processor.SupportedMediaTypes.Skip(1).First().MediaType);
             Assert.AreEqual("text/xml", processor.SupportedMediaTypes.Skip(2).First().MediaType);
         }
@@ -29,7 +29,7 @@ namespace Tests.Restbucks.MediaType
             var shop = new ShopBuilder(new Uri("http://restbucks.com/")).Build();
             var stream = new MemoryStream();
 
-            var processor = RestbucksMediaTypeFormatter.Instance;
+            var processor = RestbucksMediaType.Formatter;
             processor.WriteToStream(typeof (Shop), shop, stream, null, null);
 
             stream.Seek(0, SeekOrigin.Begin);

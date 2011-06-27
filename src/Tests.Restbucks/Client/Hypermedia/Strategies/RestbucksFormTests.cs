@@ -77,11 +77,11 @@ namespace Tests.Restbucks.Client.Hypermedia.Strategies
         public void ThrowsExceptionWhenGettingDataStrategyForFormWithNullFormDataButNoSchema()
         {
             var entityBody = new ShopBuilder(new Uri("http://localhost"))
-                .AddForm(new Form("invalid-form", new Uri("http://localhost/orders"), "post", RestbucksMediaType.Value, null as Shop))
+                .AddForm(new Form("invalid-form", new Uri("http://localhost/orders"), "post", RestbucksMediaType.ContentType.MediaType, null as Shop))
                 .Build();
 
-            var content = new ObjectContent<Shop>(entityBody, new[] { RestbucksMediaTypeFormatter.Instance });
-            content.Headers.ContentType = new MediaTypeHeaderValue(RestbucksMediaType.Value);
+            var content = new ObjectContent<Shop>(entityBody, new[] { RestbucksMediaType.Formatter });
+            content.Headers.ContentType = new MediaTypeHeaderValue(RestbucksMediaType.ContentType.MediaType);
 
             var response = new HttpResponseMessage {Content = content};
 

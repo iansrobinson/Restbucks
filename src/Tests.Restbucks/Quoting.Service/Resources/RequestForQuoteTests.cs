@@ -35,7 +35,7 @@ namespace Tests.Restbucks.Quoting.Service.Resources
             var entityBody = ExecuteRequestReturnEntityBody();
             var form = entityBody.Forms.First();
 
-            Assert.AreEqual(RestbucksMediaType.Value, form.MediaType);
+            Assert.AreEqual(RestbucksMediaType.ContentType.MediaType, form.MediaType);
         }
 
         [Test]

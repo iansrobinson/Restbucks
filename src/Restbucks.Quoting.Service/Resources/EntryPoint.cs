@@ -25,7 +25,7 @@ namespace Restbucks.Quoting.Service.Resources
         public HttpResponseMessage<Shop> Get(HttpRequestMessage request)
         {
             var body = new ShopBuilder(uriFactory.CreateBaseUri<EntryPoint>(request.RequestUri))
-                .AddLink(new Link(uriFactory.CreateRelativeUri<RequestForQuote>(), RestbucksMediaType.Value, LinkRelations.Rfq, LinkRelations.Prefetch))
+                .AddLink(new Link(uriFactory.CreateRelativeUri<RequestForQuote>(), RestbucksMediaType.ContentType.MediaType, LinkRelations.Rfq, LinkRelations.Prefetch))
                 .Build();
 
             var response = new HttpResponseMessage<Shop>(body);

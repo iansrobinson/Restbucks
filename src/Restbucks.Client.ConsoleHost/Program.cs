@@ -19,7 +19,7 @@ namespace Restbucks.Client.ConsoleHost
             var items = new ShopBuilder(null).AddItem(new Item("coffee", new Amount("g", 125))).Build();
             var variables = new ApplicationStateVariables(
                 new KeyValuePair<IKey, object>(new StringKey("home-page-uri"), new Uri("http://localhost:8080/restbucks/shop")),
-                new KeyValuePair<IKey, object>(new EntityBodyKey("request-for-quote", new MediaTypeHeaderValue(RestbucksMediaType.Value), new Uri("http://schemas.restbucks.com/shop")), items));
+                new KeyValuePair<IKey, object>(new EntityBodyKey("request-for-quote", RestbucksMediaType.ContentType, new Uri("http://schemas.restbucks.com/shop")), items));
 
             var state = new Uninitialized(variables);
             Console.WriteLine(state.GetType().Name);
@@ -47,13 +47,13 @@ namespace Restbucks.Client.ConsoleHost
             public HttpClient GetHttpClient()
             {
                 var client = new HttpClient();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(RestbucksMediaType.Value));
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(RestbucksMediaType.ContentType.MediaType));
                 return client;
             }
 
             public MediaTypeFormatter GetMediaTypeFormatter(MediaTypeHeaderValue contentType)
             {
-                return RestbucksMediaTypeFormatter.Instance;
+                return RestbucksMediaType.Formatter;
             }
         }
     }

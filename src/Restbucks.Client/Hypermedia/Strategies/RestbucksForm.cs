@@ -79,7 +79,7 @@ namespace Restbucks.Client.Hypermedia.Strategies
 
         private static Shop GetEntityBody(HttpResponseMessage response)
         {
-            return response.Content.ReadAsObject<Shop>(new[] {RestbucksMediaTypeFormatter.Instance});
+            return response.Content.ReadAsObject<Shop>(new[] { RestbucksMediaType.Formatter });
         }
 
         private static IFormDataStrategy CreateDataStrategy(Form form)

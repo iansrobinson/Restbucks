@@ -46,12 +46,12 @@ namespace Tests.Restbucks.Quoting.Service.MessageHandlers.FormsIntegrity
             var processor = new FormsIntegrityResponseHandler(new DummyFormsSigner(string.Empty));
 
             var response = new HttpResponseMessage {Content = new StringContent("input")};
-            response.Content.Headers.ContentType = new MediaTypeHeaderValue(RestbucksMediaType.Value);
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue(RestbucksMediaType.ContentType.MediaType);
             response.Content.Headers.Expires = dateTime;
 
             var newResponse = processor.OnHandle(response);
 
-            Assert.AreEqual(RestbucksMediaType.Value, newResponse.Content.Headers.ContentType.MediaType);
+            Assert.AreEqual(RestbucksMediaType.ContentType.MediaType, newResponse.Content.Headers.ContentType.MediaType);
             Assert.AreEqual(dateTime, newResponse.Content.Headers.Expires.Value);
         }
 

@@ -53,7 +53,7 @@ namespace Restbucks.Quoting.Service
                                 ((IDisposable) service).Dispose();
                             }
                         })
-                .AddFormatters(RestbucksMediaTypeFormatter.Instance)
+                .AddFormatters(RestbucksMediaType.Formatter)
                 .AddResponseHandlers(handlers, (endpoint, operation) => operation.DeclaringContract.ContractType.Equals(typeof (OrderForm)));
 
             var uriFactory = new UriFactory();

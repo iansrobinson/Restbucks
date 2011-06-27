@@ -45,8 +45,8 @@ namespace Restbucks.Quoting.Service.Resources
 
             var body = new ShopBuilder(baseUri)
                 .AddItems(quote.LineItems.Select(li => new LineItemToItem(li).Adapt()))
-                .AddLink(new Link(uriFactory.CreateRelativeUri<Quote>(quote.Id), RestbucksMediaType.Value, LinkRelations.Self))
-                .AddLink(new Link(uriFactory.CreateRelativeUri<OrderForm>(quote.Id), RestbucksMediaType.Value, LinkRelations.OrderForm))
+                .AddLink(new Link(uriFactory.CreateRelativeUri<Quote>(quote.Id), RestbucksMediaType.ContentType.MediaType, LinkRelations.Self))
+                .AddLink(new Link(uriFactory.CreateRelativeUri<OrderForm>(quote.Id), RestbucksMediaType.ContentType.MediaType, LinkRelations.OrderForm))
                 .Build();
 
             var response = new HttpResponseMessage<Shop>(body, HttpStatusCode.Created);

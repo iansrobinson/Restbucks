@@ -5,7 +5,6 @@ using System.Xml.XPath;
 using NUnit.Framework;
 using Restbucks.MediaType;
 using Restbucks.MediaType.Formatters;
-using Restbucks.Quoting.Service;
 using Restbucks.Quoting.Service.Resources.Hypermedia;
 
 namespace Tests.Restbucks.MediaType.Formatters
@@ -26,7 +25,7 @@ namespace Tests.Restbucks.MediaType.Formatters
         public void ShouldCreateLinksAsChildrenOfShopElement()
         {
             var shop = new ShopBuilder(new Uri("http://localhost/"))
-                .AddLink(new Link(new Uri("/quotes", UriKind.Relative), RestbucksMediaType.Value, LinkRelations.Rfq, LinkRelations.Prefetch))
+                .AddLink(new Link(new Uri("/quotes", UriKind.Relative), RestbucksMediaType.ContentType.MediaType, LinkRelations.Rfq, LinkRelations.Prefetch))
                 .AddLink(new Link(new Uri("/order-forms/1234", UriKind.Relative), "application/xml", LinkRelations.OrderForm))
                 .Build();
 
@@ -36,7 +35,7 @@ namespace Tests.Restbucks.MediaType.Formatters
 
             Assert.AreEqual("rb:rfq prefetch", xml.GetNodeValue("r:shop/r:link[1]/@rel"));
             Assert.AreEqual("/quotes", xml.GetNodeValue("r:shop/r:link[1]/@href"));
-            Assert.AreEqual(RestbucksMediaType.Value, xml.GetNodeValue("r:shop/r:link[1]/@type"));
+            Assert.AreEqual(RestbucksMediaType.ContentType.MediaType, xml.GetNodeValue("r:shop/r:link[1]/@type"));
 
             Assert.AreEqual("rb:order-form", xml.GetNodeValue("r:shop/r:link[2]/@rel"));
             Assert.AreEqual("application/xml", xml.GetNodeValue("r:shop/r:link[2]/@type"));
@@ -53,7 +52,7 @@ namespace Tests.Restbucks.MediaType.Formatters
             var rel2 = new CompactUriLinkRelation("tw", new Uri(ns2, UriKind.Absolute), "rel2");
 
             var shop = new ShopBuilder(new Uri("http://locahost/"))
-                .AddLink(new Link(new Uri("/quotes", UriKind.Relative), RestbucksMediaType.Value, rel1, rel2))
+                .AddLink(new Link(new Uri("/quotes", UriKind.Relative), RestbucksMediaType.ContentType.MediaType, rel1, rel2))
                 .Build();
 
             var xml = new XmlOutput(new ShopFormatter(shop).CreateXml());
@@ -98,9 +97,9 @@ namespace Tests.Restbucks.MediaType.Formatters
         public void ShouldAddFormsAsChildrenOfShopElement()
         {
             var shop = new ShopBuilder(new Uri("http://localhost"))
-                .AddForm(new Form("request-for-quote", new Uri("/quotes", UriKind.Relative), "post", RestbucksMediaType.Value, new Uri("http://schemas.restbucks.com/shop")))
-                .AddForm(new Form("order", new Uri("/orders", UriKind.Relative), "put", RestbucksMediaType.Value, new ShopBuilder(new Uri("http://localhost"))
-                                                                                                                      .Build()))
+                .AddForm(new Form("request-for-quote", new Uri("/quotes", UriKind.Relative), "post", RestbucksMediaType.ContentType.MediaType, new Uri("http://schemas.restbucks.com/shop")))
+                .AddForm(new Form("order", new Uri("/orders", UriKind.Relative), "put", RestbucksMediaType.ContentType.MediaType, new ShopBuilder(new Uri("http://localhost"))
+                                                                                                                                      .Build()))
                 .Build();
 
             var output = new XmlOutput(new ShopFormatter(shop).CreateXml());
@@ -111,14 +110,14 @@ namespace Tests.Restbucks.MediaType.Formatters
             Assert.AreEqual("request-for-quote", output.GetNodeValue("r:shop/x:model[1]/@id"));
             Assert.AreEqual("/quotes", output.GetNodeValue("r:shop/x:model[1]/x:submission/@resource"));
             Assert.AreEqual("post", output.GetNodeValue("r:shop/x:model[1]/x:submission/@method"));
-            Assert.AreEqual(RestbucksMediaType.Value, output.GetNodeValue("r:shop/x:model[1]/x:submission/@mediatype"));
+            Assert.AreEqual(RestbucksMediaType.ContentType.MediaType, output.GetNodeValue("r:shop/x:model[1]/x:submission/@mediatype"));
             Assert.AreEqual(string.Empty, output.GetNodeValue("r:shop/x:model[1]/x:instance"));
 
             Assert.IsNull(output.GetNode("r:shop/x:model[2]/@schema"));
             Assert.AreEqual("order", output.GetNodeValue("r:shop/x:model[2]/@id"));
             Assert.AreEqual("/orders", output.GetNodeValue("r:shop/x:model[2]/x:submission/@resource"));
             Assert.AreEqual("put", output.GetNodeValue("r:shop/x:model[2]/x:submission/@method"));
-            Assert.AreEqual(RestbucksMediaType.Value, output.GetNodeValue("r:shop/x:model[2]/x:submission/@mediatype"));
+            Assert.AreEqual(RestbucksMediaType.ContentType.MediaType, output.GetNodeValue("r:shop/x:model[2]/x:submission/@mediatype"));
             Assert.AreEqual(string.Empty, output.GetNodeValue("r:shop/x:model[2]/x:instance/r:shop"));
         }
 

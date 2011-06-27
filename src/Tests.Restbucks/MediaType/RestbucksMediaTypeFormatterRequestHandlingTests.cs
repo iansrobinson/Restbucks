@@ -17,7 +17,7 @@ namespace Tests.Restbucks.MediaType
             using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(xml)))
             {
                 stream.Seek(0, SeekOrigin.Begin);
-                var mediaTypeProcessor = RestbucksMediaTypeFormatter.Instance;
+                var mediaTypeProcessor = RestbucksMediaType.Formatter;
 
                 Assert.IsNull(mediaTypeProcessor.ReadFromStream(typeof (Shop), stream, null));
             }
@@ -26,7 +26,7 @@ namespace Tests.Restbucks.MediaType
         [Test]
         public void ShouldReturnNullWhenStreamIsNull()
         {
-            var mediaTypeProcessor = RestbucksMediaTypeFormatter.Instance;
+            var mediaTypeProcessor = RestbucksMediaType.Formatter;
             Assert.IsNull(mediaTypeProcessor.ReadFromStream(typeof (Shop), null, null));
         }
 
@@ -38,7 +38,7 @@ namespace Tests.Restbucks.MediaType
             using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(xml)))
             {
                 stream.Seek(0, SeekOrigin.Begin);
-                var mediaTypeProcessor = RestbucksMediaTypeFormatter.Instance;
+                var mediaTypeProcessor = RestbucksMediaType.Formatter;
 
                 Assert.IsNull(mediaTypeProcessor.ReadFromStream(typeof (Shop), stream, null));
             }
@@ -53,7 +53,7 @@ namespace Tests.Restbucks.MediaType
             using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(xml)))
             {
                 stream.Seek(0, SeekOrigin.Begin);
-                var mediaTypeProcessor = RestbucksMediaTypeFormatter.Instance;
+                var mediaTypeProcessor = RestbucksMediaType.Formatter;
 
                 mediaTypeProcessor.ReadFromStream(typeof (Shop), stream, null);
             }
