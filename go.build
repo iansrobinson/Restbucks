@@ -136,7 +136,7 @@
     <exec program="run.bat" spawn="true"/>
   </target>
 
-  <target name="build" depends="intro, clean, create.output.directories, build.assemblyinfos, build.solution, run.unit.tests, generate.reports, deploy">
+  <target name="build" depends="intro, clean, create.output.directories, build.solution, run.unit.tests, generate.reports, deploy">
     <fail if="${unit.tests.result != '0' or unit.tests.rip.result !='0'}">One or more unit tests failed</fail>
   </target>
 
